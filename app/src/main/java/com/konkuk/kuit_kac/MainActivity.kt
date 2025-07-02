@@ -19,6 +19,7 @@ import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.diet.DietScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.HomeObservationScreen
+import com.konkuk.kuit_kac.presentation.home.HomeResultScreen
 import com.konkuk.kuit_kac.presentation.home.HomeScaleScreen
 import com.konkuk.kuit_kac.presentation.home.HomeScreen
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -59,8 +60,13 @@ class MainActivity : ComponentActivity() {
                         composable(Route.HomeScale.route) {
 //                            HomeScreen()
 //                            HomeObservationScreen()
-                            HomeScaleScreen(
-                                modifier = Modifier.padding(innerPadding)
+//                            HomeScaleScreen(
+//                                modifier = Modifier.padding(innerPadding)
+//                            )
+                            HomeResultScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                value = 1,
+                                isSucceeded = true
                             )
                         }
 
