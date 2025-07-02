@@ -9,6 +9,7 @@ import com.konkuk.kuit_kac.presentation.home.HomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.konkuk.kuit_kac.presentation.home.HomeObservationScreen
+import com.konkuk.kuit_kac.presentation.home.HomeScaleScreen
 
 
 @Composable
@@ -22,7 +23,9 @@ fun KacNavGraph(
     ) {
         composable(route = Route.Home.route) {
 //            HomeScreen(modifier = modifier)
-            HomeObservationScreen(modifier = modifier)
+//            HomeObservationScreen(modifier = modifier)
+            HomeScaleScreen(modifier = modifier)
+
         }
         composable(route = Route.Diet.route) {
             DietScreen(modifier = modifier)

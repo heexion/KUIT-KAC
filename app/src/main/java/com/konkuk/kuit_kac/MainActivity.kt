@@ -50,15 +50,20 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = Route.Home.route,
+                        startDestination = Route.HomeScale.route,
                     ) {
                         composable(Route.Home.route) {
+                            HomeScreen()
+//                            HomeObservationScreen()
+                        }
+                        composable(Route.HomeScale.route) {
 //                            HomeScreen()
 //                            HomeObservationScreen()
                             HomeScaleScreen(
                                 modifier = Modifier.padding(innerPadding)
                             )
                         }
+
                         composable(Route.Diet.route) {
                             DietScreen(
                                 modifier = Modifier.padding(innerPadding)

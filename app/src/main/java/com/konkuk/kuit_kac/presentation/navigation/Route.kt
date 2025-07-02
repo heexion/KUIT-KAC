@@ -4,5 +4,6 @@ sealed class Route(val route: String) {
 
     data object Diet : Route(route = "diet")       // 식단
     data object Home : Route(route = "home")       // 홈
-    data object Fitness : Route(route ="fitness") // 운동
+    data object HomeScale : Route(route = "homeScale") // 홈-체중계 입력
+    data object Fitness : Route(route = "fitness") // 운동
 }
