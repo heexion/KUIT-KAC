@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.diet.DietScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
+import com.konkuk.kuit_kac.presentation.home.HomeObservationScreen
 import com.konkuk.kuit_kac.presentation.home.HomeScreen
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
@@ -37,16 +38,22 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Route.Home.route,
-                        modifier = Modifier.padding(innerPadding)
                     ) {
                         composable(Route.Home.route) {
-                            HomeScreen()
+//                            HomeScreen()
+                            HomeObservationScreen()
                         }
                         composable(Route.Diet.route) {
-                            DietScreen()
+                            DietScreen(
+                                modifier = Modifier.padding(innerPadding)
+
+                            )
                         }
                         composable(Route.Fitness.route) {
-                            FitnessScreen()
+                            FitnessScreen(
+                                modifier = Modifier.padding(innerPadding)
+
+                            )
                         }
                     }
                 }

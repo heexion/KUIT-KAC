@@ -8,6 +8,7 @@ import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.HomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.konkuk.kuit_kac.presentation.home.HomeObservationScreen
 
 
 @Composable
@@ -18,9 +19,10 @@ fun KacNavGraph(
     NavHost(
         navController = navController,
         startDestination = Route.Home.route,
-    ){
+    ) {
         composable(route = Route.Home.route) {
-            HomeScreen(modifier = modifier)
+//            HomeScreen(modifier = modifier)
+            HomeObservationScreen(modifier = modifier)
         }
         composable(route = Route.Diet.route) {
             DietScreen(modifier = modifier)
