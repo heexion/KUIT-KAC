@@ -11,17 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.presentation.component.BottomBar
-import com.konkuk.kuit_kac.presentation.diet.DietScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
-import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
-import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
-import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
-import com.konkuk.kuit_kac.presentation.home.screen.HomeScreen
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme

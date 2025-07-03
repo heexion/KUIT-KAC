@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home
+package com.konkuk.kuit_kac.presentation.home.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +47,7 @@ fun HomeResultScreen(
     var hamCoachImg = R.drawable.ic_hamcoach_normal
 
 
+    // 체중이 늘었을 때(감량 실패 시) 값을 바꿔서 넣기
     if (!isSucceeded) {
         bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFd6e6f5))
         shadow = Color(0x85B6C9DC)
@@ -54,6 +55,7 @@ fun HomeResultScreen(
         nyameeImg = R.drawable.ic_nyamee_sad
         hamCoachImg = R.drawable.ic_hamcoach_angry
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
