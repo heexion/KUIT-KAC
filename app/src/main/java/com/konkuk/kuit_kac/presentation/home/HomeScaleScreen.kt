@@ -47,14 +47,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
 
 @Composable
-fun HomeScaleScreen(modifier: Modifier = Modifier) {
+fun HomeScaleScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,14 +96,18 @@ fun HomeScaleScreen(modifier: Modifier = Modifier) {
         initialWeight = "",
         onConfirm = { weight ->
             println("입력된 체중: $weight")
-        }
+        },
+        navController = navController
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeScaleScreenPreview() {
-    HomeScaleScreen()
+    HomeScaleScreen(
+        modifier = TODO(),
+        navController = TODO()
+    )
 }
 
 
@@ -107,6 +116,7 @@ fun WeightInputModal(
     modifier: Modifier,
     initialWeight: String = "",
     onConfirm: (String) -> Unit,
+    navController: NavHostController
 ) {
     var weight by remember { mutableStateOf(initialWeight) }
     val focusManager = LocalFocusManager.current
@@ -192,6 +202,7 @@ fun WeightInputModal(
                 onClick = {
                     focusManager.clearFocus()
                     onConfirm(weight)
+                    navController.navigate(Route.HomeResult.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

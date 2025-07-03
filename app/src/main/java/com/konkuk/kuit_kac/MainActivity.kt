@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
 
-                val hideBottomBarRoutes = setOf(Route.HomeScale.route)
+                val hideBottomBarRoutes = setOf(Route.HomeScale.route, Route.HomeResult.route)
 
                 Scaffold(
                     modifier = Modifier
@@ -57,18 +57,24 @@ class MainActivity : ComponentActivity() {
                             HomeScreen()
 //                            HomeObservationScreen()
                         }
+
                         composable(Route.HomeScale.route) {
-//                            HomeScreen()
 //                            HomeObservationScreen()
-//                            HomeScaleScreen(
-//                                modifier = Modifier.padding(innerPadding)
-//                            )
-                            HomeResultScreen(
+                            HomeScaleScreen(
                                 modifier = Modifier.padding(innerPadding),
-                                value = 1,
-                                isSucceeded = true
+                                navController = navController
                             )
                         }
+
+                        composable(Route.HomeResult.route) {
+                            HomeResultScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                value = 2,
+                                isSucceeded = true,
+                                navController = navController
+                            )
+                        }
+
 
                         composable(Route.Diet.route) {
                             DietScreen(

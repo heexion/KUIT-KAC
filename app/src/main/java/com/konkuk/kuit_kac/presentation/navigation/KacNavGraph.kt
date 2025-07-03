@@ -24,8 +24,10 @@ fun KacNavGraph(
         composable(route = Route.Home.route) {
 //            HomeScreen(modifier = modifier)
 //            HomeObservationScreen(modifier = modifier)
-            HomeScaleScreen(modifier = modifier)
-
+            HomeScaleScreen(
+                modifier = modifier,
+                navController = navController
+            )
         }
         composable(route = Route.Diet.route) {
             DietScreen(modifier = modifier)

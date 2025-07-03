@@ -27,12 +27,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
 @Composable
-fun HomeResultScreen(modifier: Modifier = Modifier, value: Int, isSucceeded: Boolean) {
+fun HomeResultScreen(
+    modifier: Modifier = Modifier,
+    value: Int,
+    isSucceeded: Boolean,
+    navController: NavHostController
+) {
     var bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     var shadow = Color(0xFFF1C67F)
     var messageText = "체중이 ${value}kg 줄었네!\n수고 많았어!"
@@ -127,7 +134,9 @@ fun HomeResultScreen(modifier: Modifier = Modifier, value: Int, isSucceeded: Boo
             )
         }
         Button(
-            onClick = {},
+            onClick = {
+                navController.navigate(Route.Home.route)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -157,5 +166,9 @@ fun HomeResultScreen(modifier: Modifier = Modifier, value: Int, isSucceeded: Boo
 @Preview(showBackground = true)
 @Composable
 private fun HomeResultScreenPreview() {
-    HomeResultScreen(value = 1, isSucceeded = true)
+    HomeResultScreen(
+        value = 1, isSucceeded = true,
+        modifier = TODO(),
+        navController = TODO()
+    )
 }
