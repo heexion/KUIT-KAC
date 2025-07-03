@@ -18,10 +18,11 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.diet.DietScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
-import com.konkuk.kuit_kac.presentation.home.HomeObservationScreen
-import com.konkuk.kuit_kac.presentation.home.HomeResultScreen
-import com.konkuk.kuit_kac.presentation.home.HomeScaleScreen
-import com.konkuk.kuit_kac.presentation.home.HomeScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeScreen
+import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
 
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
 
-                val hideBottomBarRoutes = setOf(Route.HomeScale.route, Route.HomeResult.route)
+                val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route)
 
                 Scaffold(
                     modifier = Modifier
@@ -48,49 +49,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-
-                    NavHost(
+                    KacNavGraph(
                         navController = navController,
-                        startDestination = Route.HomeScale.route,
-                    ) {
-                        composable(Route.Home.route) {
-                            HomeScreen()
-//                            HomeObservationScreen()
-                        }
-
-                        composable(Route.HomeScale.route) {
-//                            HomeObservationScreen()
-                            HomeScaleScreen(
-                                modifier = Modifier.padding(innerPadding),
-                                navController = navController
-                            )
-                        }
-
-                        composable(Route.HomeResult.route) {
-                            HomeResultScreen(
-                                modifier = Modifier.padding(innerPadding),
-                                value = 2,
-                                isSucceeded = true,
-                                navController = navController
-                            )
-                        }
-
-
-                        composable(Route.Diet.route) {
-                            DietScreen(
-                                modifier = Modifier.padding(innerPadding)
-
-                            )
-                        }
-                        composable(Route.Fitness.route) {
-                            FitnessScreen(
-                                modifier = Modifier.padding(innerPadding)
-
-                            )
-                        }
-                    }
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
-
             }
         }
     }

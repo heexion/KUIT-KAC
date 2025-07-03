@@ -1,15 +1,17 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.presentation.diet.DietScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
-import com.konkuk.kuit_kac.presentation.home.HomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.konkuk.kuit_kac.presentation.home.HomeObservationScreen
-import com.konkuk.kuit_kac.presentation.home.HomeScaleScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeScreen
 
 
 @Composable
@@ -19,21 +21,49 @@ fun KacNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Route.Home.route,
+        startDestination = Route.HomeScale.route,
     ) {
-        composable(route = Route.Home.route) {
-//            HomeScreen(modifier = modifier)
-//            HomeObservationScreen(modifier = modifier)
+
+        composable(Route.Home.route) {
+            HomeScreen()
+//                            HomeObservationScreen()
+        }
+
+        composable(Route.HomeScale.route) {
             HomeScaleScreen(
                 modifier = modifier,
                 navController = navController
             )
         }
-        composable(route = Route.Diet.route) {
-            DietScreen(modifier = modifier)
+
+        composable(Route.HomeScaleInput.route) {
+            HomeScaleInputScreen(
+                modifier = modifier,
+                navController = navController
+            )
         }
-        composable(route = Route.Fitness.route) {
-            FitnessScreen(modifier = modifier)
+
+        composable(Route.HomeResult.route) {
+            HomeResultScreen(
+                modifier = modifier,
+                value = 2,
+                isSucceeded = true,
+                navController = navController
+            )
+        }
+
+
+        composable(Route.Diet.route) {
+            DietScreen(
+                modifier = modifier
+
+            )
+        }
+        composable(Route.Fitness.route) {
+            FitnessScreen(
+                modifier = Modifier
+
+            )
         }
     }
 }
