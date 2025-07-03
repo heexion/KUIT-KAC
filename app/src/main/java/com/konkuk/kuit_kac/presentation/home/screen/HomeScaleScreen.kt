@@ -86,7 +86,15 @@ fun HomeScaleScreen(
             painter = painterResource(id = R.drawable.ic_nyamee_normal),
             contentDescription = "homescale scale bg",
         )
-
+        Image(
+            modifier = Modifier
+                .padding(24.dp)
+                .size(24.dp)
+                .align(Alignment.TopStart)
+                .clickable { navController.navigate(Route.Home.route) },
+            painter = painterResource(id = R.drawable.ic_back_arow),
+            contentDescription = "",
+        )
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopEnd
@@ -198,6 +206,6 @@ private fun HomeScalePreview() {
     HomeScaleScreen(
         modifier = Modifier,
         navController = TODO(),
-        weight =2.4
+        weight = 2.4
     )
 }
