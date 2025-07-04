@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home
+package com.konkuk.kuit_kac.presentation.home.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

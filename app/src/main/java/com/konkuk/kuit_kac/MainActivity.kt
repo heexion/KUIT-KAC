@@ -5,18 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.presentation.component.BottomBar
-import com.konkuk.kuit_kac.presentation.diet.DietScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
-import com.konkuk.kuit_kac.presentation.home.HomeScreen
+import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
 
@@ -27,30 +25,27 @@ class MainActivity : ComponentActivity() {
         setContent {
             KUITKACTheme {
                 val navController = rememberNavController()
+                val currentRoute = navController
+                    .currentBackStackEntryAsState()
+                    .value?.destination?.route
+
+                val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route)
 
                 Scaffold(
+                    modifier = Modifier
+                        .systemBarsPadding(),
                     bottomBar = {
-                        BottomBar(navController)
+                        // 특정 화면들에서 bottomBar 보이지 않게 설정
+                        if (currentRoute !in hideBottomBarRoutes) {
+                            BottomBar(navController)
+                        }
                     }
                 ) { innerPadding ->
-
-                    NavHost(
+                    KacNavGraph(
                         navController = navController,
-                        startDestination = Route.Home.route,
                         modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable(Route.Home.route) {
-                            HomeScreen()
-                        }
-                        composable(Route.Diet.route) {
-                            DietScreen()
-                        }
-                        composable(Route.Fitness.route) {
-                            FitnessScreen()
-                        }
-                    }
+                    )
                 }
-
             }
         }
     }
