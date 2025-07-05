@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,7 +45,9 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
-fun BottomBar(navController: NavController) {
+fun BottomBar(
+    navController: NavController
+) {
     // 현재 선택된 라우트
     val selectedRoute = remember { mutableStateOf(Route.Home.route) }
 
@@ -281,7 +284,6 @@ fun BottomBar(navController: NavController) {
 
             Text("홈", style = DungGeunMo17)
         }
-
     }
     }
 
@@ -290,5 +292,5 @@ fun BottomBar(navController: NavController) {
 @Composable
 private fun BottomBarPreview() {
     val navController = rememberNavController()
-    BottomBar(navController = navController)
+    BottomBar( navController = navController)
 }

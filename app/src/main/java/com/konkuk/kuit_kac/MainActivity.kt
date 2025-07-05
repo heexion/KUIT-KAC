@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -30,8 +32,13 @@ import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
+
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = true
+            window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        }
+
         setContent {
             KUITKACTheme {
                 val navController = rememberNavController()
@@ -40,23 +47,34 @@ class MainActivity : ComponentActivity() {
                     .value?.destination?.route
 
                 val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route)
-
-                Scaffold(
-                    bottomBar = {
-                        // 특정 화면들에서 bottomBar 보이지 않게 설정
-                        if (currentRoute !in hideBottomBarRoutes) {
-                            BottomBar(navController)
-                        }
-                    },
-                ){ paddingValues: PaddingValues ->
-                    KacNavGraph(
-                        modifier = Modifier
-                            .padding(WindowInsets(0).asPaddingValues()),
-                        navController = navController
-                    )
-                    println(paddingValues)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            bottom = WindowInsets.navigationBars
+                                .asPaddingValues()
+                                .calculateBottomPadding()
+                        )
+                ){
+                    Scaffold(
+                        bottomBar = {
+                            // 특정 화면들에서 bottomBar 보이지 않게 설정
+                            if (currentRoute !in hideBottomBarRoutes) {
+                                BottomBar(
+                                    navController
+                                )
+                            }
+                        },
+                    ){ innerPadding ->
+                        KacNavGraph(
+                            modifier = Modifier
+                                .padding(innerPadding),
+                            navController = navController
+                        )
+                    }
                 }
-            }
+                }
+
         }
     }
 }
