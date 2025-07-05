@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -168,9 +169,9 @@ fun HomeResultScreen(
 @Preview(showBackground = true)
 @Composable
 private fun HomeResultScreenPreview() {
+    val navController = rememberNavController()
     HomeResultScreen(
         value = 1, isSucceeded = true,
-        modifier = TODO(),
-        navController = TODO()
+        navController = navController
     )
 }

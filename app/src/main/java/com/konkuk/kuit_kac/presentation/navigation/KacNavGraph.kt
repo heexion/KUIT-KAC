@@ -15,7 +15,6 @@ import com.konkuk.kuit_kac.presentation.home.screen.HomeObservationScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
-import com.konkuk.kuit_kac.presentation.home.screen.HomeScreen
 
 
 @Composable

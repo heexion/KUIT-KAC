@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -40,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -70,13 +73,10 @@ fun HomeScaleScreen(
             .background(Color.Gray),
         contentAlignment = Alignment.TopCenter
     ) {
-        Image(
+        HomeBackgroundComponent()
+        HomeSubBackgroundComponent(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp),
-            painter = painterResource(id = R.drawable.bg_home),
-            contentDescription = "homescale home bg",
-            contentScale = ContentScale.Crop
+                .offset(y = 477.73.dp)
         )
 
         Image(

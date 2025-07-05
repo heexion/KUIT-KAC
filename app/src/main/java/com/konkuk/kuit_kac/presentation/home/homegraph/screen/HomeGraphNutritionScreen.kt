@@ -44,6 +44,10 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
             .clip(RectangleShape)
     ) {
         HomeBackgroundComponent()
+        HomeSubBackgroundComponent(
+            modifier = Modifier
+                .offset(y = 477.73.dp)
+        )
         Image(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -74,10 +78,6 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
                 contentDescription = "magnifying glass"
             )
         }
-        HomeSubBackgroundComponent(
-            modifier = Modifier
-                .offset(y = 477.73.dp)
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
