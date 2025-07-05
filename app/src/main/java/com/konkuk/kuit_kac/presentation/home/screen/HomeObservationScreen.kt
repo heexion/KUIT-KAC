@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.home.component.ObservationBox
 import com.konkuk.kuit_kac.presentation.home.component.VerticalScrollbar
@@ -177,7 +178,8 @@ fun HomeObservationScreen(
                     ) {
                         items(observeList) { observe ->
                             ObservationBox(
-                                value = observe
+                                value = observe,
+                                navController = navController
                             )
                         }
                     }
@@ -199,9 +201,9 @@ fun HomeObservationScreen(
 @Preview(showBackground = true)
 @Composable
 private fun HomeObservationScreenPreview() {
+    val navController = rememberNavController()
     HomeObservationScreen(
-        modifier = TODO(),
-        navController = TODO()
+        navController = navController
     )
 }
 

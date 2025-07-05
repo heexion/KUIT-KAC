@@ -51,6 +51,7 @@ fun KacNavGraph(
             )
         }
 
+
         composable(Route.HomeScaleInput.route) {
             HomeScaleInputScreen(
                 modifier = modifier,
