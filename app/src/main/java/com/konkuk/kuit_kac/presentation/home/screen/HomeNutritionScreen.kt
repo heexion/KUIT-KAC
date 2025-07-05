@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.homegraph.screen
+package com.konkuk.kuit_kac.presentation.home.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,8 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeSingleNutritionBar
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
-import com.konkuk.kuit_kac.presentation.home.homegraph.component.HomeGraphScreenColumn
 
 @Composable
 fun HomeNutritionScreen(modifier: Modifier = Modifier) {
@@ -81,22 +81,22 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
                         .padding(top = 29.87.dp, start = 40.dp, end = 40.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    HomeGraphScreenColumn(
+                    HomeSingleNutritionBar(
                         type = "탄수화물",
                         base = 157,
                         quantity = 130
                     )
-                    HomeGraphScreenColumn(
+                    HomeSingleNutritionBar(
                         type = "단백질",
                         base = 117,
                         quantity = 20
                     )
-                    HomeGraphScreenColumn(
+                    HomeSingleNutritionBar(
                         type = "당류",
                         base = 157,
                         quantity = 130
                     )
-                    HomeGraphScreenColumn(
+                    HomeSingleNutritionBar(
                         type = "지방",
                         base = 76,
                         quantity = 104

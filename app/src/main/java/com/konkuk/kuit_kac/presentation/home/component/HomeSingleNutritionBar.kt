@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.homegraph.component
+package com.konkuk.kuit_kac.presentation.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,13 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
 @Composable
-fun HomeGraphScreenColumn(
+fun HomeSingleNutritionBar(
     modifier: Modifier = Modifier,
     type: String,
     base: Int,

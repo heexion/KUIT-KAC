@@ -1,6 +1,5 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -8,9 +7,9 @@ import com.konkuk.kuit_kac.presentation.diet.DietScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.konkuk.kuit_kac.presentation.home.homegraph.screen.HomeAnalysisScreen
-import com.konkuk.kuit_kac.presentation.home.homegraph.screen.HomeMainScreen
-import com.konkuk.kuit_kac.presentation.home.homegraph.screen.HomeNutritionScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
+import com.konkuk.kuit_kac.presentation.home.screen.HomeNutritionScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeObservationScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen

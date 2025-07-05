@@ -38,7 +38,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -58,7 +57,6 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
-import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScaleInputScreen(

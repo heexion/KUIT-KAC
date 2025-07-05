@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.homegraph.component
+package com.konkuk.kuit_kac.presentation.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
 @Composable
-fun NutritionGraph(
+fun HomeMultipleNutritionBar(
     modifier: Modifier = Modifier,
     carb: Float,
     protein: Float,

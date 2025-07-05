@@ -3,13 +3,11 @@ package com.konkuk.kuit_kac.presentation.home.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,9 +34,8 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
-import com.konkuk.kuit_kac.presentation.home.component.ObservationBox
-import com.konkuk.kuit_kac.presentation.home.component.VerticalScrollbar
-import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.component.VerticalScrollbar
+import com.konkuk.kuit_kac.presentation.home.component.HomeObservationBox
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -159,7 +156,7 @@ fun HomeObservationScreen(
                         modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 70.dp)
                     ) {
                         items(observeList) { observe ->
-                            ObservationBox(
+                            HomeObservationBox(
                                 value = observe,
                                 navController = navController
                             )
