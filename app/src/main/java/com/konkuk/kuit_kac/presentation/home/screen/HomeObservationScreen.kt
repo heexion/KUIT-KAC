@@ -76,15 +76,6 @@ fun HomeObservationScreen(
             painter = painterResource(id = R.drawable.ic_hamcoach_normal),
             contentDescription = null,
         )
-        Image(
-            modifier = Modifier
-                .padding(24.dp)
-                .size(24.dp)
-                .align(Alignment.TopStart)
-                .clickable { navController.navigate(Route.Home.route) },
-            painter = painterResource(id = R.drawable.ic_back_arow),
-            contentDescription = "",
-        )
         Box(
             modifier = Modifier
                 .padding(top = 40.dp)
@@ -112,15 +103,6 @@ fun HomeObservationScreen(
             )
         }
 
-        Image(
-            modifier = Modifier
-                .padding(24.dp)
-                .size(24.dp)
-                .align(Alignment.TopStart),
-//                .clickable { navController.navigate(Route.Home.route) },
-            painter = painterResource(id = R.drawable.ic_back_arow),
-            contentDescription = "",
-        )
 
         Column(
             modifier = Modifier
