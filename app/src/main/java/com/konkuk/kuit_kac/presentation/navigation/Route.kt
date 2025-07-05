@@ -11,7 +11,7 @@ sealed class Route(val route: String) {
     data object HomeResult : Route(route = "homeResult") // 홈-결과
 
     data object HomeAnalysis: Route(route = "homeAnalysis")
-    data object HHomeNutrition: Route(route = "homeNutrition")
+    data object HomeNutrition: Route(route = "homeNutrition")
 
     data object Fitness : Route(route = "fitness") // 운동
 

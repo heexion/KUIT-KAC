@@ -5,14 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,10 +24,9 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.homegraph.component.HomeGraphScreenColumn
-import com.konkuk.kuit_kac.ui.theme.Purple80
 
 @Composable
-fun HomeGraphAnalysisScreen(modifier: Modifier = Modifier) {
+fun HomeNutritionScreen(modifier: Modifier = Modifier) {
     Box(
         Modifier.fillMaxSize()
     ) {
@@ -114,6 +110,6 @@ fun HomeGraphAnalysisScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun HomeGraphAnalysisScreenPreview(){
-    HomeGraphAnalysisScreen()
+fun HomeNutritonScreenPreview(){
+    HomeNutritionScreen()
 }

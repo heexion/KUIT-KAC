@@ -37,7 +37,7 @@ import com.konkuk.kuit_kac.presentation.home.homegraph.component.NutritionGraph
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
+fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -133,6 +133,6 @@ fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun HomeGraphNutritionScreenPreview(){
-    HomeGraphNutritionScreen()
+fun HomeAnalysisScreenPreview(){
+    HomeAnalysisScreen()
 }
