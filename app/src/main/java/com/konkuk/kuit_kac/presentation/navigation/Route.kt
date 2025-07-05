@@ -10,6 +10,9 @@ sealed class Route(val route: String) {
     data object HomeScaleInput : Route(route = "homeScaleInput") // 홈-체중계 입력
     data object HomeResult : Route(route = "homeResult") // 홈-결과
 
+    data object HomeAnalysis: Route(route = "homeAnalysis")
+    data object HHomeNutrition: Route(route = "homeNutrition")
+
     data object Fitness : Route(route = "fitness") // 운동
 
 }
