@@ -54,10 +54,16 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(
-                            bottom = WindowInsets.navigationBars
-                                .asPaddingValues()
-                                .calculateBottomPadding()
+                        .then(
+                            if(currentRoute !in hideBottomBarRoutes){
+                                Modifier.padding(
+                                    bottom = WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding()
+                                )
+                            } else {
+                                Modifier
+                            }
                         )
                 ){
 
