@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,7 @@ import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponen
 
 @Composable
 fun HomeNutritionScreen(modifier: Modifier = Modifier) {
+    val scrollState = rememberScrollState()
     Box(
         Modifier.fillMaxSize()
     ) {
@@ -60,8 +64,9 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
             }
             Column(
                 modifier = Modifier
+                    .verticalScroll(scrollState)
                     .padding(top = 103.dp)
-                    .fillMaxSize()
+                    .height(436.dp)
                     .clip(
                         RoundedCornerShape(
                         topStart = 75.dp,
