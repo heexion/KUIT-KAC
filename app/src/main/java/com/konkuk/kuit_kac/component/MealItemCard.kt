@@ -95,10 +95,10 @@ fun MealItemCard(
 @Composable
 private fun MealItemCardPreview() {
     MealItemCard(
-        image = R.drawable.ic_beverages_p,
-        foodName = "사이다",
+        image = R.drawable.ic_dumplings,
+        foodName = "고기만두",
         foodAmount = 1,
-        foodKcal = 150,
+        foodKcal = 120,
         onDeleteClick = { },
         foodNum = 0
     )
