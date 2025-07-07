@@ -15,8 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -155,7 +160,10 @@ fun MealDetailCard(
 
                 QuantitySelector(
                     quantity = quantity,
-                    onQuantityChange = { quantity = it.coerceIn(0.0f, 10.0f) },
+                    onQuantityChange = {
+                        quantity = it.coerceIn(0.5f, 100.0f)
+//                        quantity = it
+                    }, //Todo: 상한선, 하한선 설정?
                     unitWeight = unitWeight
                 )
 
@@ -180,6 +188,21 @@ fun QuantitySelector(
     onQuantityChange: (Float) -> Unit,
     unitWeight: Int
 ) {
+
+    var text by remember { mutableStateOf(quantity.toString()) }
+
+    LaunchedEffect(quantity) {
+        val formatted = if (quantity == quantity.toInt().toFloat()) {
+            quantity.toInt().toString()
+        } else {
+            String.format("%.1f", quantity)
+        }
+        if (formatted != text) {
+            text = formatted
+        }
+    }
+
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -190,7 +213,7 @@ fun QuantitySelector(
             modifier = Modifier
                 .background(Color(0xFFFFD387), RoundedCornerShape(15.dp))
                 .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
-                .height(46.dp)
+                .height(50.dp)
                 .weight(0.5f)
         ) {
             Text(
@@ -207,7 +230,7 @@ fun QuantitySelector(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .height(46.dp)
+                .height(50.dp)
                 .background(Color.White, RoundedCornerShape(15.dp))
                 .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
                 .padding(horizontal = 19.dp)
@@ -224,11 +247,39 @@ fun QuantitySelector(
                 contentScale = ContentScale.FillWidth
             )
 
-            Text(
-                text = quantity.pretty(),
-                style = DungGeunMo20,
-                color = Color.Black,
-                modifier = Modifier
+//            Text(
+//                text = quantity.pretty(),
+//                style = DungGeunMo20,
+//                color = Color.Black,
+//                modifier = Modifier
+//            )
+
+            TextField(
+                modifier = Modifier.width(70.dp),
+                value = text,
+                onValueChange = {
+                    if (it.length <= 5 && it.matches(Regex("^\\d{0,3}(\\.\\d{0,1})?$"))) {
+                        // Todo: 소수점 아래 한 자리까지 받는 정규식. 입력 형태에 따라 수정 가능
+                        text = it
+                        it.toFloatOrNull()?.let { newValue ->
+                            onQuantityChange(newValue)
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                textStyle = DungGeunMo20.copy(
+                    color = Color.Black,
+                    textAlign = TextAlign.Center
+                ),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    errorContainerColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent
+                ),
             )
 
             Image(
