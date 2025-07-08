@@ -52,6 +52,7 @@ fun MealDetailCard(
     fat: Float,           // g - 지방
     baseCalories: Int,    // kcal - 기본 칼로리
     unitWeight: Int,      // g - 단위 무게
+    isSpeechBubble: Boolean = true
 ) {
     var quantity by remember { mutableStateOf(0.5f) }
 
@@ -169,14 +170,16 @@ fun MealDetailCard(
 
                 Spacer(modifier = Modifier.height(27.dp))
             }
-            Spacer(modifier = Modifier.height(35.dp))
+            if (isSpeechBubble)
+                Spacer(modifier = Modifier.height(35.dp))
         }
-        SpeechBubble(
-            "여기서 말하는\n한 개는 음료캔 크기야!",
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 15.dp)
-        )
+        if (isSpeechBubble)
+            SpeechBubble(
+                "여기서 말하는\n한 개는 음료캔 크기야!",
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(start = 15.dp)
+            )
     }
 
 }
@@ -334,7 +337,8 @@ private fun MealDetailCardPreview() {
         protein = 30f,
         fat = 0.1f,
         baseCalories = 130,
-        unitWeight = 150
+        unitWeight = 150,
+        isSpeechBubble = true
     )
 }
 
