@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -26,7 +27,8 @@ fun SearchBarItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = { },
     value: String,
-    isLastItem: Boolean = false
+    isLastItem: Boolean = false,
+    isCloseIconExist: Boolean = true
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -35,21 +37,24 @@ fun SearchBarItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = value,
                 style = DungGeunMo20,
                 color = Color(0xFF000000),
             )
-            Icon(
-                painter = painterResource(R.drawable.ic_close),
-                contentDescription = "삭제 아이콘",
-                tint = Color.Black,
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { onClick() }
-            )
+
+            if (isCloseIconExist)
+                Icon(
+                    painter = painterResource(R.drawable.ic_close),
+                    contentDescription = "삭제 아이콘",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { onClick() }
+                )
         }
 
         // 마지막 아이템인 경우 아래의 회색 가로선을 표시하지 않음
