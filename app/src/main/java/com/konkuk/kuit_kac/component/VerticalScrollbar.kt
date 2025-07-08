@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.component
+package com.konkuk.kuit_kac.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

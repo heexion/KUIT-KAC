@@ -4,13 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.presentation.component.BottomBar
@@ -22,6 +33,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = true
+            window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        }
+
         setContent {
             KUITKACTheme {
                 val navController = rememberNavController()
@@ -30,23 +47,57 @@ class MainActivity : ComponentActivity() {
                     .value?.destination?.route
 
                 val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route)
-
-                Scaffold(
+                val backArrowRoutes = setOf(
+                    Route.HomeNutrition.route, Route.HomeAnalysis.route,Route.HomeObservation.route,
+                    Route.HomeScale.route // 여기다가 뒤로가기 버튼 있으면 추가
+                )
+                Box(
                     modifier = Modifier
-                        .systemBarsPadding(),
-                    bottomBar = {
-                        // 특정 화면들에서 bottomBar 보이지 않게 설정
-                        if (currentRoute !in hideBottomBarRoutes) {
-                            BottomBar(navController)
-                        }
+                        .fillMaxSize()
+                        .then(
+                            if(currentRoute !in hideBottomBarRoutes){
+                                Modifier.padding(
+                                    bottom = WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding()
+                                )
+                            } else {
+                                Modifier
+                            }
+                        )
+                ){
+
+                    Scaffold(
+                        bottomBar = {
+                            // 특정 화면들에서 bottomBar 보이지 않게 설정
+                            if (currentRoute !in hideBottomBarRoutes) {
+                                BottomBar(
+                                    navController
+                                )
+                            }
+                        },
+                    ){ innerPadding ->
+                        KacNavGraph(
+                            modifier = Modifier
+                                .padding(innerPadding),
+                            navController = navController
+                        )
                     }
-                ) { innerPadding ->
-                    KacNavGraph(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    if(currentRoute in backArrowRoutes){
+                        Image(
+                            modifier = Modifier
+                                .padding(start = 24.dp, top = 58.dp)
+                                .size(24.dp)
+                                .align(Alignment.TopStart)
+                                .clickable { navController.popBackStack() },
+                            painter = painterResource(id = R.drawable.ic_back_arow),
+                            contentDescription = "",
+                        )
+                    }
                 }
-            }
+
+                }
+
         }
     }
 }

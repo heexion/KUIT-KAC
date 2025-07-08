@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.homegraph.screen
+package com.konkuk.kuit_kac.presentation.home.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,17 +6,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,19 +28,23 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeMultipleNutritionBar
+import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionLabel
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
-import com.konkuk.kuit_kac.presentation.home.homegraph.component.HomeGraphScreenRow
-import com.konkuk.kuit_kac.presentation.home.homegraph.component.NutritionGraph
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
+fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clip(RectangleShape)
     ) {
         HomeBackgroundComponent()
+        HomeSubBackgroundComponent(
+            modifier = Modifier
+                .offset(y = 477.73.dp)
+        )
         Image(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -74,10 +75,6 @@ fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
                 contentDescription = "magnifying glass"
             )
         }
-        HomeSubBackgroundComponent(
-            modifier = Modifier
-                .offset(y = 477.73.dp)
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,7 +108,7 @@ fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
                 .width(300.24902.dp)
                 .background(color = Color.Black)
             )
-            NutritionGraph(
+            HomeMultipleNutritionBar(
                 modifier = Modifier
                     .padding(top = 16.26.dp),
                 carb = 32f, protein = 43f, fat = 23f, healthy = 12f
@@ -122,10 +119,10 @@ fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
                     .padding(start = 35.34.dp, top = 24.34.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                HomeGraphScreenRow(content = "고탄수화물 음식", color = 0xFFFFD387)
-                HomeGraphScreenRow(content = "고단백 음식", color = 0xFFCBF38E)
-                HomeGraphScreenRow(content = "고지방 위주 음식", color = 0xFFFFA4A7)
-                HomeGraphScreenRow(content = "건강식/저열량 식단", color = 0xFFD2D2D2)
+                HomeNutritionLabel(content = "고탄수화물 음식", color = 0xFFFFD387)
+                HomeNutritionLabel(content = "고단백 음식", color = 0xFFCBF38E)
+                HomeNutritionLabel(content = "고지방 위주 음식", color = 0xFFFFA4A7)
+                HomeNutritionLabel(content = "건강식/저열량 식단", color = 0xFFD2D2D2)
             }
         }
     }
@@ -133,6 +130,6 @@ fun HomeGraphNutritionScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun HomeGraphNutritionScreenPreview(){
-    HomeGraphNutritionScreen()
+fun HomeAnalysisScreenPreview(){
+    HomeAnalysisScreen()
 }

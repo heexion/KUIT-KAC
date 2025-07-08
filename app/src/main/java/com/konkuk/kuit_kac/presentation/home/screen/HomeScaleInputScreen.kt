@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,7 +39,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -46,16 +47,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
-import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScaleInputScreen(
@@ -69,13 +73,10 @@ fun HomeScaleInputScreen(
             .background(Color.Gray),
         contentAlignment = Alignment.TopCenter
     ) {
-        Image(
+        HomeBackgroundComponent()
+        HomeSubBackgroundComponent(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp),
-            painter = painterResource(id = R.drawable.bg_home),
-            contentDescription = "homescale home bg",
-            contentScale = ContentScale.Crop
+                .offset(y = 477.73.dp)
         )
         Text(
             text = "냠코치",
@@ -107,8 +108,9 @@ fun HomeScaleInputScreen(
 @Preview(showBackground = true)
 @Composable
 private fun HomeScaleInputScreenPreview() {
+    val navController = rememberNavController()
     HomeScaleInputScreen(
-        navController = TODO(),
+        navController = navController,
         modifier = Modifier
     )
 }
@@ -133,12 +135,12 @@ fun WeightInputModal(
 
     Box(
         modifier = modifier
+            .imePadding()
             .fillMaxSize()
             .background(
                 if (isKeyboardVisible) Color(0x80000000)
                 else Color.Transparent
             )
-            .imePadding()
             .clickable {
                 focusManager.clearFocus()
             },
@@ -146,8 +148,8 @@ fun WeightInputModal(
     ) {
         Column(
             modifier = Modifier
-                .imePadding()
                 .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
+                .height(333.dp)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
@@ -161,9 +163,11 @@ fun WeightInputModal(
             Text(
                 text = "체중을 입력해줘!",
                 style = DungGeunMo24,
-                modifier = Modifier.padding(bottom = 60.dp, top = 7.dp)
+                modifier = Modifier.padding(top = 7.89.dp)
             )
             Row(
+                modifier = Modifier
+                    .padding(top = 68.47.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
@@ -234,4 +238,9 @@ fun WeightInputModal(
             }
         }
     }
+}
+
+@Composable
+fun Int.toDp(): Dp {
+    return with(LocalDensity.current) { this@toDp.toDp() }
 }

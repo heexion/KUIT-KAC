@@ -3,13 +3,12 @@ package com.konkuk.kuit_kac.presentation.home.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,10 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.presentation.home.component.ObservationBox
-import com.konkuk.kuit_kac.presentation.home.component.VerticalScrollbar
-import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
+import com.konkuk.kuit_kac.component.VerticalScrollbar
+import com.konkuk.kuit_kac.presentation.home.component.HomeObservationBox
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -50,13 +51,10 @@ fun HomeObservationScreen(
             .fillMaxSize()
             .background(Color.Transparent)
     ) {
-        Image(
+        HomeBackgroundComponent()
+        HomeSubBackgroundComponent(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp),
-            painter = painterResource(id = R.drawable.bg_whole_home),
-            contentDescription = "homescale home bg",
-            contentScale = ContentScale.Crop
+                .offset(y = 477.73.dp)
         )
         Image(
             modifier = Modifier
@@ -74,15 +72,6 @@ fun HomeObservationScreen(
                 .align(Alignment.TopCenter),
             painter = painterResource(id = R.drawable.ic_hamcoach_normal),
             contentDescription = null,
-        )
-        Image(
-            modifier = Modifier
-                .padding(24.dp)
-                .size(24.dp)
-                .align(Alignment.TopStart)
-                .clickable { navController.navigate(Route.Home.route) },
-            painter = painterResource(id = R.drawable.ic_back_arow),
-            contentDescription = "",
         )
         Box(
             modifier = Modifier
@@ -111,15 +100,6 @@ fun HomeObservationScreen(
             )
         }
 
-        Image(
-            modifier = Modifier
-                .padding(24.dp)
-                .size(24.dp)
-                .align(Alignment.TopStart),
-//                .clickable { navController.navigate(Route.Home.route) },
-            painter = painterResource(id = R.drawable.ic_back_arow),
-            contentDescription = "",
-        )
 
         Column(
             modifier = Modifier
@@ -176,8 +156,9 @@ fun HomeObservationScreen(
                         modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 70.dp)
                     ) {
                         items(observeList) { observe ->
-                            ObservationBox(
-                                value = observe
+                            HomeObservationBox(
+                                value = observe,
+                                navController = navController
                             )
                         }
                     }
@@ -199,9 +180,9 @@ fun HomeObservationScreen(
 @Preview(showBackground = true)
 @Composable
 private fun HomeObservationScreenPreview() {
+    val navController = rememberNavController()
     HomeObservationScreen(
-        modifier = TODO(),
-        navController = TODO()
+        navController = navController
     )
 }
 

@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.homegraph.component
+package com.konkuk.kuit_kac.presentation.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,11 +16,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
-import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun HomeGraphScreenBox(
+fun HomeSummaryBox(
     modifier: Modifier = Modifier,
     title: String,
     value: String

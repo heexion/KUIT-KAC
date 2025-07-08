@@ -1,6 +1,5 @@
 package com.konkuk.kuit_kac.presentation.home.component
 
-import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,12 +20,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
-fun ObservationBox(
-    value: String
+fun HomeObservationBox(
+    value: String,
+    navController: NavHostController
 ) {
     Box(
         modifier = Modifier
@@ -55,8 +57,12 @@ fun ObservationBox(
             Image(
                 modifier = Modifier
                     .padding(9.46.dp)
-                    .size(31.5.dp),
-                // .clickable() TODO: 클릭 기능 추가
+                    .size(31.5.dp)
+                    .clickable(
+                        onClick = {
+                            navController.navigate(Route.HomeAnalysis.route)
+                        }
+                    ),
                 painter = painterResource(id = R.drawable.ic_magnifier_home),
                 contentDescription = "observation box Magnifier glass",
             )
@@ -66,8 +72,10 @@ fun ObservationBox(
 
 @Preview(showBackground = true)
 @Composable
-private fun ObservationBoxPreview() {
-    ObservationBox(
-        value = "공복 시간 적음"
+private fun HomeObservationBoxPreview() {
+    val navController = rememberNavController()
+    HomeObservationBox(
+        value = "공복 시간 적음",
+        navController = navController
     )
 }

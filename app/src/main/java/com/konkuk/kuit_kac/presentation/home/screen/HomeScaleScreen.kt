@@ -1,52 +1,60 @@
 package com.konkuk.kuit_kac.presentation.home.screen
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.navigation.Route
-import com.konkuk.kuit_kac.ui.theme.DungGeunMo
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo27
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScaleScreen(
@@ -54,6 +62,8 @@ fun HomeScaleScreen(
     navController: NavHostController,
     weight: Double = 0.0
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val clicked = remember { mutableStateOf(false) }
     var buttonText = "수정하기"
     var scaleText = "${weight}kg"
     var textSize = DungGeunMo35
@@ -70,31 +80,73 @@ fun HomeScaleScreen(
             .background(Color.Gray),
         contentAlignment = Alignment.TopCenter
     ) {
+        Box(
+            modifier = Modifier
+                .requiredSize(588.dp)
+                .clipToBounds()
+        ){
+            Image(
+                modifier = Modifier
+                    .matchParentSize()
+                    .blur(radius = 3.799999952316284.dp)
+                    .offset(y = -19.dp),
+                painter = painterResource(R.drawable.img_home_background),
+                contentDescription = "homescreen background"
+            )
+        }
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .offset(y = 569.dp)
+        ) {
+            Image(
+                modifier = Modifier
+                    .blur(radius = 3.799999952316284.dp)
+                    .width(508.22656.dp)
+                    .height(195.5752.dp),
+                painter = painterResource(R.drawable.img_homegraphscreen_background),
+                contentDescription = "background",
+                contentScale = ContentScale.FillBounds,
+            )
+            Image(
+                modifier = Modifier
+                    .offset(y = (-10).dp)
+                    .blur(radius = 3.799999952316284.dp)
+                    .width(508.22656.dp)
+                    .height(195.5752.dp),
+                painter = painterResource(R.drawable.img_homegraphscreen_background),
+                contentDescription = "background",
+                contentScale = ContentScale.FillBounds
+            )
+        }
+        val scale = remember { Animatable(1f) }
+        LaunchedEffect(clicked.value) {
+            if(clicked.value){
+                delay(500)
+                scale.animateTo(5f, animationSpec = tween(800))
+            }
+            }
         Image(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp),
-            painter = painterResource(id = R.drawable.bg_home),
-            contentDescription = "homescale home bg",
-            contentScale = ContentScale.Crop
+                .zIndex(if (clicked.value) 2f else 0f)
+                .size(165.563.dp,93.21614.dp)
+                .offset(y = 361.25.dp)
+                .graphicsLayer {
+                    scaleX = scale.value
+                    scaleY = scale.value
+                    transformOrigin = TransformOrigin(0.5f, 0.5f)
+                },
+            painter = painterResource(R.drawable.img_home_scale),
+            contentDescription = "scale"
         )
-
         Image(
             modifier = Modifier
-                .padding(top = 83.dp)
+                .padding(top = 102.dp)
                 .size(290.dp),
             painter = painterResource(id = R.drawable.ic_nyamee_normal),
             contentDescription = "homescale scale bg",
         )
-        Image(
-            modifier = Modifier
-                .padding(24.dp)
-                .size(24.dp)
-                .align(Alignment.TopStart)
-                .clickable { navController.navigate(Route.Home.route) },
-            painter = painterResource(id = R.drawable.ic_back_arow),
-            contentDescription = "",
-        )
+
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopEnd
@@ -104,7 +156,7 @@ fun HomeScaleScreen(
                 contentDescription = null,
                 modifier = Modifier
                     .size(height = 103.dp, width = 275.dp)
-                    .padding(end = 18.dp, top = 10.dp),
+                    .padding(end = 18.dp, top = 19.58.dp),
                 contentScale = ContentScale.FillBounds
             )
             Text(
@@ -115,7 +167,7 @@ fun HomeScaleScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .width(275.dp)
-                    .padding(top = 32.dp, start = 10.dp, end = 26.dp)
+                    .padding(top = 41.42.dp, start = 10.dp, end = 26.dp)
             )
         }
 
@@ -123,11 +175,13 @@ fun HomeScaleScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent),
-            contentAlignment = Alignment.BottomEnd
         ) {
             Column(
                 modifier = Modifier
-                    .imePadding()
+                    .fillMaxSize()
+                    .padding(
+                        top = 450.dp
+                    )
                     .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
                     .background(
                         brush = Brush.verticalGradient(
@@ -173,9 +227,13 @@ fun HomeScaleScreen(
 
                 Button(
                     onClick = {
-                        navController.navigate(Route.HomeScaleInput.route)
+                        clicked.value = true
+                        coroutineScope.launch {
+                            delay(800)
+                            navController.navigate(Route.HomeScaleInput.route)
+                        }
                     },
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 20.dp)
                         .clip(RoundedCornerShape(20.dp))
@@ -203,9 +261,10 @@ fun HomeScaleScreen(
 @Preview(showBackground = true)
 @Composable
 private fun HomeScalePreview() {
+    val navController = rememberNavController()
     HomeScaleScreen(
         modifier = Modifier,
-        navController = TODO(),
+        navController = navController,
         weight = 2.4
     )
 }
