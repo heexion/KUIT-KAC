@@ -1,12 +1,15 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.konkuk.kuit_kac.presentation.diet.DietScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.konkuk.kuit_kac.presentation.diet.DietScreen
+import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
+import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeNutritionScreen
@@ -91,5 +94,13 @@ fun KacNavGraph(
                 modifier = modifier
             )
         }
+
+        composable("fasting_result") {
+            FastingResultScreen()
+        }
+        composable("meal_record") {
+            MealRecordScreen()
+        }
+
     }
 }
