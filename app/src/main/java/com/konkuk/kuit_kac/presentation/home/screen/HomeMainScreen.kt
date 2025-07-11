@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,14 +37,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionCircleGraph
 import com.konkuk.kuit_kac.presentation.home.component.HomeSummaryBox
@@ -66,8 +78,8 @@ fun HomeMainScreen(
             HomeBackgroundComponent()
             EllipseNyam(modifier = Modifier
                 .offset(
-                    x = 30.dp,
-                    y = 139.04.dp
+                    x = 30f.wp(),
+                    y = 72.18f.hp()
                 )
                 .clickable(
                     onClick = {
@@ -77,32 +89,31 @@ fun HomeMainScreen(
                 ellipseLength = 147.6658,
                 mascotLength = 88.43783
             )
-            Box(
-                modifier = Modifier
-                    .size(248.0013.dp, 103.00002.dp)
-                    .offset(x = 144.dp, y = 80.dp)
-            ){
-                Image(
-                    modifier = Modifier
-                        .matchParentSize(),
-                    painter = painterResource(R.drawable.img_homegraphscreen_maintextballoon),
-                    contentDescription = "너 진짜 너무 많이 먹은 거 아냐 ㅠㅠ"
-                )
-                Text(
-                    modifier = Modifier
-                        .offset(x = 34.27.dp, y = 18.11.dp),
-                    text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
-                    style = DungGeunMo17,
-                    textAlign = TextAlign.Center
-                )
-            }
 
             Image(
                 modifier = Modifier
-                    .size(187.67596.dp,244.dp)
+                    .size(248.0013f.wp(), 103.00002f.bhp())
+                    .offset(x = 144f.wp(), y = 40f.hp()),
+                painter = painterResource(R.drawable.img_homegraphscreen_maintextballoon),
+                contentDescription = "너 진짜 너무 많이 먹은 거 아냐 ㅠㅠ"
+            )
+            Text(
+                modifier = Modifier
+                    .offset(x = 178.27f.wp(), y = 58.11f.hp()),
+                text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
+                style = DungGeunMo17,
+                fontSize = 17f.isp(),
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
+            )
+
+
+            Image(
+                modifier = Modifier
+                    .size(187.67596f.wp(),244f.bhp())
                     .offset(
-                        x = 160.dp,
-                        y = 164.dp
+                        x = 160f.wp(),
+                        y = 124f.hp()
                     )
                     .clickable(
                         onClick = {
@@ -114,8 +125,8 @@ fun HomeMainScreen(
             )
             Image(
                 modifier = Modifier
-                    .size(94.13432.dp, 53.dp)
-                    .offset(y = 351.dp, x = 68.38.dp)
+                    .size(94.13432f.wp(), 53f.bhp())
+                    .offset(y = 311f.hp(), x = 68.38f.wp())
                     .clickable(
                         onClick = {
                             navController.navigate(Route.HomeScale.route)
@@ -129,11 +140,11 @@ fun HomeMainScreen(
         // 밑에 남은 칼로리 화면
         Column(
             modifier = Modifier
-                .padding(top = 417.dp)
+                .padding(top = 377f.hp())
                 .fillMaxSize()
                 .clip(RoundedCornerShape(
-                    topStart = 75.dp,
-                    topEnd = 75.dp
+                    topStart = 75f.wp(),
+                    topEnd = 75f.wp()
                 ))
                 .background(
                     brush = Brush.verticalGradient(
@@ -141,48 +152,54 @@ fun HomeMainScreen(
                     )
                 )
                 .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(
-                    topStart = 75.dp, topEnd = 75.dp
+                    topStart = 75f.wp(), topEnd = 75f.wp()
                 )),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = Modifier
-                    .padding(top = 42.dp),
+                    .padding(top = 42f.bhp()),
                 text = "오늘 남은 칼로리",
-                style = DungGeunMo20
+                color = Color(0xFF000000),
+                style = DungGeunMo20,
+                fontSize = 20f.isp()
             )
             Text(
                 modifier = Modifier
-                    .padding(top = 7.61.dp),
+                    .padding(top = 7.61f.bhp()),
                 text = "300kcal",
                 style = DungGeunMo35,
+                fontSize = 35f.isp(),
                 color = Color(0xFFFFA100)
             )
             Row(
                 modifier = Modifier
                     .padding(
-                        top = 24.39.dp
+                        top = 24.39f.bhp()
                     ),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(19.86.dp)
+                horizontalArrangement = Arrangement.spacedBy(19.86f.wp())
             ) {
                 HomeNutritionCircleGraph(
-                    current = current,
                     goal = goal,
-                    left = left
+                    left = left,
                 )
                 Column(
                     modifier = Modifier,
                 ) {
                     HomeSummaryBox(
                         title = "목표 일일 칼로리",
-                        value = goal.toString() + "kcal"
+                        value = goal.toString() + "kcal",
+                        width = 154f.wp(),
+                        height = 70f.bhp()
                     )
                     HomeSummaryBox(
                         modifier = Modifier
-                            .padding(top = 12.dp),
+                            .padding(top = 12f.bhp()),
                         title = "현재 체중",
-                        value = current.toString() + "kg"
+                        value = current.toString() + "kg",
+                        width = 154f.wp(),
+                        height = 70f.bhp()
                     )
                 }
             }

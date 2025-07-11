@@ -27,6 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionLabel
@@ -43,13 +46,13 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73.dp)
+                .offset(y = 477.73f.hp())
         )
         Image(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .width(275.dp)
-                .padding(top = 70.dp),
+                .width(275f.wp())
+                .padding(top = 70f.bhp()),
             painter = painterResource(R.drawable.img_homegraphscreen_nutritiontextballoon),
             contentDescription = "최근 아쉬웠던 부분들이야!"
         )

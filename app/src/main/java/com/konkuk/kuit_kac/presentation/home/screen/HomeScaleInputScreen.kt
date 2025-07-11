@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.navigation.Route

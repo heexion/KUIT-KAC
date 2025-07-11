@@ -22,7 +22,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlin.math.cos
@@ -31,7 +36,6 @@ import kotlin.math.sin
 @Composable
 fun HomeNutritionCircleGraph(
     modifier: Modifier = Modifier,
-    current: Int,
     goal: Int,
     left: Int
 ) {
@@ -44,9 +48,9 @@ fun HomeNutritionCircleGraph(
 
     Box(
         modifier = modifier
-            .size(190.1416.dp)
+            .size(190.1416f.wp(), 190.1416f.bhp())
             .padding(2.dp)
-            .clip(RoundedCornerShape(95.0708.dp))
+            .clip(RoundedCornerShape(190.1416f.wp()/2))
             .background(
                 brush = Brush.linearGradient(
                     listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
@@ -72,7 +76,7 @@ fun HomeNutritionCircleGraph(
                 }
                 drawPath(fillPath, color = Color(0xFFEEEEEE))
                 drawArc(
-                    color = Color.Black,
+                    color = Color(0xFF000000),
                     startAngle = (endAngle + angle) % 360f,
                     sweepAngle = 360f - angle,
                     useCenter = false,
@@ -84,7 +88,7 @@ fun HomeNutritionCircleGraph(
                     style = Stroke(width = thickStroke)
                 )
                 drawArc(
-                    color = Color.Black,
+                    color = Color(0xFF000000),
                     startAngle = endAngle,
                     sweepAngle = angle,
                     useCenter = false,
@@ -102,7 +106,7 @@ fun HomeNutritionCircleGraph(
 
         Box(
             modifier = Modifier
-                .size(82.dp)
+                .size(0.43 * 190.1416f.wp())
                 .clip(CircleShape)
                 .background(
                     Brush.verticalGradient(
@@ -115,6 +119,8 @@ fun HomeNutritionCircleGraph(
             Text(
                 text = "오늘의\n칼로리",
                 style = DungGeunMo20,
+                fontSize = 20f.isp(),
+                color = Color(0xFF000000),
                 textAlign = TextAlign.Center
             )
         }
@@ -125,10 +131,10 @@ fun HomeNutritionCircleGraph(
         ){
             Box(
                 modifier = Modifier
-                    .size(50.dp, 40.dp)
+                    .size(0.256 * 190.1416f.wp())
                     .offset(
-                        x = x.dp,
-                        y =  y.dp
+                        x = x.toFloat().wp(),
+                        y =  y.toFloat().bhp()
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -136,7 +142,8 @@ fun HomeNutritionCircleGraph(
                     modifier = Modifier,
                     text = left.toString() + "\nkcal",
                     style = DungGeunMo17,
-                    color = Color.Black,
+                    fontSize = 17f.isp(),
+                    color = Color(0xFF000000),
                     textAlign = TextAlign.Center
                 )
             }
