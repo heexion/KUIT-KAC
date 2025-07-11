@@ -32,6 +32,7 @@ fun Float.hp(): Dp {
     return paddingHeight(this@hp / 829) + topPadding
 }
 
+// 사이즈 정할 때는 hp 대신 무조건 이걸로
 @Composable
 fun Float.bhp(): Dp {
     val windowSize = LocalWindowInfo.current.containerSize
