@@ -1,12 +1,19 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.konkuk.kuit_kac.presentation.diet.DietScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.konkuk.kuit_kac.presentation.diet.DietScreen
+import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
+import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
+import com.konkuk.kuit_kac.presentation.diet.MealSearchItemDetailScreen
+import com.konkuk.kuit_kac.presentation.diet.MealSearchScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeNutritionScreen
@@ -91,5 +98,26 @@ fun KacNavGraph(
                 modifier = modifier
             )
         }
+
+        composable(route = "fasting_result") {
+            FastingResultScreen(navController = navController)
+        }
+
+        composable("meal_record") {
+            MealRecordScreen(navController = navController)
+        }
+        composable(route = "meal_search") {
+            MealSearchScreen(navController = navController)
+        }
+        composable(
+            route = "meal_search_detail/{foodName}",
+            arguments = listOf(navArgument("foodName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+            MealSearchItemDetailScreen(foodName = foodName, navController = navController)
+        }
+
+
+
     }
 }
