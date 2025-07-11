@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,13 +41,22 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
+data class MealCardData(
+    val mealType: String,
+    val totalKcal: String,
+    val foodList: List<Triple<Painter, String, String>>
+)
+
+
 @Composable
 fun MealMainScreen(
     navController: NavController,
     selectedTab: String,
     onTabClick: (String) -> Unit,
     onRecordClick: () -> Unit,
-    onFastedClick: () -> Unit
+    onFastedClick: () -> Unit,
+    mealCards: List<MealCardData>
+
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -133,41 +143,57 @@ fun MealMainScreen(
 
                 Spacer(modifier = Modifier.height(28.dp))
 
-                Box(
-                    modifier = Modifier
-                        .width(364.dp)
-                        .height(458.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.img_meal_bg),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
-                    )
-
-                    Column(
+                if (mealCards.isEmpty()) {
+                    // 식단이 없을 때
+                    Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 32.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .width(364.dp)
+                            .height(458.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
                     ) {
-                        SpeechBubble(messageText = "현재 식단이\n비어있어요!")
-                        Spacer(modifier = Modifier.height(20.dp))
-                        EllipseNyam(
-                            ellipseLength = 182.0,
-                            mascotLength = 109.0
+                        Image(
+                            painter = painterResource(id = R.drawable.img_meal_bg),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.matchParentSize()
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
-                        OutlinedRoundedButton(
-                            value = "단식했어!",
-                            onClick = {
-                                navController.navigate("fasting_result")
-                            }
-                        )
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            SpeechBubble(messageText = "현재 식단이\n비어있어요!")
+                            Spacer(modifier = Modifier.height(20.dp))
+                            EllipseNyam(ellipseLength = 182.0, mascotLength = 109.0)
+                            Spacer(modifier = Modifier.height(20.dp))
+                            OutlinedRoundedButton(
+                                value = "단식했어!",
+                                onClick = {
+                                    navController.navigate("fasting_result")
+                                }
+                            )
+                        }
+                    }
+                } else {
+                    // 식단이 있는 경우 MealCard 목록 출력
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        mealCards.forEach { card ->
+                            MealCard(
+                                mealType = card.mealType,
+                                totalKcal = card.totalKcal,
+                                foodList = card.foodList,
+                                onEditClick = { /* TODO: 편집 화면 이동 */ }
+                            )
+                        }
                     }
                 }
+
             }
         }
 
@@ -319,16 +345,44 @@ fun RecordMealButton(
 }
 
 
-
+//식단 있을때
 @Preview(showBackground = true)
 @Composable
 private fun MealMainScreenPreview() {
     val navController = rememberNavController()
+
     MealMainScreen(
         navController = navController,
         selectedTab = "기록",
         onTabClick = {},
         onRecordClick = {},
-        onFastedClick = {}
+        onFastedClick = {},
+        mealCards = listOf(
+            MealCardData(
+                mealType = "아침",
+                totalKcal = "420kcal",
+                foodList = listOf(
+                    Triple(painterResource(id = R.drawable.ic_sweetpotato), "고구마", "100g"),
+                    Triple(painterResource(id = R.drawable.ic_salad), "샐러드", "50g"),
+                    Triple(painterResource(id = R.drawable.ic_chickenbreast), "닭가슴살", "80g")
+                )
+            )
+        )
     )
 }
+
+////식단 없을때
+//@Preview(showBackground = true)
+//@Composable
+//private fun MealMainScreenEmptyPreview() {
+//    val navController = rememberNavController()
+//
+//    MealMainScreen(
+//        navController = navController,
+//        selectedTab = "기록",
+//        onTabClick = {},
+//        onRecordClick = {},
+//        onFastedClick = {},
+//        mealCards = emptyList() //식단 없음
+//    )
+//}
