@@ -14,7 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -22,27 +27,33 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun HomeSummaryBox(
     modifier: Modifier = Modifier,
     title: String,
-    value: String
+    value: String,
+    width : Dp,
+    height: Dp
 ) {
     Column(
         modifier = modifier
             .shadow(elevation = 0.dp, spotColor = Color(0x1A000000), ambientColor = Color(0x1A000000))
-            .size(154.dp, 70.dp)
-            .clip(RoundedCornerShape(18.dp))
+            .size(154f.wp(), 70f.bhp())
+            .clip(RoundedCornerShape(0.117 * width))
             .background(color = Color.Transparent)
-            .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(18.dp)),
+            .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(18f.wp())),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = title,
-            style = DungGeunMo15
+            style = DungGeunMo15,
+            fontSize = 15f.isp(),
+            color = Color(0xFF000000)
         )
         Text(
             modifier = Modifier
-                .padding(top = 2.dp),
+                .padding(top = 2f.bhp()),
             text = value,
-            style = DungGeunMo20
+            style = DungGeunMo20,
+            fontSize = 20f.isp(),
+            color = Color(0xFF000000)
         )
     }
 }

@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 
 @Composable
 fun EllipseNyam(
@@ -24,13 +26,13 @@ fun EllipseNyam(
     ){
         Image(
             modifier = Modifier
-                .size(ellipseLength.dp),
+                .size(ellipseLength.toFloat().wp(), ellipseLength.toFloat().bhp()),
             painter = painterResource(R.drawable.img_component_ellipse),
             contentDescription = "Nyam Ellipse"
         )
         Image(
             modifier = Modifier
-                .size(mascotLength.dp),
+                .size(mascotLength.toFloat().wp(), ellipseLength.toFloat().bhp()),
             painter = painterResource(R.drawable.img_component_mascot),
             contentDescription = "NyamCoach Mascot"
         )
