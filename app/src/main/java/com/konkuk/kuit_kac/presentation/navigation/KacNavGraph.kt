@@ -8,11 +8,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.konkuk.kuit_kac.presentation.diet.DietScreen
 import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
+import com.konkuk.kuit_kac.presentation.diet.MealMainScreen
 import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchItemDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.TimeInputResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
@@ -74,12 +75,18 @@ fun KacNavGraph(
         }
 
 
-        composable(Route.Diet.route) {
-            DietScreen(
-                modifier = modifier
-
+        composable(route = Route.Diet.route) {
+            MealMainScreen(
+                //나중에 뷰모델로 바꿔야함
+                navController = navController,
+                selectedTab = "기록",
+                onTabClick = { /* 탭 전환 로직 */ },
+                onRecordClick = { navController.navigate("meal_record") },
+                onFastedClick = { navController.navigate("fasting_result") },
+                mealCards = emptyList() // 또는 실제 식단 데이터
             )
         }
+
         composable(Route.Fitness.route) {
             FitnessScreen(
                 modifier = Modifier
@@ -116,6 +123,11 @@ fun KacNavGraph(
             val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
             MealSearchItemDetailScreen(foodName = foodName, navController = navController)
         }
+
+        composable(route = "time_input_result") {
+            TimeInputResultScreen(navController = navController)
+        }
+
 
 
 
