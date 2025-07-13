@@ -13,6 +13,10 @@ import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
 import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchItemDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchScreen
+import com.konkuk.kuit_kac.presentation.diet.component.DietPatchScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietCreateScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietExistScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietMainScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
@@ -75,9 +79,27 @@ fun KacNavGraph(
 
 
         composable(Route.Diet.route) {
-            DietScreen(
-                modifier = modifier
-
+            DietMainScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(Route.DietCreate.route) {
+            DietCreateScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(Route.DietExist.route) {
+            DietExistScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(Route.DietPatch.route) {
+            DietPatchScreen(
+                modifier = modifier,
+                navController = navController
             )
         }
         composable(Route.Fitness.route) {

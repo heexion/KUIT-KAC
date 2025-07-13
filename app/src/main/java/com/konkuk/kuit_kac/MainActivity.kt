@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                 val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route)
                 val backArrowRoutes = setOf(
                     Route.HomeNutrition.route, Route.HomeAnalysis.route,Route.HomeObservation.route,
-                    Route.HomeScale.route // 여기다가 뒤로가기 버튼 있으면 추가
+                    Route.HomeScale.route, Route.DietCreate.route // 여기다가 뒤로가기 버튼 있으면 추가
                 )
                 Box(
                     modifier = Modifier
