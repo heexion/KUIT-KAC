@@ -3,6 +3,9 @@ package com.konkuk.kuit_kac.presentation.navigation
 sealed class Route(val route: String) {
 
     data object Diet : Route(route = "diet")       // 식단
+    data object DietCreate : Route(route = "DietCreate")
+    data object DietExist : Route(route = "DietExist")
+    data object DietPatch : Route(route = "DietPatch")
 
     data object Home : Route(route = "home")       // 홈
     data object HomeObservation : Route(route = "homeObservation") // 홈-관찰 일지

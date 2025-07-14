@@ -29,7 +29,7 @@ fun Float.hp(): Dp {
     fun paddingHeight(height: Float): Dp {
         return with(density) {(windowSize.height * height).toDp()}
     }
-    return paddingHeight(this@hp / 829) + topPadding
+    return paddingHeight(this@hp / 917) + topPadding
 }
 
 // 사이즈 정할 때는 hp 대신 무조건 이걸로
@@ -40,7 +40,7 @@ fun Float.bhp(): Dp {
     fun paddingHeight(height: Float): Dp {
         return with(density) {(windowSize.height * height).toDp()}
     }
-    return paddingHeight(this@bhp / 829)
+    return paddingHeight(this@bhp / 917)
 }
 
 @Composable
@@ -50,5 +50,5 @@ fun Float.isp(): TextUnit {
     fun spMake(size: Float): TextUnit {
         return with(density) {(windowSize.height * size).toSp()}
     }
-    return spMake(this@isp / 829)
+    return spMake(this@isp / 917)
 }

@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
 @Composable
@@ -35,7 +37,7 @@ fun HomeMultipleNutritionBar(
     percentageMaker(healthy) */
     Row(
         modifier = modifier
-            .size(329.dp, 53.6123.dp)
+            .size(329f.wp(), 53.6123f.hp())
             .clip(RoundedCornerShape(78.dp))
             .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
             .border(1.dp,Color(0xFF000000), shape = RoundedCornerShape(78.dp))

@@ -13,6 +13,11 @@ import com.konkuk.kuit_kac.presentation.diet.MealMainScreen
 import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchItemDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchScreen
+import com.konkuk.kuit_kac.presentation.diet.component.DietPatchScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietCreateScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietExistScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietMainScreen
+
 import com.konkuk.kuit_kac.presentation.diet.screen.TimeInputResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
@@ -75,7 +80,29 @@ fun KacNavGraph(
         }
 
 
-        composable(route = Route.Diet.route) {
+        composable(Route.Diet.route) {
+            DietMainScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(Route.DietCreate.route) {
+            DietCreateScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(Route.DietExist.route) {
+            DietExistScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(Route.DietPatch.route) {
+            DietPatchScreen(
+                modifier = modifier,
+                navController = navController
+        composable(route = Route.Meal.route) {
             MealMainScreen(
                 //나중에 뷰모델로 바꿔야함
                 navController = navController,
