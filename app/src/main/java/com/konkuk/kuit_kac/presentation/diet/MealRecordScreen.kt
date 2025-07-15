@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -135,7 +136,7 @@ fun MealRecordScreen(
 
             // 버튼 1: 저장된 내 식단 선택
             Button(
-                onClick = { navController.navigate("my_saved_meal_list") },
+                onClick = { navController.navigate(Route.DietExist.route) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(70.dp)

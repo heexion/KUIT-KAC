@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
+import com.konkuk.kuit_kac.presentation.diet.MealEditResultScreen
 import com.konkuk.kuit_kac.presentation.diet.MealMainScreen
 import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
 import com.konkuk.kuit_kac.presentation.diet.MealSearchItemDetailScreen
@@ -102,6 +103,9 @@ fun KacNavGraph(
             DietPatchScreen(
                 modifier = modifier,
                 navController = navController
+            )
+        }
+
         composable(route = Route.Meal.route) {
             MealMainScreen(
                 //나중에 뷰모델로 바꿔야함
@@ -154,6 +158,10 @@ fun KacNavGraph(
         composable(route = "time_input_result") {
             TimeInputResultScreen(navController = navController)
         }
+        composable("meal_edit_result") {
+            MealEditResultScreen(navController = navController)
+        }
+
 
 
 

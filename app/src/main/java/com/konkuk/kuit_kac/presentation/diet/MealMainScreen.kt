@@ -39,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.component.SelectButton
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 data class MealCardData(
@@ -106,7 +107,10 @@ fun MealMainScreen(
                             value = "나만의 식단",
                             isSelected = selectedTab == "나만의",
                             buttonHeight = 49,
-                            onClick = { onTabClick("나만의") }
+                            onClick = {
+                                navController.navigate(Route.Diet.route)
+                                onTabClick("나만의")
+                            }
                         )
                     }
                 }
@@ -188,7 +192,7 @@ fun MealMainScreen(
                                 mealType = card.mealType,
                                 totalKcal = card.totalKcal,
                                 foodList = card.foodList,
-                                onEditClick = { /* TODO: 편집 화면 이동 */ }
+                                onEditClick = { navController.navigate(Route.DietPatch.route) }
                             )
                         }
                     }
