@@ -42,8 +42,8 @@ fun MealEditResultScreen(
     val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     val shadow = Color(0xFFF1C67F)
     val messageText = "수정 완료!\n수고 많았어~!"
-    val nyameeImg = R.drawable.ic_nyamee_happy
-    val hamCoachImg = R.drawable.ic_hamcoach_normal
+    val nyameeImg = R.drawable.img_nyamee_happy
+    val hamCoachImg = R.drawable.img_hamcoach_normal
 
     Box(
         modifier = Modifier
