@@ -8,14 +8,20 @@ sealed class Route(val route: String) {
     data object DietPatch : Route(route = "DietPatch")
     data object Meal : Route(route = "meal")
 
+    data object PlanDiet : Route(route = "PlanDiet") // 식단 계획
+    data object PlanAI : Route(route = "PlanAI") // 식단 AI 추천
+    data object PlanInPerson : Route(route = "PlanInPerson") // 식단 직접 입력
+    data object PlanCheck : Route(route = "PlanCheck") // 저장된 식단 확인
+
+
     data object Home : Route(route = "home")       // 홈
     data object HomeObservation : Route(route = "homeObservation") // 홈-관찰 일지
     data object HomeScale : Route(route = "homeScale") // 홈-체중계
     data object HomeScaleInput : Route(route = "homeScaleInput") // 홈-체중계 입력
     data object HomeResult : Route(route = "homeResult") // 홈-결과
 
-    data object HomeAnalysis: Route(route = "homeAnalysis")
-    data object HomeNutrition: Route(route = "homeNutrition")
+    data object HomeAnalysis : Route(route = "homeAnalysis")
+    data object HomeNutrition : Route(route = "homeNutrition")
 
     data object Fitness : Route(route = "fitness") // 운동
 
