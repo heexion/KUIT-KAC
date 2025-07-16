@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 
@@ -51,6 +52,7 @@ fun DefaultButton(
         Text(
             text = value,
             style = DungGeunMo20,
+            fontSize = 20f.isp(),
             lineHeight = 28.sp,
             color = Color(0xFF000000),
             modifier = Modifier.align(Alignment.Center)
