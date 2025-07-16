@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.diet.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

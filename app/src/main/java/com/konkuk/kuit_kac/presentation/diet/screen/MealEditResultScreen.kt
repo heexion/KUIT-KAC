@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,23 +32,26 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
 @Composable
-fun FastingResultScreen(
+fun MealEditResultScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFD6E6F5))
-    val shadow = Color(0x85B6C9DC)
-    val messageText = "아이고.. 바빴구나?\n아니면 일부러 굶은 거야?\n단식으로 기록할게\n다음 끼니는 꼭 챙겨먹자!"
-    val nyameeImg = R.drawable.ic_nyamee_sad
-    val hamCoachImg = R.drawable.ic_hamcoach_angry
+    val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
+    val shadow = Color(0xFFF1C67F)
+    val messageText = "수정 완료!\n수고 많았어~!"
+    val nyameeImg = R.drawable.ic_nyamee_happy
+    val hamCoachImg = R.drawable.ic_hamcoach_normal
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color.Gray)
-            .background(brush = Brush.verticalGradient(bgColors))
+            .background(
+                brush = Brush.verticalGradient(bgColors)
+            ),
     ) {
         Text(
             text = "냠코치",
@@ -61,29 +64,52 @@ fun FastingResultScreen(
                 .align(Alignment.TopCenter)
         )
 
-        // 그림자 효과 (햄코치 주변 백라이트)
+        // 배경 조명
         Image(
-            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
-            contentDescription = null,
             modifier = Modifier
                 .alpha(0.5f)
                 .padding(top = 630.dp, start = 160.dp, end = 60.dp)
                 .size(height = 50.dp, width = 180.dp),
             contentScale = ContentScale.FillBounds,
-            colorFilter = ColorFilter.tint(shadow)
+            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+            colorFilter = ColorFilter.tint(shadow),
+            contentDescription = null,
         )
         Image(
-            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
-            contentDescription = null,
             modifier = Modifier
                 .alpha(0.5f)
                 .padding(top = 615.dp, start = 45.dp, end = 200.dp)
                 .size(height = 32.dp, width = 80.dp),
             contentScale = ContentScale.FillBounds,
-            colorFilter = ColorFilter.tint(shadow)
+            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+            colorFilter = ColorFilter.tint(shadow),
+            contentDescription = null,
+        )
+        Image(
+            modifier = Modifier
+                .padding(top = 235.dp, end = 200.dp)
+                .size(232.dp),
+            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+            contentDescription = null,
         )
 
-        // 말풍선 + 텍스트
+        // 햄코치 & 냠미
+        Image(
+            modifier = Modifier
+                .padding(top = 277.dp, start = 26.dp, end = 240.dp)
+                .size(139.dp),
+            painter = painterResource(id = hamCoachImg),
+            contentDescription = null,
+        )
+        Image(
+            modifier = Modifier
+                .padding(top = 320.dp, start = 86.dp, end = 2.dp)
+                .size(350.dp),
+            painter = painterResource(id = nyameeImg),
+            contentDescription = null,
+        )
+
+        // 말풍선
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,40 +122,15 @@ fun FastingResultScreen(
             )
             Text(
                 text = messageText,
-                style = DungGeunMo20,
+                style = DungGeunMo24,
                 lineHeight = 32.sp,
-                color = Color.Black,
+                color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 2.dp, bottom = 30.dp)
             )
         }
 
-        // 햄스터 코치 백라이트 & 햄스터
-        Image(
-            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 235.dp, end = 200.dp)
-                .size(232.dp)
-        )
-        Image(
-            painter = painterResource(id = hamCoachImg),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 277.dp, start = 26.dp, end = 240.dp)
-                .size(139.dp)
-        )
-
-        // 냠이 캐릭터
-        Image(
-            painter = painterResource(id = nyameeImg),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 320.dp, start = 86.dp, end = 2.dp)
-                .size(350.dp)
-        )
-
-        // 돌아가기 버튼
+        // 버튼
         Button(
             onClick = {
                 navController.navigate(Route.Home.route)
@@ -157,9 +158,9 @@ fun FastingResultScreen(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-private fun FastingResultPreview() {
-    FastingResultScreen(navController = rememberNavController())
+private fun MealResultScreenPreview() {
+    val navController = rememberNavController()
+    MealEditResultScreen(navController = navController)
 }

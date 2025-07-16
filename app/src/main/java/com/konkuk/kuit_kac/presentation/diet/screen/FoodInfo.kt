@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.diet.screen
 
 import com.konkuk.kuit_kac.R
 
