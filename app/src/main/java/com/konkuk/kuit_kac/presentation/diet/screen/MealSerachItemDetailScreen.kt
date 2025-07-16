@@ -73,7 +73,7 @@ fun MealSearchItemDetailScreen(
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 onClick = { /* TODO: 저장 처리 */ },
                 value = "추가하기",
-                buttonHeight = 70,
+                buttonHeight = 70f,
                 isOrange = true
             )
 
