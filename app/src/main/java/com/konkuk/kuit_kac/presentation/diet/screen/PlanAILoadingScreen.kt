@@ -16,12 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlinx.coroutines.delay
-import kotlin.math.sign
 
 // 입력하기 후 분석 화면
 @Composable
@@ -34,8 +32,8 @@ fun PlanAILoadingScreen(
     LaunchedEffect(Unit) {
         delay(3000L) // 임시로 3초 대기 후 넘어가도록 함. TODO: 서버에서 분석 완료되면 넘어가도록 해야 함
         isCompleted = true
-//        if (isCompleted)
-//            navController.navigate("NextScreenRoute")
+        if (isCompleted)
+            navController.navigate("plan_ai_complete")
     }
 
     Box(
