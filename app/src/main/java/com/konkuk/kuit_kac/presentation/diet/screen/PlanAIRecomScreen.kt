@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
@@ -43,8 +44,10 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 // 외식 / 술자리 고려 AI 식단 추천 기능 화면
 @Composable
-fun PlanAIRecomScreen(modifier: Modifier = Modifier) {
-
+fun PlanAIRecomScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }
 
@@ -142,7 +145,7 @@ fun PlanAIRecomScreen(modifier: Modifier = Modifier) {
                         .height(275.72f.bhp())
                         .padding(top = 20.98f.bhp(), start = 23.34f.wp(), end = 26.89f.wp())
                         .background(Color.LightGray)
-                )
+                )   // TODO : 달력 추후 추가
                 Column(
                     modifier = Modifier.padding(horizontal = 16f.wp(), vertical = 36.31f.bhp()),
                 ) {
@@ -176,6 +179,10 @@ fun PlanAIRecomScreen(modifier: Modifier = Modifier) {
                         modifier = Modifier.padding(top = 24f.bhp()),
                         isAvailable = if (blueClicked.value || pinkClicked.value) true
                         else false,
+                        onClick = {
+                            if (blueClicked.value || pinkClicked.value)
+                                navController.navigate("plan_ai_loading")
+                        },
                         value = "다 입력했어!",
                         height = 65f
                     )
@@ -183,7 +190,6 @@ fun PlanAIRecomScreen(modifier: Modifier = Modifier) {
                         modifier = Modifier.size(75f.bhp()),
                     )
                 }
-
             }
         }
     }
@@ -193,6 +199,8 @@ fun PlanAIRecomScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun PlanAIRecomScreenPreview() {
+    val navController = rememberNavController()
     PlanAIRecomScreen(
+        navController = navController
     )
 }
