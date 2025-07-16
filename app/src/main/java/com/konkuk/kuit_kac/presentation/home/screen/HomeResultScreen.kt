@@ -44,8 +44,8 @@ fun HomeResultScreen(
     var bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     var shadow = Color(0xFFF1C67F)
     var messageText = "체중이 ${value}kg 줄었네!\n수고 많았어!"
-    var nyameeImg = R.drawable.ic_nyamee_happy
-    var hamCoachImg = R.drawable.ic_hamcoach_normal
+    var nyameeImg = R.drawable.img_nyamee_happy
+    var hamCoachImg = R.drawable.img_hamcoach_normal
 
 
     // 체중이 늘었을 때(감량 실패 시) 값을 바꿔서 넣기
@@ -53,8 +53,8 @@ fun HomeResultScreen(
         bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFd6e6f5))
         shadow = Color(0x85B6C9DC)
         messageText = "체중이 ${value}kg 늘었네..\n더 열심히 해보자!"
-        nyameeImg = R.drawable.ic_nyamee_sad
-        hamCoachImg = R.drawable.ic_hamcoach_angry
+        nyameeImg = R.drawable.img_nyamee_sad
+        hamCoachImg = R.drawable.img_hamcoach_angry
     }
 
     Box(
