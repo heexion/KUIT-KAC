@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 
@@ -24,7 +25,7 @@ fun DefaultButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     value: String,
-    buttonHeight: Int,
+    buttonHeight: Float,
     isOrange: Boolean = false
 ) {
     val image = if (isOrange) {
@@ -36,12 +37,12 @@ fun DefaultButton(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(buttonHeight.dp)
+            .height(buttonHeight.bhp())
             .clickable { onClick() }
     ) {
         Image(
             modifier = Modifier
-                .height(buttonHeight.dp),
+                .height(buttonHeight.bhp()),
             painter = painterResource(image),
             contentDescription = "default button",
             contentScale = ContentScale.FillBounds
@@ -66,7 +67,7 @@ private fun DefaultButtonPreview() {
         modifier = Modifier,
         onClick = {},
         value = "일반 버튼(주황/노랑 선택 가능)",
-        buttonHeight = 70,
+        buttonHeight = 70f,
         isOrange = true
     )
 }
