@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet.screen
+package com.konkuk.kuit_kac.presentation.diet.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

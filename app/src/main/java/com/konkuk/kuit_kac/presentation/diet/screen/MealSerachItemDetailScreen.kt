@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.component.MealDetailCard
 import com.konkuk.kuit_kac.component.MealTopBarWithSearch
+import com.konkuk.kuit_kac.presentation.diet.foodInfoMap
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable

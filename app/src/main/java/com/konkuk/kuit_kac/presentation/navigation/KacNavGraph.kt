@@ -14,7 +14,7 @@ import com.konkuk.kuit_kac.presentation.diet.screen.MealMainScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.MealRecordScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.MealSearchItemDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.MealSearchScreen
-import com.konkuk.kuit_kac.presentation.diet.component.DietPatchScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietPatchScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietCreateScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietExistScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietMainScreen
