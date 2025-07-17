@@ -2,12 +2,15 @@ package com.konkuk.kuit_kac.presentation.navigation
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
 import com.konkuk.kuit_kac.presentation.diet.MealEditResultScreen
 import com.konkuk.kuit_kac.presentation.diet.MealMainScreen
@@ -20,7 +23,13 @@ import com.konkuk.kuit_kac.presentation.diet.screen.DietExistScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietMainScreen
 
 import com.konkuk.kuit_kac.presentation.diet.screen.TimeInputResultScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessCreateScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessData
+import com.konkuk.kuit_kac.presentation.fitness.FitnessEditResultScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessMainScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
+import com.konkuk.kuit_kac.presentation.fitness.FitnessSearchScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeNutritionScreen
@@ -162,9 +171,38 @@ fun KacNavGraph(
             MealEditResultScreen(navController = navController)
         }
 
-
-
-
-
+        composable("fitness_create") {
+            FitnessCreateScreen(navController = navController)
+        }
+        composable("fitness_edit") {
+            // 예: 샘플 데이터 전달
+            FitnessEditScreen(
+                navController = navController,
+                fitnessList = remember {
+                    mutableStateListOf(
+                        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, onDeleteClick = { }),
+                        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
+                        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
+                    )
+                }
+            )
+        }
+        composable("fitness_edit_result") {
+            FitnessEditResultScreen(navController = navController)
+        }
+        composable("fitness_search") {
+            FitnessSearchScreen(navController = navController)
+        }
+        composable(route = "fitness_main") {
+            FitnessMainScreen(
+                navController = navController,
+                fitnessData = listOf(),
+                onFastedClick = { /* 구현 */ },
+                onRecordClick = { /* 구현 */ },
+                selectedTab = "0", // Int면 타입 맞춰서 수정
+                onTabClick = { /* 탭 클릭 시 동작 */ }
+            )
+        }
     }
 }
+
