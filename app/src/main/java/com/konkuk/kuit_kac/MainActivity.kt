@@ -55,11 +55,13 @@ class MainActivity : ComponentActivity() {
                     "plan_ai_loading"
                 )
                 val backArrowRoutes = setOf(
+                    // 여기다가 뒤로가기 버튼 있으면 추가
                     Route.HomeNutrition.route,
                     Route.HomeAnalysis.route,
                     Route.HomeObservation.route,
                     Route.HomeScale.route,
-                    Route.DietCreate.route // 여기다가 뒤로가기 버튼 있으면 추가
+                    Route.DietCreate.route,
+                    "plan_ai_detail"
                 )
                 Box(
                     modifier = Modifier

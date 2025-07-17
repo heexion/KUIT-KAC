@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.diet.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +29,8 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 @Composable
 fun PlanDietCard(
     dietTime: String,
-    dietValue: List<String>
+    dietValue: List<String>,
+    onClick: () -> Unit = {},
 ) {
     Column(
         Modifier
@@ -98,20 +100,17 @@ fun PlanDietCard(
                     )
                 }
             }
-
-
             Image(
                 painter = painterResource(id = R.drawable.ic_record),
                 modifier = Modifier
                     .padding(end = 11.06f.wp())
                     .size(25.35508f.wp(), 25.35508f.bhp())
-                    .align(Alignment.CenterEnd),
+                    .align(Alignment.CenterEnd)
+                    .clickable { onClick() },
                 contentScale = ContentScale.FillBounds,
                 contentDescription = null,
             )
-
         }
-
     }
 }
 
