@@ -46,16 +46,26 @@ class MainActivity : ComponentActivity() {
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
 
-                val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route, "fasting_result" , "time_input_result", "meal_edit_result")
+                val hideBottomBarRoutes = setOf(
+                    Route.HomeScaleInput.route,
+                    Route.HomeResult.route,
+                    "fasting_result",
+                    "time_input_result",
+                    "meal_edit_result",
+                    "plan_ai_loading"
+                )
                 val backArrowRoutes = setOf(
-                    Route.HomeNutrition.route, Route.HomeAnalysis.route,Route.HomeObservation.route,
-                    Route.HomeScale.route, Route.DietCreate.route // 여기다가 뒤로가기 버튼 있으면 추가
+                    Route.HomeNutrition.route,
+                    Route.HomeAnalysis.route,
+                    Route.HomeObservation.route,
+                    Route.HomeScale.route,
+                    Route.DietCreate.route // 여기다가 뒤로가기 버튼 있으면 추가
                 )
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .then(
-                            if(currentRoute !in hideBottomBarRoutes){
+                            if (currentRoute !in hideBottomBarRoutes) {
                                 Modifier.padding(
                                     bottom = WindowInsets.navigationBars
                                         .asPaddingValues()
@@ -65,7 +75,7 @@ class MainActivity : ComponentActivity() {
                                 Modifier
                             }
                         )
-                ){
+                ) {
 
                     Scaffold(
                         bottomBar = {
@@ -76,14 +86,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         },
-                    ){ innerPadding ->
+                    ) { innerPadding ->
                         KacNavGraph(
                             modifier = Modifier
                                 .padding(innerPadding),
                             navController = navController
                         )
                     }
-                    if(currentRoute in backArrowRoutes){
+                    if (currentRoute in backArrowRoutes) {
                         Image(
                             modifier = Modifier
                                 .padding(start = 24.dp, top = 58.dp)
@@ -96,7 +106,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                }
+            }
 
         }
     }
