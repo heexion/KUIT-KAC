@@ -10,17 +10,26 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.presentation.diet.FastingResultScreen
-import com.konkuk.kuit_kac.presentation.diet.MealEditResultScreen
-import com.konkuk.kuit_kac.presentation.diet.MealMainScreen
-import com.konkuk.kuit_kac.presentation.diet.MealRecordScreen
-import com.konkuk.kuit_kac.presentation.diet.MealSearchItemDetailScreen
-import com.konkuk.kuit_kac.presentation.diet.MealSearchScreen
-import com.konkuk.kuit_kac.presentation.diet.component.DietPatchScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.FastingResultScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.MealEditResultScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.MealMainScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.MealRecordScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.MealSearchItemDetailScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.MealSearchScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.DietPatchScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietCreateScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietExistScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.DietMainScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIRecomScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanCheckScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanDietMainScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddCompleteScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 
 import com.konkuk.kuit_kac.presentation.diet.screen.TimeInputResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.FitnessCreateScreen
@@ -169,6 +178,73 @@ fun KacNavGraph(
         }
         composable("meal_edit_result") {
             MealEditResultScreen(navController = navController)
+        }
+        composable(Route.PlanDiet.route) {
+            PlanDietMainScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(Route.PlanAI.route) {
+            PlanAIRecomScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(route = "plan_ai_loading") {
+            PlanAILoadingScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(route = "plan_ai_complete") {
+            PlanAICompleteScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(route = "plan_ai_detail") {
+            PlanAIDetailScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(route = "plan_result") {
+            PlanResultScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(Route.PlanInPerson.route) {
+            PlanInPersonScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(route = "plan_in_person_add") {
+            PlanIPAddScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(route = "plan_in_person_add_complete") {
+            PlanIPAddCompleteScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(Route.PlanCheck.route) {
+            PlanCheckScreen(
+                modifier = modifier,
+                navController = navController
+            )
         }
 
         composable("fitness_create") {

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -44,15 +43,12 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
-import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo27
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -143,7 +139,7 @@ fun HomeScaleScreen(
             modifier = Modifier
                 .padding(top = 102.dp)
                 .size(290.dp),
-            painter = painterResource(id = R.drawable.ic_nyamee_normal),
+            painter = painterResource(id = R.drawable.img_nyamee_normal),
             contentDescription = "homescale scale bg",
         )
 

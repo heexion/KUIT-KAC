@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.component
+package com.konkuk.kuit_kac.presentation.diet.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -13,63 +13,60 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
-import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
-
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
-fun DefaultButton(
+fun PlanSelectButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
+    isSelected: Boolean = false,
+    isBlue: Boolean = true,
     value: String,
-    buttonHeight: Float,
-    isOrange: Boolean = false
+    height: Float = 60f
 ) {
-    val image = if (isOrange) {
-        R.drawable.bg_orange_button_default
+
+    val image = if (isBlue) {
+        if (isSelected) R.drawable.bg_plan_blue_button_selected
+        else R.drawable.bg_plan_blue_button_default
     } else {
-        R.drawable.bg_yellow_button_default
+        if (isSelected) R.drawable.bg_plan_pink_button_selected
+        else R.drawable.bg_plan_pink_button_default
     }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(buttonHeight.bhp())
+            .height(height.bhp())
             .clickable { onClick() }
     ) {
         Image(
             modifier = Modifier
-                .height(buttonHeight.bhp()),
+                .matchParentSize(),
             painter = painterResource(image),
-            contentDescription = "default button",
+            contentDescription = "select button",
             contentScale = ContentScale.FillBounds
         )
 
         Text(
             text = value,
-            style = DungGeunMo20,
-            fontSize = 20f.isp(),
-            lineHeight = 28.sp,
+            style = DungGeunMo17,
+            fontSize = 17f.isp(),
             color = Color(0xFF000000),
             modifier = Modifier.align(Alignment.Center)
         )
     }
-
-
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun DefaultButtonPreview() {
-    DefaultButton(
-        modifier = Modifier,
-        onClick = {},
-        value = "일반 버튼(주황/노랑 선택 가능)",
-        buttonHeight = 70f,
-        isOrange = true
+private fun PlanSelectButtonPreview() {
+    PlanSelectButton(
+        isSelected = false,
+        isBlue = false,
+        value = "분홍/파랑 선택 가능",
+        height = 60f
     )
 }

@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -46,16 +48,40 @@ class MainActivity : ComponentActivity() {
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
 
-                val hideBottomBarRoutes = setOf(Route.HomeScaleInput.route, Route.HomeResult.route, "fasting_result" , "time_input_result", "meal_edit_result")
-                val backArrowRoutes = setOf(
-                    Route.HomeNutrition.route, Route.HomeAnalysis.route,Route.HomeObservation.route,
-                    Route.HomeScale.route, Route.DietCreate.route // 여기다가 뒤로가기 버튼 있으면 추가
+                val hideBottomBarRoutes = setOf(
+                    Route.HomeScaleInput.route,
+                    Route.HomeResult.route,
+                    "fasting_result",
+                    "time_input_result",
+                    "meal_edit_result",
+                    "plan_ai_loading",
+                    "plan_result"
                 )
+                val backArrowRoutes = setOf(
+                    // 여기다가 뒤로가기 버튼 있으면 추가
+                    Route.HomeNutrition.route,
+                    Route.HomeAnalysis.route,
+                    Route.HomeObservation.route,
+                    Route.HomeScale.route,
+                    Route.DietCreate.route,
+                    "plan_ai_detail",
+                    Route.PlanCheck.route,
+                )
+                val planButtonRoutes = setOf(
+                    Route.Home.route,
+                    Route.HomeNutrition.route,
+                    Route.HomeAnalysis.route,
+                    Route.HomeObservation.route,
+                    Route.Diet.route,
+                    Route.DietExist.route,
+                    Route.DietCreate.route,
+                )
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .then(
-                            if(currentRoute !in hideBottomBarRoutes){
+                            if (currentRoute !in hideBottomBarRoutes) {
                                 Modifier.padding(
                                     bottom = WindowInsets.navigationBars
                                         .asPaddingValues()
@@ -65,7 +91,7 @@ class MainActivity : ComponentActivity() {
                                 Modifier
                             }
                         )
-                ){
+                ) {
 
                     Scaffold(
                         bottomBar = {
@@ -76,14 +102,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         },
-                    ){ innerPadding ->
+                    ) { innerPadding ->
                         KacNavGraph(
                             modifier = Modifier
                                 .padding(innerPadding),
                             navController = navController
                         )
                     }
-                    if(currentRoute in backArrowRoutes){
+                    if (currentRoute in backArrowRoutes) {
                         Image(
                             modifier = Modifier
                                 .padding(start = 24.dp, top = 58.dp)
@@ -94,9 +120,22 @@ class MainActivity : ComponentActivity() {
                             contentDescription = "",
                         )
                     }
-                }
+
+                    if (currentRoute in planButtonRoutes) {
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 25f.wp(), bottom = 100f.bhp())
+                                .size(61f.wp(), 61f.bhp())
+                                .align(Alignment.BottomEnd)
+                                .clickable { navController.navigate(Route.PlanDiet.route) },
+                            painter = painterResource(id = R.drawable.ic_navigate_plan),
+                            contentDescription = "",
+                        )
+                    }
 
                 }
+
+            }
 
         }
     }

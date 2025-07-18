@@ -1,0 +1,258 @@
+package com.konkuk.kuit_kac.presentation.diet.screen
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.DefaultButton
+import com.konkuk.kuit_kac.component.EllipseNyam
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.diet.component.PlanDietCard
+import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+
+// 추천된 식단 화면
+@Composable
+fun PlanAIDetailScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    currentCal: Float = 1700f,
+    maxCal: Float = 2500f,
+    relativeCal: Float = 300f
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFFFFF3C1), Color(0xFFFFFCEE), Color(0xFFFFF3C1))
+                )
+            )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "냠코치",
+                style = DungGeunMo20,
+                fontSize = 20f.isp(),
+                color = Color(0xFF713E3A),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(top = 20f.hp())
+                    .align(Alignment.TopCenter)
+            )
+
+            EllipseNyam(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 112.12f.hp()),
+                mascotLength = 87.70016,
+                ellipseLength = 145.62891
+            )
+
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .padding(top = 59f.hp()), contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
+                    modifier = Modifier.size(332f.wp(), 103f.bhp()),
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = null,
+                )
+                Text(
+                    text = "추천된 식단이야! \n원래의 칼로리보다 ${relativeCal.toInt()}kcal적어!",
+                    style = DungGeunMo17,
+                    fontSize = 17f.isp(),
+                    lineHeight = 22f.isp(),
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 28f.bhp())
+                )
+            }
+
+
+            Column(
+                modifier = Modifier
+                    .padding(top = 247.59f.hp(), start = 24f.wp(), end = 24f.wp()),
+            ) {
+                Row(
+                    Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFF000000),
+                            shape = RoundedCornerShape(size = 42.dp)
+                        )
+                        .width(363.dp)
+                        .height(37.dp)
+                        .background(
+                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42.dp)
+                        )
+                ) {
+                    //Todo: 달력 구현 후 추가
+                }
+                Spacer(modifier = Modifier.size(22.5f.bhp()))
+                PlanDietCard(
+                    "아침", listOf("아침식단1"),
+                    onClick = { navController.navigate(Route.DietPatch.route) })
+                Spacer(modifier = Modifier.size(20f.bhp()))
+                PlanDietCard(
+                    "점심",
+                    listOf("점심식단1"),
+                    onClick = { navController.navigate(Route.DietPatch.route) })
+                Spacer(modifier = Modifier.size(20f.bhp()))
+                PlanDietCard(
+                    "저녁",
+                    listOf("닭가슴살 300g", "단호박 샐러드 1접시", "고구마 반개"),
+                    onClick = { navController.navigate(Route.DietPatch.route) })
+                Spacer(modifier = Modifier.size(24f.bhp()))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(43f.bhp())
+                ) {
+                    Text(
+                        modifier = Modifier.padding(top = 11f.bhp()),
+                        text = "현재 식단의 칼로리는",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp(),
+                        color = Color(0xFF000000)
+                    )
+                    Row(
+                        modifier = Modifier.align(Alignment.TopEnd),
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.padding(end = 7.06f.wp())
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
+                                modifier = Modifier.size(85f.wp(), 40f.bhp()),
+                                contentScale = ContentScale.FillBounds,
+                                contentDescription = null,
+                            )
+                            Text(
+                                text = "현재 칼로리",
+                                style = DungGeunMo12,
+                                fontSize = 12f.isp(),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(bottom = 10f.bhp())
+                            )
+                        }
+                        Box(
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
+                                modifier = Modifier.size(85f.wp(), 40f.bhp()),
+                                contentScale = ContentScale.FillBounds,
+                                contentDescription = null,
+                            )
+                            Text(
+                                text = "최대 칼로리",
+                                style = DungGeunMo12,
+                                fontSize = 12f.isp(),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(bottom = 10f.bhp())
+                            )
+                        }
+                    }
+
+                }
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(53.6f.bhp())
+                        .clip(RoundedCornerShape(26.8f.bhp()))
+                        .background(Color.Black)
+                        .border(
+                            1.dp, Color(0xFF000000), shape = RoundedCornerShape(26.8f.bhp())
+                        )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(53.6f.bhp())
+                            .weight(currentCal)
+                            .background(color = Color(0xFFFEB952))
+                            .border(1.dp, Color(0xFF000000)),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 23.2f.wp()),
+                            text = "${currentCal.toInt()}kcal",
+                            style = DungGeunMo20,
+                            fontSize = 20f.isp(),
+                            color = Color(0xFF000000)
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .height(53.6f.bhp())
+                            .weight(maxCal - currentCal)
+                            .background(color = Color(0xFFD2D2D2)),
+                    )
+                }
+                Spacer(modifier = Modifier.size(10.2f.dp))
+                DefaultButton(
+                    onClick = {
+                        navController.navigate("plan_result")
+                    }, value = "이대로 저장할게!", buttonHeight = 65f, isOrange = true
+                )
+
+                Spacer(modifier = Modifier.size(120.2f.dp))
+            }
+
+
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PlanAIDetailScreenPreview() {
+    val navController = rememberNavController()
+    PlanAIDetailScreen(
+        navController = navController
+    )
+}

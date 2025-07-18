@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.home.screen
+package com.konkuk.kuit_kac.presentation.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,27 +35,15 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
 @Composable
-fun HomeResultScreen(
+fun MealEditResultScreen(
     modifier: Modifier = Modifier,
-    value: Int,
-    isSucceeded: Boolean,
     navController: NavHostController
 ) {
-    var bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
-    var shadow = Color(0xFFF1C67F)
-    var messageText = "체중이 ${value}kg 줄었네!\n수고 많았어!"
-    var nyameeImg = R.drawable.img_nyamee_happy
-    var hamCoachImg = R.drawable.img_hamcoach_normal
-
-
-    // 체중이 늘었을 때(감량 실패 시) 값을 바꿔서 넣기
-    if (!isSucceeded) {
-        bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFd6e6f5))
-        shadow = Color(0x85B6C9DC)
-        messageText = "체중이 ${value}kg 늘었네..\n더 열심히 해보자!"
-        nyameeImg = R.drawable.img_nyamee_sad
-        hamCoachImg = R.drawable.img_hamcoach_angry
-    }
+    val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
+    val shadow = Color(0xFFF1C67F)
+    val messageText = "수정 완료!\n수고 많았어~!"
+    val nyameeImg = R.drawable.img_nyamee_happy
+    val hamCoachImg = R.drawable.img_hamcoach_normal
 
     Box(
         modifier = Modifier
@@ -75,6 +63,8 @@ fun HomeResultScreen(
                 .padding(top = 30.dp)
                 .align(Alignment.TopCenter)
         )
+
+        // 배경 조명
         Image(
             modifier = Modifier
                 .alpha(0.5f)
@@ -102,6 +92,8 @@ fun HomeResultScreen(
             painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
             contentDescription = null,
         )
+
+        // 햄코치 & 냠미
         Image(
             modifier = Modifier
                 .padding(top = 277.dp, start = 26.dp, end = 240.dp)
@@ -117,6 +109,7 @@ fun HomeResultScreen(
             contentDescription = null,
         )
 
+        // 말풍선
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,6 +129,8 @@ fun HomeResultScreen(
                 modifier = Modifier.padding(top = 2.dp, bottom = 30.dp)
             )
         }
+
+        // 버튼
         Button(
             onClick = {
                 navController.navigate(Route.Home.route)
@@ -160,18 +155,12 @@ fun HomeResultScreen(
                 modifier = Modifier.padding(vertical = 14.dp)
             )
         }
-
     }
-
 }
-
 
 @Preview(showBackground = true)
 @Composable
-private fun HomeResultScreenPreview() {
+private fun MealResultScreenPreview() {
     val navController = rememberNavController()
-    HomeResultScreen(
-        value = 1, isSucceeded = true,
-        navController = navController
-    )
+    MealEditResultScreen(navController = navController)
 }
