@@ -37,6 +37,10 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.component.EllipseNyam
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
@@ -56,42 +60,34 @@ fun MealTimeScreen(
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(Color(0xFFFFF3C1), Color.White)))
     ) {
-        // 상단 바
-        Image(
-            painter = painterResource(id = R.drawable.ic_back_arow),
-            contentDescription = "Back",
-            modifier = Modifier
-                .padding(start = 16.dp, top = 16.dp)
-                .size(24.dp)
-                .clickable { navController.popBackStack() }
-                .align(Alignment.TopStart)
-        )
 
         Column(
             modifier = Modifier
                 .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(69f.hp()))
 
             // 말풍선
             Box(
                 modifier = Modifier
-                    .width(310.dp)
-                    .height(105.dp),
+                    .width(292f.wp())
+                    .height(114f.bhp()),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
+                    modifier = Modifier
+                        .matchParentSize(),
                     painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
-                    contentDescription = "말풍선",
-                    modifier = Modifier.matchParentSize()
+                    contentDescription = "말풍선"
                 )
                 Text(
                     text = "자 마지막으로, 몇시에 먹었어?\n공복시간을 체크해줄게!",
                     style = DungGeunMo17,
-                    lineHeight = 28.sp,
-                    color = Color.Black,
+                    fontSize = 17f.isp(),
+                    lineHeight = 28f.isp(),
+                    color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 2.dp, bottom = 20.dp)
+                    modifier = Modifier.padding(top = 2f.bhp(), bottom = 20f.bhp())
                 )
             }
 
@@ -102,13 +98,13 @@ fun MealTimeScreen(
                 mascotLength = 94.206
             )
 
-            Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(44f.bhp()))
 
             // 시간 선택 박스
             Box(
                 modifier = Modifier
-                    .width(364.dp)
-                    .height(211.dp),
+                    .width(364f.wp())
+                    .height(211f.bhp()),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -122,7 +118,7 @@ fun MealTimeScreen(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 24.dp)
+                        .padding(horizontal = 24f.wp())
                 ) {
                     // 오전/오후 선택 영역
                     Column(
@@ -133,33 +129,35 @@ fun MealTimeScreen(
                             text = "오전",
                             style = DungGeunMo24.copy(
                                 fontWeight = if (isAM) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isAM) Color.Black else Color.LightGray
+                                color = if (isAM) Color(0xFF000000) else Color(0xB8707070)
                             ),
+                            fontSize = 17f.isp(),
                             modifier = Modifier.clickable { isAM = true }
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(12f.bhp()))
                         Text(
                             text = "오후",
                             style = DungGeunMo24.copy(
                                 fontWeight = if (!isAM) FontWeight.Bold else FontWeight.Normal,
-                                color = if (!isAM) Color.Black else Color.LightGray
+                                color = if (!isAM) Color(0xFF000000) else Color(0xB8707070)
                             ),
+                            fontSize = 24f.isp(),
                             modifier = Modifier.clickable { isAM = false }
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8f.wp()))
 
                     //구분선
                     Box(
                         modifier = Modifier
-                            .width(2.dp)
-                            .height(173.dp)
+                            .width(2f.wp())
+                            .height(173f.bhp())
                             .background(Color(0xFFFFE667))
                     )
 
 
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(12f.wp()))
 
 
 // 시/분 선택 영역 -> 시랑 분 따로 리스트로 만들어서 선택하려면 : 이건 하나 있어야함.. 피그마 디자인과 다름
@@ -175,7 +173,7 @@ fun MealTimeScreen(
                             // 시
                             LazyColumn(
                                 modifier = Modifier
-                                    .height(120.dp)
+                                    .height(120f.bhp())
                                     .weight(1f),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
@@ -183,13 +181,13 @@ fun MealTimeScreen(
                                     Text(
                                         text = hour,
                                         style = DungGeunMo24.copy(
-                                            fontSize = 24.sp,
-                                            color = if (hour == selectedHour) Color.Black else Color.LightGray
+                                            fontSize = 24f.isp(),
+                                            color = if (hour == selectedHour) Color(0xFF000000) else Color(0xB8707070)
                                         ),
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clickable { selectedHour = hour }
-                                            .padding(vertical = 4.dp),
+                                            .padding(vertical = 4f.bhp()),
                                         textAlign = TextAlign.Center
                                     )
                                 }
@@ -199,18 +197,18 @@ fun MealTimeScreen(
                             Text(
                                 text = ":",
                                 style = DungGeunMo24.copy(
-                                    fontSize = 24.sp,
-                                    color = Color.Black
+                                    fontSize = 24f.isp(),
+                                    color = Color(0xFF000000)
                                 ),
                                 modifier = Modifier
-                                    .padding(horizontal = 4.dp),
+                                    .padding(horizontal = 4f.wp()),
                                 textAlign = TextAlign.Center
                             )
 
                             // 분
                             LazyColumn(
                                 modifier = Modifier
-                                    .height(120.dp)
+                                    .height(120f.bhp())
                                     .weight(1f),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
@@ -218,13 +216,13 @@ fun MealTimeScreen(
                                     Text(
                                         text = minute,
                                         style = DungGeunMo24.copy(
-                                            fontSize = 24.sp,
-                                            color = if (minute == selectedMinute) Color.Black else Color.LightGray
+                                            fontSize = 24f.isp(),
+                                            color = if (minute == selectedMinute) Color(0xFF000000) else Color(0xB8707070)
                                         ),
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clickable { selectedMinute = minute }
-                                            .padding(vertical = 4.dp),
+                                            .padding(vertical = 4f.bhp()),
                                         textAlign = TextAlign.Center
                                     )
                                 }
@@ -235,12 +233,12 @@ fun MealTimeScreen(
             }
 
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(40f.bhp()))
 
             DefaultButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
+                    .padding(horizontal = 20f.wp(), vertical = 20f.bhp()),
                 onClick = {navController.navigate("time_input_result") },
                 value = "기록하기",
                 buttonHeight = 70,

@@ -32,10 +32,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.component.VerticalScrollbar
 import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeObservationBox
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -56,28 +59,17 @@ fun HomeObservationScreen(
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73.dp)
+                .offset(y = 477.73f.bhp())
         )
-        Image(
+        EllipseNyam(
             modifier = Modifier
-                .padding(top = 120.dp)
-                .size(235.dp)
+                .padding(top = 122f.hp())
                 .align(Alignment.TopCenter),
-
-            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
-            contentDescription = null,
-        )
-        Image(
-            modifier = Modifier
-                .padding(top = 162.dp)
-                .size(139.dp)
-                .align(Alignment.TopCenter),
-            painter = painterResource(id = R.drawable.ic_hamcoach_normal),
-            contentDescription = null,
+            mascotLength = 136.0, ellipseLength = 227.0
         )
         Box(
             modifier = Modifier
-                .padding(top = 40.dp)
+                .padding(top = 30f.hp())
                 .fillMaxSize(),
             contentAlignment = Alignment.TopEnd
         ) {
@@ -85,19 +77,20 @@ fun HomeObservationScreen(
                 painter = painterResource(id = R.drawable.ic_speech_bubble),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(height = 93.dp, width = 248.dp)
+                    .size(height = 93f.bhp(), width = 248f.wp())
                     .align(Alignment.TopCenter),
                 contentScale = ContentScale.FillBounds
             )
             Text(
                 text = "최근 아쉬웠던\n 부분들이야!",
                 style = DungGeunMo15,
-                lineHeight = 20.sp,
+                fontSize = 15f.isp(),
+                lineHeight = 20f.isp(),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(top = 20.dp)
-                    .width(248.dp)
+                    .padding(top = 20f.bhp())
+                    .width(248f.wp())
                     .align(Alignment.TopCenter)
             )
         }
@@ -111,9 +104,9 @@ fun HomeObservationScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 24f.wp())
                     .fillMaxHeight(0.6f)
-                    .clip(shape = RoundedCornerShape(30.dp))
+                    .clip(shape = RoundedCornerShape(30f.bhp()))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
@@ -122,16 +115,17 @@ fun HomeObservationScreen(
                     .border(
                         width = 1.25.dp,
                         color = Color.Black,
-                        shape = RoundedCornerShape(size = 30.dp)
+                        shape = RoundedCornerShape(size = 30f.bhp())
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = "<햄코치의 관찰일지>",
-                    lineHeight = 28.sp,
+                    lineHeight = 28f.isp(),
                     style = DungGeunMo20,
-                    color = Color.Black,
-                    modifier = Modifier.padding(vertical = 14.39.dp)
+                    fontSize = 20f.isp(),
+                    color = Color(0xFF000000),
+                    modifier = Modifier.padding(vertical = 14.39f.bhp())
                 )
 
                 val observeList = listOf(
@@ -155,7 +149,7 @@ fun HomeObservationScreen(
                     LazyColumn(
                         state = lazyState,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 70.dp)
+                        modifier = Modifier.padding(start = 32f.wp(), end = 32f.wp(), bottom = 70f.bhp())
                     ) {
                         items(observeList) { observe ->
                             HomeObservationBox(
@@ -169,7 +163,7 @@ fun HomeObservationScreen(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .fillMaxHeight(0.7f)
-                            .padding(end = 15.dp, top = 60.dp)
+                            .padding(end = 15f.wp(), top = 60f.bhp())
                     )
                 }
             }

@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -23,33 +24,40 @@ val Typography = Typography(
     ))
 val DungGeunMo35 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 35.sp
+    fontSize = 35.sp,
+    color = Color(0xFF000000)
 )
 
 val DungGeunMo27 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 27.sp
+    fontSize = 27.sp,
+    color = Color(0xFF000000)
 )
 
 val DungGeunMo24 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 24.sp
+    fontSize = 24.sp,
+    color = Color(0xFF000000)
 )
 val DungGeunMo20 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 20.sp
+    fontSize = 20.sp,
+    color = Color(0xFF000000)
 )
 val DungGeunMo17 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 17.sp
+    fontSize = 17.sp,
+    color = Color(0xFF000000)
 )
 val DungGeunMo15 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 15.sp
+    fontSize = 15.sp,
+    color = Color(0xFF000000)
 )
 val DungGeunMo12 = TextStyle(
     fontFamily = DungGeunMo,
-    fontSize = 12.sp
+    fontSize = 12.sp,
+    color = Color(0xFF000000)
 )
 /* Other default text styles to override
 titleLarge = TextStyle(

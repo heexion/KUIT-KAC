@@ -15,7 +15,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
@@ -37,10 +39,10 @@ fun HomeMultipleNutritionBar(
     percentageMaker(healthy) */
     Row(
         modifier = modifier
-            .size(329f.wp(), 53.6123f.hp())
-            .clip(RoundedCornerShape(78.dp))
+            .size(329f.wp(), 53.6123f.bhp())
+            .clip(RoundedCornerShape(78f.wp()))
             .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
-            .border(1.dp,Color(0xFF000000), shape = RoundedCornerShape(78.dp))
+            .border(1.dp,Color(0xFF000000), shape = RoundedCornerShape(78f.wp()))
     ){
         Box(
             modifier = Modifier
@@ -51,7 +53,9 @@ fun HomeMultipleNutritionBar(
         ){
             Text(
                 text = carb.toString() + "%",
-                style = DungGeunMo15
+                style = DungGeunMo15,
+                fontSize = 15f.isp(),
+                color = Color(0xFF000000)
             )
         }
         // TODO float 쓸지 int 쓸지 물어보고 component화 하기
@@ -64,7 +68,9 @@ fun HomeMultipleNutritionBar(
         ){
             Text(
                 text = protein.toString() + "%",
-                style = DungGeunMo15
+                style = DungGeunMo15,
+                fontSize = 15f.isp(),
+                color = Color(0xFF000000)
             )
         }
         Box(
@@ -76,7 +82,9 @@ fun HomeMultipleNutritionBar(
         ){
             Text(
                 text = fat.toString() + "%",
-                style = DungGeunMo15
+                style = DungGeunMo15,
+                fontSize = 15f.isp(),
+                color = Color(0xFF000000)
             )
         }
         Box(
@@ -88,7 +96,9 @@ fun HomeMultipleNutritionBar(
         ){
             Text(
                 text = (healthy.toInt()).toString() + "%",
-                style = DungGeunMo15
+                style = DungGeunMo15,
+                fontSize = 15f.isp(),
+                color = Color(0xFF000000)
             )
         }
     }

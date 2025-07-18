@@ -13,6 +13,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 
 @Composable
 fun HomeSubBackgroundComponent(modifier: Modifier = Modifier) {
@@ -22,19 +24,19 @@ fun HomeSubBackgroundComponent(modifier: Modifier = Modifier) {
     ) {
         Image(
             modifier = Modifier
-                .blur(radius = 3.799999952316284.dp)
-                .width(508.22656.dp)
-                .height(195.5752.dp),
+                .blur(radius = 3.799999952316284f.wp())
+                .width(508.22656f.wp())
+                .height(195.5752f.bhp()),
             painter = painterResource(R.drawable.img_homegraphscreen_background),
             contentDescription = "background",
             contentScale = ContentScale.FillBounds,
         )
         Image(
             modifier = Modifier
-                .offset(y = (-10).dp)
-                .blur(radius = 3.799999952316284.dp)
-                .width(508.22656.dp)
-                .height(195.5752.dp),
+                .offset(y = -10f.bhp())
+                .blur(radius = 3.799999952316284f.wp())
+                .width(508.22656f.wp())
+                .height(195.5752f.bhp()),
             painter = painterResource(R.drawable.img_homegraphscreen_background),
             contentDescription = "background",
             contentScale = ContentScale.FillBounds

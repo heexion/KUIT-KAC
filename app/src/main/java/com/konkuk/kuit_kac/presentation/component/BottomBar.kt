@@ -35,12 +35,16 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
@@ -50,23 +54,22 @@ fun BottomBar(
 ) {
     // 현재 선택된 라우트
     val selectedRoute = remember { mutableStateOf(Route.Home.route) }
-
+    val radius = 40f.bhp()
+    val cornerRadius = 12f.bhp()
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(75.dp)
+            .height(75f.bhp())
     ) {
         // 메인 Canvas
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
+                .height(70f.bhp())
                 .clip(
                     RoundedCornerShape(
-                        topStart = 10.dp,
-                        topEnd = 10.dp,
-                        bottomStart = 0.dp,
-                        bottomEnd = 0.dp
+                        topStart = 10f.wp(),
+                        topEnd = 10f.wp()
                     )
                 )
                 .align(Alignment.BottomCenter)
@@ -74,8 +77,8 @@ fun BottomBar(
             val width = size.width
             val height = size.height
             val centerX = width / 2
-            val radius = 40.dp.toPx()
-            val cornerRadius = 10.dp.toPx()
+            val radius = radius.toPx()
+            val cornerRadius = cornerRadius.toPx()
 
             val mainPath = Path().apply {
                 moveTo(0f, cornerRadius)
@@ -135,8 +138,8 @@ fun BottomBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .padding(horizontal = 32.dp)
+                .height(70f.bhp())
+                .padding(horizontal = 32f.wp())
                 .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -144,14 +147,14 @@ fun BottomBar(
             // 식단 버튼
             Box(
                 modifier = Modifier
-                    .offset(x = (-24).dp) // 왼쪽으로 12dp 이동
-                    .clip(RoundedCornerShape(12.dp))
+                    .offset(x = -24f.wp()) // 왼쪽으로 12dp 이동
+                    .clip(RoundedCornerShape(12f.wp()))
                     .clickable {
                         selectedRoute.value = Route.Diet.route
                         navController.navigate(Route.Diet.route)
                     }
-                    .height(56.dp)
-                    .width(160.dp)
+                    .height(56f.bhp())
+                    .width(160f.wp())
             ) {
                 if (selectedRoute.value == Route.Diet.route) {
                     Image(
@@ -163,7 +166,7 @@ fun BottomBar(
                                 scaleX = 1.8f,  // 가로만 20% 늘림
                                 scaleY = 1.0f
                             )
-                            .clip(RoundedCornerShape(12.dp)),
+                            .clip(RoundedCornerShape(12f.wp())),
                         contentScale = ContentScale.Crop
                     )
                 } else {
@@ -171,40 +174,41 @@ fun BottomBar(
                         Modifier
                             .fillMaxSize()
                             .background(Color.Transparent)
-                            .border(1.dp, Color.Transparent, RoundedCornerShape(12.dp))
+                            .border(1.dp, Color.Transparent, RoundedCornerShape(12f.wp()))
                     )
                 }
 
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16f.wp()),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_diet),
                         contentDescription = "식단",
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24f.wp(),24f.bhp())
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("식단", style = DungGeunMo17)
+                    Spacer(modifier = Modifier.width(8f.wp()))
+                    Text("식단", style = DungGeunMo17,
+                        fontSize = 17f.isp())
                 }
             }
 
-            Spacer(modifier = Modifier.width(24.dp))
+            Spacer(modifier = Modifier.width(24f.wp()))
 
 // 운동 버튼
             Box(
                 modifier = Modifier
-                    .offset(x = (24).dp) // 오른쪽으로 12dp 이동
-                    .clip(RoundedCornerShape(12.dp))
+                    .offset(x = 24f.wp()) // 오른쪽으로 12dp 이동
+                    .clip(RoundedCornerShape(12f.wp()))
                     .clickable {
                         selectedRoute.value = Route.Fitness.route
                         navController.navigate(Route.Fitness.route)
                     }
-                    .height(56.dp)
-                    .width(160.dp)
+                    .height(56f.wp())
+                    .width(160f.bhp())
             ) {
                 if (selectedRoute.value == Route.Fitness.route) {
                     Image(
@@ -216,7 +220,7 @@ fun BottomBar(
                                 scaleX = 1.8f,  // 가로만 20% 늘림
                                 scaleY = 1.0f
                             )
-                            .clip(RoundedCornerShape(12.dp)),
+                            .clip(RoundedCornerShape(12f.wp())),
                         contentScale = ContentScale.Crop
                     )
                 } else {
@@ -224,24 +228,26 @@ fun BottomBar(
                         Modifier
                             .fillMaxSize()
                             .background(Color.Transparent)
-                            .border(1.dp, Color.Transparent, RoundedCornerShape(12.dp))
+                            .border(1.dp, Color.Transparent, RoundedCornerShape(12f.wp()))
                     )
                 }
 
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16f.wp()),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_fitness),
                         contentDescription = "운동",
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24f.wp(),24f.bhp()),
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("운동", style = DungGeunMo17)
+                    Spacer(modifier = Modifier.width(8f.wp()))
+                    Text("운동", style = DungGeunMo17,
+                        color = Color(0xFF000000), fontSize = 17f.isp()
+                    )
                 }
             }
 
@@ -251,9 +257,9 @@ fun BottomBar(
         // 중앙 홈 버튼
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(64f.bhp())
                 .align(Alignment.TopCenter)
-                .offset(y = (-20).dp)
+                .offset(y = -20f.bhp())
                 .clip(CircleShape)
                 .background(
                     Brush.verticalGradient(
@@ -282,7 +288,9 @@ fun BottomBar(
                 )
             }
 
-            Text("홈", style = DungGeunMo17)
+            Text("홈", style = DungGeunMo17,
+                color = Color(0xFF000000), fontSize = 17f.isp()
+            )
         }
     }
     }

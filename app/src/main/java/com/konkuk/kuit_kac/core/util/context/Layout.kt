@@ -29,7 +29,7 @@ fun Float.hp(): Dp {
     fun paddingHeight(height: Float): Dp {
         return with(density) {(windowSize.height * height).toDp()}
     }
-    return paddingHeight(this@hp / 917) + topPadding
+    return paddingHeight(this@hp / 917) + 40f.bhp()
 }
 
 // 사이즈 정할 때는 hp 대신 무조건 이걸로
