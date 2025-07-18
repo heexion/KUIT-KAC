@@ -1,4 +1,6 @@
+
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
+
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -54,8 +56,8 @@ fun MealFastingResultScreen(
     val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFD6E6F5))
     val shadow = Color(0x85B6C9DC)
     val messageText = "아이고.. 바빴구나?\n아니면 일부러 굶은 거야?\n단식으로 기록할게\n다음 끼니는 꼭 챙겨먹자!"
-    val nyameeImg = R.drawable.ic_nyamee_sad
-    val hamCoachImg = R.drawable.ic_hamcoach_angry
+    val nyameeImg = R.drawable.img_nyamee_sad
+    val hamCoachImg = R.drawable.img_hamcoach_angry
 
     Box(
         modifier = Modifier

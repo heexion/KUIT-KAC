@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.home.screen
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,7 +44,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,6 +69,13 @@ fun HomeScaleInputScreen(
     navController: NavHostController
 ) {
 
+    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+
+    val animatedPaddingTop by animateDpAsState(
+        targetValue = if (isKeyboardVisible) 10.dp else 81.02.dp,
+        label = "ScaleImagePadding"
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -80,17 +87,9 @@ fun HomeScaleInputScreen(
             modifier = Modifier
                 .offset(y = 477.73.dp)
         )
-        Text(
-            text = "냠코치",
-            style = DungGeunMo20,
-            color = Color(0xFF713E3A),
-            lineHeight = 28.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 30.dp)
-        )
         Image(
             modifier = Modifier
-                .padding(top = 10.dp)
+                .padding(top = animatedPaddingTop)
                 .size(350.dp),
             painter = painterResource(id = R.drawable.ic_scale_home),
             contentDescription = "homescale scale bg",
@@ -103,7 +102,8 @@ fun HomeScaleInputScreen(
         onConfirm = { weight ->
             println("입력된 체중: $weight")
         },
-        navController = navController
+        navController = navController,
+        isKeyboardVisible = isKeyboardVisible
     )
 }
 
@@ -123,25 +123,24 @@ fun WeightInputModal(
     modifier: Modifier,
     initialWeight: String = "",
     onConfirm: (String) -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    isKeyboardVisible: Boolean
 ) {
     var weight by remember { mutableStateOf(initialWeight) }
     val focusManager = LocalFocusManager.current
-    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
-
     Box(
         modifier = modifier
             .imePadding()
             .fillMaxSize()
             .background(
-                if (isKeyboardVisible) Color(0x80000000)
-                else Color.Transparent
+                if (isKeyboardVisible) Color(0x60000000)
+                else Color(0x80000000)
             )
             .clickable {
                 focusManager.clearFocus()
@@ -165,6 +164,7 @@ fun WeightInputModal(
             Text(
                 text = "체중을 입력해줘!",
                 style = DungGeunMo24,
+                color = Color(0xFF000000),
                 modifier = Modifier.padding(top = 7.89.dp)
             )
             Row(
@@ -189,6 +189,7 @@ fun WeightInputModal(
                         textStyle = TextStyle(
                             fontFamily = DungGeunMo,
                             fontSize = 40.sp,
+                            color = Color(0xFF000000),
                             textAlign = TextAlign.Center
                         ),
                         modifier = Modifier
@@ -209,6 +210,7 @@ fun WeightInputModal(
                 Text(
                     text = "kg",
                     style = DungGeunMo35,
+                    color = Color(0xFF000000),
                 )
             }
 

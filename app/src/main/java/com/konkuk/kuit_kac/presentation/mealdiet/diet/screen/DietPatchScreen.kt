@@ -42,14 +42,18 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun DietPatchScreen(modifier: Modifier = Modifier,
-                    navController: NavHostController
+fun DietPatchScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     val scrollState = rememberScrollState()
     val existList = listOf(
-        1,2,3,4
+        1, 2, 3, 4
     )
     val cal = 677;
+
+    val prevRoute = navController.previousBackStackEntry?.destination?.route
+
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
@@ -66,7 +70,7 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
             modifier = Modifier
                 .padding(top = 12.51f.hp())
                 .fillMaxWidth()
-        ){
+        ) {
             Image(
                 modifier = Modifier
                     .offset(x = 78f.wp())
@@ -90,13 +94,15 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 22f.bhp(),
-                            start = 94f.wp(), end = 94f.wp())
+                        .padding(
+                            top = 22f.bhp(),
+                            start = 94f.wp(), end = 94f.wp()
+                        )
                         .height(28f.bhp())
                         .clip(RoundedCornerShape(7f.bhp()))
                         .background(color = Color(0xFFFFFCEE)),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     Text(
                         modifier = Modifier,
                         text = "아침식단1",
@@ -108,12 +114,14 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
                 }
                 Column(
                     modifier = Modifier
-                        .padding(top = 20f.bhp(),
-                            start = 16f.wp(), end = 15f.wp()),
+                        .padding(
+                            top = 20f.bhp(),
+                            start = 16f.wp(), end = 15f.wp()
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16f.bhp())
                 ) {
-                    existList.forEach{exist->
+                    existList.forEach { exist ->
                         MealItemCard(
                             foodNum = exist,
                             image = R.drawable.ic_dumplings,
@@ -148,9 +156,9 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
             )
             Text(
                 modifier = Modifier
-                    .size(135f.wp(),40f.bhp())
-                    .offset(142.26f.wp(),40.12f.bhp()),
-                text = "총 "+ cal +"kcal이야!\n식단 수준은 양호해",
+                    .size(135f.wp(), 40f.bhp())
+                    .offset(142.26f.wp(), 40.12f.bhp()),
+                text = "총 " + cal + "kcal이야!\n식단 수준은 양호해",
                 lineHeight = 20f.isp(),
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
@@ -166,20 +174,27 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 32f.bhp(),
-                    start = 17f.wp(), end = 15f.wp())
+                .padding(
+                    top = 32f.bhp(),
+                    start = 17f.wp(), end = 15f.wp()
+                )
                 .height(70f.bhp())
                 .clip(RoundedCornerShape(20f.bhp()))
                 .background(
                     brush = Brush
                         .verticalGradient(
-                            colors = listOf(Color(0xFFFFFFFF),Color(0xFFFFB638))
+                            colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                         )
                 )
                 .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.bhp()))
-                .clickable { navController.navigate("meal_edit_result") },
+                .clickable {
+                    if (prevRoute == "plan_ai_detail" || prevRoute == "plan_in_person_add")
+                        navController.popBackStack()
+                    else
+                        navController.navigate("meal_edit_result")
+                },
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Text(
                 text = "저장하기",
                 style = DungGeunMo20,
@@ -197,9 +212,10 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun DietPatchScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    DietPatchScreen(navController=navController)
+    DietPatchScreen(navController = navController)
 }

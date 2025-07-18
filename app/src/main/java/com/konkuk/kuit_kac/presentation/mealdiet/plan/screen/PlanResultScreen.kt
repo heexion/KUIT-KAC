@@ -1,20 +1,11 @@
-
-package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
-
+package com.konkuk.kuit_kac.presentation.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,11 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -48,20 +37,22 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
+// 계획 저장 완료 화면
 @Composable
-fun MealEditResultScreen(
+fun PlanResultScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
     val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     val shadow = Color(0xFFF1C67F)
-    val messageText = "수정 완료!\n수고 많았어~!"
+    val messageText = "식단 계획을 성공적으로\n 저장했어!"
     val nyameeImg = R.drawable.img_nyamee_happy
     val hamCoachImg = R.drawable.img_hamcoach_normal
 
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.Gray)
             .background(
                 brush = Brush.verticalGradient(bgColors)
             ),
@@ -69,9 +60,9 @@ fun MealEditResultScreen(
         Text(
             text = "냠코치",
             style = DungGeunMo20,
-            fontSize = 20f.isp(),
             color = Color(0xFF713E3A),
             lineHeight = 28f.isp(),
+            fontSize = 20f.isp(),
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(top = 20f.hp())
@@ -82,8 +73,8 @@ fun MealEditResultScreen(
         Image(
             modifier = Modifier
                 .alpha(0.5f)
-                .padding(top = 638.86f.hp(), start = 165f.wp())
-                .size(height = 50f.bhp(), width = 181f.wp()),
+                .padding(top = 638.86f.hp(), start = 165f.wp(), end = 65.89f.wp())
+                .size(height = 50f.bhp(), width = 180f.wp()),
             contentScale = ContentScale.FillBounds,
             painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
             colorFilter = ColorFilter.tint(shadow),
@@ -92,23 +83,33 @@ fun MealEditResultScreen(
         Image(
             modifier = Modifier
                 .alpha(0.5f)
-                .padding(top = 648f.hp(), start = 39.68f.wp())
-                .size(height = 33f.hp(), width = 67.6f.wp()),
+                .padding(top = 650.99f.hp(), start = 44.69f.wp(), end = 284.79f.wp())
+                .size(height = 33f.bhp(), width = 67f.wp()),
             contentScale = ContentScale.FillBounds,
             painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
             colorFilter = ColorFilter.tint(shadow),
             contentDescription = null,
         )
-        EllipseNyam(
-            mascotLength = 139.0,
-            ellipseLength = 232.0,
+
+        Image(
             modifier = Modifier
-                .offset(x=-20f.wp(), y = 255f.hp())
+                .padding(top = 255f.hp(), end = 200f.wp())
+                .size(232f.wp(), 232f.bhp()),
+            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+            contentDescription = null,
+        )
+
+        Image(
+            modifier = Modifier
+                .padding(top = 297f.hp(), start = 26f.wp(), end = 240f.wp())
+                .size(139f.wp(), 139f.bhp()),
+            painter = painterResource(id = hamCoachImg),
+            contentDescription = null,
         )
         Image(
             modifier = Modifier
-                .padding(top = 342.12f.hp(), start = 86.5f.wp())
-                .size(338f.wp(),338f.bhp()),
+                .padding(top = 342.12f.hp(), start = 86.5f.wp(), end = 2f.wp())
+                .size(338.09961f.wp(), 338.09961f.bhp()),
             painter = painterResource(id = nyameeImg),
             contentDescription = null,
         )
@@ -117,12 +118,10 @@ fun MealEditResultScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 79f.hp(), start = 24f.wp()),
+                .padding(top = 79f.hp(), start = 24f.wp(), end = 24f.wp()),
             contentAlignment = Alignment.Center
         ) {
             Image(
-                modifier = Modifier
-                    .size(364f.wp(),206f.bhp()),
                 painter = painterResource(id = R.drawable.ic_speech_bubble),
                 contentDescription = null,
             )
@@ -133,47 +132,43 @@ fun MealEditResultScreen(
                 lineHeight = 32f.isp(),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 31.13.dp)
+                modifier = Modifier.padding(bottom = 30f.bhp())
             )
         }
 
         // 버튼
-        Box(
+        Button(
+            onClick = {
+                navController.navigate(Route.Home.route)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(start = 24f.wp(), end = 24f.wp(), bottom = 25f.bhp()+
-                WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-                )
-                .height(70f.bhp())
-                .clip(RoundedCornerShape(20f.bhp()))
+                .padding(25.dp)
+                .clip(RoundedCornerShape(20.dp))
                 .background(
                     brush = Brush.verticalGradient(
                         listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                     )
                 )
-                .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
-                .clickable(
-                    onClick = {
-                        navController.navigate(Route.Home.route)
-                    }
-                ),
+                .border(2.dp, Color.Black, RoundedCornerShape(20.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         ) {
             Text(
                 text = "홈으로 돌아가기",
                 style = DungGeunMo20,
-                fontSize = 20f.isp(),
-                color = Color(0xFF000000),
-                modifier = Modifier
-                    .align(Alignment.Center)
+                color = Color.Black,
+                modifier = Modifier.padding(vertical = 14f.bhp())
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun MealResultScreenPreview() {
+private fun PlanResultScreenPreview() {
     val navController = rememberNavController()
-    MealEditResultScreen(navController = navController)
+    PlanResultScreen(
+        navController = navController
+    )
 }

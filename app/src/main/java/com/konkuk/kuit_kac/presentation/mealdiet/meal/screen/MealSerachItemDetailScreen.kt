@@ -1,4 +1,7 @@
+
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
+
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,7 @@ import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.component.MealDetailCard
 import com.konkuk.kuit_kac.component.MealTopBarWithSearch
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.foodInfoMap
+
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
@@ -74,7 +78,7 @@ fun MealSearchItemDetailScreen(
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 onClick = { /* TODO: 저장 처리 */ },
                 value = "추가하기",
-                buttonHeight = 70,
+                buttonHeight = 70f,
                 isOrange = true
             )
 

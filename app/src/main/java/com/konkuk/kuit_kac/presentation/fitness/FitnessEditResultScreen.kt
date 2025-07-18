@@ -44,8 +44,8 @@ fun FitnessEditResultScreen(
     val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     val shadow = Color(0xFFF1C67F)
     val messageText = "'하체루틴_허벅지 위주'를\n성공적으로 저장했어!"
-    val nyameeImg = R.drawable.ic_nyamee_happy
-    val hamCoachImg = R.drawable.ic_hamcoach_normal
+    val nyameeImg = R.drawable.img_nyamee_happy
+    val hamCoachImg = R.drawable.img_hamcoach_normal
 
     Box(
         modifier = Modifier

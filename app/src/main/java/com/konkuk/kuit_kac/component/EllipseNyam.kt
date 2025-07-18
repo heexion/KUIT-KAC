@@ -17,13 +17,16 @@ import com.konkuk.kuit_kac.core.util.context.wp
 fun EllipseNyam(
     modifier: Modifier = Modifier,
     ellipseLength: Double,
-    mascotLength: Double
+    mascotLength: Double,
+    isMascotAngry: Boolean = false
 ) {
+    val image = if (isMascotAngry) R.drawable.img_hamcoach_angry
+    else R.drawable.img_hamcoach_normal
 
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Image(
             modifier = Modifier
                 .size(ellipseLength.toFloat().wp(), ellipseLength.toFloat().bhp()),
@@ -33,7 +36,7 @@ fun EllipseNyam(
         Image(
             modifier = Modifier
                 .size(mascotLength.toFloat().wp(), ellipseLength.toFloat().bhp()),
-            painter = painterResource(R.drawable.img_component_mascot),
+            painter = painterResource(image),
             contentDescription = "NyamCoach Mascot"
         )
     }

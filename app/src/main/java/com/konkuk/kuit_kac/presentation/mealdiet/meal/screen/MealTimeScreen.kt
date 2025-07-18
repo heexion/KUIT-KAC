@@ -1,4 +1,6 @@
+
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
+
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -238,7 +240,7 @@ fun MealTimeScreen(
                     .padding(horizontal = 20f.wp(), vertical = 20f.bhp()),
                 onClick = {navController.navigate("time_input_result") },
                 value = "기록하기",
-                buttonHeight = 70,
+                buttonHeight = 70f,
                 isOrange = true
             )
         }
