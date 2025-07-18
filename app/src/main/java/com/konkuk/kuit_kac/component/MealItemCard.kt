@@ -24,6 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
@@ -42,45 +45,48 @@ fun MealItemCard(
 
     Row(
         modifier = modifier
-            .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.bhp()))
             .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(16.dp))
-            .padding(horizontal = 11.dp, vertical = 8.dp),
+            .background(Color(0xFFFFFFFF), RoundedCornerShape(16f.bhp()))
+            .padding(horizontal = 11f.wp(), vertical = 8f.bhp()),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(image),
             contentDescription = "",
-            modifier = Modifier.size(68.dp)
+            modifier = Modifier.size(68f.wp(),68f.bhp())
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(12f.wp()))
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+            verticalArrangement = Arrangement.spacedBy(6f.bhp())
         ) {
             Text(
                 text = foodName,
                 style = DungGeunMo17,
-                lineHeight = 22.sp,
+                fontSize = 17f.isp(),
+                lineHeight = 22f.isp(),
                 color = Color(0xFF713E3A),
             )
             Text(
                 text = amountText, style = DungGeunMo15,
-                lineHeight = 20.sp,
+                fontSize = 15f.isp(),
+                lineHeight = 20f.isp(),
                 color = Color(0xFF000000)
             )
             Text(
                 text = "${foodKcal}kcal", style = DungGeunMo15,
-                lineHeight = 20.sp,
+                fontSize = 15f.isp(),
+                lineHeight = 20f.isp(),
                 color = Color(0xFF000000)
             )
         }
 
         IconButton(
             onClick = onDeleteClick,
-            modifier = Modifier.padding(end = 3.dp).size(24.dp)
+            modifier = Modifier.padding(end = 3f.wp()).size(24f.wp(),24f.bhp())
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_close),

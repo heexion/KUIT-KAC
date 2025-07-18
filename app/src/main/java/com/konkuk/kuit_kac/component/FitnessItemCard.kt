@@ -42,9 +42,9 @@ fun FitnessItemCard(
 ) {
     Row(
         modifier = modifier
-            .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.bhp()))
             .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(16.dp))
+            .background(Color(0xFFFFFFFF), RoundedCornerShape(16f.bhp()))
             .padding(horizontal = 11f.wp(), vertical = 8f.bhp()),
         verticalAlignment = Alignment.CenterVertically
     ) {

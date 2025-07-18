@@ -150,7 +150,7 @@ fun WeightInputModal(
     ) {
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
+                .clip(RoundedCornerShape(topStart = 60f.wp(), topEnd = 60f.wp()))
                 .height(333.dp)
                 .background(
                     brush = Brush.verticalGradient(

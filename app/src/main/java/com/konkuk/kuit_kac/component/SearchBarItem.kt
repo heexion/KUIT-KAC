@@ -20,6 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
@@ -36,13 +39,14 @@ fun SearchBarItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 16f.wp(), vertical = 16f.bhp()),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = value,
                 style = DungGeunMo20,
+                fontSize = 20f.isp(),
                 color = Color(0xFF000000),
             )
 
@@ -50,9 +54,9 @@ fun SearchBarItem(
                 Icon(
                     painter = painterResource(R.drawable.ic_close),
                     contentDescription = "삭제 아이콘",
-                    tint = Color.Black,
+                    tint = Color(0xFF000000),
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(24f.wp(),24f.bhp())
                         .clickable { onClick() }
                 )
         }
@@ -61,7 +65,7 @@ fun SearchBarItem(
         if (!isLastItem) {
             Spacer(
                 modifier = Modifier
-                    .height(1.dp)
+                    .height(1f.bhp())
                     .fillMaxWidth()
                     .background(Color(0x3B000000))
             )

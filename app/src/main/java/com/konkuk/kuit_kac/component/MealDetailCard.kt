@@ -34,9 +34,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.pretty
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -63,15 +65,15 @@ fun MealDetailCard(
         Column {
             Column(
                 modifier = Modifier
-                    .background(Color(0xFFFFF1AB), RoundedCornerShape(20.dp))
-                    .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
-                    .padding(horizontal = 15.dp),
+                    .background(Color(0xFFFFF1AB), RoundedCornerShape(20f.bhp()))
+                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
+                    .padding(horizontal = 15f.wp()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
                     modifier = Modifier
-                        .padding(top = 11.dp)
-                        .size(74.dp),
+                        .padding(top = 11f.bhp())
+                        .size(74f.wp(),74f.bhp()),
                     painter = painterResource(image),
                     contentDescription = "meal icon",
                 )
@@ -79,21 +81,22 @@ fun MealDetailCard(
                 Text(
                     text = foodName,
                     style = DungGeunMo20,
-                    color = Color.Black,
+                    fontSize = 20f.isp(),
+                    color = Color(0xFF000000),
                     modifier = Modifier
-                        .background(Color(0xFFFFFADF), RoundedCornerShape(8.dp))
-                        .padding(horizontal = 7.dp, vertical = 6.dp)
+                        .background(Color(0xFFFFFADF), RoundedCornerShape(8f.bhp()))
+                        .padding(horizontal = 7f.wp(), vertical = 6f.bhp())
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16f.bhp()))
 
                 // 영양 정보
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White, RoundedCornerShape(15.dp))
-                        .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
-                        .padding(vertical = 25.dp, horizontal = 22.dp),
+                        .background(Color(0xFFFFFFFF), RoundedCornerShape(15f.bhp()))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.bhp()))
+                        .padding(vertical = 25f.bhp(), horizontal = 22f.wp()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(
@@ -105,59 +108,66 @@ fun MealDetailCard(
                             Text(
                                 "탄수화물",
                                 style = DungGeunMo17,
-                                color = Color.Black
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000)
                             )
                             Text(
                                 "${carbohydrate.pretty()}g",
                                 style = DungGeunMo20,
+                                fontSize = 20f.isp(),
                                 color = Color(0xFF713E3A),
-                                modifier = Modifier.padding(top = 5.dp)
+                                modifier = Modifier.padding(top = 5f.bhp())
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 "단백질",
                                 style = DungGeunMo17,
-                                color = Color.Black
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000)
                             )
                             Text(
                                 "${protein.pretty()}g",
                                 style = DungGeunMo20,
+                                fontSize = 20f.isp(),
                                 color = Color(0xFF713E3A),
-                                modifier = Modifier.padding(top = 5.dp)
+                                modifier = Modifier.padding(top = 5f.bhp())
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 "지방",
                                 style = DungGeunMo17,
-                                color = Color.Black
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000)
                             )
                             Text(
                                 "${fat.pretty()}g",
                                 style = DungGeunMo20,
+                                fontSize = 20f.isp(),
                                 color = Color(0xFF713E3A),
-                                modifier = Modifier.padding(top = 5.dp)
+                                modifier = Modifier.padding(top = 5f.bhp())
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(18f.bhp()))
                     Spacer(
                         modifier = Modifier
-                            .height(1.dp)
+                            .height(1f.bhp())
                             .fillMaxWidth()
                             .background(Color(0x3B000000))
                     )
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20f.bhp()))
 
                     Text(
                         text = "${(baseCalories * quantity).toInt()} kcal",
                         style = DungGeunMo24,
-                        color = Color.Black
+                        fontSize = 24f.isp(),
+                        color = Color(0xFF000000)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16f.bhp()))
 
                 QuantitySelector(
                     quantity = quantity,
@@ -168,17 +178,17 @@ fun MealDetailCard(
                     unitWeight = unitWeight
                 )
 
-                Spacer(modifier = Modifier.height(27.dp))
+                Spacer(modifier = Modifier.height(27f.bhp()))
             }
             if (isSpeechBubble)
-                Spacer(modifier = Modifier.height(35.dp))
+                Spacer(modifier = Modifier.height(35f.bhp()))
         }
         if (isSpeechBubble)
             SpeechBubble(
                 "여기서 말하는\n한 개는 음료캔 크기야!",
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(start = 15.dp)
+                    .padding(start = 15f.wp())
             )
     }
 
@@ -214,34 +224,35 @@ fun QuantitySelector(
         // "한 개" 버튼
         Box(
             modifier = Modifier
-                .background(Color(0xFFFFD387), RoundedCornerShape(15.dp))
-                .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
-                .height(50.dp)
+                .background(Color(0xFFFFD387), RoundedCornerShape(15f.bhp()))
+                .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.bhp()))
+                .height(50f.bhp())
                 .weight(0.5f)
         ) {
             Text(
                 "한 개 (${unitWeight}g)", style = DungGeunMo17,
-                color = Color.Black,
+                fontSize = 17f.isp(),
+                color = Color(0xFF000000),
                 modifier = Modifier
                     .align(Alignment.Center)
             )
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(16f.wp()))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .height(50.dp)
-                .background(Color.White, RoundedCornerShape(15.dp))
-                .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
-                .padding(horizontal = 19.dp)
+                .height(50f.bhp())
+                .background(Color(0xFFFFFFFF), RoundedCornerShape(15f.wp()))
+                .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.wp()))
+                .padding(horizontal = 19f.wp())
                 .weight(0.5f)
         ) {
             Image(
                 modifier = Modifier
-                    .width(14.2.dp)
+                    .width(14.2f.wp())
                     .clickable {
                         onQuantityChange(quantity - 0.5f)
                     },
@@ -253,7 +264,7 @@ fun QuantitySelector(
 //            Text(
 //                text = quantity.pretty(),
 //                style = DungGeunMo20,
-//                color = Color.Black,
+//                color = Color(0xFF000000),
 //                modifier = Modifier
 //            )
 
@@ -272,7 +283,8 @@ fun QuantitySelector(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 textStyle = DungGeunMo20.copy(
-                    color = Color.Black,
+                    fontSize = 20f.isp(),
+                    color = Color(0xFF000000),
                     textAlign = TextAlign.Center
                 ),
                 colors = TextFieldDefaults.colors(
@@ -287,7 +299,7 @@ fun QuantitySelector(
 
             Image(
                 modifier = Modifier
-                    .width(14.2.dp)
+                    .width(14.2f.wp())
                     .clickable {
                         onQuantityChange(quantity + 0.5f)
                     },
@@ -307,7 +319,7 @@ fun SpeechBubble(text: String, modifier: Modifier) {
         modifier = modifier
     ) {
         Image(
-            modifier = Modifier.height(67.dp),
+            modifier = Modifier.height(67f.bhp()),
             painter = painterResource(id = R.drawable.ic_meal_detail_speechbubble),
             contentDescription = "말풍선",
             contentScale = ContentScale.FillHeight
@@ -315,12 +327,13 @@ fun SpeechBubble(text: String, modifier: Modifier) {
         Text(
             text = text,
             style = DungGeunMo12,
-            lineHeight = 18.sp,
+            fontSize = 12f.isp(),
+            lineHeight = 18f.isp(),
             color = Color(0xFF000000),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(top = 6.dp),
+                .padding(top = 6f.bhp()),
         )
     }
 }

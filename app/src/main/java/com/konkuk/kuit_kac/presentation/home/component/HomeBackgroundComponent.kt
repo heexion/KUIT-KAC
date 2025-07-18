@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,7 +36,8 @@ fun HomeBackgroundComponent(
 
     Box(
         modifier = Modifier
-            .size(529f.wp(), 529f.bhp())
+            .width(529f.wp())
+            .height(529f.bhp())
             .clipToBounds()
             .background(Color(0xFF000000))
     ){
@@ -43,7 +45,7 @@ fun HomeBackgroundComponent(
             modifier = Modifier
                 .matchParentSize()
                 .blur(radius = 3.8f.wp()),
-            painter = painterResource(R.drawable.img_home_homebackground),
+            painter = painterResource(R.drawable.img_home_background),
             contentDescription = "homescreen background"
         )
     }

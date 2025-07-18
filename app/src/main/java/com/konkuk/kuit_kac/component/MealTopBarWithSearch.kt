@@ -26,6 +26,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -49,12 +52,12 @@ fun MealTopBarWithSearch(
                 RoundedCornerShape(
                     topStart = 0.dp,
                     topEnd = 0.dp,
-                    bottomStart = 50.dp,
-                    bottomEnd = 50.dp
+                    bottomStart = 50f.bhp(),
+                    bottomEnd = 50f.bhp()
                 )
             )
             .background(Color(0xFFFFF1AB))
-            .padding(horizontal = 20.dp, vertical = 20.dp)
+            .padding(horizontal = 20f.wp(), vertical = 20f.bhp())
     ) {
         Column {
             // 상단바
@@ -67,7 +70,7 @@ fun MealTopBarWithSearch(
                     contentDescription = "Back",
                     modifier = Modifier
                         .align(Alignment.CenterStart)
-                        .size(24.dp)
+                        .size(24f.wp(),24f.bhp())
                         .clickable { onBackClick() }
                 )
 
@@ -75,34 +78,36 @@ fun MealTopBarWithSearch(
                 Text(
                     text = title,
                     style = DungGeunMo20,
+                    fontSize = 20f.isp(),
                     color = Color(0xFF713E3A),
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
 
-            Spacer(modifier = Modifier.height(23.dp))
+            Spacer(modifier = Modifier.height(23f.bhp()))
 
             // 검색 바
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(Color.White)
-                    .border(1.dp, Color.Black, RoundedCornerShape(30.dp))
+                    .height(48f.bhp())
+                    .clip(RoundedCornerShape(30f.bhp()))
+                    .background(Color(0xFFFFFFFF))
+                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
                     .clickable { onSearchClick() },
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 20f.wp()),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = placeholderText,
                         style = placeholderTextStyle,
+                        fontSize = 15f.isp(),
                         color = placeholderTextColor
                     )
 
@@ -111,7 +116,7 @@ fun MealTopBarWithSearch(
                             painter = painterResource(id = R.drawable.ic_xmark),
                             contentDescription = "Clear Search",
                             modifier = Modifier
-                                .size(24.dp)
+                                .size(24f.wp(),24f.bhp())
                                 .clickable {
                                     onClearClick()
                                 }
