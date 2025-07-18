@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -201,7 +200,7 @@ fun BottomBar(
                     .clip(RoundedCornerShape(12.dp))
                     .clickable {
                         selectedRoute.value = Route.Fitness.route
-                        navController.navigate(Route.Fitness.route)
+                        navController.navigate("fitness_main")
                     }
                     .height(56.dp)
                     .width(160.dp)
