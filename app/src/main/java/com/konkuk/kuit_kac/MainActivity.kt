@@ -24,6 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -64,6 +67,18 @@ class MainActivity : ComponentActivity() {
                     Route.DietCreate.route,
                     "plan_ai_detail"
                 )
+                val planButtonRoutes = setOf(
+                    // 여기다가 뒤로가기 버튼 있으면 추가
+                    Route.Home.route,
+                    Route.HomeNutrition.route,
+                    Route.HomeAnalysis.route,
+                    Route.HomeObservation.route,
+                    Route.Diet.route,
+                    Route.DietExist.route,
+                    Route.DietCreate.route,
+                    "plan_ai_detail"
+                )
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -107,6 +122,19 @@ class MainActivity : ComponentActivity() {
                             contentDescription = "",
                         )
                     }
+
+                    if (currentRoute in planButtonRoutes) {
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 25f.wp(), bottom = 100f.bhp())
+                                .size(61f.wp(), 61f.bhp())
+                                .align(Alignment.BottomEnd)
+                                .clickable { navController.navigate(Route.PlanDiet.route) },
+                            painter = painterResource(id = R.drawable.ic_navigate_plan),
+                            contentDescription = "",
+                        )
+                    }
+
                 }
 
             }
