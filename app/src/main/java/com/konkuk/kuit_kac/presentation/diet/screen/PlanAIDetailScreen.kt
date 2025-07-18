@@ -39,6 +39,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.diet.component.PlanDietCard
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -130,11 +131,19 @@ fun PlanAIDetailScreen(
                     //Todo: 달력 구현 후 추가
                 }
                 Spacer(modifier = Modifier.size(22.5f.bhp()))
-                PlanDietCard("아침", listOf("아침식단1"))
+                PlanDietCard(
+                    "아침", listOf("아침식단1"),
+                    onClick = { navController.navigate(Route.DietPatch.route) })
                 Spacer(modifier = Modifier.size(20f.bhp()))
-                PlanDietCard("점심", listOf("점심식단1"))
+                PlanDietCard(
+                    "점심",
+                    listOf("점심식단1"),
+                    onClick = { navController.navigate(Route.DietPatch.route) })
                 Spacer(modifier = Modifier.size(20f.bhp()))
-                PlanDietCard("저녁", listOf("닭가슴살 300g", "단호박 샐러드 1접시", "고구마 반개"))
+                PlanDietCard(
+                    "저녁",
+                    listOf("닭가슴살 300g", "단호박 샐러드 1접시", "고구마 반개"),
+                    onClick = { navController.navigate(Route.DietPatch.route) })
                 Spacer(modifier = Modifier.size(24f.bhp()))
                 Box(
                     modifier = Modifier
@@ -231,11 +240,8 @@ fun PlanAIDetailScreen(
                     }, value = "이대로 저장할게!", buttonHeight = 65f, isOrange = true
                 )
 
-            Spacer(modifier = Modifier.size(120.2f.dp))
+                Spacer(modifier = Modifier.size(120.2f.dp))
             }
-
-
-
 
 
         }
