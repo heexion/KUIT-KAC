@@ -116,12 +116,12 @@ fun PlanIPAddScreen(
                         .border(
                             width = 1.dp,
                             color = Color(0xFF000000),
-                            shape = RoundedCornerShape(size = 42.dp)
+                            shape = RoundedCornerShape(size = 42f.bhp())
                         )
-                        .width(363.dp)
-                        .height(37.dp)
+                        .width(363f.wp())
+                        .height(37f.bhp())
                         .background(
-                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42.dp)
+                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42f.bhp())
                         )
                 ) {
                     //Todo: 달력 구현 후 추가

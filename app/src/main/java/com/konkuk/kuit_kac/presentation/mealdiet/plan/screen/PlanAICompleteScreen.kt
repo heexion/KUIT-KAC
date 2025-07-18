@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -82,7 +85,7 @@ fun PlanAICompleteScreen(
         EllipseNyam(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 194.22f.bhp()),
+                .padding(top = 194.22f.hp()),
             mascotLength = 127.45568,
             ellipseLength = 212.81445
         )
@@ -120,7 +123,7 @@ fun PlanAICompleteScreen(
                 modifier = Modifier
                     .padding(horizontal = 23.91f.wp())
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                    .clip(RoundedCornerShape(topStart = 30f.bhp(), topEnd = 30f.bhp()))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
@@ -128,8 +131,8 @@ fun PlanAICompleteScreen(
                     )
                     .border(
                         1.25.dp,
-                        Color.Black,
-                        RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                        Color(0xFF000000),
+                        RoundedCornerShape(topStart = 30f.bhp(), topEnd = 30f.bhp())
                     ),
             ) {
                 Column(
@@ -155,8 +158,9 @@ fun PlanAICompleteScreen(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(275.72f.bhp())
-                        .padding(top = 20.98f.bhp(), start = 23.34f.wp(), end = 26.89f.wp())
+                        .height(266.65f.bhp())
+                        .padding(start = 23.34f.wp(), end = 26.89f.wp(),
+                        top = 33.57f.bhp(), bottom = 30.71f.bhp())
                         .background(Color.LightGray)
                         .clickable {
                             isDateSelected.value = !isDateSelected.value
@@ -165,7 +169,6 @@ fun PlanAICompleteScreen(
                 Column {
                     PlanConfirmButton(
                         modifier = Modifier.padding(
-                            top = 30.71f.bhp(),
                             start = 14.5f.wp(),
                             end = 14.5f.wp()
                         ),
@@ -177,7 +180,7 @@ fun PlanAICompleteScreen(
                         height = 65f
                     )
                     Spacer(
-                        modifier = Modifier.size(115f.bhp()),
+                        modifier = Modifier.size(115f.bhp()- WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
                     )
                 }
             }

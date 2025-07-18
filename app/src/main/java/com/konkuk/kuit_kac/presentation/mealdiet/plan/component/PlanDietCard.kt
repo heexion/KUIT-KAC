@@ -37,7 +37,7 @@ fun PlanDietCard(
     Column(
         Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Black, shape = RoundedCornerShape(10.dp))
+            .border(1.dp, Color(0xFF000000), shape = RoundedCornerShape(10f.bhp()))
     ) {
         Box(
             Modifier
@@ -45,8 +45,8 @@ fun PlanDietCard(
                     width = 1.dp,
                     color = Color(0xFF000000),
                     shape = RoundedCornerShape(
-                        topStart = 10.dp,
-                        topEnd = 10.dp,
+                        topStart = 10f.bhp(),
+                        topEnd = 10f.bhp(),
                         bottomStart = 0.dp,
                         bottomEnd = 0.dp
                     )
@@ -55,8 +55,8 @@ fun PlanDietCard(
                 .background(
                     color = Color(0xFFFFE667),
                     shape = RoundedCornerShape(
-                        topStart = 10.dp,
-                        topEnd = 10.dp,
+                        topStart = 10f.bhp(),
+                        topEnd = 10f.bhp(),
                         bottomStart = 0.dp,
                         bottomEnd = 0.dp
                     )
@@ -81,8 +81,8 @@ fun PlanDietCard(
                     shape = RoundedCornerShape(
                         topStart = 0.dp,
                         topEnd = 0.dp,
-                        bottomStart = 10.dp,
-                        bottomEnd = 10.dp
+                        bottomStart = 10f.bhp(),
+                        bottomEnd = 10f.bhp()
                     )
                 )
         ) {

@@ -79,13 +79,6 @@ fun PlanIPAddCompleteScreen(
                     .align(Alignment.TopCenter)
             )
 
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.hp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
 
             Box(
                 modifier = Modifier
@@ -110,6 +103,14 @@ fun PlanIPAddCompleteScreen(
                 )
             }
 
+            EllipseNyam(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 112.12f.hp()),
+                mascotLength = 87.70016,
+                ellipseLength = 145.62891
+            )
+
 
             Column(
                 modifier = Modifier
@@ -120,12 +121,12 @@ fun PlanIPAddCompleteScreen(
                         .border(
                             width = 1.dp,
                             color = Color(0xFF000000),
-                            shape = RoundedCornerShape(size = 42.dp)
+                            shape = RoundedCornerShape(size = 42f.bhp())
                         )
-                        .width(363.dp)
-                        .height(37.dp)
+                        .width(363f.wp())
+                        .height(37f.bhp())
                         .background(
-                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42.dp)
+                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42f.bhp())
                         )
                 ) {
                     //Todo: 달력 구현 후 추가
@@ -236,43 +237,48 @@ fun PlanIPAddCompleteScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(122f.bhp())
+                        .height(156f.bhp())
                         .padding(
-                            top = 12f.bhp(), start = 14.5f.wp(),
+                            top = 12f.bhp(), start = 16f.wp(),
                             end = 14.5f.bhp()
                         )
                 ) {
                     EllipseNyam(
-                        ellipseLength = 153.68867, mascotLength = 93.27386,
-                        modifier = Modifier.offset(y = 20f.bhp())
+                        ellipseLength = 153.68867, mascotLength = 93.27386
                     )
-                    Image(
+                    Box(
                         modifier = Modifier
                             .width(185.85812f.wp())
                             .height(87.78002f.bhp())
-                            .offset(y = 0f.bhp(), x = 144.38f.wp()),
-                        painter = painterResource(R.drawable.img_plan_textballon),
-                        contentDescription = "text balloon"
-                    )
-                    Text(
-                        modifier = Modifier
-                            .offset(172.26f.wp(), 18.9f.bhp()),
-                        text = "이날 완전 클린식단인데?\n좋아좋아!",
-                        lineHeight = 18f.isp(),
-                        style = DungGeunMo12,
-                        fontSize = 12f.isp(),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center
-                    )
+                            .offset(y = 9.67f.bhp(), x = 146.38f.wp()),
+                    ){
+                        Image(
+                            modifier = Modifier
+                                .width(185.85812f.wp())
+                                .height(87.78002f.bhp()),
+                            painter = painterResource(R.drawable.img_plan_textballon),
+                            contentDescription = "text balloon"
+                        )
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .offset(y= -7f.bhp()),
+                            text = "이날 완전 클린식단인데?\n좋아좋아!",
+                            lineHeight = 18f.isp(),
+                            style = DungGeunMo12,
+                            fontSize = 12f.isp(),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.size(20.2f.dp))
                 DefaultButton(
                     onClick = {
                         navController.navigate("plan_result")
                     }, value = "저장하기", buttonHeight = 65f, isOrange = true
                 )
 
-                Spacer(modifier = Modifier.size(120.2f.dp))
+                Spacer(modifier = Modifier.size(170.2f.dp))
             }
 
 

@@ -79,13 +79,7 @@ fun PlanAIDetailScreen(
                     .align(Alignment.TopCenter)
             )
 
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.hp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
+
 
             Box(
                 modifier = Modifier
@@ -109,6 +103,13 @@ fun PlanAIDetailScreen(
                     modifier = Modifier.padding(bottom = 28f.bhp())
                 )
             }
+            EllipseNyam(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 112.12f.hp()),
+                mascotLength = 87.70016,
+                ellipseLength = 145.62891
+            )
 
 
             Column(
@@ -120,12 +121,12 @@ fun PlanAIDetailScreen(
                         .border(
                             width = 1.dp,
                             color = Color(0xFF000000),
-                            shape = RoundedCornerShape(size = 42.dp)
+                            shape = RoundedCornerShape(size = 42f.bhp())
                         )
-                        .width(363.dp)
-                        .height(37.dp)
+                        .width(363f.wp())
+                        .height(37f.bhp())
                         .background(
-                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42.dp)
+                            color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42f.bhp())
                         )
                 ) {
                     //Todo: 달력 구현 후 추가
@@ -205,7 +206,7 @@ fun PlanAIDetailScreen(
                         .fillMaxWidth()
                         .height(53.6f.bhp())
                         .clip(RoundedCornerShape(26.8f.bhp()))
-                        .background(Color.Black)
+                        .background(Color(0xFF000000))
                         .border(
                             1.dp, Color(0xFF000000), shape = RoundedCornerShape(26.8f.bhp())
                         )
@@ -240,7 +241,7 @@ fun PlanAIDetailScreen(
                     }, value = "이대로 저장할게!", buttonHeight = 65f, isOrange = true
                 )
 
-                Spacer(modifier = Modifier.size(120.2f.dp))
+                Spacer(modifier = Modifier.size(170.2f.dp))
             }
 
 

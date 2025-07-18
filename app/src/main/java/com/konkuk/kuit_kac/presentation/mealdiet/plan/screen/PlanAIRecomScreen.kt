@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -117,7 +120,7 @@ fun PlanAIRecomScreen(
                 modifier = Modifier
                     .padding(horizontal = 23.91f.wp())
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                    .clip(RoundedCornerShape(topStart = 30f.bhp(), topEnd = 30f.bhp()))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
@@ -126,7 +129,7 @@ fun PlanAIRecomScreen(
                     .border(
                         1.25.dp,
                         Color.Black,
-                        RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                        RoundedCornerShape(topStart = 30f.bhp(), topEnd = 30f.bhp())
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -187,7 +190,7 @@ fun PlanAIRecomScreen(
                         height = 65f
                     )
                     Spacer(
-                        modifier = Modifier.size(75f.bhp()),
+                        modifier = Modifier.size(93f.bhp()- WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
                     )
                 }
             }

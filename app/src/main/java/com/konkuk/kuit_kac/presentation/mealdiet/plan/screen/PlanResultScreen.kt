@@ -4,8 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -144,7 +147,8 @@ fun PlanResultScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(25.dp)
+                .padding(start = 24f.wp(), end = 24f.wp(),
+                    bottom = 25f.bhp()+WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
                 .clip(RoundedCornerShape(20.dp))
                 .background(
                     brush = Brush.verticalGradient(

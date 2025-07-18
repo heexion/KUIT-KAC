@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity() {
                     if (currentRoute in planButtonRoutes) {
                         Image(
                             modifier = Modifier
-                                .padding(end = 25f.wp(), bottom = 100f.bhp())
+                                .padding(end = 25f.wp(), bottom = 93f.bhp())
                                 .size(61f.wp(), 61f.bhp())
                                 .align(Alignment.BottomEnd)
                                 .clickable { navController.navigate(Route.PlanDiet.route) },
