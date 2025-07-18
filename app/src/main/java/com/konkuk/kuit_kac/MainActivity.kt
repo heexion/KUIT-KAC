@@ -76,7 +76,6 @@ class MainActivity : ComponentActivity() {
                     Route.Diet.route,
                     Route.DietExist.route,
                     Route.DietCreate.route,
-                    "plan_ai_detail"
                 )
 
                 Box(

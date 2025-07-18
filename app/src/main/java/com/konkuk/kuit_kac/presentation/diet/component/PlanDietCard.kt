@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +32,7 @@ fun PlanDietCard(
     dietTime: String,
     dietValue: List<String>,
     onClick: () -> Unit = {},
+    isEdit: Boolean = true
 ) {
     Column(
         Modifier
@@ -84,32 +86,48 @@ fun PlanDietCard(
                     )
                 )
         ) {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(horizontal = 16.06f.wp(), vertical = 12.84f.bhp())
+            Row(
+                modifier = Modifier.align(Alignment.CenterStart)
             ) {
-                dietValue.forEach { item ->
-                    Text(
-                        text = item,
-                        style = DungGeunMo12,
-                        fontSize = 12f.isp(),
-                        lineHeight = 18f.isp(),
-                        color = Color(0xFF000000),
-                        modifier = Modifier.padding(vertical = 2f.bhp())
+                if (!isEdit)
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        modifier = Modifier
+                            .padding(start = 16f.wp())
+                            .size(11f.wp(), 11f.bhp())
+                            .align(Alignment.CenterVertically)
+                            .clickable { onClick() },
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = null,
                     )
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.06f.wp(), vertical = 12.84f.bhp())
+                ) {
+                    dietValue.forEach { item ->
+                        Text(
+                            text = item,
+                            style = DungGeunMo12,
+                            fontSize = 12f.isp(),
+                            lineHeight = 18f.isp(),
+                            color = Color(0xFF000000),
+                            modifier = Modifier.padding(vertical = 2f.bhp())
+                        )
+                    }
                 }
             }
-            Image(
-                painter = painterResource(id = R.drawable.ic_record),
-                modifier = Modifier
-                    .padding(end = 11.06f.wp())
-                    .size(25.35508f.wp(), 25.35508f.bhp())
-                    .align(Alignment.CenterEnd)
-                    .clickable { onClick() },
-                contentScale = ContentScale.FillBounds,
-                contentDescription = null,
-            )
+
+            if (isEdit)
+                Image(
+                    painter = painterResource(id = R.drawable.ic_record),
+                    modifier = Modifier
+                        .padding(end = 11.06f.wp())
+                        .size(25.35508f.wp(), 25.35508f.bhp())
+                        .align(Alignment.CenterEnd)
+                        .clickable { onClick() },
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = null,
+                )
         }
     }
 }
@@ -118,7 +136,8 @@ fun PlanDietCard(
 @Composable
 private fun PlanDietCardPreview() {
     PlanDietCard(
-        dietTime = "아침",
-        dietValue = listOf("닭가슴살 300g", "단호박 샐러드 1접시", "고구마 반개")
+        dietTime = "아침 / 편집/추가 선택 가능",
+        dietValue = listOf("닭가슴살 300g", "단호박 샐러드 1접시", "고구마 반개"),
+        isEdit = true
     )
 }
