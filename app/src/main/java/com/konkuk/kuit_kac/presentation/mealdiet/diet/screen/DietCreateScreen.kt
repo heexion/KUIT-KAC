@@ -1,9 +1,10 @@
-package com.konkuk.kuit_kac.presentation.diet.screen
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.value
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,10 +81,10 @@ fun DietCreateScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 256f.hp(), start = 24f.wp(), end = 24f.wp())
-                .height(458f.wp())
-                .clip(shape = RoundedCornerShape(20f.wp()))
+                .height(458f.bhp())
+                .clip(shape = RoundedCornerShape(20f.bhp()))
                 .background(color = Color(0xFFFFF1AB))
-                .border(1.dp,Color(0xFF000000), RoundedCornerShape(20f.wp())),
+                .border(1.dp,Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -126,10 +127,15 @@ fun DietCreateScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20f.bhp(), start = 16f.wp(), end = 15f.wp())
-                    .height(84.dp)
-                    .clip(RoundedCornerShape(15f.wp()))
+                    .height(84f.bhp())
+                    .clip(RoundedCornerShape(15f.bhp()))
                     .background(color = Color(0xFFFFFFFF))
-                    .border(1.dp,Color(0xFF000000), RoundedCornerShape(15f.wp())),
+                    .border(1.dp,Color(0xFF000000), RoundedCornerShape(15f.bhp()))
+                    .clickable(
+                        onClick = {
+                            navController.navigate(Route.DietAdd.route)
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {

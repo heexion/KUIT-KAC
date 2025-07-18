@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -44,17 +47,17 @@ fun MealCard(
 ) {
     Column(
         modifier = Modifier
-            .width(364.dp)
+            .width(364f.wp())
             .wrapContentHeight()
-            .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .clip(RoundedCornerShape(16f.bhp()))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(16f.bhp()))
+            .background(Color(0xFFFFFFFF))
     ) {
         // 헤더
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(51.dp)
+                .height(51.855f.bhp())
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_diet_card),
@@ -66,15 +69,17 @@ fun MealCard(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                    .padding(horizontal = 16f.wp(), vertical = 11.1f.bhp()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "$mealType ", style = DungGeunMo20, color = Color(0xFF000000))
-                Text(text = "(총 $totalKcal)", style = DungGeunMo17, color = Color(0xFF713E3A))
+                Text(text = "$mealType ", style = DungGeunMo20,
+                    fontSize = 20f.isp(), color = Color(0xFF000000))
+                Text(text = "(총 $totalKcal)", style = DungGeunMo17,
+                    fontSize = 17f.isp(), color = Color(0xFF713E3A))
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(30.16f.wp(),29.66f.bhp())
                         .clickable { onEditClick() }
                 ) {
                     Image(
@@ -86,7 +91,7 @@ fun MealCard(
                         painter = painterResource(id = R.drawable.ic_record),
                         contentDescription = "Pencil Icon",
                         modifier = Modifier
-                            .size(26.dp)
+                            .size(26.76f.wp(),26.76f.bhp())
                             .align(Alignment.Center)
                     )
                 }
@@ -97,7 +102,7 @@ fun MealCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(154f.bhp())
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_diet_card_bg),
@@ -105,13 +110,13 @@ fun MealCard(
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .matchParentSize()
-                    .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
+                    .clip(RoundedCornerShape(bottomStart = 16f.bhp(), bottomEnd = 16f.bhp()))
             )
 
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 12.dp, vertical = 16.dp),
+                    .padding(horizontal = 17f.wp()),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -120,19 +125,21 @@ fun MealCard(
                         Image(
                             painter = icon,
                             contentDescription = name,
-                            modifier = Modifier.size(72.dp)
+                            modifier = Modifier.size(72f.wp(),72f.bhp())
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(6f.bhp()))
                         Text(
                             text = name,
                             style = DungGeunMo15,
-                            color = Color.Black,
+                            fontSize = 15f.isp(),
+                            color = Color(0xFF000000),
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(2.dp))
+                        Spacer(modifier = Modifier.height(2f.bhp()))
                         Text(
                             text = quantity,
                             style = DungGeunMo12,
+                            fontSize = 12f.isp(),
                             color = Color(0xFF713E3A),
                             textAlign = TextAlign.Center
                         )

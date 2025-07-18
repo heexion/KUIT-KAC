@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet.component
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,17 +36,17 @@ fun DietMultipleNutritionBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 17f.wp(), end = 13f.bhp()),
+            .padding(start = 41f.wp()),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
                 .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
-                .width(19.42188f.wp())
-                .height(19.42188f.wp())
-                .clip(RoundedCornerShape(9.71094f.wp()))
+                .width(19.42188f.bhp())
+                .height(19.42188f.bhp())
+                .clip(RoundedCornerShape(9.71094f.bhp()))
                 .background(color = Color(0xFFFFD387))
-                .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.wp()))
+                .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.bhp()))
         )
         Box(
             modifier = Modifier
@@ -66,11 +66,11 @@ fun DietMultipleNutritionBar(
             modifier = Modifier
                 .padding(start = 8f.wp())
                 .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
-                .width(19.42188f.wp())
-                .height(19.42188f.wp())
-                .clip(RoundedCornerShape(9.71094f.wp()))
+                .width(19.42188f.bhp())
+                .height(19.42188f.bhp())
+                .clip(RoundedCornerShape(9.71094f.bhp()))
                 .background(color = Color(0xFFCBF38E))
-                .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.wp()))
+                .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.bhp()))
         )
         Box(
             modifier = Modifier
@@ -91,11 +91,11 @@ fun DietMultipleNutritionBar(
             modifier = Modifier
                 .padding(start = 8f.wp())
                 .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
-                .width(19.42188f.wp())
-                .height(19.42188f.wp())
-                .clip(RoundedCornerShape(9.71094f.wp()))
+                .width(19.42188f.bhp())
+                .height(19.42188f.bhp())
+                .clip(RoundedCornerShape(9.71094f.bhp()))
                 .background(color = Color(0xFFFFA4A7))
-                .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.wp()))
+                .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.bhp()))
         )
         Box(
             modifier = Modifier

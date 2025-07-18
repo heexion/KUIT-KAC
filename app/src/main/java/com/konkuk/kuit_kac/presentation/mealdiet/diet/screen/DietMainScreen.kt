@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet.screen
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +34,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.SelectButton2
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -118,8 +118,13 @@ fun DietMainScreen(
                 Box(
                     modifier = Modifier
                         .size(364f.wp(), 49f.bhp())
-                        .clip(RoundedCornerShape(24f.wp()))
-                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(24f.wp())),
+                        .clip(RoundedCornerShape(24f.bhp()))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(24f.bhp()))
+                        .clickable(
+                            onClick = {
+                                navController.navigate(Route.DietCreate.route)
+                            }
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Row(

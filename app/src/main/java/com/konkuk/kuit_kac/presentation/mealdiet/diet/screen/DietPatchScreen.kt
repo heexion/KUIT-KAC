@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet.component
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +36,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -69,22 +70,22 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
             Image(
                 modifier = Modifier
                     .offset(x = 78f.wp())
-                    .size(272f.wp(),96f.hp()),
+                    .size(272f.wp(),96f.bhp()),
                 painter = painterResource(R.drawable.img_diet_patchballoon),
                 contentDescription = "textballoon"
             )
             EllipseNyam(
                 modifier = Modifier
-                    .offset(y = 72f.hp(), x = 117f.wp()),
+                    .offset(y = 72f.bhp(), x = 117f.wp()),
                 ellipseLength = 177.17578, mascotLength = 106.1115
             )
             Column(
                 modifier = Modifier
                     .padding(top = 256f.hp(), start = 24f.wp())
                     .width(364f.wp())
-                    .clip(RoundedCornerShape(20f.wp()))
+                    .clip(RoundedCornerShape(20f. bhp()))
                     .background(color = Color(0xFFFFF1AB))
-                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp())),
+                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             ){
                 Box(
                     modifier = Modifier
@@ -92,7 +93,7 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
                         .padding(top = 22f.bhp(),
                             start = 94f.wp(), end = 94f.wp())
                         .height(28f.bhp())
-                        .clip(RoundedCornerShape(7f.wp()))
+                        .clip(RoundedCornerShape(7f.bhp()))
                         .background(color = Color(0xFFFFFCEE)),
                     contentAlignment = Alignment.Center
                 ){
@@ -134,15 +135,14 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(122f.bhp())
-                .padding(top = 12f.bhp(), start = 32.56f.wp(),
-                    end = 29.68f.bhp())
+                .padding(top = 12f.bhp(), start = 56.58f.wp())
         ){
             EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
             Image(
                 modifier = Modifier
-                    .width(197.37698.dp)
-                    .height(67.78002.dp)
-                    .offset(y = 22.2f.bhp(), x = 104.38f.wp()),
+                    .width(197.37698f.wp())
+                    .height(67.78002f.bhp())
+                    .offset(y = 26.84f.bhp(), x = 104.38f.wp()),
                 painter = painterResource(R.drawable.img_home_existtextballoon),
                 contentDescription = "text balloon"
             )
@@ -169,14 +169,14 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
                 .padding(top = 32f.bhp(),
                     start = 17f.wp(), end = 15f.wp())
                 .height(70f.bhp())
-                .clip(RoundedCornerShape(20f.wp()))
+                .clip(RoundedCornerShape(20f.bhp()))
                 .background(
                     brush = Brush
                         .verticalGradient(
                             colors = listOf(Color(0xFFFFFFFF),Color(0xFFFFB638))
                         )
                 )
-                .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.wp()))
+                .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.bhp()))
                 .clickable { navController.navigate("meal_edit_result") },
             contentAlignment = Alignment.Center
         ){
@@ -191,7 +191,7 @@ fun DietPatchScreen(modifier: Modifier = Modifier,
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(115f.hp())
+                .height(115f.bhp())
                 .background(Color.Transparent)
         )
     }

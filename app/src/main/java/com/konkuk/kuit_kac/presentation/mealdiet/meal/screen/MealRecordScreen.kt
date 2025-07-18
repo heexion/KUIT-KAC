@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -33,6 +35,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -46,7 +52,7 @@ fun MealRecordScreen(
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    listOf(Color(0xFFFFF3C1), Color.White)
+                    listOf(Color(0xFFFFF3C1), Color(0xFFFFFFFF))
                 )
             )
     ) {
@@ -56,32 +62,23 @@ fun MealRecordScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color(0xFFFFF1AB))
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
+                    .height(67.59f.hp())
             ) {
-                // 뒤로가기 아이콘
-                Image(
-                    painter = painterResource(id = R.drawable.ic_back_arow),
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .size(24.dp)
-                        .clickable { navController.popBackStack() }
-                )
-
                 // 타이틀
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.align(Alignment.Center)
+                        .padding(top = 20f.bhp())
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_diet),
                         contentDescription = "식단 아이콘",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(28.8f.wp(),28.8f.bhp())
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "식단",
                         style = DungGeunMo20,
+                        fontSize = 20f.isp(),
                         color = Color(0xFF713E3A)
                     )
                 }
@@ -91,11 +88,10 @@ fun MealRecordScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.Black)
+                    .height(1f.bhp())
+                    .background(Color(0xFF000000))
             )
         }
-        Spacer(modifier = Modifier.height(200.dp))
         // 콘텐츠
         Column(
             modifier = Modifier
@@ -103,13 +99,13 @@ fun MealRecordScreen(
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(162.dp))
+            Spacer(modifier = Modifier.height(162f.hp()))
 
             // 말풍선
             Box(
                 modifier = Modifier
-                    .width(272.dp)
-                    .height(96.dp),
+                    .width(272f.wp())
+                    .height(96f.bhp()),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -120,69 +116,77 @@ fun MealRecordScreen(
                 Text(
                     text = "기록을 어떻게 할까?",
                     style = DungGeunMo20,
-                    lineHeight = 28.sp,
-                    color = Color.Black,
+                    fontSize = 20f.isp(),
+                    lineHeight = 28f.isp(),
+                    color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 2.dp, bottom = 20.dp)
+                    modifier = Modifier.padding(bottom = 18f.bhp())
                 )
             }
             // 캐릭터
             EllipseNyam(
-                ellipseLength = 182.0,
-                mascotLength = 109.0
+                ellipseLength = 203.1,
+                mascotLength = 121.6
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(7.81f.bhp()))
 
             // 버튼 1: 저장된 내 식단 선택
-            Button(
-                onClick = { navController.navigate(Route.DietExist.route) },
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(70.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .border(2.dp, Color.Black, RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(20f.bhp()))
+                    .border(2.dp, Color.Black, RoundedCornerShape(20f.bhp()))
                     .background(
                         Brush.verticalGradient(
                             listOf(Color.White, Color(0xFFFFE667))
                         )
+                    )
+                    .clickable(
+                        onClick = { navController.navigate(Route.DietExist.route) }
                     ),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "저장된 내 식단 선택하기",
                     style = DungGeunMo20,
-                    color = Color.Black
+                    fontSize = 20f.isp(),
+                    color = Color(0xFF000000)
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24f.bhp()))
 
             // 버튼 2: 직접 입력하기
-            Button(
-                onClick = { navController.navigate("meal_search") },
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(70.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .border(2.dp, Color.Black, RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(20f.bhp()))
+                    .border(2.dp, Color.Black, RoundedCornerShape(20f.bhp()))
                     .background(
                         Brush.verticalGradient(
                             listOf(Color.White, Color(0xFFFFE667))
                         )
+                    )
+                    .clickable(
+                        onClick = { navController.navigate(Route.MealSearch.route) }
                     ),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = "직접 입력하기",
                         style = DungGeunMo20,
-                        color = Color.Black
+                        fontSize = 20f.isp(),
+                        color = Color(0xFF000000)
                     )
                     Text(
                         text = "(외식 시 추천!)",
                         style = DungGeunMo15,
-                        color = Color.Black
+                        fontSize = 15f.isp(),
+                        color = Color(0xFF000000)
                     )
                 }
             }

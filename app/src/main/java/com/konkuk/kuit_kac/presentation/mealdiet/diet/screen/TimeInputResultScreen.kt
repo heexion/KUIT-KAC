@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,13 +35,13 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
 @Composable
-fun MealEditResultScreen(
+fun TimeInputResultScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
     val bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     val shadow = Color(0xFFF1C67F)
-    val messageText = "수정 완료!\n수고 많았어~!"
+    val messageText = "기록 완료!\n수고 많았어~!"
     val nyameeImg = R.drawable.ic_nyamee_happy
     val hamCoachImg = R.drawable.ic_hamcoach_normal
 
@@ -160,7 +160,7 @@ fun MealEditResultScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun MealResultScreenPreview() {
+private fun TimeInputResultScreenPreview() {
     val navController = rememberNavController()
-    MealEditResultScreen(navController = navController)
+    TimeInputResultScreen(navController = navController)
 }

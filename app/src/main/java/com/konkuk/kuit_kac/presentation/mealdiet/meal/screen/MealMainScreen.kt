@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,6 +39,11 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.component.SelectButton
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -69,7 +74,10 @@ fun MealMainScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color(0xFFFFF1AB))
-                    .padding(horizontal = 20.dp, vertical = 24.dp)
+                    .padding(
+                        start = 24f.wp(), end = 24f.wp(),
+                        top = 16f.hp(), bottom = 14.5f.bhp()
+                    )
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -80,17 +88,18 @@ fun MealMainScreen(
                         Image(
                             painter = painterResource(id = R.drawable.ic_diet),
                             contentDescription = "식단 아이콘",
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(28.8584f.wp(),28.8584f.bhp())
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(4f.wp()))
                         Text(
                             text = "식단",
                             style = DungGeunMo20,
+                            fontSize = 20f.isp(),
                             color = Color(0xFF713E3A)
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(17.5.dp))
+                    Spacer(modifier = Modifier.height(17.5f.bhp()))
 
                     // 탭 버튼
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -101,7 +110,7 @@ fun MealMainScreen(
                             buttonHeight = 49,
                             onClick = { onTabClick("기록") }
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(16.21f.wp()))
                         SelectButton(
                             modifier = Modifier.weight(1f),
                             value = "나만의 식단",
@@ -119,8 +128,8 @@ fun MealMainScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.Black)
+                    .height(1f.bhp())
+                    .background(Color(0xFF000000))
             )
 
             // 메인 콘텐츠
@@ -131,30 +140,30 @@ fun MealMainScreen(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color(0xFFFFF3C1),
-                                Color.White,
+                                Color(0xFFFFFFFF),
                                 Color(0xFFFFF3C1)
                             )
                         )
                     )
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = 24f.wp()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(modifier = Modifier.height(28f.bhp()))
 
                 RecordMealButton(
-                    onClick = { navController.navigate("meal_record") }
+                    onClick = { navController.navigate(Route.MealRecord.route) }
                 )
 
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(modifier = Modifier.height(27.22f.bhp()))
 
                 if (mealCards.isEmpty()) {
                     // 식단이 없을 때
                     Box(
                         modifier = Modifier
-                            .width(364.dp)
-                            .height(458.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                            .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
+                            .width(364f.wp())
+                            .height(458f.bhp())
+                            .clip(RoundedCornerShape(20f.bhp()))
+                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.img_meal_bg),
@@ -163,20 +172,26 @@ fun MealMainScreen(
                             modifier = Modifier.matchParentSize()
                         )
 
-                        Column(
+                        Box(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 32.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .padding(top = 87f.bhp(), start = 72.67f.wp())
                         ) {
-                            SpeechBubble(messageText = "현재 식단이\n비어있어요!")
-                            Spacer(modifier = Modifier.height(20.dp))
-                            EllipseNyam(ellipseLength = 182.0, mascotLength = 109.0)
-                            Spacer(modifier = Modifier.height(20.dp))
+                            SpeechBubble(messageText = "현재 식단이\n비어있어요!",
+                                modifier = Modifier)
+                            EllipseNyam(ellipseLength = 182.0, mascotLength = 109.0,
+                                modifier = Modifier
+                                    .offset(y = 73f.bhp(), x = 19f.wp())
+                                    .clickable(
+                                        onClick = {
+                                            navController.navigate(Route.MealExist.route)
+                                        }
+                                    ))
                             OutlinedRoundedButton(
+                                modifier = Modifier
+                                    .offset(x = 47f.wp(),y=255f.bhp()),
                                 value = "단식했어!",
                                 onClick = {
-                                    navController.navigate("fasting_result")
+                                    navController.navigate(Route.MealFastingResult.route)
                                 }
                             )
                         }
@@ -192,7 +207,7 @@ fun MealMainScreen(
                                 mealType = card.mealType,
                                 totalKcal = card.totalKcal,
                                 foodList = card.foodList,
-                                onEditClick = { navController.navigate(Route.DietPatch.route) }
+                                onEditClick = { navController.navigate(Route.MealPatch.route) }
                             )
                         }
                     }
@@ -259,11 +274,12 @@ fun CalendarFloatingButton(
 }
 
 @Composable
-fun SpeechBubble(messageText: String) {
+fun SpeechBubble(messageText: String,
+                 modifier: Modifier) {
     Box(
-        modifier = Modifier
-            .width(219.dp)
-            .height(83.dp),
+        modifier = modifier
+            .width(219f.wp())
+            .height(83f.bhp()),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -273,11 +289,11 @@ fun SpeechBubble(messageText: String) {
         )
         Text(
             text = messageText,
-            style = DungGeunMo20.copy(fontSize = 20.sp),
+            style = DungGeunMo20.copy(fontSize = 20f.isp()),
             lineHeight = 28.sp,
-            color = Color.Black,
+            color = Color(0xFF000000),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 2.dp, bottom = 20.dp)
+            modifier = Modifier.padding(bottom = 21f.bhp())
         )
     }
 }
@@ -286,31 +302,32 @@ fun SpeechBubble(messageText: String) {
 
 @Composable
 fun OutlinedRoundedButton(
+    modifier: Modifier,
     value: String,
     onClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .width(125.dp)
-            .height(48.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
+        modifier = modifier
+            .width(125f.wp())
+            .height(48f.bhp())
+            .clip(RoundedCornerShape(20f.bhp()))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Image(
             modifier = Modifier
                 .matchParentSize()
-                .clip(RoundedCornerShape(20.dp)),
+                .clip(RoundedCornerShape(20f.bhp())),
             painter = painterResource(id = R.drawable.bg_orange_button_default),
             contentDescription = "bg",
             contentScale = ContentScale.FillBounds
         )
-
         Text(
             text = value,
             style = DungGeunMo20,
-            color = Color.Black
+            fontSize = 20f.isp(),
+            color = Color(0xFF000000)
         )
     }
 }
@@ -322,28 +339,28 @@ fun RecordMealButton(
 ) {
     Row(
         modifier = modifier
-            .width(364.dp)
-            .height(49.dp)
+            .width(364f.wp())
+            .height(49f.bhp())
             .border(
                 width = 1.dp,
-                color = Color.Black,
-                shape = RoundedCornerShape(35.dp)
+                color = Color(0xFF000000),
+                shape = RoundedCornerShape(35f.wp())
             )
             .clickable { onClick() }
-            .padding(horizontal = 16.dp), // 내부 여백
+            .padding(horizontal = 16f.wp()), // 내부 여백
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_record),
             contentDescription = "식단 기록 아이콘",
-            modifier = Modifier.size(27.dp)
+            modifier = Modifier.size(27f.wp(),27f.bhp())
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(8f.wp()))
         Text(
             text = "식단 기록하기",
             style = DungGeunMo20.copy(fontSize = 17.sp),
-            color = Color.Black
+            color = Color(0xFF000000)
         )
     }
 }

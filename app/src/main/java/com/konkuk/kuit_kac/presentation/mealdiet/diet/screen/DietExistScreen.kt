@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet.screen
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,8 +46,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.DietMultipleNutritionBar
-import com.konkuk.kuit_kac.presentation.diet.component.SelectButton2
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -138,8 +138,8 @@ fun DietExistScreen(
                 Box(
                     modifier = Modifier
                         .size(364f.wp(), 49f.bhp())
-                        .clip(RoundedCornerShape(24f.wp()))
-                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(24f.wp())),
+                        .clip(RoundedCornerShape(24f.bhp()))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(24f.bhp())),
                     contentAlignment = Alignment.Center
                 ) {
                     Row(
@@ -167,9 +167,9 @@ fun DietExistScreen(
                     .padding(top = 28f.bhp(),
                         start = 24f.wp())
                     .width(364f.wp())
-                    .clip(RoundedCornerShape(20f.wp()))
+                    .clip(RoundedCornerShape(20f.bhp()))
                     .background(color = Color(0xFFFFF1AB))
-                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp())),
+                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             ){
                 Row(
                     modifier = Modifier
@@ -181,7 +181,7 @@ fun DietExistScreen(
                                 start = 94f.wp())
                             .width(176f.wp())
                             .height(28f.bhp())
-                            .clip(RoundedCornerShape(7f.wp()))
+                            .clip(RoundedCornerShape(7f.bhp()))
                             .background(color = Color(0xFFFFFCEE)),
                         contentAlignment = Alignment.Center
                     ){
@@ -199,7 +199,7 @@ fun DietExistScreen(
                             .padding(top = 22f.bhp(),
                                 start = 48.79f.wp())
                             .size(26.75811f.wp(),26.75811f.bhp())
-                            .clip(RoundedCornerShape(13.27905f.wp()))
+                            .clip(RoundedCornerShape(13.27905f.bhp()))
                             .background(brush = Brush.verticalGradient(
                                 colors = listOf(
                                     Color(0xFFFFFFFF),Color(0xFFFFB638)
@@ -248,8 +248,8 @@ fun DietExistScreen(
                     EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
                     Image(
                         modifier = Modifier
-                            .width(197.37698.dp)
-                            .height(67.78002.dp)
+                            .width(197.37698f.wp())
+                            .height(67.78002f.bhp())
                             .offset(y = 22.2f.bhp(), x = 104.38f.wp()),
                         painter = painterResource(R.drawable.img_home_existtextballoon),
                         contentDescription = "text balloon"
@@ -280,7 +280,7 @@ fun DietExistScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(115f.hp())
+                    .height(115f.bhp())
                     .background(Color.Transparent)
             )
         }

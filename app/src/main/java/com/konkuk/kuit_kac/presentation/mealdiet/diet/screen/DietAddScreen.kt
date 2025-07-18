@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet
+package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,11 +32,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.SearchBarItem
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun MealSearchScreen(
+fun DietAddScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
@@ -58,67 +62,59 @@ fun MealSearchScreen(
                     RoundedCornerShape(
                         topStart = 0.dp,
                         topEnd = 0.dp,
-                        bottomStart = 50.dp,
-                        bottomEnd = 50.dp
+                        bottomStart = 50f.wp(),
+                        bottomEnd = 50f.wp()
                     )
                 )
                 .background(Color(0xFFFFF1AB))
-                .padding(horizontal = 20.dp, vertical = 20.dp)
+                .padding(top = 18f.hp(), bottom = 22f.bhp(), start = 24f.wp(), end = 24f.wp())
         ) {
             Column {
                 // 상단바
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // 뒤로가기 아이콘
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_back_arow),
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .size(24.dp)
-                            .clickable { navController.popBackStack() }
-                    )
-
 
                     // 타이틀
                     Text(
-                        text = "식단 검색하기",
+                        text = "식단 추가하기",
                         style = DungGeunMo20,
+                        fontSize = 20f.isp(),
                         color = Color(0xFF713E3A),
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(23.dp))
+                Spacer(modifier = Modifier.height(23f.bhp()))
 
                 // 검색 바
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
-                        .clip(RoundedCornerShape(30.dp))
-                        .background(Color.White)
-                        .border(1.dp, Color(0xFF000000), shape = RoundedCornerShape(30.dp)),
+                        .height(48f.bhp())
+                        .clip(RoundedCornerShape(30f.bhp()))
+                        .background(Color(0xFFFFFFFF))
+                        .border(1.dp, Color(0xFF000000), shape = RoundedCornerShape(30f.bhp())),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Text(
                         text = "무슨 음식을 먹었어?",
                         style = DungGeunMo15,
+                        fontSize = 15f.isp(),
                         color = Color(0xFFB5B5B5),
-                        modifier = Modifier.padding(horizontal = 20.dp)
+                        modifier = Modifier.padding(horizontal = 20f.wp())
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12f.bhp()))
 
         // 3. 검색 기록 리스트
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(searchHistory) { index, item ->
                 SearchBarItem(
-                    modifier = Modifier.padding(horizontal = 27.dp),
+                    modifier = Modifier.padding(horizontal = 27f.wp()),
                     value = item,
                     isLastItem = index == searchHistory.lastIndex,
                     onClick = {
@@ -132,6 +128,6 @@ fun MealSearchScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun MealSearchScreenPreview() {
-    MealSearchScreen()
+private fun DietAddScreenPreview() {
+    DietAddScreen()
 }
