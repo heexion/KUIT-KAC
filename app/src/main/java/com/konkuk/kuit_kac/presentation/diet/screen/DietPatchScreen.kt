@@ -191,7 +191,7 @@ fun DietPatchScreen(
                 )
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
                 .clickable {
-                    if (prevRoute == "plan_ai_detail")
+                    if (prevRoute == "plan_ai_detail" || prevRoute == "plan_in_person_add")
                         navController.popBackStack()
                     else
                         navController.navigate("meal_edit_result")

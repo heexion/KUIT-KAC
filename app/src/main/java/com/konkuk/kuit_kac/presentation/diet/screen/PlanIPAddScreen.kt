@@ -151,7 +151,7 @@ fun PlanIPAddScreen(
                         .fillMaxWidth()
                         .height(65f.bhp())
                         .clickable {
-                            navController.navigate("plan_result")
+                            navController.navigate("plan_in_person_add_complete")
                         }
                 ) {
                     Image(
@@ -170,7 +170,6 @@ fun PlanIPAddScreen(
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-
                 Spacer(modifier = Modifier.size(120.2f.dp))
             }
 

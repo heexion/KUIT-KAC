@@ -24,6 +24,7 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIRecomScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanCheckScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanDietMainScreen
+import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddCompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
@@ -225,10 +226,17 @@ fun KacNavGraph(
                 navController = navController
             )
         }
+        composable(route = "plan_in_person_add_complete") {
+            PlanIPAddCompleteScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
 
         composable(Route.PlanCheck.route) {
             PlanCheckScreen(
                 modifier = modifier,
+                navController = navController
             )
         }
 

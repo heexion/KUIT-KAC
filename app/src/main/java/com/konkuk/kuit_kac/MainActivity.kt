@@ -25,7 +25,6 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.core.util.context.bhp
-import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
@@ -65,10 +64,10 @@ class MainActivity : ComponentActivity() {
                     Route.HomeObservation.route,
                     Route.HomeScale.route,
                     Route.DietCreate.route,
-                    "plan_ai_detail"
+                    "plan_ai_detail",
+                    Route.PlanCheck.route,
                 )
                 val planButtonRoutes = setOf(
-                    // 여기다가 뒤로가기 버튼 있으면 추가
                     Route.Home.route,
                     Route.HomeNutrition.route,
                     Route.HomeAnalysis.route,
