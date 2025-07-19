@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.component
+package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

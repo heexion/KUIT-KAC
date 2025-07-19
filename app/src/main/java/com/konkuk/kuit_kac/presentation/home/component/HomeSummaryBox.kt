@@ -37,7 +37,7 @@ fun HomeSummaryBox(
             .size(154f.wp(), 70f.bhp())
             .clip(RoundedCornerShape(0.117 * width))
             .background(color = Color.Transparent)
-            .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(18f.wp())),
+            .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(0.117 * width)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

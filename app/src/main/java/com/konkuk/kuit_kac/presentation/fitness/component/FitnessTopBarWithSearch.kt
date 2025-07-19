@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.fitness
+package com.konkuk.kuit_kac.presentation.fitness.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

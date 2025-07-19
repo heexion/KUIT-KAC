@@ -28,6 +28,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.ui.theme.deepYellow
 
 @Composable
 fun HomeBackgroundComponent(
@@ -39,15 +40,15 @@ fun HomeBackgroundComponent(
             .width(529f.wp())
             .height(529f.bhp())
             .clipToBounds()
-            .background(Color(0xFF000000))
+            .background(deepYellow)
     ){
-        Image(
+        /*Image(
             modifier = Modifier
                 .matchParentSize()
                 .blur(radius = 3.8f.wp()),
             painter = painterResource(R.drawable.img_home_background),
             contentDescription = "homescreen background"
-        )
+        ) */
     }
 }
 

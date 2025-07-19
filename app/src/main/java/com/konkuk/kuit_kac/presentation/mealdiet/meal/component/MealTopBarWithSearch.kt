@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.component
+package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +36,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun MealTopBarWithSearch(
+    modifier: Modifier,
     title: String,
     placeholderText: String = "무슨 음식을 먹었어?",
     placeholderTextColor: Color = Color(0xFFB5B5B5),
@@ -46,7 +47,7 @@ fun MealTopBarWithSearch(
     onClearClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(
                 RoundedCornerShape(
@@ -138,7 +139,8 @@ fun PreviewMealTopBarWithSearch() {
         placeholderTextStyle = DungGeunMo17,
         onBackClick = {},
         onSearchClick = {},
-        onClearClick = { }
+        onClearClick = { },
+        modifier = Modifier
     )
 }
 

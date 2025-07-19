@@ -139,10 +139,10 @@ fun MealRecordScreen(
                     .fillMaxWidth()
                     .height(70.dp)
                     .clip(RoundedCornerShape(20f.bhp()))
-                    .border(2.dp, Color.Black, RoundedCornerShape(20f.bhp()))
+                    .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                     .background(
                         Brush.verticalGradient(
-                            listOf(Color.White, Color(0xFFFFE667))
+                            listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
                     .clickable(
@@ -166,10 +166,10 @@ fun MealRecordScreen(
                     .fillMaxWidth()
                     .height(70.dp)
                     .clip(RoundedCornerShape(20f.bhp()))
-                    .border(2.dp, Color.Black, RoundedCornerShape(20f.bhp()))
+                    .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                     .background(
                         Brush.verticalGradient(
-                            listOf(Color.White, Color(0xFFFFE667))
+                            listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
                     .clickable(

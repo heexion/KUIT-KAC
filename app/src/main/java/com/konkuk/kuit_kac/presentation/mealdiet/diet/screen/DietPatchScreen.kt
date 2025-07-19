@@ -18,11 +18,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +34,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.component.MealItemCard
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -46,14 +49,19 @@ fun DietPatchScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    val scrollState = rememberScrollState()
-    val existList = listOf(
-        1, 2, 3, 4
-    )
-    val cal = 677;
 
     val prevRoute = navController.previousBackStackEntry?.destination?.route
-
+    var Clicked = remember{mutableStateOf(false)}
+    val scrollState = rememberScrollState()
+    val existList =
+        if(!Clicked.value){
+            listOf(
+                1, 2, 3, 4
+            )
+        } else{
+listOf(1,2,3,4,5,6)
+        }
+    val cal = 677;
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
@@ -83,62 +91,100 @@ fun DietPatchScreen(
                     .offset(y = 72f.bhp(), x = 117f.wp()),
                 ellipseLength = 177.17578, mascotLength = 106.1115
             )
-            Column(
+            Box(
                 modifier = Modifier
                     .padding(top = 256f.hp(), start = 24f.wp())
                     .width(364f.wp())
-                    .clip(RoundedCornerShape(20f. bhp()))
-                    .background(color = Color(0xFFFFF1AB))
-                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             ){
-                Box(
+                Image(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 22f.bhp(),
-                            start = 94f.wp(), end = 94f.wp()
-                        )
-                        .height(28f.bhp())
-                        .clip(RoundedCornerShape(7f.bhp()))
-                        .background(color = Color(0xFFFFFCEE)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        modifier = Modifier,
-                        text = "아침식단1",
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp(),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                        .matchParentSize()
+                        .graphicsLayer {
+                            scaleX = 1.08f
+                            scaleY = 1.08f
+                        },
+                    painter = painterResource(R.drawable.img_all_tilted_rectangle),
+                    contentDescription = "tilted Rectangle"
+                )
                 Column(
                     modifier = Modifier
-                        .padding(
-                            top = 20f.bhp(),
-                            start = 16f.wp(), end = 15f.wp()
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16f.bhp())
-                ) {
-                    existList.forEach { exist ->
-                        MealItemCard(
-                            foodNum = exist,
-                            image = R.drawable.ic_dumplings,
-                            foodName = "고기만두",
-                            foodAmount = 1,
-                            foodKcal = 120,
-                            onDeleteClick = { }
+                        .width(364f.wp())
+                        .clip(RoundedCornerShape(20f. bhp()))
+                        .background(color = Color(0xFFFFF1AB))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
+                ){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = 22f.bhp(),
+                                start = 94f.wp(), end = 94f.wp()
+                            )
+                            .height(28f.bhp())
+                            .clip(RoundedCornerShape(7f.bhp()))
+                            .background(color = Color(0xFFFFFCEE)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = "아침식단1",
+                            style = DungGeunMo17,
+                            fontSize = 17f.isp(),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center
                         )
                     }
+                    Column(
+                        modifier = Modifier
+                            .padding(
+                                top = 20f.bhp(),
+                                start = 16f.wp(), end = 15f.wp()
+                            ),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16f.bhp())
+                    ) {
+                        existList.forEach { exist ->
+                            MealItemCard(
+                                foodNum = exist,
+                                image = R.drawable.ic_dumplings,
+                                foodName = "고기만두",
+                                foodAmount = 1,
+                                foodKcal = 120,
+                                onDeleteClick = {},
+                                navController =navController
+                            )
+                    }}
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(19f.bhp())
+                    )
                 }
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(19f.bhp())
-                )
+                        .align(Alignment.Center)
+                        .offset(x=182f.wp(),
+                            y = 25f.bhp())
+                        .size(35f.wp(),35f.bhp())
+                        .clip(RoundedCornerShape(11f.bhp()))
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
+                        ))
+                        .clickable(
+                            onClick = {
+                                Clicked.value = true
+                            }
+                        )
+                        .border(1.dp,Color(0xFF000000), RoundedCornerShape(11f.bhp())),
+                    contentAlignment = Alignment.Center){
+                    Image(painter = painterResource(R.drawable.svg_all_point),
+                        contentDescription = "pointer",
+                        modifier = Modifier
+                            .size(9f.wp(),13f.bhp()))
+                }
             }
-        }
+            }
         Box(
             modifier = Modifier
                 .fillMaxWidth()

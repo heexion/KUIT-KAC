@@ -54,7 +54,8 @@ class MainActivity : ComponentActivity() {
                     "time_input_result",
                     "meal_edit_result",
                     "plan_ai_loading",
-                    "plan_result"
+                    "plan_result",
+                    Route.FitnessEditResult.route
                 )
                 val backArrowRoutes = setOf(
                     // 여기다가 뒤로가기 버튼 있으면 추가

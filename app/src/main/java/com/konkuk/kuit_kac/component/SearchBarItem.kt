@@ -38,6 +38,7 @@ fun SearchBarItem(
     ) {
         Row(
             modifier = Modifier
+                .clickable { onClick() }
                 .fillMaxWidth()
                 .padding(horizontal = 16f.wp(), vertical = 16f.bhp()),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -57,7 +58,6 @@ fun SearchBarItem(
                     tint = Color(0xFF000000),
                     modifier = Modifier
                         .size(24f.wp(),24f.bhp())
-                        .clickable { onClick() }
                 )
         }
 

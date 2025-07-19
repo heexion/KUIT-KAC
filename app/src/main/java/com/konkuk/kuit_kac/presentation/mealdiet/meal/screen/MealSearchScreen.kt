@@ -7,8 +7,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -118,7 +120,7 @@ fun MealSearchScreen(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(searchHistory) { index, item ->
                 SearchBarItem(
-                    modifier = Modifier.padding(horizontal = 27f.wp()),
+                    modifier = Modifier.padding(horizontal = 24f.wp()),
                     value = item,
                     isLastItem = index == searchHistory.lastIndex,
                     onClick = {

@@ -67,8 +67,8 @@ fun BottomBar(
                 .height(70f.bhp())
                 .clip(
                     RoundedCornerShape(
-                        topStart = 10f.wp(),
-                        topEnd = 10f.wp()
+                        topStart = 10f.bhp(),
+                        topEnd = 10f.bhp()
                     )
                 )
                 .align(Alignment.BottomCenter)
@@ -165,7 +165,7 @@ fun BottomBar(
                                 scaleX = 1.8f,  // 가로만 20% 늘림
                                 scaleY = 1.0f
                             )
-                            .clip(RoundedCornerShape(12f.wp())),
+                            .clip(RoundedCornerShape(12f.bhp())),
                         contentScale = ContentScale.Crop
                     )
                 } else {
@@ -173,7 +173,7 @@ fun BottomBar(
                         Modifier
                             .fillMaxSize()
                             .background(Color.Transparent)
-                            .border(1.dp, Color.Transparent, RoundedCornerShape(12f.wp()))
+                            .border(1.dp, Color.Transparent, RoundedCornerShape(12f.bhp()))
                     )
                 }
 
@@ -204,7 +204,7 @@ fun BottomBar(
                     .clip(RoundedCornerShape(12f.wp()))
                     .clickable {
                         selectedRoute.value = Route.Fitness.route
-                        navController.navigate("fitness_main")
+                        navController.navigate(Route.Fitness.route)
                     }
                     .height(56f.wp())
                     .width(160f.bhp())
@@ -219,7 +219,7 @@ fun BottomBar(
                                 scaleX = 1.8f,  // 가로만 20% 늘림
                                 scaleY = 1.0f
                             )
-                            .clip(RoundedCornerShape(12f.wp())),
+                            .clip(RoundedCornerShape(12f.bhp())),
                         contentScale = ContentScale.Crop
                     )
                 } else {
@@ -227,7 +227,7 @@ fun BottomBar(
                         Modifier
                             .fillMaxSize()
                             .background(Color.Transparent)
-                            .border(1.dp, Color.Transparent, RoundedCornerShape(12f.wp()))
+                            .border(1.dp, Color.Transparent, RoundedCornerShape(12f.bhp()))
                     )
                 }
 
@@ -268,7 +268,7 @@ fun BottomBar(
                         )
                     )
                 )
-                .border(2.dp, Color.Black, CircleShape)
+                .border(2.dp, Color(0xFF000000), CircleShape)
                 .clickable {
                     selectedRoute.value = Route.Home.route
                     navController.navigate(Route.Home.route)

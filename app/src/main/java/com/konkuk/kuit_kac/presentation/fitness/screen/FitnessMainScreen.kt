@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.fitness
+package com.konkuk.kuit_kac.presentation.fitness.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,31 +20,41 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
+import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
+import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 
 @Composable
 fun FitnessMainScreen(
-    navController: NavController,
+    navController: NavHostController,
     selectedTab: String,
     onTabClick: (String) -> Unit,
     onRecordClick: () -> Unit,
@@ -57,6 +67,7 @@ fun FitnessMainScreen(
         FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
         FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
     )
+    val Clicked = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -67,7 +78,7 @@ fun FitnessMainScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color(0xFFFFF1AB))
-                    .padding(horizontal = 20f.wp(), vertical = 24f.bhp())
+                    .padding(start = 20f.wp(), end = 20f.wp(), top = 16f.hp(), bottom = 11f.bhp())
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -84,6 +95,7 @@ fun FitnessMainScreen(
                         Text(
                             text = "운동",
                             style = DungGeunMo20,
+                            fontSize = 20f.isp(),
                             color = Color(0xFF713E3A)
                         )
                     }
@@ -99,14 +111,14 @@ fun FitnessMainScreen(
                             buttonHeight = 49,
                             onClick = { onTabClick("기록") }
                         )
-                        Spacer(modifier = Modifier.width(8f.wp()))
+                        Spacer(modifier = Modifier.width(16f.wp()))
                         SelectButton(
                             modifier = Modifier.weight(1f),
                             value = "나만의 운동 루틴",
                             isSelected = selectedTab == "나만의",
                             buttonHeight = 49,
                             onClick = {
-                                navController.navigate("fitness_main")
+                                navController.navigate(route = Route.Fitness.route)
                                 onTabClick("나만의")
                             }
                         )
@@ -118,7 +130,7 @@ fun FitnessMainScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(Color.Black)
+                    .background(Color(0xFF000000))
             )
 
             // 메인 콘텐츠
@@ -140,10 +152,10 @@ fun FitnessMainScreen(
                 Spacer(modifier = Modifier.height(28f.bhp()))
 
                 RecordFitnessButton(
-                    onClick = { navController.navigate("fitness_create") }
+                    onClick = { navController.navigate(route = Route.FitnessCreate.route) }
                 )
 
-                Spacer(modifier = Modifier.height(28f.bhp()))
+                Spacer(modifier = Modifier.height(27f.bhp()))
 
                 if (fitnessData.isEmpty()) {
                     // 운동이 없을 때
@@ -151,8 +163,8 @@ fun FitnessMainScreen(
                         modifier = Modifier
                             .width(364f.wp())
                             .height(458f.bhp())
-                            .clip(RoundedCornerShape(20f.wp()))
-                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
+                            .clip(RoundedCornerShape(20f.bhp()))
+                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.img_meal_bg),
@@ -164,23 +176,66 @@ fun FitnessMainScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(top = 32f.bhp()),
+                                .padding(top = 88f.bhp()),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             SpeechBubble(messageText = "현재 운동 루틴이\n비어있어요!")
-                            Spacer(modifier = Modifier.height(20f.bhp()))
-                            EllipseNyam(ellipseLength = 182.0, mascotLength = 109.0)
-                            Spacer(modifier = Modifier.height(20f.bhp()))
+                            EllipseNyam(ellipseLength = 182.0, mascotLength = 109.0,
+                                modifier = Modifier
+                                    .clickable(
+                                        onClick = {
+                                            navController.navigate(Route.FitnessExist.route)
+                                        }
+                                    ))
 
                         }
                     }
                 } else {
                     // 운동 루틴이 있는 경우 FitnessCard 출력
-                    FitnessCard(
-                        navController = rememberNavController(),
-                        title = "하체루틴_허벅지..",
-                        fitnessList = sampleList
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 4f.wp())
+                    ){
+                        Image(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .graphicsLayer {
+                                    scaleX = 1.38f
+                                    scaleY = 1.0f
+                                },
+                            painter = painterResource(R.drawable.img_all_tilted_rectangle),
+                            contentDescription = "tilted Rectangle"
+                        )
+                        FitnessCard(
+                            navController = navController,
+                            title = "하체루틴_허벅지..",
+                            fitnessList = sampleList
+                        )
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .offset(x=182f.wp(),
+                                    y = 25f.bhp())
+                                .size(35f.bhp(),35f.bhp())
+                                .clip(RoundedCornerShape(11f.bhp()))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
+                                    ))
+                                .clickable(
+                                    onClick = {
+                                        Clicked.value = true
+                                    }
+                                )
+                                .border(1.dp,Color(0xFF000000), RoundedCornerShape(11f.bhp())),
+                            contentAlignment = Alignment.Center){
+                            Image(painter = painterResource(R.drawable.svg_all_point),
+                                contentDescription = "pointer",
+                                modifier = Modifier
+                                    .size(9f.wp(),13f.bhp()))
+                        }
+                    }
                 }
 
             }

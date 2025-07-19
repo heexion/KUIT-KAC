@@ -1,8 +1,9 @@
-package com.konkuk.kuit_kac.component
+package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -30,28 +33,38 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
-fun FitnessItemCard(
+fun MealItemCard(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
-    FitnessNum: Int,
+    foodNum: Int,
     image: Int,
-    FitnessName: String,
-    FitnessAmount: Int,
-    FitnessKcal: Int,
-    onDeleteClick: () -> Unit,
-    isEditable: Boolean = false
+    foodName: String,
+    foodAmount: Int,
+    foodKcal: Int,
+    onDeleteClick: () -> Unit
 ) {
+    var amountText = "${foodAmount}개"
+    // Todo: 추후에 음식 종류 선별해서 개/ml/접시 등등으로 바꿔야 함
+
     Row(
         modifier = modifier
             .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.bhp()))
             .fillMaxWidth()
             .background(Color(0xFFFFFFFF), RoundedCornerShape(16f.bhp()))
-            .padding(horizontal = 11f.wp(), vertical = 8f.bhp()),
+            .padding(horizontal = 11f.wp(), vertical = 8f.bhp())
+            .clickable(
+                onClick = {
+                    navController.navigate(
+                        "meal_search_detail/마라탕"
+                    )
+                }
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(image),
             contentDescription = "",
-            modifier = Modifier.size(68f.bhp())
+            modifier = Modifier.size(68f.wp(),68f.bhp())
         )
 
         Spacer(modifier = Modifier.width(12f.wp()))
@@ -61,38 +74,35 @@ fun FitnessItemCard(
             verticalArrangement = Arrangement.spacedBy(6f.bhp())
         ) {
             Text(
-                text = FitnessName,
+                text = foodName,
                 style = DungGeunMo17,
+                fontSize = 17f.isp(),
                 lineHeight = 22f.isp(),
                 color = Color(0xFF713E3A),
             )
             Text(
-                text = "세트 수: ${FitnessAmount}회",
-                style = DungGeunMo15,
+                text = amountText, style = DungGeunMo15,
+                fontSize = 15f.isp(),
                 lineHeight = 20f.isp(),
                 color = Color(0xFF000000)
             )
             Text(
-                text = "소모 칼로리: ${FitnessKcal}kcal",
-                style = DungGeunMo15,
+                text = "${foodKcal}kcal", style = DungGeunMo15,
+                fontSize = 15f.isp(),
                 lineHeight = 20f.isp(),
                 color = Color(0xFF000000)
             )
         }
 
-        if (isEditable) {
-            IconButton(
-                onClick = onDeleteClick,
-                modifier = Modifier
-                    .padding(end = 3f.wp())
-                    .size(24f.bhp())
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_close),
-                    contentDescription = "삭제",
-                    tint = Color(0xFF999999)
-                )
-            }
+        IconButton(
+            onClick = onDeleteClick,
+            modifier = Modifier.padding(end = 3f.wp()).size(24f.wp(),24f.bhp())
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_close),
+                contentDescription = "삭제",
+                tint = Color(0xFF999999)
+            )
         }
     }
 }
@@ -100,13 +110,14 @@ fun FitnessItemCard(
 @Preview
 @Composable
 private fun MealItemCardPreview() {
-    FitnessItemCard(
-        image = R.drawable.ic_lowerbody,
-        FitnessName = "레그 컬",
-        FitnessAmount = 2,
-        FitnessKcal = 120,
+    val navController = rememberNavController()
+    MealItemCard(
+        image = R.drawable.ic_dumplings,
+        foodName = "고기만두",
+        foodAmount = 1,
+        foodKcal = 120,
         onDeleteClick = { },
-        FitnessNum = 0,
-      // isEditable = true
+        foodNum = 0,
+        navController = navController
     )
 }

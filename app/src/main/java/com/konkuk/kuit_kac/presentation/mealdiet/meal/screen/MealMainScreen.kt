@@ -360,7 +360,7 @@ fun RecordMealButton(
         Spacer(modifier = Modifier.width(8f.wp()))
         Text(
             text = "식단 기록하기",
-            style = DungGeunMo20.copy(fontSize = 17.sp),
+            style = DungGeunMo20.copy(fontSize = 17f.isp()),
             color = Color(0xFF000000)
         )
     }

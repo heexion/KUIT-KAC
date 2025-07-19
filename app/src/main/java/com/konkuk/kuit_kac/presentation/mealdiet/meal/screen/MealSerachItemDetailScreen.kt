@@ -4,6 +4,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.component.DefaultButton
-import com.konkuk.kuit_kac.component.MealDetailCard
-import com.konkuk.kuit_kac.component.MealTopBarWithSearch
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealDetailCard
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealTopBarWithSearch
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.foodInfoMap
+import com.konkuk.kuit_kac.presentation.navigation.Route
 
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -43,11 +48,18 @@ fun MealSearchItemDetailScreen(
                 .fillMaxSize()
                 .background(Color(0xFFFFFBE8))
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(0f.hp())
+                    .background(color = Color(0xFFFFF1AB))
+            )
             // 공통 상단 컴포저블 사용
             MealTopBarWithSearch(
+                modifier = Modifier,
                 title = "식단 기록하기",
                 placeholderText = foodName,
-                placeholderTextColor = Color.Black,
+                placeholderTextColor = Color(0xFF000000),
                 placeholderTextStyle = DungGeunMo20,
                 showClearButton = true,
                 onBackClick = { navController.popBackStack() },
@@ -55,11 +67,11 @@ fun MealSearchItemDetailScreen(
                 onClearClick = { navController.navigate("meal_search") }
             )
 
-            Spacer(modifier = Modifier.height(82.dp))
+            Spacer(modifier = Modifier.height(82f.bhp()))
 
             // 음식 상세 카드
             MealDetailCard(
-                modifier = Modifier.padding(horizontal = 24.dp),
+                modifier = Modifier.padding(horizontal = 24f.wp()),
                 image = foodInfo.image,
                 foodName = foodName,
                 carbohydrate = foodInfo.carbohydrate,
@@ -70,13 +82,13 @@ fun MealSearchItemDetailScreen(
                 isSpeechBubble = true
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(38f.bhp()))
 // 하단 추가 버튼
             DefaultButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
-                onClick = { /* TODO: 저장 처리 */ },
+                    .padding(horizontal = 24f.wp()),
+                onClick = { navController.navigate(Route.MealTime.route) },
                 value = "추가하기",
                 buttonHeight = 70f,
                 isOrange = true

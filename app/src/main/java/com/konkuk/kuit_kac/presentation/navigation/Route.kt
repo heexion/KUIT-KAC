@@ -14,6 +14,7 @@ sealed class Route(val route: String) {
     data object MealFastingResult: Route(route = "MealFastingResult")
     data object MealRecord: Route(route = "MealRecord")
     data object MealSearch: Route(route = "MealSearch")
+    data object MealTime: Route(route = "MealTime")
 
     data object PlanDiet : Route(route = "PlanDiet") // 식단 계획
     data object PlanAI : Route(route = "PlanAI") // 식단 AI 추천
@@ -31,5 +32,10 @@ sealed class Route(val route: String) {
     data object HomeNutrition : Route(route = "homeNutrition")
 
     data object Fitness : Route(route = "fitness") // 운동
+    data object FitnessExist: Route(route = "FitnessExist")
+    data object FitnessCreate: Route(route = "FitnessCreate")
+    data object FitnessSearch: Route(route = "FitnessSearch")
+    data object FitnessEdit: Route(route = "FitnessEdit")
+    data object FitnessEditResult: Route(route = "FitnessEditResult")
 
 }

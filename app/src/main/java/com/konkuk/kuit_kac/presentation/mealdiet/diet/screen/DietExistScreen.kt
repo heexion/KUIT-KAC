@@ -4,12 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,31 +15,34 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberBasicTooltipState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.component.MealItemCard
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -57,8 +58,10 @@ import com.konkuk.kuit_kac.ui.theme.deepYellow
 @Composable
 fun DietExistScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    routineList: List<String> = listOf("아침", "점심", "저녁")
 ) {
+    var expanded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val lazyState = rememberLazyListState()
     val existList = listOf(
@@ -174,50 +177,90 @@ fun DietExistScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(Color.Transparent)
                 ) {
                     Box(
                         modifier = Modifier
-                            .padding(top = 22f.bhp(),
-                                start = 94f.wp())
-                            .width(176f.wp())
-                            .height(28f.bhp())
-                            .clip(RoundedCornerShape(7f.bhp()))
-                            .background(color = Color(0xFFFFFCEE)),
-                        contentAlignment = Alignment.Center
-                    ){
-                        Text(
-                            modifier = Modifier,
-                            text = "아침식단1",
-                            style = DungGeunMo17,
-                            fontSize = 17f.isp(),
-                            color = Color(0xFF000000),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 22f.bhp(),
-                                start = 48.79f.wp())
-                            .size(26.75811f.wp(),26.75811f.bhp())
-                            .clip(RoundedCornerShape(13.27905f.bhp()))
-                            .background(brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color(0xFFFFFFFF),Color(0xFFFFB638)
+                            .padding(top = 22f.bhp(), start = 94f.wp())
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .width(176f.wp())
+                                .height(28f.bhp())
+                                .clip(RoundedCornerShape(7f.bhp()))
+                                .background(Color(0xFFFFFCEE))
+                                .clickable { expanded = true },
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Text(
+                                text = "아침식단1",
+                                style = DungGeunMo17,
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000),
+                                modifier = Modifier
+                                    .padding(start = 49.5f.wp())
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_dropdown),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd)
+                                    .padding(end = 7f.wp())
+                                    .size(12f.wp(), 12f.bhp())
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier
+                                .width(176f.wp())
+                                .background(Color(0xFFFFF6C3))
+                        ) {
+                            routineList.forEachIndexed { index, routine ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = routine,
+                                            fontSize = 16f.isp(),
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    },
+                                    onClick = {
+                                        expanded = false
+                                    }
                                 )
-                            ))
-                            .clickable(
-                                onClick = {
+
+                                if (index < routineList.lastIndex) {
+                                    Divider(
+                                        color = Color(0xFF999999),
+                                        modifier = Modifier.padding(horizontal = 7f.wp())
+                                    )
+                                }
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 224f.wp())
+                                .size(26.75811f.bhp(), 26.75811f.bhp())
+                                .clip(RoundedCornerShape(13.27905f.bhp()))
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
+                                    )
+                                )
+                                .clickable {
                                     navController.navigate(Route.DietPatch.route)
                                 }
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.img_diet_pen),
+                                contentDescription = "pen",
+                                modifier = Modifier
+                                    .fillMaxSize()
                             )
-                    ){
-                        Image(
-                            modifier = Modifier
-                                .width(26.75811f.wp())
-                                .height(26.75811f.bhp()),
-                            painter = painterResource(R.drawable.img_diet_pen),
-                            contentDescription = "pen"
-                        )
+                        }
                     }
                 }
                 Column(
@@ -234,7 +277,8 @@ fun DietExistScreen(
                             foodName = "고기만두",
                             foodAmount = 1,
                             foodKcal = 120,
-                            onDeleteClick = { }
+                            onDeleteClick = { },
+                            navController = navController
                         )
                     }
                 }

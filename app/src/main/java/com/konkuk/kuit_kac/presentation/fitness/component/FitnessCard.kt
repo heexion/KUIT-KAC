@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.fitness
+package com.konkuk.kuit_kac.presentation.fitness.component
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,6 +50,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 
@@ -65,7 +67,7 @@ fun FitnessCard(
     navController: NavHostController,
     title: String,
     fitnessList: List<FitnessData>,
-    isEditable: Boolean = false,
+    isEditable: Boolean = true,
     routineList: List<String> = listOf("루틴1", "루틴2", "루틴3"),
     onRoutineSelect: (String) -> Unit = {}
 ) {
@@ -75,22 +77,20 @@ fun FitnessCard(
 
     Column(
         modifier = modifier
-            .padding(top = 28f.bhp(), start = 24f.wp())
-            .width(364f.wp())
-            .clip(RoundedCornerShape(20f.wp()))
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20f.bhp()))
             .background(Color(0xFFFFF1AB))
-            .border(1.dp, Color.Black, RoundedCornerShape(20f.wp()))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth()
         ) {
             Box(
                 modifier = Modifier
-                    .padding(top = 22f.bhp(), start = 24f.wp())
-                    .width(176f.wp())
+                    .padding(top = 22f.bhp(), start = 50f.wp())
+                    .width(223f.wp())
                     .height(28f.bhp())
-                    .clip(RoundedCornerShape(7f.wp()))
+                    .clip(RoundedCornerShape(7f.bhp()))
                     .background(Color(0xFFFFFCEE))
                     .clickable {
                         if (isEditable) {
@@ -101,104 +101,96 @@ fun FitnessCard(
                     },
                 contentAlignment = Alignment.CenterStart
             ) {
-                if (isEditingTitle && isEditable) {
-                    TextField(
-                        value = selectedTitle,
-                        onValueChange = {
-                            selectedTitle = it
-                            onRoutineSelect(it) // 실시간 반영
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp)
-                            .height(28f.bhp()),
-                        textStyle = DungGeunMo17.copy(
-                            fontSize = 17f.isp(),
-                            color = Color.Black,
-                            textAlign = TextAlign.Center
-                        ),
-                        singleLine = true,
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent
-                        )
-
-                        ,
-                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(
-                            onDone = { isEditingTitle = false }
-                        )
-                    )
-                } else {
-                    Text(
-                        text = selectedTitle,
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp(),
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp)
-                    )
-                }
-
-                // 드롭다운 아이콘 (보낸 아이콘), 편집화면일 때는 숨김
-                if (!isEditable) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_dropdown), // 두 번째 이미지 참고
-                        contentDescription = "드롭다운",
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 8.dp)
-                            .size(12.dp)
-                    )
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .width(223f.wp())
-                        .height(114f.bhp())
-                        .clip(RoundedCornerShape(6f.wp()))
-                        .background(Color(0xFFFFF6C3))
-                ) {
-                    routineList.forEachIndexed { index, routine ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = routine,
-                                    style = DungGeunMo17,
-                                    fontSize = 16f.isp(),
-                                    color = Color.Black,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            },
-                            onClick = {
-                                selectedTitle = routine
-                                onRoutineSelect(routine)
-                                expanded = false
+                Column {
+                    if (isEditingTitle && isEditable) {
+                        TextField(
+                            value = selectedTitle,
+                            onValueChange = {
+                                selectedTitle = it
+                                onRoutineSelect(it)
                             },
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(38f.bhp()) // 전체 높이 114 중 3등분
+                                .width(223f.wp())
+                                .heightIn(max = 56f.bhp()),
+                            singleLine = true,
+                            textStyle = DungGeunMo17.copy(
+                                fontSize = 17f.isp(),
+                                color = Color.Black,
+                                textAlign = TextAlign.Center
+                            ),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent
+                            ),
+                            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(onDone = { isEditingTitle = false })
                         )
-
-                        // 루틴 구분선 (마지막 항목 뒤에는 생략)
-                        if (index < routineList.lastIndex) {
-                            Divider(
-                                color = Color(0xFF999999),
-                                thickness = 1.dp,
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .width(223f.wp())
+                                .height(28f.bhp())
+                                .clip(RoundedCornerShape(7f.bhp()))
+                                .background(Color(0xFFFFFCEE))
+                                .clickable { expanded = true },
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Text(
+                                text = selectedTitle,
+                                textAlign = TextAlign.Center,
+                                style = DungGeunMo17,
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF0000000),
                                 modifier = Modifier
-                                    .padding(horizontal = 7f.wp()) // (223 - 208.686) ≈ 14.3, 좌우 약 7씩
-                                    .width(208.686f.wp())
-                                    .height(1.dp)
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8f.wp())
                             )
+
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_dropdown),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd)
+                                    .padding(end = 7f.wp())
+                                    .size(12f.wp(), 12f.bhp())
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier
+                                .width(223f.wp())
+                                .height(114f.bhp())
+                                .background(Color(0xFFFFF6C3))
+                        ) {
+                            routineList.forEachIndexed { index, routine ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = routine,
+                                            fontSize = 16f.isp(),
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    },
+                                    onClick = {
+                                        selectedTitle = routine
+                                        onRoutineSelect(routine)
+                                        expanded = false
+                                    }
+                                )
+                                if (index < routineList.lastIndex) {
+                                    Divider(
+                                        color = Color(0xFF999999),
+                                        modifier = Modifier.padding(horizontal = 7f.wp())
+                                    )
+                                }
+                            }
                         }
                     }
                 }
+
 
             }
 
@@ -206,16 +198,16 @@ fun FitnessCard(
             if (isEditable) {
                 Box(
                     modifier = Modifier
-                        .padding(top = 22f.bhp(), start = 48.79f.wp())
+                        .padding(top = 22f.bhp(), start = 13.9f.wp())
                         .size(26.75811f.wp(), 26.75811f.bhp())
-                        .clip(RoundedCornerShape(13.27905f.wp()))
+                        .clip(RoundedCornerShape(13.27905f.bhp()))
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.White, Color(0xFFFFB638))
+                                colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                             )
                         )
                         .clickable {
-                            navController.navigate("fitness_edit")
+                            navController.navigate(Route.FitnessEdit.route)
                         }
                 ) {
                     Image(
@@ -261,17 +253,17 @@ fun FitnessItem(
 ) {
     Row(
         modifier = modifier
-            .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(16f.bhp()))
             .fillMaxWidth()
-            .height(84.dp)
-            .background(Color(0xFFFFFFFF), RoundedCornerShape(16.dp))
+            .height(84f.bhp())
+            .background(Color(0xFFFFFFFF), RoundedCornerShape(16f.bhp()))
             .padding(horizontal = 11f.wp(), vertical = 8f.bhp()),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(image),
             contentDescription = "",
-            modifier = Modifier.size(68f.bhp())
+            modifier = Modifier.size(68f.wp(),68f.bhp())
         )
 
         Spacer(modifier = Modifier.width(12f.wp()))
@@ -283,6 +275,7 @@ fun FitnessItem(
             Text(
                 text = FitnessName,
                 style = DungGeunMo17,
+                fontSize = 17f.isp(),
                 lineHeight = 22f.isp(),
                 color = Color(0xFF713E3A),
             )

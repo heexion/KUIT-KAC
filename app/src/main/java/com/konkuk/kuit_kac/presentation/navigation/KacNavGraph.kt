@@ -33,14 +33,13 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.TimeInputResultScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessCreateScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessData
-import com.konkuk.kuit_kac.presentation.fitness.FitnessEditResultScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessEditScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessMainScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessScreen
-import com.konkuk.kuit_kac.presentation.fitness.FitnessSearchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
+import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditResultScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessMainScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessSearchScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeNutritionScreen
@@ -51,6 +50,7 @@ import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealFastingResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealPatchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTimeScreen
 
 
 @Composable
@@ -181,13 +181,13 @@ fun KacNavGraph(
         composable(Route.MealSearch.route) {
             MealSearchScreen(navController = navController)
         }
-
-        composable(Route.Fitness.route) {
-            FitnessScreen(
-                modifier = Modifier
-
+        composable(Route.MealTime.route){
+            MealTimeScreen(
+                navController = navController
             )
         }
+
+
 
         composable(Route.HomeAnalysis.route) {
             HomeAnalysisScreen(
@@ -284,10 +284,10 @@ fun KacNavGraph(
             )
         }
 
-        composable("fitness_create") {
+        composable(Route.FitnessCreate.route) {
             FitnessCreateScreen(navController = navController)
         }
-        composable("fitness_edit") {
+        composable(Route.FitnessEdit.route) {
             // 예: 샘플 데이터 전달
             FitnessEditScreen(
                 navController = navController,
@@ -300,13 +300,13 @@ fun KacNavGraph(
                 }
             )
         }
-        composable("fitness_edit_result") {
+        composable(Route.FitnessEditResult.route) {
             FitnessEditResultScreen(navController = navController)
         }
-        composable("fitness_search") {
+        composable(Route.FitnessSearch.route) {
             FitnessSearchScreen(navController = navController)
         }
-        composable(route = "fitness_main") {
+        composable(route = Route.Fitness.route){
             FitnessMainScreen(
                 navController = navController,
                 fitnessData = listOf(),
@@ -314,6 +314,37 @@ fun KacNavGraph(
                 onRecordClick = { /* 구현 */ },
                 selectedTab = "0", // Int면 타입 맞춰서 수정
                 onTabClick = { /* 탭 클릭 시 동작 */ }
+            )
+        }
+        composable(route = Route.FitnessExist.route){
+            val sampleFitnessData = listOf(
+                FitnessData(
+                    id = 1,
+                    name = "레그 컬",
+                    imageRes = R.drawable.ic_lowerbody, // 실제 리소스 있어야 함
+                    onDeleteClick = {}
+                ),
+                FitnessData(
+                    id = 2,
+                    name = "레그 프레스",
+                    imageRes = R.drawable.ic_lowerbody,
+                    onDeleteClick = {}
+                ),
+                FitnessData(
+                    id = 3,
+                    name = "레그 익스텐션",
+                    imageRes = R.drawable.ic_lowerbody,
+                    onDeleteClick = {}
+                )
+            )
+
+            FitnessMainScreen(
+                navController = navController,
+                selectedTab = "기록",
+                onTabClick = {},
+                onRecordClick = {},
+                onFastedClick = {},
+                fitnessData = sampleFitnessData
             )
         }
     }

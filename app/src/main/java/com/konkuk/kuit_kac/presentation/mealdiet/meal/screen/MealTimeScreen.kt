@@ -173,7 +173,7 @@ fun MealTimeScreen(
                             LazyColumn(
                                 modifier = Modifier
                                     .height(120f.bhp())
-                                    .weight(1f),
+                                    .weight(0.5f),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 items(hours) { hour ->
@@ -208,7 +208,7 @@ fun MealTimeScreen(
                             LazyColumn(
                                 modifier = Modifier
                                     .height(120f.bhp())
-                                    .weight(1f),
+                                    .weight(0.5f),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 items(minutes) { minute ->
