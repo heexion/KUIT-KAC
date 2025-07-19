@@ -66,6 +66,14 @@ class MainActivity : ComponentActivity() {
                     Route.DietCreate.route,
                     "plan_ai_detail",
                     Route.PlanCheck.route,
+                    Route.MealSearch.route,
+                    Route.DietAdd.route,
+                    Route.MealTime.route,
+                    Route.FitnessEdit.route,
+                    Route.FitnessSearch.route,
+                    Route.FitnessCreate.route,
+                    Route.MealPatch.route,
+                    Route.DietPatch.route
                 )
                 val planButtonRoutes = setOf(
                     Route.Home.route,

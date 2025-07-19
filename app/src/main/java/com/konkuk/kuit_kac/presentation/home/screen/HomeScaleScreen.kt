@@ -91,7 +91,6 @@ fun HomeScaleScreen(
         val scale = remember { Animatable(1f) }
         LaunchedEffect(clicked.value) {
             if(clicked.value){
-                delay(500)
                 scale.animateTo(5f, animationSpec = tween(800))
             }
             }
@@ -205,7 +204,6 @@ fun HomeScaleScreen(
                             onClick = {
                                 clicked.value = true
                                 coroutineScope.launch {
-                                    delay(800)
                                     navController.navigate(Route.HomeScaleInput.route)
                                 }
                             }

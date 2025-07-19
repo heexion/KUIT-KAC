@@ -82,7 +82,7 @@ listOf(1,2,3,4,5,6)
             Image(
                 modifier = Modifier
                     .offset(x = 78f.wp())
-                    .size(272f.wp(),96f.bhp()),
+                    .size(272f.wp(), 96f.bhp()),
                 painter = painterResource(R.drawable.img_diet_patchballoon),
                 contentDescription = "textballoon"
             )
@@ -95,7 +95,7 @@ listOf(1,2,3,4,5,6)
                 modifier = Modifier
                     .padding(top = 256f.hp(), start = 24f.wp())
                     .width(364f.wp())
-            ){
+            ) {
                 Image(
                     modifier = Modifier
                         .matchParentSize()
@@ -109,10 +109,10 @@ listOf(1,2,3,4,5,6)
                 Column(
                     modifier = Modifier
                         .width(364f.wp())
-                        .clip(RoundedCornerShape(20f. bhp()))
+                        .clip(RoundedCornerShape(20f.bhp()))
                         .background(color = Color(0xFFFFF1AB))
                         .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
-                ){
+                ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -151,9 +151,10 @@ listOf(1,2,3,4,5,6)
                                 foodAmount = 1,
                                 foodKcal = 120,
                                 onDeleteClick = {},
-                                navController =navController
+                                navController = navController
                             )
-                    }}
+                        }
+                    }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -163,25 +164,30 @@ listOf(1,2,3,4,5,6)
                 Box(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(x=182f.wp(),
-                            y = 25f.bhp())
-                        .size(35f.wp(),35f.bhp())
+                        .offset(
+                            x = 182f.wp(),
+                            y = 25f.bhp()
+                        )
+                        .size(35f.wp(), 35f.bhp())
                         .clip(RoundedCornerShape(11f.bhp()))
                         .background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
-                        ))
+                            )
+                        )
                         .clickable(
                             onClick = {
                                 Clicked.value = true
                             }
                         )
-                        .border(1.dp,Color(0xFF000000), RoundedCornerShape(11f.bhp())),
-                    contentAlignment = Alignment.Center){
-                    Image(painter = painterResource(R.drawable.svg_all_point),
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(11f.bhp())),
+                    contentAlignment = Alignment.Center) {
+                    Image(
+                        painter = painterResource(R.drawable.svg_all_point),
                         contentDescription = "pointer",
                         modifier = Modifier
-                            .size(9f.wp(),13f.bhp()))
+                            .size(9f.wp(), 13f.bhp())
+                    )
                 }
             }
             }
@@ -232,7 +238,7 @@ listOf(1,2,3,4,5,6)
                             colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                         )
                 )
-                .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.bhp()))
+                .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                 .clickable {
                     if (prevRoute == "plan_ai_detail" || prevRoute == "plan_in_person_add")
                         navController.popBackStack()

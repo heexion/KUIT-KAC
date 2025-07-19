@@ -124,6 +124,11 @@ fun DietAddScreen(
             }
         }
     }
+    Spacer(
+        modifier = Modifier
+            .padding(bottom = 120f.bhp())
+            .background(Color(0xFFFFFBE8))
+    )
 }
 
 @Preview(showBackground = true)

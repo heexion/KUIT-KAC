@@ -281,6 +281,7 @@ fun DietExistScreen(
                             navController = navController
                         )
                     }
+
                 }
                 Box(
                     modifier = Modifier
@@ -320,6 +321,7 @@ fun DietExistScreen(
                         .fillMaxWidth()
                         .height(20f.bhp())
                 )
+
             }
             Box(
                 modifier = Modifier

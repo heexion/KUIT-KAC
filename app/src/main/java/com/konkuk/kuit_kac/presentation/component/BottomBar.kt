@@ -187,7 +187,8 @@ fun BottomBar(
                     Icon(
                         painter = painterResource(R.drawable.ic_diet),
                         contentDescription = "식단",
-                        modifier = Modifier.size(24f.wp(),24f.bhp())
+                        modifier = Modifier.size(24f.wp(),24f.bhp()),
+                        tint = Color(0xFF000000)
                     )
                     Spacer(modifier = Modifier.width(8f.wp()))
                     Text("식단", style = DungGeunMo17,
@@ -242,6 +243,7 @@ fun BottomBar(
                         painter = painterResource(R.drawable.ic_fitness),
                         contentDescription = "운동",
                         modifier = Modifier.size(24f.wp(),24f.bhp()),
+                        tint = Color(0xFF000000)
                     )
                     Spacer(modifier = Modifier.width(8f.wp()))
                     Text("운동", style = DungGeunMo17,
