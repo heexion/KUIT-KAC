@@ -18,6 +18,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 
 @Composable
 fun VerticalScrollbar(
@@ -30,11 +32,11 @@ fun VerticalScrollbar(
 
     Box(
         modifier = modifier
-            .width(6.dp)
+            .width(6f.wp())
             .onGloballyPositioned {
                 containerHeightPx = it.size.height
             }
-            .background(trackColor, shape = RoundedCornerShape(3.dp))
+            .background(trackColor, shape = RoundedCornerShape(3f.bhp()))
     ) {
         val layoutInfo = scrollState.layoutInfo
         val totalItems = layoutInfo.totalItemsCount
@@ -51,10 +53,10 @@ fun VerticalScrollbar(
 
             Box(
                 modifier = Modifier
-                    .width(6.dp)
+                    .width(6f.wp())
                     .offset { IntOffset(x = 0, y = offsetY) }
                     .height(with(LocalDensity.current) { thumbHeight.toDp() })
-                    .background(thumbColor, shape = RoundedCornerShape(3.dp))
+                    .background(thumbColor, shape = RoundedCornerShape(3f.bhp()))
             )
         }
     }

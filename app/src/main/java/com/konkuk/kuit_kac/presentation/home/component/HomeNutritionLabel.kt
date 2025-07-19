@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
@@ -29,16 +31,17 @@ fun HomeNutritionLabel(
         Box(
             modifier = Modifier
                 .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFFFFFFFF))
-                .size(19.42188.dp)
-                .clip(RoundedCornerShape(9.71094.dp))
+                .size(19.42188f.wp())
+                .clip(RoundedCornerShape(9.71094f.wp()))
                 .background(color = Color(color))
-                .border(1.dp, color = Color.Black, shape = RoundedCornerShape(9.71094.dp))
+                .border(1.dp, color = Color.Black, shape = RoundedCornerShape(9.71094f.wp()))
         )
         Text(
             modifier = Modifier
-                .padding(start = 7.dp),
+                .padding(start = 7f.wp()),
             text = content,
-            style = DungGeunMo17
+            style = DungGeunMo17,
+            fontSize = 17f.isp()
         )
     }
 }

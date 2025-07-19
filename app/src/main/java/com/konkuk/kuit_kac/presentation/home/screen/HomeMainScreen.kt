@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -69,16 +70,17 @@ fun HomeMainScreen(
     left: Int,
     navController: NavHostController
 ) {
+    HomeBackgroundComponent()
     Box(
         modifier = modifier
     ) {
         Box(
             modifier = Modifier
         ) {
-            HomeBackgroundComponent()
+
             EllipseNyam(modifier = Modifier
                 .offset(
-                    x = 30f.wp(),
+                    x = 24f.wp(),
                     y = 72.18f.hp()
                 )
                 .clickable(
@@ -89,23 +91,30 @@ fun HomeMainScreen(
                 ellipseLength = 147.6658,
                 mascotLength = 88.43783
             )
-
-            Image(
+            Box(
                 modifier = Modifier
                     .size(248.0013f.wp(), 103.00002f.bhp())
                     .offset(x = 144f.wp(), y = 40f.hp()),
-                painter = painterResource(R.drawable.img_homegraphscreen_maintextballoon),
-                contentDescription = "너 진짜 너무 많이 먹은 거 아냐 ㅠㅠ"
-            )
-            Text(
-                modifier = Modifier
-                    .offset(x = 178.27f.wp(), y = 58.11f.hp()),
-                text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
-                style = DungGeunMo17,
-                fontSize = 17f.isp(),
-                color = Color(0xFF000000),
-                textAlign = TextAlign.Center
-            )
+                contentAlignment = Alignment.Center
+            ){
+                Image(
+                    modifier = Modifier
+                        .matchParentSize(),
+                    painter = painterResource(R.drawable.img_homegraphscreen_maintextballoon),
+                    contentDescription = "너 진짜 너무 많이 먹은 거 아냐 ㅠㅠ"
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(bottom = 29.89f.bhp()
+                        ),
+                        //.offset(x = 178.27f.wp(), y = 58.11f.hp()),
+                    text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
+                    style = DungGeunMo17,
+                    fontSize = 17f.isp(),
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center
+                )
+            }
 
 
             Image(

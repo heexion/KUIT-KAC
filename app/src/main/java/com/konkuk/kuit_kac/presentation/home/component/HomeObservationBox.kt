@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
@@ -33,7 +36,7 @@ fun HomeObservationBox(
 ) {
     Box(
         modifier = Modifier
-            .height(52.73.dp)
+            .height(52.73f.bhp())
             .fillMaxWidth()
     ) {
         Spacer(
@@ -46,9 +49,10 @@ fun HomeObservationBox(
         Text(
             text = value,
             style = DungGeunMo17,
+            fontSize = 17f.isp(),
             color = Color(0xFF000000),
-            lineHeight = 22.sp,
-            modifier = Modifier.padding(top = 13.94.dp),
+            lineHeight = 22f.isp(),
+            modifier = Modifier.padding(top = 13.94f.bhp()),
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -56,8 +60,8 @@ fun HomeObservationBox(
         ) {
             Image(
                 modifier = Modifier
-                    .padding(9.46.dp)
-                    .size(31.5.dp)
+                    .padding(9.46f.bhp())
+                    .size(31.5f.wp(), 31.5f.bhp())
                     .clickable(
                         onClick = {
                             navController.navigate(Route.HomeAnalysis.route)

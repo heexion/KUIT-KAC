@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
@@ -37,12 +39,12 @@ fun SelectButton(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(buttonHeight.dp)
+            .height(buttonHeight.toFloat().bhp())
             .clickable { onClick() }
     ) {
         Image(
             modifier = Modifier
-                .height(buttonHeight.dp),
+                .height(buttonHeight.toFloat().bhp()),
             painter = painterResource(image),
             contentDescription = "select button",
             contentScale = ContentScale.FillBounds
@@ -51,7 +53,8 @@ fun SelectButton(
         Text(
             text = value,
             style = DungGeunMo20,
-            lineHeight = 28.sp,
+            fontSize = 20f.isp(),
+            lineHeight = 28f.isp(),
             color = Color(0xFF000000),
             modifier = Modifier.align(Alignment.Center)
         )

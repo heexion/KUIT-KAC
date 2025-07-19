@@ -19,6 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
@@ -56,7 +58,7 @@ fun HomeSingleNutritionBar(
             )
             Text(
                 modifier = Modifier
-                    .padding(start = 12.65.dp),
+                    .padding(start = 12.65f.wp()),
                 text = quantity.toString(),
                 style = DungGeunMo17,
                 color = color
@@ -68,20 +70,20 @@ fun HomeSingleNutritionBar(
         }
         Row(
             modifier = Modifier
-                .padding(top = 7.17.dp)
+                .padding(top = 7.17f.bhp())
                 .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
-                .size(332.dp,36.dp)
-                .clip(RoundedCornerShape(30.dp))
-                .border(1.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
+                .size(332f.wp(),36f.bhp())
+                .clip(RoundedCornerShape(30f.wp()))
+                .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.wp()))
                 .background(color = Color(0xFFD8D8D8))
         ) {
             Box(
                 modifier = Modifier
                     .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
-                    .width(width.dp)
+                    .width(width.toFloat().wp())
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(30.dp))
-                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(30f.wp()))
+                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.wp()))
                     .background(color = color),
                 contentAlignment = Alignment.Center
             ) {

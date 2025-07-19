@@ -47,15 +47,15 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = navController
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
-
                 val hideBottomBarRoutes = setOf(
                     Route.HomeScaleInput.route,
                     Route.HomeResult.route,
-                    "fasting_result",
+                    Route.MealFastingResult.route,
                     "time_input_result",
                     "meal_edit_result",
                     "plan_ai_loading",
-                    "plan_result"
+                    "plan_result",
+                    Route.FitnessEditResult.route
                 )
                 val backArrowRoutes = setOf(
                     // 여기다가 뒤로가기 버튼 있으면 추가
@@ -66,6 +66,14 @@ class MainActivity : ComponentActivity() {
                     Route.DietCreate.route,
                     "plan_ai_detail",
                     Route.PlanCheck.route,
+                    Route.MealSearch.route,
+                    Route.DietAdd.route,
+                    Route.MealTime.route,
+                    Route.FitnessEdit.route,
+                    Route.FitnessSearch.route,
+                    Route.FitnessCreate.route,
+                    Route.MealPatch.route,
+                    Route.DietPatch.route
                 )
                 val planButtonRoutes = setOf(
                     Route.Home.route,
@@ -124,7 +132,7 @@ class MainActivity : ComponentActivity() {
                     if (currentRoute in planButtonRoutes) {
                         Image(
                             modifier = Modifier
-                                .padding(end = 25f.wp(), bottom = 100f.bhp())
+                                .padding(end = 25f.wp(), bottom = 93f.bhp())
                                 .size(61f.wp(), 61f.bhp())
                                 .align(Alignment.BottomEnd)
                                 .clickable { navController.navigate(Route.PlanDiet.route) },
