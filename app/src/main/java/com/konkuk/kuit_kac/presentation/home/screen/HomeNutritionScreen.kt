@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSingleNutritionBar
@@ -32,18 +33,17 @@ import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponen
 
 @Composable
 fun HomeNutritionScreen(modifier: Modifier = Modifier) {
-    val scrollState = rememberScrollState()
     Box(
         Modifier.fillMaxSize()
     ) {
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73.dp)
+                .offset(y = 477.73f.hp())
         )
         Column(
             modifier = Modifier
-                .padding(top = 70.dp)
+                .padding(top = 30f.hp())
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -51,14 +51,14 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
             ) {
                 Image(
                     modifier = Modifier
-                        .size(248.0013.dp, 103.00002.dp),
+                        .size(248.0013f.wp(), 103.00002f.bhp()),
                     painter = painterResource(R.drawable.img_homegrpahscreen_analysistextballoon),
                     contentDescription = "현재까지 내 뱃속 정보야"
                 )
                 Image(
                     modifier = Modifier
-                        .size(187.67596.dp, 244.dp)
-                        .offset(y = 86.dp)
+                        .size(187.67596f.wp(), 244f.bhp())
+                        .offset(y = 86f.bhp())
                         .align(Alignment.BottomCenter),
                     painter = painterResource(R.drawable.img_main_person),
                     contentDescription = "person"
@@ -66,13 +66,12 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
             }
             Column(
                 modifier = Modifier
-                    .verticalScroll(scrollState)
-                    .padding(top = 103.dp)
-                    .height(436.dp)
+                    .fillMaxSize()
+                    .padding(top = 103f.bhp())
                     .clip(
                         RoundedCornerShape(
-                        topStart = 75.dp,
-                        topEnd = 75.dp
+                        topStart = 75f.wp(),
+                        topEnd = 75f.wp()
                     )
                     )
                     .background(
@@ -85,8 +84,8 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
             ){
                 Column(
                     modifier = Modifier
-                        .padding(top = 29.87.dp, start = 40.dp, end = 40.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                        .padding(top = 29.87f.bhp(), start = 40f.wp(), end = 40f.wp()),
+                    verticalArrangement = Arrangement.spacedBy(16f.bhp())
                 ) {
                     HomeSingleNutritionBar(
                         type = "탄수화물",

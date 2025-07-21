@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,10 +42,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +58,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
@@ -134,7 +140,7 @@ fun WeightInputModal(
         focusRequester.requestFocus()
     }
 
-    Box(
+    Column(
         modifier = modifier
             .imePadding()
             .fillMaxSize()
@@ -145,11 +151,40 @@ fun WeightInputModal(
             .clickable {
                 focusManager.clearFocus()
             },
-        contentAlignment = Alignment.BottomEnd
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_weight),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(300f.wp()),
+                contentScale = ContentScale.FillWidth
+            )
+            Text(
+                text = "<현재 체중>",
+                style = DungGeunMo24,
+                fontSize = 24f.isp(),
+                color = Color(0xFF000000),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 55f.bhp())
+            )
+            Text(
+                text = "45kg",
+                style = DungGeunMo35,
+                fontSize = 35f.isp(),
+                color = Color(0xFF713E3A),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 25f.bhp())
+            )
+        }
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
+                .clip(RoundedCornerShape(topStart = 60f.wp(), topEnd = 60f.wp()))
                 .height(333.dp)
                 .background(
                     brush = Brush.verticalGradient(
@@ -157,7 +192,7 @@ fun WeightInputModal(
                     )
                 )
                 .border(1.25.dp, Color.Black, RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
-                .padding(25.dp)
+                .padding(horizontal = 25f.wp(), vertical = 25f.bhp())
                 .clickable(enabled = false) {},
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -169,13 +204,13 @@ fun WeightInputModal(
             )
             Row(
                 modifier = Modifier
-                    .padding(top = 68.47.dp),
+                    .padding(top = 48.88f.bhp()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                        .padding(horizontal = 20f.wp(), vertical = 12f.bhp())
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color(0xFFFFF3B7))
                 ) {
@@ -204,7 +239,13 @@ fun WeightInputModal(
                             focusedIndicatorColor = Color.Transparent
                         ),
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                navController.navigate(Route.HomeResult.route)
+                            }
+                        )
                     )
                 }
                 Text(
@@ -214,31 +255,15 @@ fun WeightInputModal(
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20f.bhp()))
 
-            Button(
-                onClick = {
-                    focusManager.clearFocus()
-                    onConfirm(weight)
-                    navController.navigate(Route.HomeResult.route)
-                },
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(20.dp))
-                    .background(
-                        brush = Brush.verticalGradient(
-                            listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
-                        )
-                    )
-                    .border(2.dp, Color.Black, RoundedCornerShape(20.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                    ,
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "기록하기",
-                    style = DungGeunMo20,
-                    color = Color.Black,
-                    modifier = Modifier.padding(vertical = 14.dp)
-                )
             }
         }
     }

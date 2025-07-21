@@ -48,9 +48,9 @@ fun HomeNutritionCircleGraph(
 
     Box(
         modifier = modifier
-            .size(190.1416f.wp(), 190.1416f.bhp())
+            .size(190.1416f.bhp())
             .padding(2.dp)
-            .clip(RoundedCornerShape(190.1416f.wp()/2))
+            .clip(RoundedCornerShape(190.1416f.bhp()/2))
             .background(
                 brush = Brush.linearGradient(
                     listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))

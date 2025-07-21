@@ -53,7 +53,7 @@ fun DefaultButton(
             text = value,
             style = DungGeunMo20,
             fontSize = 20f.isp(),
-            lineHeight = 28.sp,
+            lineHeight = 28f.isp(),
             color = Color(0xFF000000),
             modifier = Modifier.align(Alignment.Center)
         )

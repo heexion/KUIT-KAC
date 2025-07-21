@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +44,12 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -76,94 +83,53 @@ fun HomeScaleScreen(
             .background(Color.Gray),
         contentAlignment = Alignment.TopCenter
     ) {
-        Box(
+        HomeBackgroundComponent()
+        HomeSubBackgroundComponent(
             modifier = Modifier
-                .requiredSize(588.dp)
-                .clipToBounds()
-        ){
-            Image(
-                modifier = Modifier
-                    .matchParentSize()
-                    .blur(radius = 3.799999952316284.dp)
-                    .offset(y = -19.dp),
-                painter = painterResource(R.drawable.img_home_background),
-                contentDescription = "homescreen background"
-            )
-        }
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .offset(y = 569.dp)
-        ) {
-            Image(
-                modifier = Modifier
-                    .blur(radius = 3.799999952316284.dp)
-                    .width(508.22656.dp)
-                    .height(195.5752.dp),
-                painter = painterResource(R.drawable.img_homegraphscreen_background),
-                contentDescription = "background",
-                contentScale = ContentScale.FillBounds,
-            )
-            Image(
-                modifier = Modifier
-                    .offset(y = (-10).dp)
-                    .blur(radius = 3.799999952316284.dp)
-                    .width(508.22656.dp)
-                    .height(195.5752.dp),
-                painter = painterResource(R.drawable.img_homegraphscreen_background),
-                contentDescription = "background",
-                contentScale = ContentScale.FillBounds
-            )
-        }
+                .offset(y = 477.73f.hp())
+        )
         val scale = remember { Animatable(1f) }
         LaunchedEffect(clicked.value) {
             if(clicked.value){
-                delay(500)
                 scale.animateTo(5f, animationSpec = tween(800))
             }
             }
         Image(
             modifier = Modifier
-                .zIndex(if (clicked.value) 2f else 0f)
-                .size(165.563.dp,93.21614.dp)
-                .offset(y = 361.25.dp)
-                .graphicsLayer {
-                    scaleX = scale.value
-                    scaleY = scale.value
-                    transformOrigin = TransformOrigin(0.5f, 0.5f)
-                },
+                .size(165.563f.wp(),93.21614f.bhp())
+                .offset(y = 342.24f.hp()),
             painter = painterResource(R.drawable.img_home_scale),
             contentDescription = "scale"
         )
         Image(
             modifier = Modifier
-                .padding(top = 102.dp)
-                .size(290.dp),
+                .padding(top = 83f.hp())
+                .size(211f.wp(),295f.bhp()),
             painter = painterResource(id = R.drawable.img_nyamee_normal),
             contentDescription = "homescale scale bg",
         )
 
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopEnd
+            modifier = Modifier.offset(
+                y = 4f.hp(), x = 56f.wp()
+            )
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_speech_bubble),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(height = 103.dp, width = 275.dp)
-                    .padding(end = 18.dp, top = 19.58.dp),
+                    .size(height = 103f.bhp(), width = 275f.wp()),
                 contentScale = ContentScale.FillBounds
             )
             Text(
-                text = "조금 더 힘내면 원하는 몸무게에 금방 도달 할 수 있을 거야",
+                text = "조금 더 힘내면 원하는 몸무게에\n 금방 도달 할 수 있을 거야",
                 style = DungGeunMo15,
+                fontSize = 15f.isp(),
                 lineHeight = 20.sp,
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .width(275.dp)
-                    .padding(top = 41.42.dp, start = 10.dp, end = 26.dp)
+                modifier = Modifier.align(Alignment.Center)
+                    .padding(bottom = 17f.bhp())
             )
         }
 
@@ -176,9 +142,9 @@ fun HomeScaleScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        top = 450.dp
+                        top = 458f.hp()
                     )
-                    .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
+                    .clip(RoundedCornerShape(topStart = 60f.bhp(), topEnd = 60f.bhp()))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
@@ -186,66 +152,70 @@ fun HomeScaleScreen(
                     )
                     .border(
                         1.25.dp,
-                        Color.Black,
-                        RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp)
+                        Color(0xFF000000),
+                        RoundedCornerShape(topStart = 60f.bhp(), topEnd = 60f.bhp())
                     )
-                    .padding(25.dp),
+                    .padding(horizontal = 25f.wp(), vertical = 25f.bhp()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
-                    modifier = Modifier.padding(top = 10.dp, start = 5.dp, end = 5.dp)
+                    modifier = Modifier.padding(top = 8.dp, start = 31.dp, end = 30.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_weight),
                         contentDescription = null,
                         modifier = Modifier
-                            .width(300.dp),
+                            .width(300f.wp()),
                         contentScale = ContentScale.FillWidth
                     )
                     Text(
                         text = "<현재 체중>",
                         style = DungGeunMo24,
-                        color = Color.Black,
+                        fontSize = 24f.isp(),
+                        color = Color(0xFF000000),
                         modifier = Modifier
                             .align(Alignment.TopCenter)
-                            .padding(top = 55.dp)
+                            .padding(top = 55f.bhp())
                     )
                     Text(
                         text = scaleText,
                         style = textSize,
+                        fontSize = 35f.isp(),
                         color = Color(0xFF713E3A),
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(bottom = 25.dp)
+                            .padding(bottom = 25f.bhp())
                     )
                 }
 
 
-                Button(
-                    onClick = {
-                        clicked.value = true
-                        coroutineScope.launch {
-                            delay(800)
-                            navController.navigate(Route.HomeScaleInput.route)
-                        }
-                    },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .height(70f.bhp())
+                        .clip(RoundedCornerShape(20f.bhp()))
                         .background(
                             brush = Brush.verticalGradient(
                                 listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                             )
                         )
-                        .border(2.dp, Color.Black, RoundedCornerShape(20.dp)),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
+                        .clickable(
+                            onClick = {
+                                clicked.value = true
+                                coroutineScope.launch {
+                                    navController.navigate(Route.HomeScaleInput.route)
+                                }
+                            }
+                        )
                 ) {
                     Text(
                         text = buttonText,
                         style = DungGeunMo20,
-                        color = Color.Black,
+                        fontSize = 20f.isp(),
+                        color = Color(0xFF000000),
                         modifier = Modifier.padding(vertical = 14.dp)
+                            .align(Alignment.Center)
                     )
                 }
             }

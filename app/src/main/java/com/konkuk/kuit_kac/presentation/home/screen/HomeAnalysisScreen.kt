@@ -29,6 +29,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeMultipleNutritionBar
@@ -52,14 +53,14 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .width(275f.wp())
-                .padding(top = 70f.bhp()),
+                .padding(top = 30f.hp()),
             painter = painterResource(R.drawable.img_homegraphscreen_nutritiontextballoon),
             contentDescription = "최근 아쉬웠던 부분들이야!"
         )
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 163.dp)
+                .padding(top = 110f.hp())
         ) {
             EllipseNyam(
                 modifier = Modifier
@@ -70,10 +71,10 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
             Image(
                 modifier = Modifier
                     .padding(
-                        top = 117.6.dp,
-                        start = 110.35.dp
+                        top = 117.6f.bhp(),
+                        start = 110.35f.wp()
                     )
-                    .size(48.02214.dp),
+                    .size(48.02214f.wp(),48.02214f.bhp()),
                 painter = painterResource(R.drawable.img_homegraphscreen_magnifyingglass),
                 contentDescription = "magnifying glass"
             )
@@ -82,13 +83,13 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = 398.dp,
-                    start = 24.dp,
-                    end = 24.dp
+                    top = 358f.hp(),
+                    start = 24f.wp(),
+                    end = 24f.wp()
                 )
                 .clip(RoundedCornerShape(
-                    topStart = 30.dp,
-                    topEnd = 30.dp
+                    topStart = 30f.wp(),
+                    topEnd = 30f.wp()
                 ))
                 .background(
                     brush = Brush.verticalGradient(
@@ -96,31 +97,33 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
                     )
                 )
                 .border(1.dp, Color(0xFF000000), RoundedCornerShape(
-                    topStart = 30.dp, topEnd = 30.dp
+                    topStart = 30f.wp(), topEnd = 30f.wp()
                 )),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = Modifier
-                    .padding(top = 14.39.dp),
+                    .padding(top = 14.39f.bhp()),
                 text = "<현재까지의 외식 영양소>",
-                style = DungGeunMo20
+                style = DungGeunMo20,
+                fontSize = 20f.isp(),
+                color = Color(0xFF000000)
             )
             HorizontalDivider(modifier = Modifier
-                .padding(top = 15.39.dp)
-                .width(300.24902.dp)
-                .background(color = Color.Black)
+                .padding(top = 15.39f.bhp())
+                .width(300.24902f.wp())
+                .background(color = Color(0xFF000000))
             )
             HomeMultipleNutritionBar(
                 modifier = Modifier
-                    .padding(top = 16.26.dp),
+                    .padding(top = 16.26f.bhp()),
                 carb = 32f, protein = 43f, fat = 23f, healthy = 12f
             )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 35.34.dp, top = 24.34.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                    .padding(start = 35.34f.wp(), top = 24.34f.bhp()),
+                verticalArrangement = Arrangement.spacedBy(20f.bhp())
             ) {
                 HomeNutritionLabel(content = "고탄수화물 음식", color = 0xFFFFD387)
                 HomeNutritionLabel(content = "고단백 음식", color = 0xFFCBF38E)
