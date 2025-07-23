@@ -42,6 +42,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.diet.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.diet.component.PlanSelectButton
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -133,24 +134,10 @@ fun PlanAIRecomScreen(
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "날짜 선택하기",
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    color = Color(0xFF000000),
-                    modifier = Modifier
-                        .padding(top = 22.98f.bhp(), start = 22.5f.wp())
-                        .align(Alignment.Start)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(275.72f.bhp())
-                        .padding(top = 20.98f.bhp(), start = 23.34f.wp(), end = 26.89f.wp())
-                        .background(Color.LightGray)
-                )   // TODO : 달력 추후 추가
+                PlanCalendar(modifier = Modifier.padding(18f.wp()))
+                Spacer(modifier=Modifier.size(15f.bhp()))
                 Column(
-                    modifier = Modifier.padding(horizontal = 16f.wp(), vertical = 36.31f.bhp()),
+                    modifier = Modifier.padding(start = 16f.wp(), end = 16f.wp(), bottom = 36.31f.bhp()),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12f.wp())

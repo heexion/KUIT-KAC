@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
                                 .size(24.dp)
                                 .align(Alignment.TopStart)
                                 .clickable { navController.popBackStack() },
-                            painter = painterResource(id = R.drawable.ic_back_arow),
+                            painter = painterResource(id = R.drawable.ic_back_arrow),
                             contentDescription = "",
                         )
                     }
