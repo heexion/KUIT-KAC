@@ -94,4 +94,10 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.manager)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
 }
