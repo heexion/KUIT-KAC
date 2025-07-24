@@ -83,6 +83,8 @@ class MainActivity : ComponentActivity() {
                     Route.Diet.route,
                     Route.DietExist.route,
                     Route.DietCreate.route,
+                    Route.Fitness.route,
+                    Route.FitnessExist.route
                 )
 
                 Box(
