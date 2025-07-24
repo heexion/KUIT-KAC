@@ -45,7 +45,8 @@ import java.time.LocalDate
 fun PlanCalendar(
     modifier: Modifier = Modifier,
     taggedDATES: Map<LocalDate, PlanTagType>,
-    onNavigateToDetail: () -> Unit = {}
+    onNavigateToDetail: () -> Unit = {},
+    isTagButton: Boolean = false
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -245,107 +246,109 @@ fun PlanCalendar(
             }
         }
 
-        Spacer(modifier = Modifier.size(25f.bhp()))
-        var confirmString = "다 입력했어!"
+        if (isTagButton) {
+            Spacer(modifier = Modifier.size(25f.bhp()))
+            var confirmString = "다 입력했어!"
 
-        // 외식/술자리 버튼
-        if (!blueClicked.value && !pinkClicked.value)
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12f.wp())
-            ) {
-                PlanSelectButton(
-                    modifier = Modifier.weight(0.5f),
-                    onClick = {
-                        if (selectedDate != null) {
-                            blueClicked.value = true
-                            pinkClicked.value = false
-                        }
-                    },
-                    isBlue = true,
-                    value = "외식",
-                    height = 60f
-                )
-                PlanSelectButton(
-                    modifier = Modifier.weight(0.5f),
-                    onClick = {
-                        if (selectedDate != null) {
-                            blueClicked.value = false
-                            pinkClicked.value = true
-                        }
-                    },
-                    isBlue = false,
-                    value = "술자리",
-                    height = 60f
-                )
-            }
-        else
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(18f.wp())
-            ) {
-                confirmString = "이때 먹을 예정이야!"
-                PlanSelectButton(
-                    modifier = Modifier.weight(0.5f),
-                    onClick = {
-                        breakfastClicked.value = !breakfastClicked.value
-                        lunchClicked.value = false
-                        dinnerClicked.value = false
-                    },
-                    isSelected = breakfastClicked.value,
-                    isBlue = blueClicked.value,
-                    isSmall = true,
-                    value = "아침",
-                    height = 60f
-                )
-
-                PlanSelectButton(
-                    modifier = Modifier.weight(0.5f),
-                    onClick = {
-                        lunchClicked.value = !lunchClicked.value
-                        breakfastClicked.value = false
-                        dinnerClicked.value = false
-                    },
-                    isSelected = lunchClicked.value,
-                    isBlue = blueClicked.value,
-                    isSmall = true,
-                    value = "점심",
-                    height = 60f
-                )
-
-                PlanSelectButton(
-                    modifier = Modifier.weight(0.5f),
-                    onClick = {
-                        dinnerClicked.value = !dinnerClicked.value
-                        lunchClicked.value = false
-                        breakfastClicked.value = false
-                    },
-                    isSelected = dinnerClicked.value,
-                    isBlue = blueClicked.value,
-                    isSmall = true,
-                    value = "저녁",
-                    height = 60f
-                )
-            }
-
-        PlanConfirmButton(
-            modifier = Modifier.padding(top = 24f.bhp()),
-            isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
-            onClick = {
-                if (confirmString == "다 입력했어!") {
-                    onNavigateToDetail()
+            // 외식/술자리 버튼
+            if (!blueClicked.value && !pinkClicked.value)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12f.wp())
+                ) {
+                    PlanSelectButton(
+                        modifier = Modifier.weight(0.5f),
+                        onClick = {
+                            if (selectedDate != null) {
+                                blueClicked.value = true
+                                pinkClicked.value = false
+                            }
+                        },
+                        isBlue = true,
+                        value = "외식",
+                        height = 60f
+                    )
+                    PlanSelectButton(
+                        modifier = Modifier.weight(0.5f),
+                        onClick = {
+                            if (selectedDate != null) {
+                                blueClicked.value = false
+                                pinkClicked.value = true
+                            }
+                        },
+                        isBlue = false,
+                        value = "술자리",
+                        height = 60f
+                    )
                 }
-                if (selectedDate != null) {
-                    isAddedOnce.value = true
-                    val updated = taggedDates.toMutableMap()
-                    if (blueClicked.value) updated[selectedDate!!] = PlanTagType.EATING_OUT
-                    else if (pinkClicked.value) updated[selectedDate!!] = PlanTagType.DRINKING
-                    taggedDates = updated
+            else
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(18f.wp())
+                ) {
+                    confirmString = "이때 먹을 예정이야!"
+                    PlanSelectButton(
+                        modifier = Modifier.weight(0.5f),
+                        onClick = {
+                            breakfastClicked.value = !breakfastClicked.value
+                            lunchClicked.value = false
+                            dinnerClicked.value = false
+                        },
+                        isSelected = breakfastClicked.value,
+                        isBlue = blueClicked.value,
+                        isSmall = true,
+                        value = "아침",
+                        height = 60f
+                    )
+
+                    PlanSelectButton(
+                        modifier = Modifier.weight(0.5f),
+                        onClick = {
+                            lunchClicked.value = !lunchClicked.value
+                            breakfastClicked.value = false
+                            dinnerClicked.value = false
+                        },
+                        isSelected = lunchClicked.value,
+                        isBlue = blueClicked.value,
+                        isSmall = true,
+                        value = "점심",
+                        height = 60f
+                    )
+
+                    PlanSelectButton(
+                        modifier = Modifier.weight(0.5f),
+                        onClick = {
+                            dinnerClicked.value = !dinnerClicked.value
+                            lunchClicked.value = false
+                            breakfastClicked.value = false
+                        },
+                        isSelected = dinnerClicked.value,
+                        isBlue = blueClicked.value,
+                        isSmall = true,
+                        value = "저녁",
+                        height = 60f
+                    )
                 }
-                pinkClicked.value = false
-                blueClicked.value = false
-            },
-            value = confirmString,
-            height = 65f
-        )
+
+            PlanConfirmButton(
+                modifier = Modifier.padding(top = 24f.bhp()),
+                isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
+                onClick = {
+                    if (confirmString == "다 입력했어!") {
+                        onNavigateToDetail()
+                    }
+                    if (selectedDate != null) {
+                        isAddedOnce.value = true
+                        val updated = taggedDates.toMutableMap()
+                        if (blueClicked.value) updated[selectedDate!!] = PlanTagType.EATING_OUT
+                        else if (pinkClicked.value) updated[selectedDate!!] = PlanTagType.DRINKING
+                        taggedDates = updated
+                    }
+                    pinkClicked.value = false
+                    blueClicked.value = false
+                },
+                value = confirmString,
+                height = 65f
+            )
+        }
     }
 }
 
