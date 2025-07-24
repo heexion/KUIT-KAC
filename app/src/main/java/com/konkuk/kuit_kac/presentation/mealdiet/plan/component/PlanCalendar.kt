@@ -33,6 +33,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import java.time.LocalDate
@@ -40,12 +41,13 @@ import java.time.LocalDate
 @Composable
 fun PlanCalendar(
     modifier: Modifier = Modifier,
-    onDateSelected: (LocalDate) -> Unit = {}
+    taggedDates: Map<LocalDate, PlanTagType>,
+    onDateSelected: (LocalDate?) -> Unit = {}
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
-
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
+
 
     Column(
         modifier = modifier
@@ -167,14 +169,41 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                if (isSelected)
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
-                                        modifier = Modifier.size(39f.wp(), 39f.bhp()),
-                                        contentScale = ContentScale.FillBounds,
-                                        contentDescription = null,
-                                    )
+                                val tag = taggedDates[thisDate]
+                                val color = when (tag) {
+                                    PlanTagType.EATING_OUT -> Color(0xFF67D1FF)
+                                    PlanTagType.DRINKING -> Color(0xFFFF7FD0)
+                                    else -> Color.Transparent
+                                }
 
+
+                                Box(
+                                    modifier = Modifier
+                                        .size(39f.wp(), 39f.bhp())
+                                        .background(
+                                            color = color,
+                                            shape = CircleShape
+                                        )
+                                )
+
+                                if (isSelected) {
+                                    if (tag == PlanTagType.NONE || tag == null) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
+                                            modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                            contentScale = ContentScale.FillBounds,
+                                            contentDescription = null,
+                                        )
+                                    } else
+                                        Box(
+                                            modifier = Modifier
+                                                .size(39f.wp(), 39f.bhp())
+                                                .background(
+                                                    color = color,
+                                                    shape = CircleShape
+                                                )
+                                        )
+                                }
                                 Text(
                                     text = "$dayNumber",
                                     style = DungGeunMo20,
@@ -198,5 +227,8 @@ fun PlanCalendar(
 @Preview(showBackground = true)
 @Composable
 private fun PlanCalendarPreview() {
-    PlanCalendar()
+    val taggedDates = remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
+    PlanCalendar(
+        taggedDates = taggedDates.value
+    )
 }
