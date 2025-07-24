@@ -33,6 +33,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.diet.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -47,10 +48,13 @@ fun PlanCalendar(
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
+    var blueClicked = remember { mutableStateOf(false) }
+    var pinkClicked = remember { mutableStateOf(false) }
+    var _taggedDates by remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
 
 
     Column(
-        modifier = modifier
+        modifier = modifier.padding(15.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -66,6 +70,8 @@ fun PlanCalendar(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
                     selectedDate = null
+                    pinkClicked.value = false
+                    blueClicked.value = false
                 }
             ) {
                 Image(
@@ -169,13 +175,12 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tag = taggedDates[thisDate]
-                                val color = when (tag) {
+                                val tag = _taggedDates?.get(thisDate)
+                                var color = when (tag) {
                                     PlanTagType.EATING_OUT -> Color(0xFF67D1FF)
                                     PlanTagType.DRINKING -> Color(0xFFFF7FD0)
                                     else -> Color.Transparent
                                 }
-
 
                                 Box(
                                     modifier = Modifier
@@ -186,23 +191,35 @@ fun PlanCalendar(
                                         )
                                 )
 
+
+
                                 if (isSelected) {
-                                    if (tag == PlanTagType.NONE || tag == null) {
+                                    if (blueClicked.value)
+                                        Box(
+                                            modifier = Modifier
+                                                .size(39f.wp(), 39f.bhp())
+                                                .background(
+                                                    color = Color(0xFF67D1FF),
+                                                    shape = CircleShape
+                                                )
+                                        )
+                                    else if (pinkClicked.value)
+                                        Box(
+                                            modifier = Modifier
+                                                .size(39f.wp(), 39f.bhp())
+                                                .background(
+                                                    color = Color(0xFFFF7FD0),
+                                                    shape = CircleShape
+                                                )
+                                        )
+                                    else {
                                         Image(
                                             painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
                                             modifier = Modifier.size(39f.wp(), 39f.bhp()),
                                             contentScale = ContentScale.FillBounds,
                                             contentDescription = null,
                                         )
-                                    } else
-                                        Box(
-                                            modifier = Modifier
-                                                .size(39f.wp(), 39f.bhp())
-                                                .background(
-                                                    color = color,
-                                                    shape = CircleShape
-                                                )
-                                        )
+                                    }
                                 }
                                 Text(
                                     text = "$dayNumber",
@@ -220,6 +237,54 @@ fun PlanCalendar(
                 }
             }
         }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12f.wp())
+        ) {
+            PlanSelectButton(
+                modifier = Modifier.weight(0.5f),
+                onClick = {
+                    if (selectedDate != null) {
+                        blueClicked.value = true
+                        pinkClicked.value = false
+                    }
+                },
+                isBlue = true,
+                value = "외식",
+                height = 60f
+            )
+            PlanSelectButton(
+                modifier = Modifier.weight(0.5f),
+                onClick = {
+                    if (selectedDate != null) {
+                        blueClicked.value = false
+                        pinkClicked.value = true
+                    }
+                },
+                isBlue = false,
+                value = "술자리",
+                height = 60f
+            )
+        }
+
+        PlanConfirmButton(
+            modifier = Modifier.padding(top = 24f.bhp()),
+            isAvailable = if (selectedDate != null && (blueClicked.value || pinkClicked.value)) true
+            else false,
+            onClick = {
+                if (selectedDate != null) {
+                    val updated = _taggedDates.toMutableMap()
+                    if (blueClicked.value) updated[selectedDate!!] = PlanTagType.EATING_OUT
+                    else if (pinkClicked.value) updated[selectedDate!!] = PlanTagType.DRINKING
+                    _taggedDates = updated
+                }
+
+                pinkClicked.value = false
+                blueClicked.value = false
+            },
+            value = "완성",
+            height = 65f
+        )
     }
 }
 
