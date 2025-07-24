@@ -45,6 +45,7 @@ import java.time.LocalDate
 fun PlanCalendar(
     modifier: Modifier = Modifier,
     taggedDATES: Map<LocalDate, PlanTagType>,
+    onNavigateToDetail: () -> Unit = {}
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -56,6 +57,8 @@ fun PlanCalendar(
     var breakfastClicked = remember { mutableStateOf(false) }
     var lunchClicked = remember { mutableStateOf(false) }
     var dinnerClicked = remember { mutableStateOf(false) }
+
+    var isAddedOnce = remember { mutableStateOf(false) }
 
     LaunchedEffect(taggedDATES) {
         taggedDates = taggedDATES
@@ -181,7 +184,7 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tag = taggedDates?.get(thisDate)
+                                val tag = taggedDates.get(thisDate)
                                 var color = when (tag) {
                                     PlanTagType.EATING_OUT -> Color(0xFF67D1FF)
                                     PlanTagType.DRINKING -> Color(0xFFFF7FD0)
@@ -325,9 +328,13 @@ fun PlanCalendar(
 
         PlanConfirmButton(
             modifier = Modifier.padding(top = 24f.bhp()),
-            isAvailable = selectedDate != null && (blueClicked.value || pinkClicked.value),
+            isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
             onClick = {
+                if (confirmString == "다 입력했어!") {
+                    onNavigateToDetail()
+                }
                 if (selectedDate != null) {
+                    isAddedOnce.value = true
                     val updated = taggedDates.toMutableMap()
                     if (blueClicked.value) updated[selectedDate!!] = PlanTagType.EATING_OUT
                     else if (pinkClicked.value) updated[selectedDate!!] = PlanTagType.DRINKING
