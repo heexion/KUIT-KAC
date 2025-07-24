@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -42,19 +44,25 @@ import java.time.LocalDate
 @Composable
 fun PlanCalendar(
     modifier: Modifier = Modifier,
-    taggedDates: Map<LocalDate, PlanTagType>,
-    onDateSelected: (LocalDate?) -> Unit = {}
+    taggedDATES: Map<LocalDate, PlanTagType>,
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }
-    var _taggedDates by remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
+    var taggedDates by remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
 
+    var breakfastClicked = remember { mutableStateOf(false) }
+    var lunchClicked = remember { mutableStateOf(false) }
+    var dinnerClicked = remember { mutableStateOf(false) }
+
+    LaunchedEffect(taggedDATES) {
+        taggedDates = taggedDATES
+    }
 
     Column(
-        modifier = modifier.padding(15.dp)
+        modifier = modifier
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -148,7 +156,6 @@ fun PlanCalendar(
 
         val totalDays = startDayOfWeek + lastDayOfMonth.dayOfMonth
         val weeks = (totalDays / 7) + if (totalDays % 7 != 0) 1 else 0
-
         Column {
             for (week in 0 until weeks) {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -163,7 +170,6 @@ fun PlanCalendar(
                                 .clickable(enabled = isValid) {
                                     val selected = currentMonth.withDayOfMonth(dayNumber)
                                     selectedDate = selected
-                                    onDateSelected(selected)
                                 },
                             contentAlignment = Alignment.Center
                         ) {
@@ -175,7 +181,7 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tag = _taggedDates?.get(thisDate)
+                                val tag = taggedDates?.get(thisDate)
                                 var color = when (tag) {
                                     PlanTagType.EATING_OUT -> Color(0xFF67D1FF)
                                     PlanTagType.DRINKING -> Color(0xFFFF7FD0)
@@ -190,8 +196,6 @@ fun PlanCalendar(
                                             shape = CircleShape
                                         )
                                 )
-
-
 
                                 if (isSelected) {
                                     if (blueClicked.value)
@@ -238,51 +242,101 @@ fun PlanCalendar(
             }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12f.wp())
-        ) {
-            PlanSelectButton(
-                modifier = Modifier.weight(0.5f),
-                onClick = {
-                    if (selectedDate != null) {
-                        blueClicked.value = true
-                        pinkClicked.value = false
-                    }
-                },
-                isBlue = true,
-                value = "외식",
-                height = 60f
-            )
-            PlanSelectButton(
-                modifier = Modifier.weight(0.5f),
-                onClick = {
-                    if (selectedDate != null) {
-                        blueClicked.value = false
-                        pinkClicked.value = true
-                    }
-                },
-                isBlue = false,
-                value = "술자리",
-                height = 60f
-            )
-        }
+        Spacer(modifier = Modifier.size(25f.bhp()))
+        var confirmString = "다 입력했어!"
+
+        // 외식/술자리 버튼
+        if (!blueClicked.value && !pinkClicked.value)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12f.wp())
+            ) {
+                PlanSelectButton(
+                    modifier = Modifier.weight(0.5f),
+                    onClick = {
+                        if (selectedDate != null) {
+                            blueClicked.value = true
+                            pinkClicked.value = false
+                        }
+                    },
+                    isBlue = true,
+                    value = "외식",
+                    height = 60f
+                )
+                PlanSelectButton(
+                    modifier = Modifier.weight(0.5f),
+                    onClick = {
+                        if (selectedDate != null) {
+                            blueClicked.value = false
+                            pinkClicked.value = true
+                        }
+                    },
+                    isBlue = false,
+                    value = "술자리",
+                    height = 60f
+                )
+            }
+        else
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(18f.wp())
+            ) {
+                confirmString = "이때 먹을 예정이야!"
+                PlanSelectButton(
+                    modifier = Modifier.weight(0.5f),
+                    onClick = {
+                        breakfastClicked.value = !breakfastClicked.value
+                        lunchClicked.value = false
+                        dinnerClicked.value = false
+                    },
+                    isSelected = breakfastClicked.value,
+                    isBlue = blueClicked.value,
+                    isSmall = true,
+                    value = "아침",
+                    height = 60f
+                )
+
+                PlanSelectButton(
+                    modifier = Modifier.weight(0.5f),
+                    onClick = {
+                        lunchClicked.value = !lunchClicked.value
+                        breakfastClicked.value = false
+                        dinnerClicked.value = false
+                    },
+                    isSelected = lunchClicked.value,
+                    isBlue = blueClicked.value,
+                    isSmall = true,
+                    value = "점심",
+                    height = 60f
+                )
+
+                PlanSelectButton(
+                    modifier = Modifier.weight(0.5f),
+                    onClick = {
+                        dinnerClicked.value = !dinnerClicked.value
+                        lunchClicked.value = false
+                        breakfastClicked.value = false
+                    },
+                    isSelected = dinnerClicked.value,
+                    isBlue = blueClicked.value,
+                    isSmall = true,
+                    value = "저녁",
+                    height = 60f
+                )
+            }
 
         PlanConfirmButton(
             modifier = Modifier.padding(top = 24f.bhp()),
-            isAvailable = if (selectedDate != null && (blueClicked.value || pinkClicked.value)) true
-            else false,
+            isAvailable = selectedDate != null && (blueClicked.value || pinkClicked.value),
             onClick = {
                 if (selectedDate != null) {
-                    val updated = _taggedDates.toMutableMap()
+                    val updated = taggedDates.toMutableMap()
                     if (blueClicked.value) updated[selectedDate!!] = PlanTagType.EATING_OUT
                     else if (pinkClicked.value) updated[selectedDate!!] = PlanTagType.DRINKING
-                    _taggedDates = updated
+                    taggedDates = updated
                 }
-
                 pinkClicked.value = false
                 blueClicked.value = false
             },
-            value = "완성",
+            value = confirmString,
             height = 65f
         )
     }
@@ -294,6 +348,6 @@ fun PlanCalendar(
 private fun PlanCalendarPreview() {
     val taggedDates = remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
     PlanCalendar(
-        taggedDates = taggedDates.value
+        taggedDATES = taggedDates.value
     )
 }

@@ -35,7 +35,7 @@ fun PlanConfirmButton(
         modifier = modifier
             .fillMaxWidth()
             .height(height.bhp())
-            .clickable { onClick() }
+            .clickable { if (isAvailable) onClick() }
     ) {
         Image(
             modifier = Modifier
