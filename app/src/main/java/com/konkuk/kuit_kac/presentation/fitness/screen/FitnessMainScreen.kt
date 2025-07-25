@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.OffsetEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -273,7 +276,7 @@ fun SpeechBubble(messageText: String) {
 
 @Composable
 fun SwipeCardPager(navController: NavHostController) {
-
+    val rotateDegree = 10F
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { 3 }
@@ -285,16 +288,26 @@ fun SwipeCardPager(navController: NavHostController) {
     )
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        pageSpacing = 45.dp
     ) {
+        page ->
         FitnessCard(
             navController = navController,
             title = "하체루틴_허벅지..",
-            fitnessList = sampleList
+            fitnessList = sampleList,
+            modifier = Modifier
+                .graphicsLayer {
+                    val pageOffset = pagerState.offsetForPage(page)
+                    rotationZ = -rotateDegree * pageOffset
+                }
         )
+
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+fun PagerState.offsetForPage(page: Int) = (currentPage - page) + currentPageOffsetFraction
 
 @Composable
 fun RecordFitnessButton(
