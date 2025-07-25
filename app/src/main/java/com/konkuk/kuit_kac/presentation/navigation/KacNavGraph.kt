@@ -24,6 +24,7 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessMainScreen
@@ -391,6 +392,11 @@ fun KacNavGraph(
                 onTabClick = { /* 탭 전환 로직 */ },
                 fitnessItems = sampleData
             )
+        }
+
+        composable("fitness/detail/{name}") { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            FitnessDetailRecordScreen(name = name)
         }
 
 

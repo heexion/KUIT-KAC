@@ -39,6 +39,7 @@ sealed class Route(val route: String) {
     data object FitnessEditResult: Route(route = "FitnessEditResult")
     data object FitnessRecordEdit: Route(route =  "fitness_record_edit")
     data object FitnessRoutineEdit : Route(route = "fitness_routine_edit")
+    data class FitnessDetailRecord(val name: String) : Route("fitness/detail/$name")
 
 
 
