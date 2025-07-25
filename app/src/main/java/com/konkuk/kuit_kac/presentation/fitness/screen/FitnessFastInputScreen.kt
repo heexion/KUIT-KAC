@@ -39,6 +39,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.presentation.fitness.component.ReadOnlyFieldCard
@@ -52,7 +53,6 @@ fun FitnessFastInputScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-
     val scrollState = rememberScrollState()
     var anaerobicTimeText by remember { mutableStateOf("0") }
     var selectedIntensity by remember { mutableStateOf(-1) }
@@ -60,28 +60,23 @@ fun FitnessFastInputScreen(
     var aerobicTimeText by remember { mutableStateOf("0") }
     var selectedAerobicIntensity by remember { mutableStateOf(-1) }
 
-
-    //칼로리 계산 예시
-    // 무산소
     val anaerobicTime = anaerobicTimeText.toIntOrNull() ?: 0
     val anaerobicFactor = when (selectedIntensity) {
-        0 -> 3 // easy
-        1 -> 5 // normal
-        2 -> 8 // hard
+        0 -> 3
+        1 -> 5
+        2 -> 8
         else -> 0
     }
     val anaerobicKcal = anaerobicTime * anaerobicFactor
 
-// 유산소
     val aerobicTime = aerobicTimeText.toIntOrNull() ?: 0
     val aerobicFactor = when (selectedAerobicIntensity) {
-        0 -> 2 // easy
-        1 -> 4 // normal
-        2 -> 6 // hard
+        0 -> 2
+        1 -> 4
+        2 -> 6
         else -> 0
     }
     val aerobicKcal = aerobicTime * aerobicFactor
-
 
     Column(
         modifier = Modifier
@@ -106,35 +101,31 @@ fun FitnessFastInputScreen(
                     .padding(top = 20f.hp())
                     .align(Alignment.TopCenter)
             )
-
-
         }
-        Spacer(modifier = Modifier.height(32.dp))
-        //무산소
-        // 운동 이름 버튼
+
+        Spacer(modifier = Modifier.height(32f.bhp()))
+
         Box(
             modifier = Modifier
-                .padding(start = 24.dp)
-                .width(154.dp)
-                .height(40.dp)
-                .clip(RoundedCornerShape(15.dp))
+                .padding(start = 24f.wp())
+                .width(154f.wp())
+                .height(40f.bhp())
+                .clip(RoundedCornerShape(15f.bhp()))
                 .background(
                     brush = Brush.verticalGradient(
-                        listOf(
-                            Color(0xFFFFFFFF),
-                            Color(0xFFFFE667)
-                        )
+                        listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                     )
                 )
-                .border(1.5.dp, Color.Black, RoundedCornerShape(20.dp)),
+                .border(1.5.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "무산소 운동",
                 style = DungGeunMo15,
-                color = Color.Black
+                color = Color(0xFF000000)
             )
         }
+
         EditFieldCard(
             title = "운동 시간",
             value = anaerobicTimeText,
@@ -143,8 +134,6 @@ fun FitnessFastInputScreen(
             },
             unitLabel = "분"
         )
-
-        //Spacer(modifier = Modifier.height(8.dp))
 
         EditIntensityCard(
             selectedIndex = selectedIntensity,
@@ -157,27 +146,26 @@ fun FitnessFastInputScreen(
             unitLabel = "kcal"
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(28f.bhp()))
 
-        // 유산소 운동
         Box(
             modifier = Modifier
-                .padding(start = 24.dp)
-                .width(154.dp)
-                .height(40.dp)
-                .clip(RoundedCornerShape(15.dp))
+                .padding(start = 24f.wp())
+                .width(154f.wp())
+                .height(40f.bhp())
+                .clip(RoundedCornerShape(15f.bhp()))
                 .background(
                     brush = Brush.verticalGradient(
                         listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                     )
                 )
-                .border(1.5.dp, Color.Black, RoundedCornerShape(20.dp)),
+                .border(1.5.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "유산소 운동",
                 style = DungGeunMo15,
-                color = Color.Black
+                color = Color(0xFF000000)
             )
         }
 
@@ -201,44 +189,39 @@ fun FitnessFastInputScreen(
             unitLabel = "kcal"
         )
 
+        Spacer(modifier = Modifier.height(24.13f.bhp()))
 
-        Spacer(modifier = Modifier.height(24.13.dp))
-
-        //구분선
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(1.5.dp)
-                .padding(horizontal = 24.dp)
+                .height(1.5f.bhp())
+                .padding(horizontal = 24f.wp())
                 .background(Color(0xFF000000))
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(24f.bhp()))
 
-        //최종 예상 소모 칼로리
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24f.wp())
         ) {
-            // 이미지 배경 레이어
             Image(
                 painter = painterResource(id = R.drawable.img_kcal_bar),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(364.dp)
-                    .height(58.89.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .border(1.5.dp, Color(0xFF000000), RoundedCornerShape(20.dp))
+                    .width(364f.wp())
+                    .height(58.89f.bhp())
+                    .clip(RoundedCornerShape(20f.bhp()))
+                    .border(1.5.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
             )
 
-            // 텍스트 오버레이
             Row(
                 modifier = Modifier
-                    .width(364.dp)
-                    .height(58.89.dp)
-                    .padding(horizontal = 16.dp),
+                    .width(364f.wp())
+                    .height(58.89f.bhp())
+                    .padding(horizontal = 16f.wp()),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -255,16 +238,13 @@ fun FitnessFastInputScreen(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(32.1.dp))
+
+        Spacer(modifier = Modifier.height(32.1f.bhp()))
 
         RecordButton(
             value = "기록하기",
             onClick = { /* TODO */ }
         )
-
-
-
-
     }
 }
 
@@ -281,7 +261,7 @@ fun RecordButton(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 24f.wp())
             .height(height.bhp())
             .clickable { onClick() }
     ) {
@@ -301,6 +281,7 @@ fun RecordButton(
         )
     }
 }
+
 
 
 
