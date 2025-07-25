@@ -210,13 +210,7 @@ fun FitnessMainScreen(
                             painter = painterResource(R.drawable.img_all_tilted_rectangle),
                             contentDescription = "tilted Rectangle"
                         )
-//                        FitnessCard(
-//                            navController = navController,
-//                            title = "하체루틴_허벅지..",
-//                            fitnessList = sampleList
-//                        )
                         SwipeCardPager(navController = navController)
-
                     }
                 }
             }
