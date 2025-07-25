@@ -41,11 +41,11 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.component.FitnessTopBarWithSearch
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+
 
 @Composable
 fun FitnessSearchScreen(
@@ -83,8 +83,6 @@ fun FitnessSearchScreen(
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-
-
                     // 타이틀
                     Text(
                         text = "루틴 추가하기",
