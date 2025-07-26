@@ -32,6 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
@@ -47,6 +49,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun FitnessDetailRecordScreen(
     name: String,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -106,6 +109,8 @@ fun FitnessDetailRecordScreen(
                 )
             }
 
+            Spacer(modifier = Modifier.height(25.7f.bhp()))
+
             EllipseNyam(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -164,7 +169,8 @@ fun FitnessDetailRecordScreen(
         PlanConfirmButton(
             modifier = Modifier.padding(horizontal = 24f.wp()),
             onClick = {
-                // TODO: 기록 저장 로직 작성
+                // TODO: 실제 데이터 저장 로직이 있다면 먼저 실행한 후 이동
+                navController.navigate("fitness_detail_add")
             },
             isAvailable = isAllFilled,
             value = "추가하기"
@@ -183,5 +189,10 @@ fun getObjectParticle(word: String): String {
 @Preview(showBackground = true)
 @Composable
 fun FitnessDetailRecordScreenPreview() {
-    FitnessDetailRecordScreen(name = "스쿼트")
+    val navController = rememberNavController()
+    FitnessDetailRecordScreen(
+        name = "스쿼트",
+        navController = navController
+    )
 }
+
