@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,25 +17,27 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.OffsetEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -46,10 +49,9 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
-import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -59,7 +61,7 @@ fun FitnessMainScreen(
     onTabClick: (String) -> Unit,
     onRecordClick: () -> Unit,
     onFastedClick: () -> Unit,
-    fitnessData:  List<FitnessData>
+    fitnessData: List<FitnessData>
 
 ) {
     val sampleList = listOf(
@@ -180,7 +182,8 @@ fun FitnessMainScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             SpeechBubble(messageText = "현재 운동 루틴이\n비어있어요!")
-                            EllipseNyam(ellipseLength = 182.0, mascotLength = 109.0,
+                            EllipseNyam(
+                                ellipseLength = 182.0, mascotLength = 109.0,
                                 modifier = Modifier
                                     .clickable(
                                         onClick = {
@@ -196,7 +199,7 @@ fun FitnessMainScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 4f.wp())
-                    ){
+                    ) {
                         Image(
                             modifier = Modifier
                                 .matchParentSize()
@@ -207,70 +210,13 @@ fun FitnessMainScreen(
                             painter = painterResource(R.drawable.img_all_tilted_rectangle),
                             contentDescription = "tilted Rectangle"
                         )
-                        FitnessCard(
-                            navController = navController,
-                            title = "하체루틴_허벅지..",
-                            fitnessList = sampleList
-                        )
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .offset(x=182f.wp(),
-                                    y = 25f.bhp())
-                                .size(35f.bhp(),35f.bhp())
-                                .clip(RoundedCornerShape(11f.bhp()))
-                                .background(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
-                                    ))
-                                .clickable(
-                                    onClick = {
-                                        Clicked.value = true
-                                    }
-                                )
-                                .border(1.dp,Color(0xFF000000), RoundedCornerShape(11f.bhp())),
-                            contentAlignment = Alignment.Center){
-                            Image(painter = painterResource(R.drawable.svg_all_point),
-                                contentDescription = "pointer",
-                                modifier = Modifier
-                                    .size(9f.wp(),13f.bhp()))
-                        }
+                        SwipeCardPager(navController = navController)
                     }
                 }
-
             }
-        }
-
-
-        // 캘린더 플로팅 버튼 (오른쪽 하단) 디자인 제약때문에 Box로 구현함
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(x = (-25f.wp()), y = (-93f.bhp()))
-                .size(61f.wp())
-                .clip(CircleShape)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.White,
-                            Color(0xFFFFB638)
-                        )
-                    )
-                )
-                .border(1.dp, Color.Black, CircleShape)
-                .alpha(0.85f)
-                .clickable { /* onCalendarClick() */ },
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_calendar),
-                contentDescription = "캘린더",
-                modifier = Modifier.size(42f.wp())
-            )
         }
     }
 }
-
 
 
 @Composable
@@ -297,8 +243,75 @@ fun SpeechBubble(messageText: String) {
     }
 }
 
+@Composable
+fun SwipeCardPager(navController: NavHostController) {
+    val rotateDegree = 10F
+    val sampleList = listOf(
+        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, onDeleteClick = { }),
+        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
+        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
+    )
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { sampleList.size }
+    )
+    val coroutineScope = rememberCoroutineScope()
 
+    Box {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth(),
+            pageSpacing = 40.dp
+        ) { page ->
+            FitnessCard(
+                navController = navController,
+                title = "하체루틴_허벅지..",
+                fitnessList = sampleList,
+                modifier = Modifier
+                    .graphicsLayer {
+                        val pageOffset = pagerState.offsetForPage(page)
+                        rotationZ = -rotateDegree * pageOffset
+                    }
+            )
+        }
 
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset(
+                    x = 182f.wp(),
+                    y = 25f.bhp()
+                )
+                .size(35f.bhp(), 35f.bhp())
+                .clip(RoundedCornerShape(11f.bhp()))
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
+                    )
+                )
+                .clickable(
+                    onClick = {
+                        coroutineScope.launch {
+                            val nextPage =
+                                (pagerState.currentPage + 1).coerceAtMost(sampleList.size - 1)
+                            pagerState.animateScrollToPage(nextPage)
+                        }
+                    }
+                )
+                .border(1.dp, Color(0xFF000000), RoundedCornerShape(11f.bhp())),
+            contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(R.drawable.svg_all_point),
+                contentDescription = "pointer",
+                modifier = Modifier
+                    .size(9f.wp(), 13f.bhp())
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+fun PagerState.offsetForPage(page: Int) = (currentPage - page) + currentPageOffsetFraction
 
 @Composable
 fun RecordFitnessButton(

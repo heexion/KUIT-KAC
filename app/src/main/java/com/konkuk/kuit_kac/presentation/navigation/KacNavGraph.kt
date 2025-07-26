@@ -12,16 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditResultScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealMainScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealRecordScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchItemDetailScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietAddScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietPatchScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietCreateScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietExistScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietMainScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
@@ -32,13 +22,14 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddCompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
-
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
-import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessMainScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessSearchScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
@@ -47,10 +38,21 @@ import com.konkuk.kuit_kac.presentation.home.screen.HomeObservationScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietAddScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietCreateScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietExistScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietMainScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietPatchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealCardData
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealFastingResultScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealMainScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealPatchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealRecordScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchItemDetailScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTimeScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
 
 
 @Composable
@@ -347,6 +349,59 @@ fun KacNavGraph(
                 fitnessData = sampleFitnessData
             )
         }
+        composable(route = Route.FitnessRecordEdit.route) {
+            FitnessRecordEditScreen(
+                navController = navController,
+                fitnessList = remember {
+                    mutableStateListOf(
+                        // 실제 데이터 필요 시 ViewModel 연동
+                        FitnessData(id = 0, imageRes = R.drawable.ic_lowerbody, name = "레그 컬", onDeleteClick = {}),
+                        FitnessData(id = 1, imageRes = R.drawable.ic_lowerbody, name = "레그 프레스", onDeleteClick = {}),
+                        FitnessData(id = 2, imageRes = R.drawable.ic_lowerbody, name = "레그 익스텐션", onDeleteClick = {})
+                    )
+                }
+            )
+        }
+        composable(route = Route.FitnessRoutineEdit.route) {
+            val sampleData = remember {
+                listOf(
+                    FitnessData(
+                        id = 0,
+                        name = "레그 컬",
+                        imageRes = R.drawable.ic_lowerbody,
+                        onDeleteClick = {}
+                    ),
+                    FitnessData(
+                        id = 1,
+                        name = "레그 프레스",
+                        imageRes = R.drawable.ic_lowerbody,
+                        onDeleteClick = {}
+                    ),
+                    FitnessData(
+                        id = 2,
+                        name = "레그 익스텐션",
+                        imageRes = R.drawable.ic_lowerbody,
+                        onDeleteClick = {}
+                    )
+                )
+            }
+
+            FitnessRoutineEditScreen(
+                navController = navController,
+                selectedTab = "기록",
+                onTabClick = { /* 탭 전환 로직 */ },
+                fitnessItems = sampleData
+            )
+        }
+
+        composable("fitness/detail/{name}") { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            FitnessDetailRecordScreen(name = name)
+        }
+
+
+
+
     }
 }
 

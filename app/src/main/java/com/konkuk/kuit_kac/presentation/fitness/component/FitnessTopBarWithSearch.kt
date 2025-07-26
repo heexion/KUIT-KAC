@@ -64,7 +64,7 @@ fun FitnessTopBarWithSearch(
             ) {
                 // 뒤로가기 아이콘
                 Image(
-                    painter = painterResource(id = R.drawable.ic_back_arow),
+                    painter = painterResource(id = R.drawable.ic_back_arrow),
                     contentDescription = "Back",
                     modifier = Modifier
                         .align(Alignment.CenterStart)

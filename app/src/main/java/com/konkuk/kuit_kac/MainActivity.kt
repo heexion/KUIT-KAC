@@ -90,6 +90,9 @@ class MainActivity : ComponentActivity() {
                     Route.Diet.route,
                     Route.DietExist.route,
                     Route.DietCreate.route,
+                    Route.Fitness.route,
+                    Route.FitnessExist.route,
+                    Route.MealExist.route
                 )
 
                 Box(
@@ -131,7 +134,7 @@ class MainActivity : ComponentActivity() {
                                 .size(24.dp)
                                 .align(Alignment.TopStart)
                                 .clickable { navController.popBackStack() },
-                            painter = painterResource(id = R.drawable.ic_back_arow),
+                            painter = painterResource(id = R.drawable.ic_back_arrow),
                             contentDescription = "",
                         )
                     }
