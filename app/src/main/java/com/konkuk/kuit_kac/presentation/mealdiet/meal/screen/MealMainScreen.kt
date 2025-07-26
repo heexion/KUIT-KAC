@@ -216,33 +216,6 @@ fun MealMainScreen(
 
             }
         }
-
-        // 캘린더 플로팅 버튼 (오른쪽 하단) 디자인 제약때문에 Box로 구현함
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(x = (-25).dp, y = (-93).dp)
-                .size(61.dp)
-                .clip(CircleShape)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.White,
-                            Color(0xFFFFB638)
-                        )
-                    )
-                )
-                .border(1.dp, Color.Black, CircleShape)
-                .alpha(0.85f)
-                .clickable { /* onCalendarClick() */ },
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_calendar),
-                contentDescription = "캘린더",
-                modifier = Modifier.size(42.dp)
-            )
-        }
     }
 }
 

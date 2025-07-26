@@ -3,16 +3,13 @@ package com.konkuk.kuit_kac.presentation.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,10 +37,10 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.PlanConfirmButton
-import com.konkuk.kuit_kac.presentation.diet.component.PlanSelectButton
-import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 // 외식 / 술자리 고려 AI 식단 추천 기능 화면
 @Composable
@@ -51,8 +48,8 @@ fun PlanAIRecomScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    var blueClicked = remember { mutableStateOf(false) }
-    var pinkClicked = remember { mutableStateOf(false) }
+    val taggedDates = remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
+
 
     Box(
         modifier = Modifier
@@ -133,66 +130,25 @@ fun PlanAIRecomScreen(
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "날짜 선택하기",
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    color = Color(0xFF000000),
-                    modifier = Modifier
-                        .padding(top = 22.98f.bhp(), start = 22.5f.wp())
-                        .align(Alignment.Start)
+                PlanCalendar(
+                    modifier = Modifier.padding(18f.wp()),
+                    taggedDATES = taggedDates.value,
+                    onNavigateToDetail = {
+                        navController.navigate("plan_ai_loading")
+                    }
                 )
                 Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(275.72f.bhp())
-                        .padding(top = 20.98f.bhp(), start = 23.34f.wp(), end = 26.89f.wp())
-                        .background(Color.LightGray)
-                )   // TODO : 달력 추후 추가
-                Column(
-                    modifier = Modifier.padding(horizontal = 16f.wp(), vertical = 36.31f.bhp()),
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12f.wp())
-                    ) {
-                        PlanSelectButton(
-                            modifier = Modifier.weight(0.5f),
-                            onClick = {
-                                blueClicked.value = !blueClicked.value
-                                pinkClicked.value = false
-                            },
-                            isSelected = blueClicked.value,
-                            isBlue = true,
-                            value = "외식",
-                            height = 60f
-                        )
-                        PlanSelectButton(
-                            modifier = Modifier.weight(0.5f),
-                            onClick = {
-                                blueClicked.value = false
-                                pinkClicked.value = !pinkClicked.value
-                            },
-                            isSelected = pinkClicked.value,
-                            isBlue = false,
-                            value = "술자리",
-                            height = 60f
-                        )
-                    }
-                    PlanConfirmButton(
-                        modifier = Modifier.padding(top = 24f.bhp()),
-                        isAvailable = if (blueClicked.value || pinkClicked.value) true
-                        else false,
-                        onClick = {
-                            if (blueClicked.value || pinkClicked.value)
-                                navController.navigate("plan_ai_loading")
-                        },
-                        value = "다 입력했어!",
-                        height = 65f
-                    )
-                    Spacer(
-                        modifier = Modifier.size(93f.bhp()- WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
-                    )
-                }
+                    modifier = Modifier.size(
+                        93f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                            .calculateBottomPadding()
+                    ),
+                )
+                Spacer(
+                    modifier = Modifier.size(
+                        93f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                            .calculateBottomPadding()
+                    ),
+                )
             }
         }
     }

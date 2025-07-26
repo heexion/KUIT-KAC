@@ -1,15 +1,19 @@
-package com.konkuk.kuit_kac.presentation.diet.component
+package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,15 +28,25 @@ fun PlanSelectButton(
     onClick: () -> Unit = {},
     isSelected: Boolean = false,
     isBlue: Boolean = true,
+    isSmall: Boolean = false,
     value: String,
     height: Float = 60f
 ) {
+    var isPressed by remember { mutableStateOf(false) }
 
     val image = if (isBlue) {
-        if (isSelected) R.drawable.bg_plan_blue_button_selected
+        if (isSmall) {
+            if (isPressed || isSelected) R.drawable.bg_plan_blue_small_button_selected
+            else R.drawable.bg_plan_blue_small_button_default
+        }
+        else if (isPressed || isSelected) R.drawable.bg_plan_blue_button_selected
         else R.drawable.bg_plan_blue_button_default
     } else {
-        if (isSelected) R.drawable.bg_plan_pink_button_selected
+        if (isSmall) {
+            if (isPressed || isSelected) R.drawable.bg_plan_pink_small_button_selected
+            else R.drawable.bg_plan_pink_small_button_default
+        }
+        else if (isPressed || isSelected) R.drawable.bg_plan_pink_button_selected
         else R.drawable.bg_plan_pink_button_default
     }
 
@@ -40,7 +54,23 @@ fun PlanSelectButton(
         modifier = modifier
             .fillMaxWidth()
             .height(height.bhp())
-            .clickable { onClick() }
+            .pointerInteropFilter {
+                when (it.action) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                        isPressed = true
+                        true
+                    }
+
+                    android.view.MotionEvent.ACTION_UP,
+                    android.view.MotionEvent.ACTION_CANCEL -> {
+                        isPressed = false
+                        onClick()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
     ) {
         Image(
             modifier = Modifier
