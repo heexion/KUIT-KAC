@@ -24,12 +24,16 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordAddScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessFastInputScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessMainScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineSearchScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessSearchScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
@@ -396,8 +400,29 @@ fun KacNavGraph(
 
         composable("fitness/detail/{name}") { backStackEntry ->
             val name = backStackEntry.arguments?.getString("name") ?: ""
-            FitnessDetailRecordScreen(name = name)
+            FitnessDetailRecordScreen(
+                name = name,
+                navController = navController)
         }
+
+        composable(Route.FitnessRecordResult.route) {
+            FitnessRecordResultScreen(navController = navController)
+        }
+
+        composable(Route.FitnessRoutineSearch.route) {
+            FitnessRoutineSearchScreen(navController = navController)
+        }
+
+        composable(Route.FitnessFastInput.route) {
+            FitnessFastInputScreen(navController = navController)
+        }
+        composable(Route.FitnessDetailRecordAdd.route) {
+            FitnessDetailRecordAddScreen(navController = navController)
+        }
+
+
+
+
 
 
 
