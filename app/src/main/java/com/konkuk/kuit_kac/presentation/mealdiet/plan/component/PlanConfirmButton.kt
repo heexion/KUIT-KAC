@@ -1,4 +1,4 @@
-package com.konkuk.kuit_kac.presentation.diet.component
+package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

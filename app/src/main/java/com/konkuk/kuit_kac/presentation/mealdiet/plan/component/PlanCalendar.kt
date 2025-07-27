@@ -33,12 +33,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -49,7 +47,9 @@ fun PlanCalendar(
     modifier: Modifier = Modifier,
     taggedDATES: Map<LocalDate, Set<PlanTagType>>,
     onNavigateToDetail: () -> Unit = {},
-    isTagButton: Boolean = false
+    isTagButton: Boolean = false,
+    confirmButtonValue: String = "",
+    confirmButtonOnClick: () -> Unit = {}
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
