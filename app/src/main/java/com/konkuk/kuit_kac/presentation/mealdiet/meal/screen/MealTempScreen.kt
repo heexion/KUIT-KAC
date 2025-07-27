@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -23,8 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,10 +43,12 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -55,15 +63,8 @@ fun MealTempScreen(
     val prevRoute = navController.previousBackStackEntry?.destination?.route
     var Clicked = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
-    val existList =
-        if (!Clicked.value) {
-            listOf(
-                1, 2, 3, 4
-            )
-        } else {
-            listOf(1, 2, 3, 4, 5, 6)
-        }
-    val cal = 677;
+    val cal = selectedFoods.sumOf { (it.food.calorie * it.quantity).toInt() }
+
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
@@ -135,19 +136,75 @@ fun MealTempScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16f.bhp())
                     ) {
-                        selectedFoods.forEach { food ->
+                        selectedFoods.forEach { foodWithQuantity ->
+                            val food = foodWithQuantity.food
+                            val quantity = foodWithQuantity.quantity
                             MealItemCard(
                                 foodNum = 1,
-                                image = R.drawable.ic_dumplings,
+                                image = food.foodType.toDrawable(),
                                 foodName = food.name,
-                                foodAmount = 1,
+                                foodAmount = quantity,
                                 foodKcal = food.calorie.toInt(),
                                 onDeleteClick = {
-                                    mealViewModel.removeFood(food)
+                                    mealViewModel.removeFood(foodWithQuantity)
                                 },
                                 navController = navController
                             )
+                            Log.d("MealTemp", "foodType: ${food.foodType}")
+                            Log.d("MealTemp", "foodType: ${food.foodType.toDrawable()}")
                         }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16f.bhp(), start = 16f.wp(), end = 15f.wp())
+                            .height(84f.bhp())
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(color = Color(0xFFFFFFFF))
+                            .clickable(
+                                onClick = {
+                                    navController.navigate(Route.FitnessSearch.route)
+                                }
+                            )
+                            .drawBehind {
+                                val strokeWidth = 3.dp.toPx()
+                                val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                                    floatArrayOf(
+                                        4.dp.toPx(),
+                                        4.dp.toPx()
+                                    ), 0f
+                                )
+                                val rect = Rect(0f, 0f, size.width, size.height)
+
+                                drawRoundRect(
+                                    color = Color(0xFF000000),
+                                    style = Stroke(width = strokeWidth, pathEffect = pathEffect),
+                                    size = size,
+                                    cornerRadius = CornerRadius(15.dp.toPx())
+                                )
+                            }
+                            .clickable (
+                                onClick = {
+                                    navController.navigate(Route.MealSearch.route)
+                                }
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(19f.wp(), 19f.bhp())
+                                .padding(end = 7f.wp()),
+                            painter = painterResource(R.drawable.img_diet_plus),
+                            contentDescription = "plus"
+                        )
+                        Text(
+                            text = "운동 추가하기",
+                            style = DungGeunMo15,
+                            fontSize = 15f.isp(),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center
+                        )
                     }
                     Box(
                         modifier = Modifier

@@ -48,6 +48,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -55,10 +56,11 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun MealSearchScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: FoodViewModel = hiltViewModel()
+    foodViewModel: FoodViewModel = hiltViewModel(),
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    val query = viewModel.query
-    val suggestions = viewModel.suggestions
+    val query = foodViewModel.query
+    val suggestions = foodViewModel.suggestions
 
     Column(
         modifier = modifier
@@ -112,7 +114,7 @@ fun MealSearchScreen(
                     shape = RoundedCornerShape(30f.bhp()),
                     singleLine = true,
                     value = query,
-                    onValueChange = { viewModel.onQueryChange(it) },
+                    onValueChange = { foodViewModel.onQueryChange(it) },
                     label = { Text(
                         text = "무슨 음식을 먹었어?",
                         style = DungGeunMo15,

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,8 +32,13 @@ class MealViewModel @Inject constructor(
     fun createMeal(
         name: String,
         dietType: String,
-        foods: List<FoodRequestDto>
     ){
+        val foods = selectedFoods.map{
+            FoodRequestDto(
+                foodId = it.food.id,
+                quantity = it.quantity
+            )
+        }
         val dietRequest = MealRequestDto(
             userId = 5040,
             dietType = dietType,
@@ -49,22 +55,32 @@ class MealViewModel @Inject constructor(
                 }
                 .onFailure {
                     _createMealState.value = false
-                    Log.e("creatDiet", error(message = "error")?: "Unknown error")
+                    Log.e("creatDiet", it.message?: "Unknown error")
                 }
         }
     }
-    private val _selectedFoods = mutableStateOf<List<Food>>(emptyList())
-    val selectedFoods: List<Food> get() = _selectedFoods.value
+    private val _selectedFoods = mutableStateListOf<FoodWithQuantity>()
+    val selectedFoods: List<FoodWithQuantity> get() = _selectedFoods
 
-    fun addFood(food: Food) {
-        _selectedFoods.value = _selectedFoods.value + food
+    fun addFood(food: Food, quantity: Float) {
+        val existing = _selectedFoods.indexOfFirst { it.food.id == food.id }
+        if (existing >= 0) {
+            _selectedFoods[existing] = FoodWithQuantity(food, quantity)
+        } else {
+            _selectedFoods.add(FoodWithQuantity(food, quantity))
+        }
     }
 
-    fun removeFood(food: Food) {
-        _selectedFoods.value = _selectedFoods.value - food
+    fun removeFood(item: FoodWithQuantity) {
+        _selectedFoods.remove(item)
     }
 
     fun clearFoods() {
-        _selectedFoods.value = emptyList()
+        _selectedFoods.clear()
     }
 }
+
+data class FoodWithQuantity(
+    val food: Food,
+    val quantity: Float
+)

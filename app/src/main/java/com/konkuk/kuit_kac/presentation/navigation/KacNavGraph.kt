@@ -50,6 +50,7 @@ import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietCreateScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietExistScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietMainScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietPatchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealFastingResultScreen
@@ -199,13 +200,38 @@ fun KacNavGraph(
         }
 
         navigation(
-            route = "MealRecordAgain",
+            route = Route.MealGraph.route,
             startDestination = Route.MealSearch.route
         ){
             composable(
                 Route.MealSearch.route
-            ){
-                val mealViewModel: MealViewModel = hiltViewModel()
+            ){backStackEntry ->
+                val parentEntry = remember(backStackEntry){
+                    navController.getBackStackEntry(Route.MealGraph.route)
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealSearchScreen(navController = navController, mealViewModel= mealViewModel)
+            }
+            composable(
+                route = "meal_search_detail/{foodName}",
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(Route.MealGraph.route)
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+                MealSearchItemDetailScreen(
+                    foodName = foodName,
+                    navController = navController,
+                    mealViewModel = mealViewModel
+                )
+            }
+            composable(Route.MealTemp.route) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(Route.MealGraph.route)
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealTempScreen(navController = navController, mealViewModel = mealViewModel)
             }
         }
 
@@ -221,20 +247,6 @@ fun KacNavGraph(
             HomeNutritionScreen(
                 modifier = modifier
             )
-        }
-
-
-        composable(
-            route = "meal_search_detail/{foodName}",
-            arguments = listOf(navArgument("foodName") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
-            MealSearchItemDetailScreen(foodName = foodName, navController = navController)
-        }
-
-        composable(Route.MealTemp.route){
-            MealTempScreen(navController = navController,
-                modifier = modifier)
         }
 
         composable(route = "time_input_result") {

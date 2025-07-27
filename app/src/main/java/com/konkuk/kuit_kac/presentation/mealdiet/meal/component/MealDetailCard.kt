@@ -54,9 +54,11 @@ fun MealDetailCard(
     fat: Float,           // g - 지방
     baseCalories: Int,    // kcal - 기본 칼로리
     unitWeight: Int,      // g - 단위 무게
-    isSpeechBubble: Boolean = true
+    isSpeechBubble: Boolean = true,
+    initialQuantity: Float,
+    onQuantityChange: (Float) -> Unit
 ) {
-    var quantity by remember { mutableStateOf(0.5f) }
+    var quantity by remember { mutableStateOf(initialQuantity) }
 
     Box(
         modifier = modifier
@@ -172,8 +174,8 @@ fun MealDetailCard(
                 QuantitySelector(
                     quantity = quantity,
                     onQuantityChange = {
-                        quantity = it.coerceIn(0.5f, 100.0f)
-//                        quantity = it
+                        quantity = it.coerceIn(0.5f,100f)
+                        onQuantityChange(it)
                     }, //Todo: 상한선, 하한선 설정?
                     unitWeight = unitWeight
                 )
@@ -351,7 +353,9 @@ private fun MealDetailCardPreview() {
         fat = 0.1f,
         baseCalories = 130,
         unitWeight = 150,
-        isSpeechBubble = true
+        isSpeechBubble = true,
+        initialQuantity = 1.0.toFloat(),
+        onQuantityChange = {}
     )
 }
 

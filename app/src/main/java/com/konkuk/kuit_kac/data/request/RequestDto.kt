@@ -27,5 +27,5 @@ data class FoodRequestDto(
     @SerialName("foodId")
     val foodId: Int,
     @SerialName("quantity")
-    val quantity: Int
+    val quantity: Float
 )

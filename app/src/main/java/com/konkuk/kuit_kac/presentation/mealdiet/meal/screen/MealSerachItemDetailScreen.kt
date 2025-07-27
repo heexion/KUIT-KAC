@@ -24,11 +24,14 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
+import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealDetailCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealTopBarWithSearch
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.foodInfoMap
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.FoodWithQuantity
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 
@@ -42,6 +45,9 @@ fun MealSearchItemDetailScreen(
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
     val foodInfo = foodViewModel.food
+    val quantity = foodInfo?.let { info ->
+        mealViewModel.selectedFoods.find { it.food.name == info.name }?.quantity
+    } ?: 0.5f
 
     LaunchedEffect(foodName) {
         foodViewModel.loadFoodByName(foodName)
@@ -72,8 +78,8 @@ fun MealSearchItemDetailScreen(
                 placeholderTextStyle = DungGeunMo20,
                 showClearButton = true,
                 onBackClick = { navController.popBackStack() },
-                onSearchClick = { navController.navigate("meal_search") },
-                onClearClick = { navController.navigate("meal_search") }
+                onSearchClick = { },
+                onClearClick = {}
             )
 
             Spacer(modifier = Modifier.height(82f.bhp()))
@@ -81,14 +87,25 @@ fun MealSearchItemDetailScreen(
             // 음식 상세 카드
             MealDetailCard(
                 modifier = Modifier.padding(horizontal = 24f.wp()),
-                image = R.drawable.ic_chickenbreast,
+                image = foodInfo.foodType.toDrawable(),
                 foodName = foodInfo.name,
                 carbohydrate = foodInfo.carb.toFloat(),
                 protein = foodInfo.protein.toFloat(),
                 fat = foodInfo.fat.toFloat(),
                 baseCalories = foodInfo.calorie.toInt(),
                 unitWeight = 150,
-                isSpeechBubble = true
+                isSpeechBubble = true,
+                initialQuantity = quantity,
+                onQuantityChange = { newQuantity ->
+                    foodInfo?.let { food ->
+                        val existing =
+                            mealViewModel.selectedFoods.find { it.food.name == food.name }
+                        if (existing != null) {
+                            mealViewModel.removeFood(existing)
+                        }
+                        mealViewModel.addFood(food, newQuantity)
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(38f.bhp()))
@@ -98,8 +115,11 @@ fun MealSearchItemDetailScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24f.wp()),
                 onClick = {
-                    mealViewModel.addFood(foodInfo)
-                    navController.navigate(Route.MealTemp.route) },
+                    foodInfo?.let { food ->
+                        mealViewModel.addFood(food, quantity)
+                        navController.navigate(Route.MealTemp.route)
+                    }
+                },
                 value = "추가하기",
                 buttonHeight = 70f,
                 isOrange = true
