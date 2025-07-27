@@ -31,4 +31,14 @@ class FoodViewModel@Inject constructor(
             }
         }
     }
+
+    var food by mutableStateOf<Food?>(null)
+        private set
+
+    fun loadFoodByName(name: String) {
+        viewModelScope.launch {
+            food = repository.getFood(name)
+        }
+    }
+
 }

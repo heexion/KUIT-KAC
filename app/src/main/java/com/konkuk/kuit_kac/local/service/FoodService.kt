@@ -7,8 +7,4 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface FoodService {
-    @GET("food")
-    suspend fun getFoodData(
-        @Query("name") name: String
-    ): Food
 }

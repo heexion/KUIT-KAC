@@ -17,6 +17,9 @@ interface FoodDao {
 
     @Query("SELECT * FROM food WHERE name LIKE :query LIMIT 10")
     suspend fun searchFoodsByName(query: String): List<Food>
+
+    @Query("SELECT * FROM food WHERE name = :name")
+    suspend fun getFood(name: String): Food?
 }
 
 

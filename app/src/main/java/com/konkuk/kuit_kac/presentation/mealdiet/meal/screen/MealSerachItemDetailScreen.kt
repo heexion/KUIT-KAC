@@ -17,12 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealDetailCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealTopBarWithSearch
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.foodInfoMap
@@ -33,14 +36,18 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun MealSearchItemDetailScreen(
     foodName: String,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: FoodViewModel = hiltViewModel()
 ) {
-    val foodInfo = foodInfoMap[foodName]
+    val foodInfo = viewModel.food
+
+    LaunchedEffect(foodName) {
+        viewModel.loadFoodByName(foodName)
+    }
 
     if (foodInfo == null) {
-        // 데이터가 없으면 바로 뒤로 이동
-        LaunchedEffect(Unit) {
-            navController.popBackStack()
+        Box(modifier = Modifier.fillMaxSize().background(Color(0xFFFFFBE8))) {
+
         }
     } else {
         Column(
@@ -72,13 +79,13 @@ fun MealSearchItemDetailScreen(
             // 음식 상세 카드
             MealDetailCard(
                 modifier = Modifier.padding(horizontal = 24f.wp()),
-                image = foodInfo.image,
-                foodName = foodName,
-                carbohydrate = foodInfo.carbohydrate,
-                protein = foodInfo.protein,
-                fat = foodInfo.fat,
-                baseCalories = foodInfo.calories,
-                unitWeight = foodInfo.unitWeight,
+                image = R.drawable.ic_chickenbreast,
+                foodName = foodInfo.name,
+                carbohydrate = foodInfo.carb.toFloat(),
+                protein = foodInfo.protein.toFloat(),
+                fat = foodInfo.fat.toFloat(),
+                baseCalories = foodInfo.calorie.toInt(),
+                unitWeight = 150,
                 isSpeechBubble = true
             )
 
