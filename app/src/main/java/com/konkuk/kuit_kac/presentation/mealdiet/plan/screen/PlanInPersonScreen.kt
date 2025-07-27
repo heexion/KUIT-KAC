@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,9 +41,12 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 //직접 식단짜기 화면
 
@@ -50,7 +55,8 @@ fun PlanInPersonScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    var dateSelected = remember { mutableStateOf(false) }
+    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     Box(
         modifier = Modifier
@@ -126,40 +132,34 @@ fun PlanInPersonScreen(
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "날짜 선택하기",
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    color = Color(0xFF000000),
-                    modifier = Modifier
-                        .padding(top = 22.98f.bhp(), start = 22.5f.wp())
-                        .align(Alignment.Start)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(275.72f.bhp())
-                        .padding(top = 20.98f.bhp(), start = 23.34f.wp(), end = 26.89f.wp())
-                        .background(Color.LightGray)
-                        .clickable { dateSelected.value = !dateSelected.value }
-                )   // TODO : 달력 추후 추가
+
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 16f.wp()),
+                    modifier = Modifier.padding(horizontal = 16f.wp(), vertical = 22.32f.bhp()),
                 ) {
+                    PlanCalendar(
+                        modifier = Modifier.padding(),
+                        taggedDATES = taggedDates,
+                        onDateSelected = { date ->
+                            selectedDate = date
+                        }
+                    )
                     PlanConfirmButton(
                         modifier = Modifier.padding(top = 36f.bhp()),
-                        isAvailable = if (dateSelected.value) true
+                        isAvailable = if (selectedDate != null) true
                         else false,
                         onClick = {
-                            if (dateSelected.value)
+                            if (selectedDate != null)
                                 navController.navigate("plan_in_person_add")
                         },
                         value = "계획하기",
                         height = 65f
                     )
                     Spacer(
-                        modifier = Modifier.size(120f.bhp()-WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
+                        modifier = Modifier.size(
+                            140f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                                .calculateBottomPadding()
+                        ),
                     )
                 }
             }

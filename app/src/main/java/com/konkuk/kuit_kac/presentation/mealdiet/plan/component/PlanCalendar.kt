@@ -91,6 +91,7 @@ fun PlanCalendar(
                     breakfastClicked.value = false
                     lunchClicked.value = false
                     dinnerClicked.value = false
+                    onDateSelected(null)
                 }
             ) {
                 Image(
@@ -411,6 +412,8 @@ private fun PlanCalendarPreview() {
     )
 }
 
+
+// 반반 색깔 다른 원
 @Composable
 fun HalfColoredCircle(
     modifier: Modifier = Modifier,
