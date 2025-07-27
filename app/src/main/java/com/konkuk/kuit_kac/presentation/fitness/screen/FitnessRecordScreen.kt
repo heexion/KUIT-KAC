@@ -167,8 +167,9 @@ fun FitnessRecordScreen(
                         )
                     )
                     .clickable(
-                        onClick = { navController.navigate(Route.MealSearch.route) }
-                    ),
+                        onClick = { navController.navigate(Route.FitnessRoutineSearch.route) }
+                    )
+                ,
                 contentAlignment = Alignment.Center
             ) {
                     Text(
@@ -194,8 +195,9 @@ fun FitnessRecordScreen(
                         )
                     )
                     .clickable(
-                        onClick = { navController.navigate(Route.MealSearch.route) }
-                    ),
+                        onClick = { navController.navigate(Route.FitnessFastInput.route) }
+
+            ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
