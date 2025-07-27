@@ -37,6 +37,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.diet.component.PlanColorType
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -48,8 +49,8 @@ fun PlanCalendar(
     taggedDATES: Map<LocalDate, Set<PlanTagType>>,
     onNavigateToDetail: () -> Unit = {},
     isTagButton: Boolean = false,
-    confirmButtonValue: String = "",
-    confirmButtonOnClick: () -> Unit = {}
+    isTagDetailShow: Boolean = false,
+    onDateSelected: (LocalDate?) -> Unit = {}
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -107,6 +108,15 @@ fun PlanCalendar(
                 )
             }
         }
+        if (isTagDetailShow)
+            Row(
+                modifier = Modifier.padding(top = 10.02f.bhp()),
+                horizontalArrangement = Arrangement.spacedBy(8f.wp())
+            ) {
+                PlanColorType(value = "AI 식단 날짜", image = R.drawable.ic_plan_circle_yellow)
+                PlanColorType(value = "외식", image = R.drawable.ic_plan_circle_blue)
+                PlanColorType(value = "술자리", image = R.drawable.ic_plan_circle_pink)
+            }
         Spacer(modifier = Modifier.height(15f.bhp()))
 
         // 월 변경 헤더
@@ -180,6 +190,7 @@ fun PlanCalendar(
                                 .clickable(enabled = isValid) {
                                     val selected = currentMonth.withDayOfMonth(dayNumber)
                                     selectedDate = selected
+                                    onDateSelected(selectedDate)
                                 },
                             contentAlignment = Alignment.Center
                         ) {
