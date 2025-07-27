@@ -48,7 +48,7 @@ fun PlanAIRecomScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    val taggedDates = remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
+    val taggedDates = remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
 
 
     Box(
@@ -135,7 +135,8 @@ fun PlanAIRecomScreen(
                     taggedDATES = taggedDates.value,
                     onNavigateToDetail = {
                         navController.navigate("plan_ai_loading")
-                    }
+                    },
+                    isTagButton = true
                 )
                 Spacer(
                     modifier = Modifier.size(
