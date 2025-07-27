@@ -69,7 +69,7 @@ fun PlanCalendar(
     }
 
     Column(
-        modifier = modifier.padding(20.dp)
+        modifier = modifier
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -192,18 +192,11 @@ fun PlanCalendar(
                                 }
 
                                 val tags = taggedDates[thisDate].orEmpty()
-                                if (tags.size > 1) {
-                                    HalfColoredCircle(
-                                        modifier = Modifier.size(39f.wp(), 39f.bhp()),
-                                        leftColor = Color(0xFF67D1FF),
-                                        rightColor = Color(0xFFFF7FD0)
-                                    )
-                                } else {
-                                    val color = when {
-                                        PlanTagType.EATING_OUT in tags -> Color(0xFF67D1FF)
-                                        PlanTagType.DRINKING in tags -> Color(0xFFFF7FD0)
-                                        else -> Color.Transparent
-                                    }
+
+                                var color = Color(0xFFFFFFFF)
+
+                                if (thisDate.isBefore(LocalDate.now()) && tags.isNotEmpty()) {
+                                    color = Color(0xFFDFDFDF)
                                     Box(
                                         modifier = Modifier
                                             .size(39f.wp(), 39f.bhp())
@@ -212,6 +205,30 @@ fun PlanCalendar(
                                                 shape = CircleShape
                                             )
                                     )
+                                } else {
+
+                                    if (tags.size > 1) {
+                                        HalfColoredCircle(
+                                            modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                            leftColor = Color(0xFF67D1FF),
+                                            rightColor = Color(0xFFFF7FD0)
+                                        )
+                                    } else {
+                                        color = when {
+                                            PlanTagType.EATING_OUT in tags -> Color(0xFF67D1FF)
+                                            PlanTagType.DRINKING in tags -> Color(0xFFFF7FD0)
+                                            PlanTagType.AI_RECOMMEND in tags -> Color(0xFFFFE667)
+                                            else -> Color.Transparent
+                                        }
+                                        Box(
+                                            modifier = Modifier
+                                                .size(39f.wp(), 39f.bhp())
+                                                .background(
+                                                    color = color,
+                                                    shape = CircleShape
+                                                )
+                                        )
+                                    }
                                 }
 
                                 if (isSelected) {
