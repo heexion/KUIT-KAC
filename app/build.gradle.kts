@@ -123,4 +123,7 @@ dependencies {
 
     //okio
     implementation("com.squareup.okio:okio:3.9.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }

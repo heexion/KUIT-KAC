@@ -22,30 +22,4 @@ class DietViewModel @Inject constructor(
 ):ViewModel() {
     private val _createDietState = mutableStateOf<Boolean?>(null)
     val createDietState: State<Boolean?> get() = _createDietState
-
-    fun createDiet(
-        name: String,
-        dietType: String,
-        foods: List<FoodRequestDto>
-    ){
-        val dietRequest = MealRequestDto(
-            userId = 5040,
-            dietType = dietType,
-            foods = foods,
-            name = name,
-            dietTime = Instant.now()
-        )
-        viewModelScope.launch {
-            runCatching {
-                dietRepository.createDiet(dietRequest)
-            }
-                .onSuccess {
-                    _createDietState.value = true
-                }
-                .onFailure {
-                    _createDietState.value = false
-                    Log.e("creatDiet", error(message = "error")?: "Unknown error")
-                }
-        }
-    }
 }

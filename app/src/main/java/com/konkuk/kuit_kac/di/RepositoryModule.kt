@@ -6,6 +6,7 @@ import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.service.FoodService
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,10 +16,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+
     @Provides
     @Singleton
-    fun providesFoodRepository (foodDao: FoodDao): FoodRepository = FoodRepository(foodDao)
+    fun provideMealRepository(mealService: MealService): MealRepository =
+        MealRepositoryImpl(mealService)
+
     @Provides
     @Singleton
-    fun providesMealRepository (mealService: MealService):MealRepository = MealRepository(mealService)
+    fun providesFoodRepository(foodDao: FoodDao): FoodRepository =
+        FoodRepository(foodDao)
 }

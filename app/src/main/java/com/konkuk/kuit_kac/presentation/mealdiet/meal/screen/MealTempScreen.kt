@@ -263,6 +263,10 @@ fun MealTempScreen(
                 )
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                 .clickable {
+                    mealViewModel.createMeal(
+                        name = "아침식단",
+                        dietType = "아침"
+                    )
                     if (prevRoute == "plan_ai_detail" || prevRoute == "plan_in_person_add")
                         navController.popBackStack()
                     else

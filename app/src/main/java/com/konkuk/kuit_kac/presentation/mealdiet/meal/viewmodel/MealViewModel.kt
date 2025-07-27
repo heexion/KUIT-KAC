@@ -20,6 +20,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +30,7 @@ class MealViewModel @Inject constructor(
 ):ViewModel() {
     private val _createMealState = mutableStateOf<Boolean?>(null)
     val createMealState: State<Boolean?> get() = _createMealState
+    val formattedTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
     fun createMeal(
         name: String,
@@ -40,18 +43,20 @@ class MealViewModel @Inject constructor(
             )
         }
         val dietRequest = MealRequestDto(
-            userId = 5040,
+            userId = 1,
             dietType = dietType,
             foods = foods,
             name = name,
-            dietTime = Instant.now()
+            dietTime = formattedTime
         )
         viewModelScope.launch {
             runCatching {
                 mealRepository.createMeal(dietRequest)
             }
                 .onSuccess {
+                    Log.d("API", "Success")
                     _createMealState.value = true
+                    Log.e("createDiet", "success")
                 }
                 .onFailure {
                     _createMealState.value = false

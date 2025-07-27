@@ -17,7 +17,7 @@ data class MealRequestDto(
     val dietType:String,
     @SerialName("dietTime")
     @Contextual
-    val dietTime: Instant,
+    val dietTime: String,
     @SerialName("foods")
     val foods: List<FoodRequestDto>
 )
