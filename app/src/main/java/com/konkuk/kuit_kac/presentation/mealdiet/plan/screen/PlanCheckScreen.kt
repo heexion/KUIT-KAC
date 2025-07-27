@@ -151,11 +151,10 @@ fun PlanCheckScreen(
                 Column {
                     PlanConfirmButton(
                         modifier = Modifier.padding(
-                            top = 30.71f.bhp(),
                             start = 14.5f.wp(),
                             end = 14.5f.wp()
                         ),
-                        isAvailable = true,
+                        isAvailable = selectedDate != null,
                         onClick = {
                             navController.navigate(navigateValue)
                         },
@@ -164,7 +163,7 @@ fun PlanCheckScreen(
                     )
                     Spacer(
                         modifier = Modifier.size(
-                            115f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                            150f.bhp() - WindowInsets.navigationBars.asPaddingValues()
                                 .calculateBottomPadding()
                         ),
                     )
