@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -39,6 +40,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -46,9 +48,10 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun MealTempScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
-
+    val selectedFoods = mealViewModel.selectedFoods
     val prevRoute = navController.previousBackStackEntry?.destination?.route
     var Clicked = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -132,14 +135,16 @@ fun MealTempScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16f.bhp())
                     ) {
-                        existList.forEach { exist ->
+                        selectedFoods.forEach { food ->
                             MealItemCard(
-                                foodNum = exist,
+                                foodNum = 1,
                                 image = R.drawable.ic_dumplings,
-                                foodName = "고기만두",
+                                foodName = food.name,
                                 foodAmount = 1,
-                                foodKcal = 120,
-                                onDeleteClick = {},
+                                foodKcal = food.calorie.toInt(),
+                                onDeleteClick = {
+                                    mealViewModel.removeFood(food)
+                                },
                                 navController = navController
                             )
                         }

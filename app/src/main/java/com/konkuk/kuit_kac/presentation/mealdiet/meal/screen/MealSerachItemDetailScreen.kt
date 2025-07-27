@@ -29,6 +29,7 @@ import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealDetailCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealTopBarWithSearch
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.foodInfoMap
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -37,12 +38,13 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun MealSearchItemDetailScreen(
     foodName: String,
     navController: NavHostController,
-    viewModel: FoodViewModel = hiltViewModel()
+    foodViewModel: FoodViewModel = hiltViewModel(),
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    val foodInfo = viewModel.food
+    val foodInfo = foodViewModel.food
 
     LaunchedEffect(foodName) {
-        viewModel.loadFoodByName(foodName)
+        foodViewModel.loadFoodByName(foodName)
     }
 
     if (foodInfo == null) {
@@ -95,7 +97,9 @@ fun MealSearchItemDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24f.wp()),
-                onClick = { navController.navigate(Route.MealTime.route) },
+                onClick = {
+                    mealViewModel.addFood(foodInfo)
+                    navController.navigate(Route.MealTemp.route) },
                 value = "추가하기",
                 buttonHeight = 70f,
                 isOrange = true

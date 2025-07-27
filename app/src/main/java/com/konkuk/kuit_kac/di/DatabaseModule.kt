@@ -23,7 +23,9 @@ object DatabaseModule {
             context,
             FoodDatabase::class.java,
             "food.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
     }
 
     @Provides

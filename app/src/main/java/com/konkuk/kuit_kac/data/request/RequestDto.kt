@@ -8,7 +8,7 @@ import java.time.Instant
 import java.util.Date
 
 @Serializable
-data class DietRequestDto(
+data class MealRequestDto(
     @SerialName("userId")
     val userId:Int,
     @SerialName("name")

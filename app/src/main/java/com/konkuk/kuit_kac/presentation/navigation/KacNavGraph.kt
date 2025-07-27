@@ -5,11 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
@@ -55,8 +58,10 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealPatchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealRecordScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchItemDetailScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTimeScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 
 
 @Composable
@@ -193,6 +198,17 @@ fun KacNavGraph(
             )
         }
 
+        navigation(
+            route = "MealRecordAgain",
+            startDestination = Route.MealSearch.route
+        ){
+            composable(
+                Route.MealSearch.route
+            ){
+                val mealViewModel: MealViewModel = hiltViewModel()
+            }
+        }
+
 
 
         composable(Route.HomeAnalysis.route) {
@@ -214,6 +230,11 @@ fun KacNavGraph(
         ) { backStackEntry ->
             val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
             MealSearchItemDetailScreen(foodName = foodName, navController = navController)
+        }
+
+        composable(Route.MealTemp.route){
+            MealTempScreen(navController = navController,
+                modifier = modifier)
         }
 
         composable(route = "time_input_result") {

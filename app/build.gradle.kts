@@ -3,20 +3,35 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-
 }
 
 val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin" && requested.name.startsWith("kotlin-stdlib")) {
+            useVersion("1.9.22")
+        }
+        if (requested.group == "com.squareup.okio") {
+            useVersion("3.9.0")
+        }
+        if (requested.group == "org.jetbrains.kotlinx" && requested.name == "kotlinx-serialization-core") {
+            useVersion("1.6.3")
+        }
+    }
+}
 android {
     namespace = "com.konkuk.kuit_kac"
     compileSdk = 36
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.12"
+    }
+
 
     defaultConfig {
         applicationId = "com.konkuk.kuit_kac"
@@ -44,6 +59,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += "-P=plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
     buildFeatures {
         compose = true
@@ -60,7 +76,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3.v121)
+    implementation(libs.androidx.material3)
+    implementation(libs.kotlinx.metadata.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,7 +94,6 @@ dependencies {
 
     // coil
     implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
 
     // Network
     implementation(platform(libs.okhttp.bom))
@@ -104,4 +120,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
+
+    //okio
+    implementation("com.squareup.okio:okio:3.9.0")
 }

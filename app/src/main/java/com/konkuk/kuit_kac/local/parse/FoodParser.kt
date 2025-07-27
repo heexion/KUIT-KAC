@@ -18,10 +18,11 @@ fun loadFood(context: Context): List<Food>{
         try {
             val food = Food(
                 name = tokens[0],
-                calorie = tokens[1].toDoubleOrNull() ?: 0.0,
-                protein = tokens[2].toDoubleOrNull() ?: 0.0,
-                fat = tokens[3].toDoubleOrNull() ?: 0.0,
-                carb = tokens[4].toDoubleOrNull() ?: 0.0
+                foodType = tokens[1],
+                calorie = tokens[2].toDoubleOrNull() ?: 0.0,
+                protein = tokens[3].toDoubleOrNull() ?: 0.0,
+                fat = tokens[4].toDoubleOrNull() ?: 0.0,
+                carb = tokens[5].toDoubleOrNull() ?: 0.0
 
             )
             foods.add(food)
