@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -44,7 +47,7 @@ import java.time.LocalDate
 @Composable
 fun PlanCalendar(
     modifier: Modifier = Modifier,
-    taggedDATES: Map<LocalDate, PlanTagType>,
+    taggedDATES: Map<LocalDate, Set<PlanTagType>>,
     onNavigateToDetail: () -> Unit = {},
     isTagButton: Boolean = false
 ) {
@@ -53,7 +56,7 @@ fun PlanCalendar(
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }
-    var taggedDates by remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
+    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
 
     var breakfastClicked = remember { mutableStateOf(false) }
     var lunchClicked = remember { mutableStateOf(false) }
@@ -66,7 +69,7 @@ fun PlanCalendar(
     }
 
     Column(
-        modifier = modifier
+        modifier = modifier.padding(20.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -84,6 +87,9 @@ fun PlanCalendar(
                     selectedDate = null
                     pinkClicked.value = false
                     blueClicked.value = false
+                    breakfastClicked.value = false
+                    lunchClicked.value = false
+                    dinnerClicked.value = false
                 }
             ) {
                 Image(
@@ -185,21 +191,28 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tag = taggedDates.get(thisDate)
-                                var color = when (tag) {
-                                    PlanTagType.EATING_OUT -> Color(0xFF67D1FF)
-                                    PlanTagType.DRINKING -> Color(0xFFFF7FD0)
-                                    else -> Color.Transparent
+                                val tags = taggedDates[thisDate].orEmpty()
+                                if (tags.size > 1) {
+                                    HalfColoredCircle(
+                                        modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                        leftColor = Color(0xFF67D1FF),
+                                        rightColor = Color(0xFFFF7FD0)
+                                    )
+                                } else {
+                                    val color = when {
+                                        PlanTagType.EATING_OUT in tags -> Color(0xFF67D1FF)
+                                        PlanTagType.DRINKING in tags -> Color(0xFFFF7FD0)
+                                        else -> Color.Transparent
+                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .size(39f.wp(), 39f.bhp())
+                                            .background(
+                                                color = color,
+                                                shape = CircleShape
+                                            )
+                                    )
                                 }
-
-                                Box(
-                                    modifier = Modifier
-                                        .size(39f.wp(), 39f.bhp())
-                                        .background(
-                                            color = color,
-                                            shape = CircleShape
-                                        )
-                                )
 
                                 if (isSelected) {
                                     if (blueClicked.value)
@@ -338,12 +351,19 @@ fun PlanCalendar(
                     if (selectedDate != null) {
                         isAddedOnce.value = true
                         val updated = taggedDates.toMutableMap()
-                        if (blueClicked.value) updated[selectedDate!!] = PlanTagType.EATING_OUT
-                        else if (pinkClicked.value) updated[selectedDate!!] = PlanTagType.DRINKING
+                        val currentTags = updated[selectedDate!!]?.toMutableSet() ?: mutableSetOf()
+
+                        if (blueClicked.value) currentTags.add(PlanTagType.EATING_OUT)
+                        if (pinkClicked.value) currentTags.add(PlanTagType.DRINKING)
+
+                        updated[selectedDate!!] = currentTags
                         taggedDates = updated
                     }
                     pinkClicked.value = false
                     blueClicked.value = false
+                    breakfastClicked.value = false
+                    lunchClicked.value = false
+                    dinnerClicked.value = false
                 },
                 value = confirmString,
                 height = 65f
@@ -356,8 +376,41 @@ fun PlanCalendar(
 @Preview(showBackground = true)
 @Composable
 private fun PlanCalendarPreview() {
-    val taggedDates = remember { mutableStateOf<Map<LocalDate, PlanTagType>>(emptyMap()) }
+    val taggedDates = remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
     PlanCalendar(
-        taggedDATES = taggedDates.value
+        taggedDATES = taggedDates.value,
+        isTagButton = true
     )
+}
+
+@Composable
+fun HalfColoredCircle(
+    modifier: Modifier = Modifier,
+    leftColor: Color = Color.Blue,
+    rightColor: Color = Color.Magenta
+) {
+    Canvas(modifier = modifier) {
+        val radius = size.minDimension / 2
+        val center = Offset(size.width / 2, size.height / 2)
+
+        // 왼쪽 반
+        drawArc(
+            color = leftColor,
+            startAngle = 90f,
+            sweepAngle = 180f,
+            useCenter = true,
+            topLeft = Offset(center.x - radius, center.y - radius),
+            size = Size(radius * 2, radius * 2)
+        )
+
+        // 오른쪽 반
+        drawArc(
+            color = rightColor,
+            startAngle = 270f,
+            sweepAngle = 180f,
+            useCenter = true,
+            topLeft = Offset(center.x - radius, center.y - radius),
+            size = Size(radius * 2, radius * 2)
+        )
+    }
 }
