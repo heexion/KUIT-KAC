@@ -28,10 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
@@ -88,7 +88,7 @@ fun FitnessRoutineDetailInputScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(bottom = 117.dp), // 버튼 높이 고려하여 아래 공간 확보
+                .padding(bottom = 117f.bhp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -102,9 +102,9 @@ fun FitnessRoutineDetailInputScreen(
 
             Box(
                 modifier = Modifier
-                    .padding(top = 24.dp)
-                    .width(240.dp)
-                    .height(50.dp)
+                    .padding(top = 24f.bhp())
+                    .width(240f.wp())
+                    .height(50f.bhp())
             ) {
                 Image(
                     painter = painterResource(id = selectedImageRes),
@@ -124,7 +124,7 @@ fun FitnessRoutineDetailInputScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(85.2.dp))
+            Spacer(modifier = Modifier.height(85.2f.bhp()))
 
             when (selectedTab) {
                 "횟수" -> {
@@ -139,7 +139,7 @@ fun FitnessRoutineDetailInputScreen(
                             },
                             onDeleteClick = { countCards.removeAt(index) }
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(20f.bhp()))
                     }
                 }
 
@@ -161,7 +161,7 @@ fun FitnessRoutineDetailInputScreen(
                             },
                             onDeleteClick = { weightCards.removeAt(index) }
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(20f.bhp()))
                     }
                 }
 
@@ -177,7 +177,7 @@ fun FitnessRoutineDetailInputScreen(
                             },
                             onDeleteClick = { distanceCards.removeAt(index) }
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(20f.bhp()))
                     }
                 }
             }
@@ -192,14 +192,13 @@ fun FitnessRoutineDetailInputScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32f.bhp()))
         }
-
 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 117.dp)
+                .padding(bottom = 117f.bhp())
         ) {
             PlanConfirmButton(
                 modifier = Modifier.padding(horizontal = 24f.wp()),
@@ -212,8 +211,6 @@ fun FitnessRoutineDetailInputScreen(
         }
     }
 }
-
-
 
 
 @Preview(showBackground = true)

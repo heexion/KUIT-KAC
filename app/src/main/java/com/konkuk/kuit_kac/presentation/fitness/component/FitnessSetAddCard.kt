@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 
 @Composable
 fun FitnessSetAddCard(
@@ -31,10 +33,10 @@ fun FitnessSetAddCard(
 ) {
     Box(
         modifier = modifier
-            .width(365.dp)
-            .height(60.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .border(1.dp, Color.Black, RoundedCornerShape(20.dp)) // 테두리만 있음
+            .width(365f.wp())
+            .height(60f.bhp())
+            .clip(RoundedCornerShape(20f.bhp()))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())) // 테두리만 있음
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -46,18 +48,19 @@ fun FitnessSetAddCard(
                 painter = painterResource(id = R.drawable.ic_plus),
                 contentDescription = "세트 추가",
                 modifier = Modifier
-                    .size(14.2.dp),
-                colorFilter = ColorFilter.tint(Color.Black)
+                    .size(14.2f.bhp()),
+                colorFilter = ColorFilter.tint(Color(0xFF000000))
             )
-            Spacer(modifier = Modifier.width(10.4.dp))
+            Spacer(modifier = Modifier.width(10.4f.wp()))
             Text(
                 text = "세트 추가",
                 style = DungGeunMo20,
-                color = Color.Black
+                color = Color(0xFF000000)
             )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

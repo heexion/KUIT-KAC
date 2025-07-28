@@ -31,6 +31,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
@@ -43,12 +45,12 @@ fun FitnessSetCountCard(
 ) {
     Row(
         modifier = modifier
-            .width(365.dp)
-            .height(60.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color.White)
-            .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
-            .padding(horizontal = 16.dp),
+            .width(365f.wp())
+            .height(60f.bhp())
+            .clip(RoundedCornerShape(20f.bhp()))
+            .background(Color(0xFFFFFFFF))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
+            .padding(horizontal = 16f.wp()),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -56,7 +58,7 @@ fun FitnessSetCountCard(
         Text(
             text = "세트 $setNumber",
             style = DungGeunMo17,
-            color = Color.Black
+            color = Color(0xFF000000)
         )
 
         // 우측: 입력 필드 + 단위 + 삭제 아이콘
@@ -64,9 +66,9 @@ fun FitnessSetCountCard(
             // 노란 입력 박스
             Box(
                 modifier = Modifier
-                    .width(62.6.dp)
-                    .height(31.6.dp)
-                    .clip(RoundedCornerShape(10.dp))
+                    .width(62.6f.wp())
+                    .height(31.6f.bhp())
+                    .clip(RoundedCornerShape(10f.bhp()))
                     .background(Color(0xFFFFF1AB)),
                 contentAlignment = Alignment.Center
             ) {
@@ -75,39 +77,37 @@ fun FitnessSetCountCard(
                     onValueChange = onCountChange,
                     textStyle = DungGeunMo17.copy(
                         textAlign = TextAlign.Center,
-                        color = Color.Black
+                        color = Color(0xFF000000)
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
 
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(4f.wp()))
 
             // "회" 텍스트
             Text(
                 text = "회",
                 style = DungGeunMo17,
-                color = Color.Black
+                color = Color(0xFF000000)
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8f.wp()))
 
             // 삭제 버튼
             Box(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(24f.bhp())
                     .clickable { onDeleteClick() },
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_close),
                     contentDescription = "삭제",
-                    modifier = Modifier.size(7.7.dp),
-                    colorFilter = ColorFilter.tint(Color.Black)
+                    modifier = Modifier.size(7.7f.bhp()),
+                    colorFilter = ColorFilter.tint(Color(0xFF000000))
                 )
             }
-
-
         }
     }
 }
