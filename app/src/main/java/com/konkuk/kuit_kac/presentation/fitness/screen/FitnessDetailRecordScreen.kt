@@ -39,7 +39,6 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -166,7 +165,7 @@ fun FitnessDetailRecordScreen(
 
         Spacer(modifier = Modifier.height(97f.bhp()))
 
-        PlanConfirmButton(
+        /*PlanConfirmButton(
             modifier = Modifier.padding(horizontal = 24f.wp()),
             onClick = {
                 // TODO: 실제 데이터 저장 로직이 있다면 먼저 실행한 후 이동
@@ -174,7 +173,7 @@ fun FitnessDetailRecordScreen(
             },
             isAvailable = isAllFilled,
             value = "추가하기"
-        )
+        ) */
     }
 }
 

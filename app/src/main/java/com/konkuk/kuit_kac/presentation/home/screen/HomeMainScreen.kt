@@ -70,6 +70,7 @@ fun HomeMainScreen(
     left: Int,
     navController: NavHostController
 ) {
+
     HomeBackgroundComponent()
     Box(
         modifier = modifier

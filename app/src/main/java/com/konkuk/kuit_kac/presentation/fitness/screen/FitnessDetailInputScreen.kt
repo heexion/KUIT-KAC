@@ -40,7 +40,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
@@ -227,7 +226,7 @@ fun FitnessDetailInputScreen(
 
         Spacer(modifier = Modifier.height(32.1f.bhp()))
 
-        PlanConfirmButton(
+        /*PlanConfirmButton(
             modifier = Modifier
                 .padding(horizontal = 24f.wp()),
             onClick = {
@@ -235,7 +234,7 @@ fun FitnessDetailInputScreen(
             },
             isAvailable = isAllFilled,
             value = "기록하기"
-        )
+        )*/
     }
 }
 

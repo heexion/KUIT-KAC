@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,13 +40,12 @@ fun MealItemCard(
     foodNum: Int,
     image: Int,
     foodName: String,
-    foodAmount: Int,
+    foodAmount: Float,
     foodKcal: Int,
     onDeleteClick: () -> Unit
 ) {
     var amountText = "${foodAmount}개"
     // Todo: 추후에 음식 종류 선별해서 개/ml/접시 등등으로 바꿔야 함
-
     Row(
         modifier = modifier
             .border(1.dp, Color(0xFF000000), RoundedCornerShape(15f.bhp()))
@@ -112,9 +112,9 @@ fun MealItemCard(
 private fun MealItemCardPreview() {
     val navController = rememberNavController()
     MealItemCard(
-        image = R.drawable.ic_dumplings,
+        image = R.drawable.ic_chickenbreast,
         foodName = "고기만두",
-        foodAmount = 1,
+        foodAmount = 1f,
         foodKcal = 120,
         onDeleteClick = { },
         foodNum = 0,

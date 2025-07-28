@@ -12,9 +12,14 @@ sealed class Route(val route: String) {
     data object MealExist: Route(route = "MealExist") // 나중에 삭제
     data object MealPatch: Route(route = "MealPatch")
     data object MealFastingResult: Route(route = "MealFastingResult")
-    data object MealRecord: Route(route = "MealRecord")
-    data object MealSearch: Route(route = "MealSearch")
     data object MealTime: Route(route = "MealTime")
+    data object MealRecord: Route(route = "MealRecord")
+
+
+    //MEAL GRAPH
+    data object MealGraph: Route(route = "MealGraph")
+    data object MealSearch: Route(route = "MealSearch")
+    data object MealTemp: Route(route = "MealTemp")
 
     data object PlanDiet : Route(route = "PlanDiet") // 식단 계획
     data object PlanAI : Route(route = "PlanAI") // 식단 AI 추천
