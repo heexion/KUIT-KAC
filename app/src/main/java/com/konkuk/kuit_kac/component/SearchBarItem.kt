@@ -62,14 +62,14 @@ fun SearchBarItem(
         }
 
         // 마지막 아이템인 경우 아래의 회색 가로선을 표시하지 않음
-        if (!isLastItem) {
+        /*if (!isLastItem) {
             Spacer(
                 modifier = Modifier
                     .height(1f.bhp())
                     .fillMaxWidth()
                     .background(Color(0x3B000000))
             )
-        }
+        }*/
     }
 }
 

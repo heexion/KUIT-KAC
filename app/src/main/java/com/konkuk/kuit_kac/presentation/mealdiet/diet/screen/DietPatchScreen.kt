@@ -138,7 +138,7 @@ fun DietPatchScreen(
                                 foodNum = exist,
                                 image = R.drawable.ic_dumplings,
                                 foodName = "고기만두",
-                                foodAmount = 1,
+                                foodAmount = 1f,
                                 foodKcal = 120,
                                 onDeleteClick = {},
                                 navController = navController

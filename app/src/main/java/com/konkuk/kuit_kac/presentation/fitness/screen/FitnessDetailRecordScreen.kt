@@ -166,7 +166,7 @@ fun FitnessDetailRecordScreen(
 
         Spacer(modifier = Modifier.height(97f.bhp()))
 
-        PlanConfirmButton(
+        /*PlanConfirmButton(
             modifier = Modifier.padding(horizontal = 24f.wp()),
             onClick = {
                 // TODO: 실제 데이터 저장 로직이 있다면 먼저 실행한 후 이동
@@ -174,7 +174,7 @@ fun FitnessDetailRecordScreen(
             },
             isAvailable = isAllFilled,
             value = "추가하기"
-        )
+        ) */
     }
 }
 

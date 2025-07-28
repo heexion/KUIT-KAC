@@ -22,16 +22,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.FoodDatabase
+import com.konkuk.kuit_kac.local.dao.FoodDao
+import com.konkuk.kuit_kac.local.parse.loadFood
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var foodDao: FoodDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -148,6 +159,13 @@ class MainActivity : ComponentActivity() {
 
             }
 
+        }
+
+        lifecycleScope.launch {
+            if(!foodDao.hasAnyFood()){
+                val foods = loadFood(applicationContext)
+                foodDao.insertAll(foods)
+            }
         }
     }
 }

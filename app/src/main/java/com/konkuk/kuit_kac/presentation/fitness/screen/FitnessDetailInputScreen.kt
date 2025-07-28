@@ -227,7 +227,7 @@ fun FitnessDetailInputScreen(
 
         Spacer(modifier = Modifier.height(32.1f.bhp()))
 
-        PlanConfirmButton(
+        /*PlanConfirmButton(
             modifier = Modifier
                 .padding(horizontal = 24f.wp()),
             onClick = {
@@ -235,7 +235,7 @@ fun FitnessDetailInputScreen(
             },
             isAvailable = isAllFilled,
             value = "기록하기"
-        )
+
 
     }
 }
