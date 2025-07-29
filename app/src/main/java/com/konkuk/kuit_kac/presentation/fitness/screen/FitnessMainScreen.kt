@@ -243,8 +243,8 @@ fun CustomPagerIndicator(
     modifier: Modifier = Modifier,
     activeColor: Color = Color(0xFF000000),
     inactiveColor: Color = Color(0xFFCCCCCC),
-    indicatorSize: Dp = 8.dp,
-    spacing: Dp = 8.dp
+    indicatorSize: Dp = 8f.bhp(),
+    spacing: Dp = 8f.bhp()
 ) {
     Row(
         modifier = modifier,
@@ -262,6 +262,7 @@ fun CustomPagerIndicator(
         }
     }
 }
+
 
 @Composable
 fun SpeechBubble(messageText: String) {
@@ -300,7 +301,7 @@ fun SwipeCardPager(
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
-            pageSpacing = 40.dp
+            pageSpacing = 40f.wp()
         ) { page ->
             val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
             FitnessCard(
