@@ -191,7 +191,11 @@ fun WeightInputModal(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                     )
                 )
-                .border(1.25.dp, Color.Black, RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
+                .border(
+                    1.25.dp,
+                    Color.Black,
+                    RoundedCornerShape(topStart = 60f.wp(), topEnd = 60f.wp())
+                )
                 .padding(horizontal = 25f.wp(), vertical = 25f.bhp())
                 .clickable(enabled = false) {},
             horizontalAlignment = Alignment.CenterHorizontally
@@ -239,8 +243,10 @@ fun WeightInputModal(
                             focusedIndicatorColor = Color.Transparent
                         ),
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 navController.navigate(Route.HomeResult.route)
@@ -260,8 +266,7 @@ fun WeightInputModal(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(20.dp))
-                    ,
+                    .clip(RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
             ) {
             }
