@@ -180,7 +180,7 @@ fun HomeScaleScreen(
                     Text(
                         text = scaleText,
                         style = textSize,
-                        fontSize = 35f.isp(),
+                        fontSize = 30f.isp(),
                         color = Color(0xFF713E3A),
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
@@ -231,6 +231,6 @@ private fun HomeScalePreview() {
     HomeScaleScreen(
         modifier = Modifier,
         navController = navController,
-        weight = 2.4
+        weight = 0.0
     )
 }
