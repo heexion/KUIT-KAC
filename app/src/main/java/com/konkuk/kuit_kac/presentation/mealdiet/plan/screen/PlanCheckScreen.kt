@@ -154,8 +154,10 @@ fun PlanCheckScreen(
                             start = 14.5f.wp(),
                             end = 14.5f.wp()
                         ),
-                        isAvailable = selectedDate != null,
+                        isAvailable = true,
                         onClick = {
+                            navigateValue = if (selectedDate == null) "plan_result"
+                            else "plan_in_person_add_complete"
                             navController.navigate(navigateValue)
                         },
                         value = "확인하기",
