@@ -1,46 +1,28 @@
 package com.konkuk.kuit_kac.presentation.home.screen
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.magnifier
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,12 +30,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
+import coil.size.Size
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.GifImage
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionCircleGraph
 import com.konkuk.kuit_kac.presentation.home.component.HomeSummaryBox
@@ -78,26 +66,66 @@ fun HomeMainScreen(
         Box(
             modifier = Modifier
         ) {
-
-            EllipseNyam(modifier = Modifier
-                .offset(
-                    x = 24f.wp(),
-                    y = 72.18f.hp()
+            Box(
+                modifier = Modifier
+                    .offset(
+                        x = 24f.wp(),
+                        y = 72.18f.hp()
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(147.6658f.wp(), 147.6658f.bhp()),
+                    painter = painterResource(R.drawable.img_component_ellipse),
+                    contentDescription = "Nyam Ellipse"
                 )
-                .clickable(
+                GifImage(
+                    modifier = Modifier
+                        .size(125f.wp(), 125f.bhp())
+                        .offset(x = 5f.wp())
+                    ,
+                    drawableId = R.drawable.gif_hamcoach_default,
                     onClick = {
                         navController.navigate(Route.HomeObservation.route)
-                    }
-                ),
-                ellipseLength = 147.6658,
-                mascotLength = 88.43783
+                    },
+                    actualWidth = 88.43783f.wp(),
+                    actualHeight = 88.43783f.bhp()
+                )
+            }
+
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .offset(
+//                        x = 24f.wp(),
+//                        y = 72.18f.hp()
+//                    )
+//                    .clickable(
+//                        onClick = {
+//                            navController.navigate(Route.HomeObservation.route)
+//                        }
+//                    ),
+//                ellipseLength = 147.6658,
+//                mascotLength = 88.43783
+//            )
+
+            GifImage(
+                modifier = Modifier
+                    .size(375.2f.wp(), 488f.bhp())
+                    .offset(x = 70f.wp(), y = 36f.hp()),
+                drawableId = R.drawable.gif_nyamee_jumpingjacks_effect,
+                onClick = {
+                    navController.navigate(Route.HomeNutrition.route)
+                },
+                actualWidth = 187.6f.wp(),
+                actualHeight = 244f.bhp()
             )
             Box(
                 modifier = Modifier
                     .size(248.0013f.wp(), 103.00002f.bhp())
                     .offset(x = 144f.wp(), y = 40f.hp()),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Image(
                     modifier = Modifier
                         .matchParentSize(),
@@ -106,9 +134,10 @@ fun HomeMainScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .padding(bottom = 29.89f.bhp()
+                        .padding(
+                            bottom = 29.89f.bhp()
                         ),
-                        //.offset(x = 178.27f.wp(), y = 58.11f.hp()),
+                    //.offset(x = 178.27f.wp(), y = 58.11f.hp()),
                     text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
                     style = DungGeunMo17,
                     fontSize = 17f.isp(),
@@ -118,21 +147,6 @@ fun HomeMainScreen(
             }
 
 
-            Image(
-                modifier = Modifier
-                    .size(187.67596f.wp(),244f.bhp())
-                    .offset(
-                        x = 160f.wp(),
-                        y = 124f.hp()
-                    )
-                    .clickable(
-                        onClick = {
-                            navController.navigate(Route.HomeNutrition.route)
-                        }
-                    ),
-                painter = painterResource(R.drawable.img_main_person),
-                contentDescription = "you person"
-            )
             Image(
                 modifier = Modifier
                     .size(94.13432f.wp(), 53f.bhp())
@@ -152,18 +166,22 @@ fun HomeMainScreen(
             modifier = Modifier
                 .padding(top = 377f.hp())
                 .fillMaxSize()
-                .clip(RoundedCornerShape(
-                    topStart = 75f.wp(),
-                    topEnd = 75f.wp()
-                ))
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFFFFFFFF,),Color(0xFFFFEDD0))
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 75f.wp(),
+                        topEnd = 75f.wp()
                     )
                 )
-                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(
-                    topStart = 75f.wp(), topEnd = 75f.wp()
-                )),
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
+                    )
+                )
+                .border(
+                    1.dp, color = Color(0xFF000000), RoundedCornerShape(
+                        topStart = 75f.wp(), topEnd = 75f.wp()
+                    )
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -219,10 +237,9 @@ fun HomeMainScreen(
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
-fun HomeMainScreenPreview(){
+fun HomeMainScreenPreview() {
     val navController = rememberNavController()
     HomeMainScreen(current = 55, goal = 2300, left = 800, navController = navController)
 }
