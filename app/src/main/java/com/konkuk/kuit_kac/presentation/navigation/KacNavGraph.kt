@@ -5,15 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
@@ -27,6 +24,7 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailInputScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordAddScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditResultScreen
@@ -50,7 +48,6 @@ import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietCreateScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietExistScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietMainScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietPatchScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealFastingResultScreen
@@ -63,6 +60,7 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTimeScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
+import com.konkuk.kuit_kac.presentation.navigation.Route.FitnessDetailInput
 
 
 @Composable
@@ -452,6 +450,40 @@ fun KacNavGraph(
         composable(Route.FitnessDetailRecordAdd.route) {
             FitnessDetailRecordAddScreen(navController = navController)
         }
+        composable(route = FitnessDetailInput.route) {
+            val sampleFitnessList = listOf(
+                FitnessData(
+                    id = 1,
+                    name = "레그 컬",
+                    imageRes = R.drawable.ic_lowerbody,
+                    onDeleteClick = {}
+                ),
+                FitnessData(
+                    id = 2,
+                    name = "레그 프레스",
+                    imageRes = R.drawable.ic_lowerbody,
+                    onDeleteClick = {}
+                ),
+                FitnessData(
+                    id = 3,
+                    name = "레그 익스텐션",
+                    imageRes = R.drawable.ic_lowerbody,
+                    onDeleteClick = {}
+                )
+            )
+
+            FitnessDetailInputScreen(
+                fitnessList = sampleFitnessList,
+                modifier = Modifier
+            )
+        }
+//뷰모델로 바꿔야함 위에꺼 아래처럼
+//        composable(route = FitnessDetailInput.route) {
+//            val viewModel: FitnessViewModel = hiltViewModel()
+//            FitnessDetailInputScreen(
+//                fitnessList = viewModel.selectedFitnessList // ViewModel에서 가져옴
+//            )
+//        }
 
 
 

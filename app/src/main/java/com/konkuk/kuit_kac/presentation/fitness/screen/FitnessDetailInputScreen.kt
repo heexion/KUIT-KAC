@@ -14,10 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +38,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.component.DetailRecordCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
@@ -227,79 +226,20 @@ fun FitnessDetailInputScreen(
 
         Spacer(modifier = Modifier.height(32.1f.bhp()))
 
-        /*PlanConfirmButton(
+        PlanConfirmButton(
             modifier = Modifier
                 .padding(horizontal = 24f.wp()),
             onClick = {
                 // TODO: 기록 저장 로직 작성
             },
             isAvailable = isAllFilled,
-            value = "기록하기"
+            value = "기록하기")
 
 
     }
 }
 
 
-@Composable
-fun DetailRecordCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    value: String,
-    onValueChange: (String) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24f.wp())
-    ) {
-        Row(
-            modifier = Modifier
-                .width(364f.wp())
-                .height(59.9f.bhp())
-                .padding(vertical = 8f.bhp())
-                .clip(RoundedCornerShape(20f.bhp()))
-                .background(Color(0xFFFFFFFF))
-                .padding(horizontal = 12f.wp()),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = title,
-                style = DungGeunMo17,
-                color = Color(0xFF000000),
-                modifier = Modifier.padding(start = 15.85f.wp())
-            )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = 16.14f.wp())
-            ) {
-                BasicTextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    textStyle = DungGeunMo15.copy(
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Start
-                    ),
-                    singleLine = true,
-                    modifier = Modifier
-                        .widthIn(min = 40f.wp(), max = 100f.wp())
-                        .padding(end = 4f.wp())
-                        .background(Color(0xFFFFFFFF))
-                )
-
-                Text(
-                    text = "ex) 운동 횟수, 거리",
-                    style = DungGeunMo15,
-                    color = Color(0xFF999999),
-                    fontSize = 13f.isp(),
-                    maxLines = 1
-                )
-            }
-        }
-    }
-}
 
 
 

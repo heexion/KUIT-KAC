@@ -49,6 +49,8 @@ sealed class Route(val route: String) {
     data object FitnessRoutineSearch : Route(route = "fitness_routine_search")
     data object FitnessFastInput : Route(route = "fitness_fast_input")
     data object FitnessDetailRecordAdd : Route("fitness_detail_add")
+    data object FitnessDetailInput : Route(route = "fitness_detail_input")
+
 
 
 

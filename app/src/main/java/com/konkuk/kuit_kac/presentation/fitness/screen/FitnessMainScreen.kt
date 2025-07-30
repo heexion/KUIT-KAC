@@ -20,23 +20,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.OffsetEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -69,7 +68,10 @@ fun FitnessMainScreen(
         FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
         FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
     )
-    val Clicked = remember { mutableStateOf(false) }
+    val pagerState = rememberPagerState { sampleList.size }
+
+
+    // val Clicked = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -194,26 +196,69 @@ fun FitnessMainScreen(
                         }
                     }
                 } else {
-                    // 운동 루틴이 있는 경우 FitnessCard 출력
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 4f.wp())
-                    ) {
-                        Image(
+                    // 루틴 있을 때
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
                             modifier = Modifier
-                                .matchParentSize()
-                                .graphicsLayer {
-                                    scaleX = 1.38f
-                                    scaleY = 1.0f
-                                },
-                            painter = painterResource(R.drawable.img_all_tilted_rectangle),
-                            contentDescription = "tilted Rectangle"
+                                .fillMaxWidth()
+                                .padding(horizontal = 4f.wp())
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .graphicsLayer {
+                                        scaleX = 1.38f
+                                        scaleY = 1.0f
+                                    },
+                                painter = painterResource(R.drawable.img_all_tilted_rectangle),
+                                contentDescription = "tilted Rectangle"
+                            )
+                            SwipeCardPager(
+                                navController = navController,
+                                pagerState = pagerState,
+                                sampleList = sampleList
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(12f.bhp()))
+
+                        CustomPagerIndicator(
+                            pagerState = pagerState,
+                            pageCount = sampleList.size,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 4f.bhp())
                         )
-                        SwipeCardPager(navController = navController)
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun CustomPagerIndicator(
+    pagerState: PagerState,
+    pageCount: Int,
+    modifier: Modifier = Modifier,
+    activeColor: Color = Color(0xFF000000),
+    inactiveColor: Color = Color(0xFFCCCCCC),
+    indicatorSize: Dp = 8f.bhp(),
+    spacing: Dp = 8f.bhp()
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(spacing),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        repeat(pageCount) { index ->
+            val isSelected = pagerState.currentPage == index
+            Box(
+                modifier = Modifier
+                    .size(indicatorSize)
+                    .clip(CircleShape)
+                    .background(if (isSelected) activeColor else inactiveColor)
+            )
         }
     }
 }
@@ -244,44 +289,35 @@ fun SpeechBubble(messageText: String) {
 }
 
 @Composable
-fun SwipeCardPager(navController: NavHostController) {
+fun SwipeCardPager(
+    navController: NavHostController,
+    pagerState: PagerState,
+    sampleList: List<FitnessData>
+) {
     val rotateDegree = 10F
-    val sampleList = listOf(
-        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, onDeleteClick = { }),
-        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
-        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
-    )
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        pageCount = { sampleList.size }
-    )
     val coroutineScope = rememberCoroutineScope()
 
     Box {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
-            pageSpacing = 40.dp
+            pageSpacing = 40f.wp()
         ) { page ->
+            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
             FitnessCard(
                 navController = navController,
                 title = "하체루틴_허벅지..",
                 fitnessList = sampleList,
-                modifier = Modifier
-                    .graphicsLayer {
-                        val pageOffset = pagerState.offsetForPage(page)
-                        rotationZ = -rotateDegree * pageOffset
-                    }
+                modifier = Modifier.graphicsLayer {
+                    rotationZ = -rotateDegree * pageOffset
+                }
             )
         }
 
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
-                .offset(
-                    x = 182f.wp(),
-                    y = 25f.bhp()
-                )
+                .offset(x = 182f.wp(), y = 25f.bhp())
                 .size(35f.bhp(), 35f.bhp())
                 .clip(RoundedCornerShape(11f.bhp()))
                 .background(
@@ -289,26 +325,24 @@ fun SwipeCardPager(navController: NavHostController) {
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                     )
                 )
-                .clickable(
-                    onClick = {
-                        coroutineScope.launch {
-                            val nextPage =
-                                (pagerState.currentPage + 1).coerceAtMost(sampleList.size - 1)
-                            pagerState.animateScrollToPage(nextPage)
-                        }
+                .clickable {
+                    coroutineScope.launch {
+                        val nextPage = (pagerState.currentPage + 1).coerceAtMost(sampleList.size - 1)
+                        pagerState.animateScrollToPage(nextPage)
                     }
-                )
+                }
                 .border(1.dp, Color(0xFF000000), RoundedCornerShape(11f.bhp())),
-            contentAlignment = Alignment.Center) {
+            contentAlignment = Alignment.Center
+        ) {
             Image(
                 painter = painterResource(R.drawable.svg_all_point),
                 contentDescription = "pointer",
-                modifier = Modifier
-                    .size(9f.wp(), 13f.bhp())
+                modifier = Modifier.size(9f.wp(), 13f.bhp())
             )
         }
     }
 }
+
 
 @OptIn(ExperimentalFoundationApi::class)
 fun PagerState.offsetForPage(page: Int) = (currentPage - page) + currentPageOffsetFraction
