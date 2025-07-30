@@ -49,6 +49,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
+import kotlin.random.Random
 
 @Composable
 fun HomeMainScreen(
@@ -58,6 +59,7 @@ fun HomeMainScreen(
     left: Int,
     navController: NavHostController
 ) {
+    var randNum = Random.nextInt(3) + 1
 
     HomeBackgroundComponent()
     Box(
@@ -80,11 +82,11 @@ fun HomeMainScreen(
                     painter = painterResource(R.drawable.img_component_ellipse),
                     contentDescription = "Nyam Ellipse"
                 )
+
                 GifImage(
                     modifier = Modifier
                         .size(125f.wp(), 125f.bhp())
-                        .offset(x = 5f.wp())
-                    ,
+                        .offset(x = 5f.wp()),
                     drawableId = R.drawable.gif_hamcoach_default,
                     onClick = {
                         navController.navigate(Route.HomeObservation.route)
@@ -109,17 +111,44 @@ fun HomeMainScreen(
 //                mascotLength = 88.43783
 //            )
 
-            GifImage(
-                modifier = Modifier
-                    .size(375.2f.wp(), 488f.bhp())
-                    .offset(x = 70f.wp(), y = 36f.hp()),
-                drawableId = R.drawable.gif_nyamee_jumpingjacks_effect,
-                onClick = {
-                    navController.navigate(Route.HomeNutrition.route)
-                },
-                actualWidth = 187.6f.wp(),
-                actualHeight = 244f.bhp()
-            )
+            when (randNum) {
+                1 -> GifImage(
+                    modifier = Modifier
+                        .size(375.2f.wp(), 488f.bhp())
+                        .offset(x = 75f.wp(), y = 36f.hp()),
+                    drawableId = R.drawable.gif_nyamee_jumpingjacks_effect,
+                    onClick = {
+                        navController.navigate(Route.HomeNutrition.route)
+                    },
+                    actualWidth = 187.6f.wp(),
+                    actualHeight = 244f.bhp()
+                )
+
+                2 -> GifImage(
+                    modifier = Modifier
+                        .size(260.16f.wp(), 360.4f.bhp())
+                        .offset(x = 130f.wp(), y = 110f.hp()),
+                    drawableId = R.drawable.gif_nyamee_headset,
+                    onClick = {
+                        navController.navigate(Route.HomeNutrition.route)
+                    },
+                    actualWidth = 187.6f.wp(),
+                    actualHeight = 244f.bhp()
+                )
+
+                3 -> GifImage(
+                    modifier = Modifier
+                        .size(324.2f.wp(), 400f.bhp())
+                        .offset(x = 100f.wp(), y = 65f.hp()),
+                    drawableId = R.drawable.gif_nyamee_dumbbell,
+                    onClick = {
+                        navController.navigate(Route.HomeNutrition.route)
+                    },
+                    actualWidth = 187.6f.wp(),
+                    actualHeight = 244f.bhp()
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .size(248.0013f.wp(), 103.00002f.bhp())
