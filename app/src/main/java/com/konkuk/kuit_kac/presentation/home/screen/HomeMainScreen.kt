@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +42,7 @@ import com.konkuk.kuit_kac.presentation.home.component.GifImage
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionCircleGraph
 import com.konkuk.kuit_kac.presentation.home.component.HomeSummaryBox
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -49,7 +57,12 @@ fun HomeMainScreen(
     left: Int,
     navController: NavHostController
 ) {
-    val randNum = Random.nextInt(3) + 1
+
+    var randNum by remember { mutableIntStateOf(1) }
+
+    LaunchedEffect(Unit) {
+        randNum = Random.nextInt(3) + 1
+    }
 
     HomeBackgroundComponent()
     Box(
@@ -100,44 +113,13 @@ fun HomeMainScreen(
 //                ellipseLength = 147.6658,
 //                mascotLength = 88.43783
 //            )
-
-            when (randNum) {
-                1 -> GifImage(
-                    modifier = Modifier
-                        .size(375.2f.wp(), 488f.bhp())
-                        .offset(x = 75f.wp(), y = 36f.hp()),
-                    drawableId = R.drawable.gif_nyamee_jumpingjacks_effect,
-                    onClick = {
-                        navController.navigate(Route.HomeNutrition.route)
-                    },
-                    actualWidth = 187.6f.wp(),
-                    actualHeight = 244f.bhp()
-                )
-
-                2 -> GifImage(
-                    modifier = Modifier
-                        .size(260.16f.wp(), 360.4f.bhp())
-                        .offset(x = 130f.wp(), y = 110f.hp()),
-                    drawableId = R.drawable.gif_nyamee_headset,
-                    onClick = {
-                        navController.navigate(Route.HomeNutrition.route)
-                    },
-                    actualWidth = 187.6f.wp(),
-                    actualHeight = 244f.bhp()
-                )
-
-                3 -> GifImage(
-                    modifier = Modifier
-                        .size(324.2f.wp(), 400f.bhp())
-                        .offset(x = 100f.wp(), y = 65f.hp()),
-                    drawableId = R.drawable.gif_nyamee_dumbbell,
-                    onClick = {
-                        navController.navigate(Route.HomeNutrition.route)
-                    },
-                    actualWidth = 187.6f.wp(),
-                    actualHeight = 244f.bhp()
-                )
-            }
+            NyameeGif(
+                onClick = {
+                    navController.navigate(Route.HomeNutrition.route)
+                },
+                modifier = Modifier.offset(x = 75f.wp(), y = 36f.bhp()),
+                num = randNum
+            )
 
             Box(
                 modifier = Modifier
