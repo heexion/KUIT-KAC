@@ -1,5 +1,11 @@
 package com.konkuk.kuit_kac
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,6 +37,7 @@ import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.FoodDatabase
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFood
+import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -46,6 +53,25 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+            }
+        }
+        if (!isNotificationServiceEnabled(this)) {
+            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            startActivity(intent)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Alert Channel"
+            val descriptionText = "Shows alerts when 주문 접수 is detected"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("alert_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
 
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightNavigationBars = true
