@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -39,6 +40,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -86,11 +88,23 @@ fun DietPatchScreen(
                 painter = painterResource(R.drawable.img_diet_patchballoon),
                 contentDescription = "textballoon"
             )
-            EllipseNyam(
-                modifier = Modifier
-                    .offset(y = 72f.bhp(), x = 117f.wp()),
-                ellipseLength = 177.17578, mascotLength = 106.1115
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .offset(y = 72f.bhp(), x = 117f.wp()),
+//                ellipseLength = 177.17578, mascotLength = 106.1115
+//            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 72f.bhp()),
+                    num = 1,
+                    ellipseLength = 177.17578,
+                    mascotLength = 145.0,
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .padding(top = 256f.hp(), start = 24f.wp())
@@ -159,7 +173,13 @@ fun DietPatchScreen(
                 .height(122f.bhp())
                 .padding(top = 12f.bhp(), start = 56.58f.wp())
         ) {
-            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+//            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+            HamcoachGif(
+                num = 1,
+                ellipseLength = 122.0,
+                mascotLength = 100.0,
+            )
+
             Image(
                 modifier = Modifier
                     .width(197.37698f.wp())
