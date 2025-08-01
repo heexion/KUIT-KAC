@@ -34,6 +34,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -182,17 +183,29 @@ fun DietMainScreen(
                     )
                 }
 
-                EllipseNyam(
-                    modifier = Modifier
-                        .offset(x = 87f.wp(), y = 174f.bhp())
-                        .clickable(
-                            onClick = {
-                                navController.navigate(Route.DietExist.route)
-                            }
-                        ),
-                    ellipseLength = 182.0,
-                    mascotLength = 109.0
-                )
+//                EllipseNyam(
+//                    modifier = Modifier
+//                        .offset(x = 87f.wp(), y = 174f.bhp())
+//                        .clickable(
+//                            onClick = {
+//                                navController.navigate(Route.DietExist.route)
+//                            }
+//                        ),
+//                    ellipseLength = 182.0,
+//                    mascotLength = 109.0
+//                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HamcoachGif(
+                        modifier = Modifier.offset(y = 174f.bhp()),
+                        num = 1,
+                        ellipseLength = 182.0,
+                        mascotLength = 160.0,
+                    )
+                }
             }
         }
     }
