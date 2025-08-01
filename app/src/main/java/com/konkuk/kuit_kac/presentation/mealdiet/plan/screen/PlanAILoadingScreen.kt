@@ -1,8 +1,12 @@
 package com.konkuk.kuit_kac.presentation.diet.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlinx.coroutines.delay
 
@@ -30,7 +35,7 @@ fun PlanAILoadingScreen(
     var isCompleted: Boolean
 
     LaunchedEffect(Unit) {
-        delay(3000L) // 임시로 3초 대기 후 넘어가도록 함. TODO: 서버에서 분석 완료되면 넘어가도록 해야 함
+        delay(4000L) // 임시로 4초 대기 후 넘어가도록 함. TODO: 서버에서 분석 완료되면 넘어가도록 해야 함
         isCompleted = true
         if (isCompleted)
             navController.navigate("plan_ai_complete")
@@ -56,14 +61,26 @@ fun PlanAILoadingScreen(
                 .align(Alignment.TopCenter)
         )
 
-        EllipseNyam(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 212.5f.hp()),
-            mascotLength = 158.55273,
-            ellipseLength = 263.57922,
-            isMascotAngry = true
-        )
+//        EllipseNyam(
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
+//                .padding(top = 212.5f.hp()),
+//            mascotLength = 158.55273,
+//            ellipseLength = 263.57922,
+//            isMascotAngry = true
+//        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            HamcoachGif(
+                modifier = Modifier.offset(y = 212.5f.hp()),
+                num = 4,
+                ellipseLength = 263.0,
+                mascotLength = 225.0,
+            )
+        }
 
         Text(
             text = "햄코치가 식단 분석 중...",
