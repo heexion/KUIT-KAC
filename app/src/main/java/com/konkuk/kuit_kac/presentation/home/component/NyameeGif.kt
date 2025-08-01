@@ -24,7 +24,7 @@ fun NyameeGif(
         modifier = modifier
     ) {
         when (num) {
-            // 1: 팔굽혀펴기 2: 헤드셋 3: 덤벨
+            // 1:팔굽혀펴기 2:헤드셋 3:덤벨 4:울기 5:기록완료(점프) 6:박수
             1 -> GifImage(
                 modifier = Modifier
 //                    .size(375.2f.wp(), 488f.bhp())
@@ -49,11 +49,34 @@ fun NyameeGif(
             3 -> GifImage(
                 modifier = Modifier,
 //                    .size(324.2f.wp(), 400f.bhp())
-//                    .offset(x = 25f.wp(), y = 29f.hp()),
                 drawableId = R.drawable.gif_nyamee_dumbbell,
                 onClick = { onClick() },
                 actualWidth = 187.6f.wp(),
-                actualHeight = 244f.bhp(), size = sizePercent*0.86f
+                actualHeight = 244f.bhp(), size = sizePercent * 0.86f
+            )
+
+            4 -> GifImage(
+                modifier = Modifier.offset(x = -5f.wp(), y = 0f.bhp()),
+                drawableId = R.drawable.gif_nyamee_crying,
+                onClick = { onClick() },
+                actualWidth = 187.6f.wp(),
+                actualHeight = 244f.bhp(), size = sizePercent * 0.69f
+            )
+
+            5 -> GifImage(
+                modifier = Modifier.offset(x = -5f.wp(), y = -30f.bhp()),
+                drawableId = R.drawable.gif_nyamee_complete_jumping,
+                onClick = { onClick() },
+                actualWidth = 187.6f.wp(),
+                actualHeight = 244f.bhp(), size = sizePercent * 0.69f
+            )
+
+            6 -> GifImage(
+                modifier = Modifier.offset(x = -5f.wp(), y = 0f.bhp()),
+                drawableId = R.drawable.gif_nyamee_clapping,
+                onClick = { onClick() },
+                actualWidth = 187.6f.wp(),
+                actualHeight = 244f.bhp(), size = sizePercent * 0.69f
             )
         }
     }
