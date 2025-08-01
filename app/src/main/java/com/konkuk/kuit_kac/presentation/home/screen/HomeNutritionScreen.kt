@@ -54,7 +54,7 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
 
         Box() {
             NyameeGif(
-                modifier = Modifier.offset(x = 20f.wp(), y = 25f.bhp()),
+                modifier = Modifier.offset(x = 10f.wp(), y = 50f.bhp()),
                 num = randNum
             )
         }
