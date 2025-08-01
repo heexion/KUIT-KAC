@@ -15,13 +15,14 @@ import kotlin.random.Random
 fun NyameeGif(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    num: Int = 0
+    num: Int = 1
 ) {
 //    val randNum = Random.nextInt(3) + 1
     Box(
         modifier = modifier
     ) {
         when (num) {
+            // 1: 팔굽혀펴기 2: 헤드셋 3: 덤벨
             1 -> GifImage(
                 modifier = Modifier
                     .size(375.2f.wp(), 488f.bhp())

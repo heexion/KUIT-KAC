@@ -39,6 +39,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.GifImage
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionCircleGraph
 import com.konkuk.kuit_kac.presentation.home.component.HomeSummaryBox
@@ -71,48 +72,12 @@ fun HomeMainScreen(
         Box(
             modifier = Modifier
         ) {
-            Box(
-                modifier = Modifier
-                    .offset(
-                        x = 24f.wp(),
-                        y = 72.18f.hp()
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(147.6658f.wp(), 147.6658f.bhp()),
-                    painter = painterResource(R.drawable.img_component_ellipse),
-                    contentDescription = "Nyam Ellipse"
-                )
+            HamcoachGif(
+                modifier = Modifier.offset(x = 24f.wp(), y = 72.18f.hp()),
+                onClick = {
+                    navController.navigate(Route.HomeObservation.route)
+                })
 
-                GifImage(
-                    modifier = Modifier
-                        .size(125f.wp(), 125f.bhp())
-                        .offset(x = 5f.wp()),
-                    drawableId = R.drawable.gif_hamcoach_default,
-                    onClick = {
-                        navController.navigate(Route.HomeObservation.route)
-                    },
-                    actualWidth = 88.43783f.wp(),
-                    actualHeight = 88.43783f.bhp()
-                )
-            }
-
-//            EllipseNyam(
-//                modifier = Modifier
-//                    .offset(
-//                        x = 24f.wp(),
-//                        y = 72.18f.hp()
-//                    )
-//                    .clickable(
-//                        onClick = {
-//                            navController.navigate(Route.HomeObservation.route)
-//                        }
-//                    ),
-//                ellipseLength = 147.6658,
-//                mascotLength = 88.43783
-//            )
             NyameeGif(
                 onClick = {
                     navController.navigate(Route.HomeNutrition.route)
