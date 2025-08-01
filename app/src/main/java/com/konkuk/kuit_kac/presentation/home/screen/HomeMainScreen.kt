@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,7 +36,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.home.component.GifImage
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionCircleGraph
@@ -82,8 +79,9 @@ fun HomeMainScreen(
                 onClick = {
                     navController.navigate(Route.HomeNutrition.route)
                 },
-                modifier = Modifier.offset(x = 75f.wp(), y = 36f.bhp()),
-                num = randNum
+                modifier = Modifier.offset(x = 60f.wp(), y = 60f.bhp()),
+                num = randNum,
+                sizePercent = 0.93f
             )
 
             Box(
@@ -198,7 +196,6 @@ fun HomeMainScreen(
                 }
             }
         }
-
     }
 }
 
