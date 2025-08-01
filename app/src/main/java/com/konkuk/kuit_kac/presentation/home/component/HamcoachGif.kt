@@ -41,6 +41,16 @@ fun HamcoachGif(
                 actualWidth = 88.43783f.wp(),
                 actualHeight = 88.43783f.bhp()
             )
+
+            2 -> GifImage(
+                modifier = Modifier
+                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
+                    .offset(x = 10f.wp()),
+                drawableId = R.drawable.gif_hamcoach_thumbsup,
+                onClick = { onClick() },
+                actualWidth = 88.43783f.wp(),
+                actualHeight = 88.43783f.bhp()
+            )
         }
     }
 }
