@@ -55,11 +55,16 @@ fun HomeMainScreen(
     left: Int,
     navController: NavHostController
 ) {
-
+    val isLate = true
+    var hamcoachNum by remember { mutableIntStateOf(1) }
     var randNum by remember { mutableIntStateOf(1) }
 
     LaunchedEffect(Unit) {
-        randNum = Random.nextInt(3) + 1
+        if (!isLate) randNum = Random.nextInt(3) + 1
+        else {
+            randNum = 4
+            hamcoachNum = 3
+        }
     }
 
     HomeBackgroundComponent()
@@ -73,7 +78,9 @@ fun HomeMainScreen(
                 modifier = Modifier.offset(x = 24f.wp(), y = 72.18f.hp()),
                 onClick = {
                     navController.navigate(Route.HomeObservation.route)
-                })
+                },
+                num = hamcoachNum
+            )
 
             NyameeGif(
                 onClick = {
