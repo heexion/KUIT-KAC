@@ -66,6 +66,38 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScre
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route.FitnessDetailInput
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingActivityLevel
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDelivery
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDiet
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDietSpeed
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFailEx
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingHamCoach
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInput
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingIntroduce
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeHam
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeNyam
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeScale
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingNyamCoach
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingPreferType
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingWeek
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingActivityLevelScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAppetiteScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingDeliveryScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingDietScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingDietSpeedScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingFailExScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingHamCoachScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingInputResultScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingInputScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingIntroduceScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeHamScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeNyamScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeScaleScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingNyamCoachScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
 
 
 @Composable
@@ -538,10 +570,60 @@ fun KacNavGraph(
 //        }
 
 
-
-
-
-
+//온보딩
+        composable(OnboardingDiet.route) {
+            OnboardingDietScreen(navController = navController) // 필요 시 navController 넘기세요
+        }
+        composable(OnboardingFailEx.route) {
+            OnboardingFailExScreen(navController = navController)
+        }
+        composable(OnboardingAppetite.route) {
+            OnboardingAppetiteScreen(navController = navController)
+        }
+        composable(OnboardingWeek.route) {
+            OnboardingWeekScreen(navController = navController)
+        }
+        composable(OnboardingPreferType.route) {
+            OnboardingPreferTypeScreen(navController = navController)
+        }
+        composable(route = OnboardingDietSpeed.route) {
+            OnboardingDietSpeedScreen(
+                navController = navController,
+                onNavigate = {
+                    navController.navigate(OnboardingActivityLevel.route)
+                }
+            )
+        }
+        composable(route = OnboardingActivityLevel.route) {
+            OnboardingActivityLevelScreen(navController = navController)
+        }
+        composable(route = OnboardingInput.route) {
+            OnboardingInputScreen(navController = navController)
+        }
+        composable(route = OnboardingInputResult.route) {
+            OnboardingInputResultScreen(navController = navController)
+        }
+        composable(route = OnboardingIntroduce.route) {
+            OnboardingIntroduceScreen(navController = navController)
+        }
+        composable(route = OnboardingHamCoach.route) {
+            OnboardingHamCoachScreen(navController = navController)
+        }
+        composable(route = OnboardingNyamCoach.route) {
+            OnboardingNyamCoachScreen(navController = navController)
+        }
+        composable(route = OnboardingDelivery.route) {
+            OnboardingDeliveryScreen(navController = navController)
+        }
+        composable(route = OnboardingMainHomeHam.route) {
+            OnboardingMainHomeHamScreen(navController = navController)
+        }
+        composable(route = OnboardingMainHomeNyam.route) {
+            OnboardingMainHomeNyamScreen(navController = navController)
+        }
+        composable(route = OnboardingMainHomeScale.route) {
+            OnboardingMainHomeScaleScreen(navController = navController)
+        }
 
 
     }

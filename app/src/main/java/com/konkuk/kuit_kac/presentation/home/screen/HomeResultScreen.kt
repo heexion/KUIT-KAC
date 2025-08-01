@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,6 +38,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
@@ -106,27 +109,39 @@ fun HomeResultScreen(
             contentDescription = null,
         )
 
-        Image(
-            modifier = Modifier
-                .padding(top = 255f.hp(), end = 200f.wp())
-                .size(232f.wp(), 232f.bhp()),
-            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
-            contentDescription = null,
+//        Image(
+//            modifier = Modifier
+//                .padding(top = 255f.hp(), end = 200f.wp())
+//                .size(232f.wp(), 232f.bhp()),
+//            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+//            contentDescription = null,
+//        )
+//        Image(
+//            modifier = Modifier
+//                .padding(top = 297f.hp(), start = 26f.wp(), end = 240f.wp())
+//                .size(139f.wp(), 139f.bhp()),
+//            painter = painterResource(id = hamCoachImg),
+//            contentDescription = null,
+//        )
+//        Image(
+//            modifier = Modifier
+//                .padding(top = 342.12f.hp(), start = 86.5f.wp(), end = 2f.wp())
+//                .size(338.09961f.wp(), 338.09961f.bhp()),
+//            painter = painterResource(id = nyameeImg),
+//            contentDescription = null,
+//        )
+
+        HamcoachGif(
+            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            num = 2,
+            ellipseLength = 222.0,
+            mascotLength = 200.0
         )
 
-        Image(
-            modifier = Modifier
-                .padding(top = 297f.hp(), start = 26f.wp(), end = 240f.wp())
-                .size(139f.wp(), 139f.bhp()),
-            painter = painterResource(id = hamCoachImg),
-            contentDescription = null,
-        )
-        Image(
-            modifier = Modifier
-                .padding(top = 342.12f.hp(), start = 86.5f.wp(), end = 2f.wp())
-                .size(338.09961f.wp(), 338.09961f.bhp()),
-            painter = painterResource(id = nyameeImg),
-            contentDescription = null,
+        NyameeGif(
+            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+            num = 5,
+            sizePercent = 1.35f
         )
 
         // 말풍선

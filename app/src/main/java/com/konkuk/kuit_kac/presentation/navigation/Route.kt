@@ -51,6 +51,25 @@ sealed class Route(val route: String) {
     data object FitnessDetailRecordAdd : Route("fitness_detail_add")
     data object FitnessDetailInput : Route(route = "fitness_detail_input")
 
+    //온보딩
+    data object OnboardingDiet : Route(route = "onboarding_diet")
+    data object OnboardingFailEx : Route(route = "onboarding_fail_ex")
+    data object OnboardingAppetite : Route(route = "onboarding_appetite")
+    data object OnboardingWeek : Route(route = "onboarding_week")
+    data object OnboardingPreferType : Route(route = "onboarding_prefer_type")
+    data object OnboardingDietSpeed : Route(route = "onboarding_diet_speed")
+    data object OnboardingActivityLevel : Route(route = "onboarding_activity_level")
+    data object OnboardingInput : Route(route = "onboarding_input")
+    data object OnboardingInputResult : Route(route = "onboarding_input_result")
+    data object OnboardingIntroduce : Route(route = "onboarding_introduce")
+    data object OnboardingHamCoach : Route(route = "onboarding_ham_coach")
+    data object OnboardingNyamCoach : Route(route = "onboarding_nyam_coach")
+    data object OnboardingDelivery : Route(route = "onboarding_delivery")
+    data object OnboardingMainHomeHam : Route(route = "onboarding_main_home_ham")
+    data object OnboardingMainHomeNyam : Route(route = "onboarding_main_home_nyam")
+    data object OnboardingMainHomeScale : Route(route = "onboarding_main_home_scale")
+
+
 
 
 

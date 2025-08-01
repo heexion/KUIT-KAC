@@ -6,8 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,7 +42,9 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.home.component.HomeObservationBox
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -61,12 +65,25 @@ fun HomeObservationScreen(
             modifier = Modifier
                 .offset(y = 477.73f.bhp())
         )
-        EllipseNyam(
-            modifier = Modifier
-                .padding(top = 122f.hp())
-                .align(Alignment.TopCenter),
-            mascotLength = 136.0, ellipseLength = 227.0
-        )
+//        EllipseNyam(
+//            modifier = Modifier
+//                .padding(top = 122f.hp())
+//                .align(Alignment.TopCenter),
+//            mascotLength = 136.0, ellipseLength = 227.0
+//        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            HamcoachGif(
+                modifier = Modifier.offset(y = 90.18f.hp()),
+                num = 1,
+                ellipseLength = 227.0,
+                mascotLength = 180.0,
+            )
+        }
+
         Box(
             modifier = Modifier
                 .padding(top = 30f.hp())
@@ -149,7 +166,11 @@ fun HomeObservationScreen(
                     LazyColumn(
                         state = lazyState,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(start = 32f.wp(), end = 32f.wp(), bottom = 70f.bhp())
+                        modifier = Modifier.padding(
+                            start = 32f.wp(),
+                            end = 32f.wp(),
+                            bottom = 70f.bhp()
+                        )
                     ) {
                         items(observeList) { observe ->
                             HomeObservationBox(
@@ -162,8 +183,9 @@ fun HomeObservationScreen(
                         scrollState = lazyState,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .fillMaxHeight(0.7f)
-                            .padding(end = 15f.wp(), top = 60f.bhp())
+                            .fillMaxHeight(0.6f)
+                            .padding(end = 15f.wp(), top = 60f.bhp()),
+                        thumbColor = Color(0xFFFFE667)
                     )
                 }
             }
