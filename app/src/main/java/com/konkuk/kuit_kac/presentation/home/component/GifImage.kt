@@ -27,7 +27,8 @@ fun GifImage(
     drawableId: Int,
     onClick: () -> Unit = {},
     actualWidth: Dp,
-    actualHeight: Dp
+    actualHeight: Dp,
+    size: Float=1f
 ) {
     val context = LocalContext.current
     val imageLoader = ImageLoader.Builder(context)
@@ -49,8 +50,8 @@ fun GifImage(
             ),
             contentDescription = null,
             modifier = Modifier.graphicsLayer {
-                scaleX = 1f
-                scaleY = 1f
+                scaleX = size
+                scaleY = size
             }
         )
 
@@ -60,6 +61,7 @@ fun GifImage(
                 .align(Alignment.Center)
                 .size(actualWidth, actualHeight)
                 .clickable(onClick = onClick)
+//                .background(Color(0x30000000))
                 .background(Color.Transparent)
         )
     }
