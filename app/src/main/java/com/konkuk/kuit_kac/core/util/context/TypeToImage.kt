@@ -2,7 +2,7 @@ package com.konkuk.kuit_kac.core.util.context
 
 import androidx.compose.runtime.Composable
 import com.konkuk.kuit_kac.R
-@Composable
+
 fun String.toDrawable(): Int {
     val foodMap = mapOf(
         "곡류" to R.drawable.ic_grains,

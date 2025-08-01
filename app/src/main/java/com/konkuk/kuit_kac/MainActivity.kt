@@ -78,7 +78,6 @@ class MainActivity : ComponentActivity() {
                     "plan_ai_detail",
                     Route.PlanCheck.route,
                     Route.MealSearch.route,
-                    Route.DietAdd.route,
                     Route.MealTime.route,
                     Route.FitnessEdit.route,
                     Route.FitnessSearch.route,
