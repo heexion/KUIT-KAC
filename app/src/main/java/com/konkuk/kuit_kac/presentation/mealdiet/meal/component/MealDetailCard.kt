@@ -174,9 +174,9 @@ fun MealDetailCard(
                 QuantitySelector(
                     quantity = quantity,
                     onQuantityChange = {
-                        quantity = it.coerceIn(0.5f,100f)
+                        quantity = it.coerceIn(0.1f,100f)
                         onQuantityChange(it)
-                    }, //Todo: 상한선, 하한선 설정?
+                    },
                     unitWeight = unitWeight
                 )
 
@@ -263,22 +263,15 @@ fun QuantitySelector(
                 contentScale = ContentScale.FillWidth
             )
 
-//            Text(
-//                text = quantity.pretty(),
-//                style = DungGeunMo20,
-//                color = Color(0xFF000000),
-//                modifier = Modifier
-//            )
-
             TextField(
                 modifier = Modifier.width(70.dp),
                 value = text,
                 onValueChange = {
                     if (it.length <= 5 && it.matches(Regex("^\\d{0,3}(\\.\\d{0,1})?$"))) {
-                        // Todo: 소수점 아래 한 자리까지 받는 정규식. 입력 형태에 따라 수정 가능
                         text = it
                         it.toFloatOrNull()?.let { newValue ->
-                            onQuantityChange(newValue)
+                            val clampedValue = newValue.coerceIn(0.1f, 100.0f)
+                            onQuantityChange(clampedValue)
                         }
                     }
                 },

@@ -149,7 +149,11 @@ fun HomeObservationScreen(
                     LazyColumn(
                         state = lazyState,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(start = 32f.wp(), end = 32f.wp(), bottom = 70f.bhp())
+                        modifier = Modifier.padding(
+                            start = 32f.wp(),
+                            end = 32f.wp(),
+                            bottom = 70f.bhp()
+                        )
                     ) {
                         items(observeList) { observe ->
                             HomeObservationBox(
@@ -162,8 +166,9 @@ fun HomeObservationScreen(
                         scrollState = lazyState,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .fillMaxHeight(0.7f)
-                            .padding(end = 15f.wp(), top = 60f.bhp())
+                            .fillMaxHeight(0.6f)
+                            .padding(end = 15f.wp(), top = 60f.bhp()),
+                        thumbColor = Color(0xFFFFE667)
                     )
                 }
             }
