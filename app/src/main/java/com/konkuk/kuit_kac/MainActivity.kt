@@ -1,6 +1,16 @@
 package com.konkuk.kuit_kac
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -31,6 +42,7 @@ import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.FoodDatabase
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFood
+import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -46,6 +58,43 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
+            }
+        }
+        val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
+        if (!notificationsEnabled) {
+            Toast.makeText(this, "앱 알림이 꺼져 있어요. 설정에서 켜주세요!", Toast.LENGTH_LONG).show()
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            }
+            startActivity(intent)
+        }
+        if (!isNotificationServiceEnabled(this)) {
+            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            startActivity(intent)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Alert Channel"
+            val descriptionText = "Shows alerts when 주문 접수 is detected"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("alert_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
 
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightNavigationBars = true
@@ -78,7 +127,6 @@ class MainActivity : ComponentActivity() {
                     "plan_ai_detail",
                     Route.PlanCheck.route,
                     Route.MealSearch.route,
-                    Route.DietAdd.route,
                     Route.MealTime.route,
                     Route.FitnessEdit.route,
                     Route.FitnessSearch.route,

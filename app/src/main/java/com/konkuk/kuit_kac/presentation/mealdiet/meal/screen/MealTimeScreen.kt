@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -40,13 +41,15 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
 
 @Composable
 fun MealTimeScreen(
-    navController: NavController
+    navController: NavController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
     val hours = (1..12).map { it.toString().padStart(2, '0') }
     val minutes = (0..59).map { it.toString().padStart(2, '0') }
@@ -238,7 +241,10 @@ fun MealTimeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20f.wp(), vertical = 20f.bhp()),
-                onClick = {navController.navigate("time_input_result") },
+                onClick = {
+                    mealViewModel.setMealTime(selectedHour, selectedMinute, isAM)
+                    mealViewModel.createMeal()
+                    navController.navigate("time_input_result") },
                 value = "기록하기",
                 buttonHeight = 70f,
                 isOrange = true

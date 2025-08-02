@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -43,50 +46,51 @@ import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealState
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealFastingCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealRecordCard
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealCardData
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
-// 데이터 클래스
-data class MealCardData(
-    val mealType: String,
-    val totalKcal: String,
-    val foodList: List<Triple<Painter, String, String>>,
-    val isPlanned: Boolean = false // 자동 기록 여부
-)
 
 @Composable
 fun MealMainScreen(
     navController: NavHostController,
     selectedTab: String,
     onTabClick: (String) -> Unit,
-    mealCards: List<MealCardData>,
     onRecordClick: () -> Unit = {},
-    onFastedClick: () -> Unit = {}
+    onFastedClick: () -> Unit = {},
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        mealViewModel.getRecord(userId = 1)
+    }
+    val mealCards = mealViewModel.mealCardData.value
     val mealTypeList = listOf("아침", "점심", "저녁", "간식")
     var showDialog by remember { mutableStateOf(false) }
     var dialogMealType by remember { mutableStateOf("") }
     var showAutoRecordDialog by remember { mutableStateOf(false) }
 
-    val initialStates = remember {
-        mealTypeList.map { type ->
-            val matched = mealCards.find { it.mealType == type }
-            MealState(
-                mealType = type,
-                mealCardData = matched,
-                isFasting = false
-            )
-        }
+    val initialStates = mealTypeList.map { type ->
+        val matched = mealCards.find { it.mealType == type }
+        MealState(
+            mealType = type,
+            mealCardData = matched,
+            isFasting = false
+        )
     }
-    val mealStates = remember { mutableStateListOf<MealState>().apply { addAll(initialStates) } }
+    val mealStates = remember(mealCards) {
+        mutableStateListOf<MealState>().apply { addAll(initialStates) }
+    }
 
-    LaunchedEffect(Unit) {
+
+    LaunchedEffect(mealCards) {
         val isAllBlank = mealStates.all { it.mealCardData == null && !it.isFasting }
         val hasPlan = mealCards.isNotEmpty()
         if (isAllBlank && hasPlan) {
@@ -94,7 +98,13 @@ fun MealMainScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    val scrollState = rememberScrollState()
+
+    Column(modifier = Modifier.fillMaxSize()
+        .verticalScroll(
+            state = scrollState
+        ),
+        ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -166,12 +176,17 @@ fun MealMainScreen(
 
                     when {
                         state.mealCardData != null -> {
-                            MealCard(
-                                mealType = label,
-                                totalKcal = state.mealCardData.totalKcal,
-                                foodList = state.mealCardData.foodList,
-                                onEditClick = { navController.navigate(Route.MealPatch.route) }
-                            )
+                            if (state.mealCardData != null) {
+                                MealCard(
+                                    mealType = state.mealCardData.mealType,
+                                    totalKcal = state.mealCardData.totalKcal,
+                                    foodList = state.mealCardData.foodList.map { (drawableId, name, quantity) ->
+                                        Triple(painterResource(id = drawableId), name, quantity)
+                                    },
+                                    onEditClick = { navController.navigate(Route.MealPatch.route) }
+                                )
+                            }
+
                         }
                         state.isFasting -> {
                             MealFastingCard(
@@ -195,7 +210,12 @@ fun MealMainScreen(
                     }
                 }
             }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200f.bhp())){}
         }
+
 
         if (showDialog) {
             Dialog(onDismissRequest = { showDialog = false }) {
@@ -499,6 +519,5 @@ private fun MealMainScreenPreview() {
         navController = navController,
         selectedTab = "기록",
         onTabClick = {},
-        mealCards = emptyList()
     )
 }
