@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,10 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,23 +50,26 @@ fun OnboardingFailExScreen(
     val options = listOf("야식", "스트레스성\n   폭식", "식단 기록\n  귀찮음", "의지 부족")
     val selectedOptions = remember { mutableStateListOf<String>() }
 
+    var isDirectInputMode by remember { mutableStateOf(false) }
+    var directInputText by remember { mutableStateOf("") }
+
     fun toggle(option: String) {
         if (selectedOptions.contains(option)) {
             selectedOptions.remove(option)
         } else {
+            selectedOptions.clear()
             selectedOptions.add(option)
         }
+        isDirectInputMode = false
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        // 배경
         OnboardingBackScreen(
             bubbleText = "실패한 경험이 있다면,\n그 이유가 뭐라고 생각해?",
             bubbleFontSize = 24f.isp(),
             nyamAlpha = 0.5f
         )
 
-        // 선택 버튼 + 다음 버튼 그룹
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -73,40 +82,66 @@ fun OnboardingFailExScreen(
             verticalArrangement = Arrangement.spacedBy(20f.bhp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
-                SelectButton(
-                    value = options[0],
-                    isSelected = selectedOptions.contains(options[0]),
-                    buttonHeight = 70,
-                    onClick = { toggle(options[0]) },
-                    modifier = Modifier.width(174f.wp())
-                )
-                SelectButton(
-                    value = options[1],
-                    isSelected = selectedOptions.contains(options[1]),
-                    buttonHeight = 70,
-                    onClick = { toggle(options[1]) },
-                    modifier = Modifier.width(174f.wp())
-                )
+            if (!isDirectInputMode) {
+                Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
+                    SelectButton(
+                        value = options[0],
+                        isSelected = selectedOptions.contains(options[0]),
+                        buttonHeight = 70,
+                        onClick = { toggle(options[0]) },
+                        modifier = Modifier.width(174f.wp())
+                    )
+                    SelectButton(
+                        value = options[1],
+                        isSelected = selectedOptions.contains(options[1]),
+                        buttonHeight = 70,
+                        onClick = { toggle(options[1]) },
+                        modifier = Modifier.width(174f.wp())
+                    )
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
+                    SelectButton(
+                        value = options[2],
+                        isSelected = selectedOptions.contains(options[2]),
+                        buttonHeight = 70,
+                        onClick = { toggle(options[2]) },
+                        modifier = Modifier.width(174f.wp())
+                    )
+                    SelectButton(
+                        value = options[3],
+                        isSelected = selectedOptions.contains(options[3]),
+                        buttonHeight = 70,
+                        onClick = { toggle(options[3]) },
+                        modifier = Modifier.width(174f.wp())
+                    )
+                }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
-                SelectButton(
-                    value = options[2],
-                    isSelected = selectedOptions.contains(options[2]),
-                    buttonHeight = 70,
-                    onClick = { toggle(options[2]) },
-                    modifier = Modifier.width(174f.wp())
-                )
-                SelectButton(
-                    value = options[3],
-                    isSelected = selectedOptions.contains(options[3]),
-                    buttonHeight = 70,
-                    onClick = { toggle(options[3]) },
-                    modifier = Modifier.width(174f.wp())
+
+            if (isDirectInputMode) {
+                TextField(
+                    value = directInputText,
+                    onValueChange = {
+                        directInputText = it
+                        if (it.isNotBlank()) {
+                            selectedOptions.clear()
+                            selectedOptions.add(it)
+                        } else {
+                            selectedOptions.clear()
+                        }
+                    },
+                    placeholder = {
+                        Text(
+                            text = "직접 이유를 입력해 주세요",
+                            color = Color(0xFF888888)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56f.bhp())
+                        .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(12f.bhp()))
                 )
             }
 
-            // 다음 버튼
             ConfirmButton(
                 isAvailable = selectedOptions.isNotEmpty(),
                 value = if (selectedOptions.isNotEmpty()) "다음 단계로" else "직접 입력하기",
@@ -114,9 +149,10 @@ fun OnboardingFailExScreen(
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
                     if (selectedOptions.isNotEmpty()) {
-                        navController.navigate(OnboardingAppetite.route) //다음단계로
+                        onNextClick(selectedOptions.toList())
+                        navController.navigate(OnboardingAppetite.route)
                     } else {
-                        onDirectInputClick() //직접 입력하는 화면 넣어야함
+                        isDirectInputMode = true
                     }
                 }
             )
@@ -163,9 +199,12 @@ fun ConfirmButton(
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun OnboardingFailExScreenPreview () {
-    val navController = rememberNavController()
-    OnboardingFailExScreen(navController = navController)
+fun OnboardingFailExScreenPreview() {
+    OnboardingFailExScreen(
+        navController = rememberNavController(),
+        onNextClick = {},
+        onDirectInputClick = {}
+    )
 }
