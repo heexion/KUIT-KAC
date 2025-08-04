@@ -204,6 +204,9 @@ fun DietMainScreen(
                         num = 1,
                         ellipseLength = 182.0,
                         mascotLength = 160.0,
+                        onClick = {
+                                navController.navigate(Route.DietExist.route)
+                            }
                     )
                 }
             }
