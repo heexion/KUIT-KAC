@@ -41,6 +41,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemData
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessRecordCard
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -166,13 +167,23 @@ fun FitnessRecordMainScreen(
                                 painter = painterResource(R.drawable.img_fitnessrecordmain_text),
                                 contentDescription = "textballoon"
                             )
-                            EllipseNyam(
-                                ellipseLength = 182.0,
-                                mascotLength = 109.0,
-                                modifier = Modifier.clickable {
-                                    navController.navigate(Route.FitnessExist.route)
-                                }
-                            )
+//                            EllipseNyam(
+//                                ellipseLength = 182.0,
+//                                mascotLength = 109.0,
+//                                modifier = Modifier.clickable {
+//                                    navController.navigate(Route.FitnessExist.route)
+//                                }
+//                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                HamcoachGif(
+                                    num = 1,
+                                    ellipseLength = 182.0,
+                                    mascotLength = 160.0,
+                                )
+                            }
                         }
                     }
                 }
