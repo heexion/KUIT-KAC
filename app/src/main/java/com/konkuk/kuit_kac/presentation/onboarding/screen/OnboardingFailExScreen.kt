@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -130,11 +129,16 @@ fun OnboardingFailExScreen(
                             selectedOptions.clear()
                         }
                     },
-                    placeholder = { Text("직접 이유를 입력해 주세요") },
+                    placeholder = {
+                        Text(
+                            text = "직접 이유를 입력해 주세요",
+                            color = Color(0xFF888888)
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
-                        .background(Color.White, shape = RoundedCornerShape(12.dp))
+                        .height(56f.bhp())
+                        .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(12f.bhp()))
                 )
             }
 
