@@ -6,7 +6,7 @@ sealed class Route(val route: String) {
     data object DietCreate : Route(route = "DietCreate")
     data object DietExist : Route(route = "DietExist")
     data object DietPatch : Route(route = "DietPatch")
-    data object DietAdd : Route(route = "DietAdd")
+    data object DietSearch : Route(route = "DietSearch")
 
     data object Meal : Route(route = "meal")
     data object MealExist: Route(route = "MealExist") // 나중에 삭제
@@ -17,7 +17,7 @@ sealed class Route(val route: String) {
 
 
     //MEAL GRAPH
-    data object MealGraph: Route(route = "MealGraph")
+    data object MealGraph: Route(route = "MealGraph/{mealType}")
     data object MealSearch: Route(route = "MealSearch")
     data object MealTemp: Route(route = "MealTemp")
 

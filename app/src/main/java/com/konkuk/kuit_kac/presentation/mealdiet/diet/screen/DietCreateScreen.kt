@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -50,6 +51,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -57,7 +59,8 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 @Composable
 fun DietCreateScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    dietViewModel: DietViewModel = hiltViewModel()
 ) {
     var title by remember { mutableStateOf("") }
     Box(
@@ -114,7 +117,10 @@ fun DietCreateScreen(
                         .width(176f.wp())
                         .heightIn(min=56f.bhp()),
                     value = title,
-                    onValueChange = { title = it },
+                    onValueChange = {
+                        title = it
+
+                                    },
                     placeholder = { Box(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -150,7 +156,8 @@ fun DietCreateScreen(
                     .background(color = Color(0xFFFFFFFF))
                     .clickable(
                         onClick = {
-                            navController.navigate(Route.DietAdd.route)
+                            dietViewModel.setName(title)
+                            navController.navigate(Route.DietSearch.route)
                         }
                     )
                     .drawBehind {
@@ -159,7 +166,7 @@ fun DietCreateScreen(
                         val rect = Rect(0f, 0f, size.width, size.height)
 
                         drawRoundRect(
-                            color = Color.Black,
+                            color = Color(0xFF000000),
                             style = Stroke(width = strokeWidth, pathEffect = pathEffect),
                             size = size,
                             cornerRadius = CornerRadius(15.dp.toPx())

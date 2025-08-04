@@ -29,3 +29,13 @@ data class FoodRequestDto(
     @SerialName("quantity")
     val quantity: Float
 )
+
+@Serializable
+data class DietRequestDto(
+    @SerialName("userId")
+    val userId:Int,
+    @SerialName("name")
+    val name:String,
+    @SerialName("foods")
+    val foods: List<FoodRequestDto>
+)

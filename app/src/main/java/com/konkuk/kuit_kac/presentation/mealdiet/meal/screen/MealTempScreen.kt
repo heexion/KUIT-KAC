@@ -244,7 +244,8 @@ fun MealTempScreen(
         DietMultipleNutritionBar(
             modifier = Modifier
                 .padding(start = 41f.wp(), end = 39f.wp(), top = 13.29f.bhp()),
-            carb = 65f, protein = 18f, fat = 13f
+            carb = mealViewModel.totalCarb.toFloat(), protein = mealViewModel.totalProtein.toFloat(),
+            fat = mealViewModel.totalFat.toFloat()
         )
         Box(
             modifier = Modifier
@@ -263,14 +264,10 @@ fun MealTempScreen(
                 )
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                 .clickable {
-                    mealViewModel.createMeal(
-                        name = "아침식단",
-                        dietType = "아침"
-                    )
                     if (prevRoute == "plan_ai_detail" || prevRoute == "plan_in_person_add")
                         navController.popBackStack()
                     else
-                        navController.navigate("meal_edit_result")
+                        navController.navigate(Route.MealTime.route)
                 },
             contentAlignment = Alignment.Center
         ) {

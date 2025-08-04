@@ -108,7 +108,10 @@ fun MealRecordCard(
             ) {
                 RecordMealButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { navController.navigate(Route.MealRecord.route) }
+                    onClick = {
+
+                        navController.navigate("MealGraph/${mealType}")
+                    }
                 )
 
                 FastingMealButton(
