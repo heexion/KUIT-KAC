@@ -32,7 +32,6 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 @Composable
 fun HomeObservationBox(
     value: String,
-    navController: NavHostController
 ) {
     Box(
         modifier = Modifier
@@ -54,32 +53,30 @@ fun HomeObservationBox(
             lineHeight = 22f.isp(),
             modifier = Modifier.padding(top = 13.94f.bhp()),
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Image(
-                modifier = Modifier
-                    .padding(9.46f.bhp())
-                    .size(31.5f.wp(), 31.5f.bhp())
-                    .clickable(
-                        onClick = {
-                            navController.navigate(Route.HomeAnalysis.route)
-                        }
-                    ),
-                painter = painterResource(id = R.drawable.ic_magnifier_home),
-                contentDescription = "observation box Magnifier glass",
-            )
-        }
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.End
+//        ) {
+//            Image(
+//                modifier = Modifier
+//                    .padding(9.46f.bhp())
+//                    .size(31.5f.wp(), 31.5f.bhp())
+//                    .clickable(
+//                        onClick = {
+//                            navController.navigate(Route.HomeAnalysis.route)
+//                        }
+//                    ),
+//                painter = painterResource(id = R.drawable.ic_magnifier_home),
+//                contentDescription = "observation box Magnifier glass",
+//            )
+//        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeObservationBoxPreview() {
-    val navController = rememberNavController()
     HomeObservationBox(
         value = "공복 시간 적음",
-        navController = navController
     )
 }

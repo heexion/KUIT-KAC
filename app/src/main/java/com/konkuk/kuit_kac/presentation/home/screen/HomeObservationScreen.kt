@@ -150,16 +150,7 @@ fun HomeObservationScreen(
                     "공복 시간 적음",
                     "잦은 술자리",
                     "수시로 배달 어플",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
-                    "잦은 야식",
+                    "잦은 야식"
                 )
 
                 Box() {
@@ -175,18 +166,17 @@ fun HomeObservationScreen(
                         items(observeList) { observe ->
                             HomeObservationBox(
                                 value = observe,
-                                navController = navController
                             )
                         }
                     }
-                    VerticalScrollbar(
-                        scrollState = lazyState,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .fillMaxHeight(0.6f)
-                            .padding(end = 15f.wp(), top = 60f.bhp()),
-                        thumbColor = Color(0xFFFFE667)
-                    )
+//                    VerticalScrollbar(
+//                        scrollState = lazyState,
+//                        modifier = Modifier
+//                            .align(Alignment.TopEnd)
+//                            .fillMaxHeight(0.6f)
+//                            .padding(end = 15f.wp(), top = 60f.bhp()),
+//                        thumbColor = Color(0xFFFFE667)
+//                    )
                 }
             }
         }
