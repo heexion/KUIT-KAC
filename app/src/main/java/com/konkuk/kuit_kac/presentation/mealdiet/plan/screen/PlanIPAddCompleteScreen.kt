@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanDietCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
@@ -79,6 +81,17 @@ fun PlanIPAddCompleteScreen(
                     .align(Alignment.TopCenter)
             )
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 112.12f.hp()),
+                    num = 1,
+                    ellipseLength = 145.62891,
+                    mascotLength = 110.0,
+                )
+            }
 
             Box(
                 modifier = Modifier
@@ -103,13 +116,13 @@ fun PlanIPAddCompleteScreen(
                 )
             }
 
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.hp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .align(Alignment.TopCenter)
+//                    .padding(top = 112.12f.hp()),
+//                mascotLength = 87.70016,
+//                ellipseLength = 145.62891
+//            )
 
 
             Column(
@@ -243,15 +256,23 @@ fun PlanIPAddCompleteScreen(
                             end = 14.5f.bhp()
                         )
                 ) {
-                    EllipseNyam(
-                        ellipseLength = 153.68867, mascotLength = 93.27386
+//                    EllipseNyam(
+//                        ellipseLength = 153.68867, mascotLength = 93.27386
+//                    )
+
+                    HamcoachGif(
+                        modifier = Modifier.offset(),
+                        num = 1,
+                        ellipseLength = 153.68,
+                        mascotLength = 120.0,
                     )
+
                     Box(
                         modifier = Modifier
                             .width(185.85812f.wp())
                             .height(87.78002f.bhp())
                             .offset(y = 9.67f.bhp(), x = 146.38f.wp()),
-                    ){
+                    ) {
                         Image(
                             modifier = Modifier
                                 .width(185.85812f.wp())
@@ -262,7 +283,7 @@ fun PlanIPAddCompleteScreen(
                         Text(
                             modifier = Modifier
                                 .align(Alignment.Center)
-                                .offset(y= -7f.bhp()),
+                                .offset(y = -7f.bhp()),
                             text = "이날 완전 클린식단인데?\n좋아좋아!",
                             lineHeight = 18f.isp(),
                             style = DungGeunMo12,

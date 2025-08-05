@@ -50,6 +50,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -78,12 +79,24 @@ fun DietCreateScreen(
                 .padding(top = 12f.hp(), start = 78f.wp())
                 .size(272f.wp(),98f.bhp())
         )
-        EllipseNyam(
-            modifier = Modifier
-                .padding(top = 84f.hp(), start = 117f.wp()),
-            mascotLength = 106.1115,
-            ellipseLength = 177.17575
-        )
+//        EllipseNyam(
+//            modifier = Modifier
+//                .padding(top = 84f.hp(), start = 117f.wp()),
+//            mascotLength = 106.1115,
+//            ellipseLength = 177.17575
+//        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            HamcoachGif(
+                modifier = Modifier.offset(y = 84f.hp()),
+                num = 1,
+                ellipseLength = 177.17575,
+                mascotLength = 145.0,
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()

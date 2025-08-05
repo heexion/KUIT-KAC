@@ -45,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemCard
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -81,11 +82,22 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
                 painter = painterResource(R.drawable.img_fitnessrecordedit_text),
                 contentDescription = "textballoon"
             )
-            EllipseNyam(
-                modifier = Modifier
-                    .offset(y = 80f.bhp(), x = 117f.wp()),
-                ellipseLength = 177.17578, mascotLength = 106.1115
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .offset(y = 80f.bhp(), x = 117f.wp()),
+//                ellipseLength = 177.17578, mascotLength = 106.1115
+//            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 80f.bhp()),
+                    num = 1,
+                    ellipseLength = 177.17578,
+                    mascotLength = 145.0,
+                )
+            }
             Column(
                 modifier = Modifier
                     .padding(top = 256f.bhp(), start = 24f.wp())

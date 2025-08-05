@@ -319,11 +319,11 @@ fun KacNavGraph(
 
 
 
-        composable(Route.HomeAnalysis.route) {
-            HomeAnalysisScreen(
-                modifier = modifier
-            )
-        }
+//        composable(Route.HomeAnalysis.route) {
+//            HomeAnalysisScreen(
+//                modifier = modifier
+//            )
+//        }
 
         composable(Route.HomeNutrition.route) {
             HomeNutritionScreen(

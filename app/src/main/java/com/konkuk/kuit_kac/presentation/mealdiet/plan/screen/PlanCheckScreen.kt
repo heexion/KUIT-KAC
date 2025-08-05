@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.diet.component.PlanColorType
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
@@ -82,13 +84,18 @@ fun PlanCheckScreen(
                 .align(Alignment.TopCenter)
         )
 
-        EllipseNyam(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 194.22f.bhp()),
-            mascotLength = 127.45568,
-            ellipseLength = 212.81445
-        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            HamcoachGif(
+                modifier = Modifier.offset(y = 194.22f.hp()),
+                num = 1,
+                ellipseLength = 212.81445,
+                mascotLength = 175.0,
+            )
+        }
 
         Box(
             modifier = Modifier
