@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,8 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -54,18 +51,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
-import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.viewmodel.WeightViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo
-import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo35
 
@@ -74,6 +71,8 @@ fun HomeScaleInputScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
+    val viewModel: WeightViewModel = hiltViewModel()
+    val postSuccess by viewModel.postSuccess
 
     val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
@@ -106,11 +105,17 @@ fun HomeScaleInputScreen(
         modifier = Modifier,
         initialWeight = "",
         onConfirm = { weight ->
-            println("입력된 체중: $weight")
+            viewModel.postWeight(userId = 1, weight = weight.toFloatOrNull() ?: 0f)
         },
         navController = navController,
         isKeyboardVisible = isKeyboardVisible
     )
+
+    LaunchedEffect(postSuccess) {
+        if (postSuccess == true) {
+            navController.navigate(Route.HomeResult.route)
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -249,7 +254,8 @@ fun WeightInputModal(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                navController.navigate(Route.HomeResult.route)
+                                onConfirm(weight) // ← 체중 전달
+                                focusManager.clearFocus()
                             }
                         )
                     )

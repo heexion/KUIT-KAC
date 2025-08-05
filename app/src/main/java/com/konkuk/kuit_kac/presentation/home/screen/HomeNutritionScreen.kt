@@ -9,18 +9,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
@@ -37,10 +34,20 @@ import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSingleNutritionBar
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
+import com.konkuk.kuit_kac.presentation.home.viewmodel.NutritionViewModel
 import kotlin.random.Random
 
 @Composable
 fun HomeNutritionScreen(modifier: Modifier = Modifier) {
+
+    val viewModel: NutritionViewModel = hiltViewModel()
+    val nutrition = viewModel.nutrition.value
+    val error = viewModel.error.value
+
+    LaunchedEffect(Unit) {
+        viewModel.loadNutrition(userId = 1)
+    }
+
     Box(
         Modifier.fillMaxSize()
     ) {
@@ -109,26 +116,34 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
                         .padding(top = 29.87f.bhp(), start = 40f.wp(), end = 40f.wp()),
                     verticalArrangement = Arrangement.spacedBy(16f.bhp())
                 ) {
-                    HomeSingleNutritionBar(
-                        type = "탄수화물",
-                        base = 157,
-                        quantity = 130
-                    )
-                    HomeSingleNutritionBar(
-                        type = "단백질",
-                        base = 117,
-                        quantity = 20
-                    )
-                    HomeSingleNutritionBar(
-                        type = "당류",
-                        base = 157,
-                        quantity = 130
-                    )
-                    HomeSingleNutritionBar(
-                        type = "지방",
-                        base = 76,
-                        quantity = 104
-                    )
+                    if (nutrition != null) {
+                        HomeSingleNutritionBar(
+                            type = "탄수화물",
+                            base = nutrition.carbGoal,
+                            quantity = nutrition.carbTaken
+                        )
+                        HomeSingleNutritionBar(
+                            type = "단백질",
+                            base = nutrition.proteinGoal,
+                            quantity = nutrition.proteinTaken
+                        )
+                        HomeSingleNutritionBar(
+                            type = "당류",
+                            base = nutrition.sugarGoal,
+                            quantity = nutrition.sugarTaken
+                        )
+                        HomeSingleNutritionBar(
+                            type = "지방",
+                            base = nutrition.fatGoal,
+                            quantity = nutrition.fatTaken
+                        )
+
+                    } else if (error != null) {
+                        Text("영양 정보 불러오기 실패: $error")
+                    } else {
+                        CircularProgressIndicator()
+                    }
+
                 }
 
             }
