@@ -45,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -142,12 +143,17 @@ fun FitnessRoutineEditScreen(
                     painter = painterResource(R.drawable.img_fitnessroutine_text),
                     contentDescription = "textballoon"
                 )
-                EllipseNyam(
-                   // modifier = Modifier.padding(top = 8f.bhp()),
-                    ellipseLength = 137.5,
-                    mascotLength = 82.3
-                )
+//                EllipseNyam(
+//                   // modifier = Modifier.padding(top = 8f.bhp()),
+//                    ellipseLength = 137.5,
+//                    mascotLength = 82.3
+//                )
 
+                HamcoachGif(
+                    num = 1,
+                    ellipseLength = 137.5,
+                    mascotLength = 116.0
+                )
                 //Spacer(modifier = Modifier.height(24f.bhp()))
 
                 // 루틴 카드

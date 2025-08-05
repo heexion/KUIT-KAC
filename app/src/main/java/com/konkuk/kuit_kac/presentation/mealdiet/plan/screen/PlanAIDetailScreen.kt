@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,6 +40,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanDietCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
@@ -78,8 +81,17 @@ fun PlanAIDetailScreen(
                     .padding(top = 20f.hp())
                     .align(Alignment.TopCenter)
             )
-
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 112.12f.hp()),
+                    num = 1,
+                    ellipseLength = 145.62891,
+                    mascotLength = 110.0,
+                )
+            }
 
             Box(
                 modifier = Modifier
@@ -103,14 +115,13 @@ fun PlanAIDetailScreen(
                     modifier = Modifier.padding(bottom = 28f.bhp())
                 )
             }
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.hp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
-
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .align(Alignment.TopCenter)
+//                    .padding(top = 112.12f.hp()),
+//                mascotLength = 87.70016,
+//                ellipseLength = 145.62891
+//            )
 
             Column(
                 modifier = Modifier

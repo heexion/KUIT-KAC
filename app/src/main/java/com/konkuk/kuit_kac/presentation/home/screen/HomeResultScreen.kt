@@ -54,8 +54,8 @@ fun HomeResultScreen(
     var bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFFFE3B5))
     var shadow = Color(0xFFF1C67F)
     var messageText = "체중이 ${value}kg 줄었네!\n수고 많았어!"
-    var nyameeImg = R.drawable.img_nyamee_happy
-    var hamCoachImg = R.drawable.img_hamcoach_normal
+    var nyameeImg = 5
+    var hamCoachImg = 2
 
 
     // 체중이 늘었을 때(감량 실패 시) 값을 바꿔서 넣기
@@ -63,8 +63,8 @@ fun HomeResultScreen(
         bgColors = listOf(Color(0xFFFFFFFF), Color(0xFFd6e6f5))
         shadow = Color(0x85B6C9DC)
         messageText = "체중이 ${value}kg 늘었네..\n더 열심히 해보자!"
-        nyameeImg = R.drawable.img_nyamee_sad
-        hamCoachImg = R.drawable.img_hamcoach_angry
+        nyameeImg = 1
+        hamCoachImg = 4
     }
 
     Box(
@@ -133,14 +133,14 @@ fun HomeResultScreen(
 
         HamcoachGif(
             modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
-            num = 2,
+            num = hamCoachImg,
             ellipseLength = 222.0,
             mascotLength = 200.0
         )
 
         NyameeGif(
             modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
-            num = 5,
+            num = nyameeImg,
             sizePercent = 1.35f
         )
 

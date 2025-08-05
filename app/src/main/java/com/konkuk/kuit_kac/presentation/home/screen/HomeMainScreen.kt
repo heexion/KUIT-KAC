@@ -58,10 +58,16 @@ fun HomeMainScreen(
     val summary by viewModel.summary
     val error by viewModel.error
     var randNum by remember { mutableIntStateOf(1) }
-
+    val isLate = true
+    var hamcoachNum by remember { mutableIntStateOf(1) }
+    
     LaunchedEffect(userId) {
         viewModel.loadSummary(userId)
-        randNum = Random.nextInt(3) + 1
+        if (!isLate) randNum = Random.nextInt(3) + 1
+        else {
+            randNum = 4
+            hamcoachNum = 3
+        }
     }
 
     // 로딩 상태 처리
@@ -88,7 +94,9 @@ fun HomeMainScreen(
                 modifier = Modifier.offset(x = 24f.wp(), y = 72.18f.hp()),
                 onClick = {
                     navController.navigate(Route.HomeObservation.route)
-                })
+                },
+                num = hamcoachNum
+            )
 
             NyameeGif(
                 onClick = {

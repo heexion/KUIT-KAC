@@ -48,6 +48,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlinx.coroutines.launch
@@ -184,14 +185,27 @@ fun FitnessMainScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             SpeechBubble(messageText = "현재 운동 루틴이\n비어있어요!")
-                            EllipseNyam(
-                                ellipseLength = 182.0, mascotLength = 109.0,
-                                modifier = Modifier
-                                    .clickable(
-                                        onClick = {
-                                            navController.navigate(Route.FitnessExist.route)
-                                        }
-                                    ))
+//                            EllipseNyam(
+//                                ellipseLength = 182.0, mascotLength = 109.0,
+//                                modifier = Modifier
+//                                    .clickable(
+//                                        onClick = {
+//                                            navController.navigate(Route.FitnessExist.route)
+//                                        }
+//                                    ))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                HamcoachGif(
+                                    num = 1,
+                                    ellipseLength = 182.0,
+                                    mascotLength = 156.0,
+                                    onClick = {
+                                        navController.navigate(Route.FitnessExist.route)
+                                    }
+                                )
+                            }
 
                         }
                     }

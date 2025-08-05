@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,6 +43,7 @@ import com.konkuk.kuit_kac.presentation.fitness.component.DetailRecordCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -100,6 +102,17 @@ fun FitnessDetailInputScreen(
                     .align(Alignment.TopCenter)
             )
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 135.82f.hp()),
+                    num = 1,
+                    ellipseLength = 145.62891,
+                    mascotLength = 110.0,
+                )
+            }
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -122,13 +135,15 @@ fun FitnessDetailInputScreen(
                     modifier = Modifier.padding(bottom = 28f.bhp())
                 )
             }
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.hp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
+            Spacer(modifier = Modifier.height(300f.bhp()))
+
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .align(Alignment.TopCenter)
+//                    .padding(top = 112.12f.hp()),
+//                mascotLength = 87.70016,
+//                ellipseLength = 145.62891
+//            )
         }
 
         fitnessList.forEach { item ->
