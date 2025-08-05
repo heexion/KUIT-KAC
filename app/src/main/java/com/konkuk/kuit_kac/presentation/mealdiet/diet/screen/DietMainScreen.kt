@@ -147,6 +147,7 @@ fun DietMainScreen(
                     }
                 }
             }
+
             Box(
                 modifier = Modifier
                     .size(364f.wp(),458f.bhp())

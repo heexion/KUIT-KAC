@@ -20,7 +20,7 @@ class MyNotificationListenerService : NotificationListenerService() {
             "com.sampleapp",
             "com.shinhan.o2o",
             "com.coupang.mobile.eats",
-                    "com.google.android.gm"-> {
+            "com.google.android.gm"-> {
                 val title = sbn.notification.extras.getString(Notification.EXTRA_TITLE) ?: ""
                 val text = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
                 val combined = "$title $text"

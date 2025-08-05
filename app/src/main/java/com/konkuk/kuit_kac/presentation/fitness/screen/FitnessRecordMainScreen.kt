@@ -221,7 +221,7 @@ fun FitnessRecordMainScreen(
                         )
                     )
                 )
-                .border(1.dp, Color.Black, CircleShape)
+                .border(1.dp, Color(0xFF000000), CircleShape)
                 .alpha(0.85f)
                 .clickable { /* onCalendarClick() */ },
             contentAlignment = Alignment.Center

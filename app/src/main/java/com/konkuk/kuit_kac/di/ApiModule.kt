@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.konkuk.kuit_kac.BuildConfig
 import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.data.service.MealService
+import com.konkuk.kuit_kac.data.service.RoutineService
 import com.konkuk.kuit_kac.local.service.FoodService
 import dagger.Module
 import dagger.Provides
@@ -36,6 +37,11 @@ object ApiModule {
     @Singleton
     fun provideFoodService(retrofit: Retrofit): FoodService =
         retrofit.create(FoodService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRoutineService(retrofit: Retrofit): RoutineService =
+        retrofit.create(RoutineService::class.java)
 }
 @Module
 @InstallIn(SingletonComponent::class)

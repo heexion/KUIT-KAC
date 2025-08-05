@@ -11,13 +11,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -41,6 +46,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
+import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -50,13 +57,13 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun FitnessSearchScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    fitnessViewModel: FitnessViewModel = hiltViewModel()
 ) {
+    val query = fitnessViewModel.query
+    val suggestions = fitnessViewModel.suggestions
     var selectedItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
-    var searchHistory by remember {
-        mutableStateOf(listOf("벤치프레스", "바벨 로우", "핵스쿼트", "풀업", "사이드 레터럴 레이즈", "덤벨 플라이"))
-    }
 
     Column(
         modifier = modifier
@@ -94,25 +101,31 @@ fun FitnessSearchScreen(
                 }
 
                 Spacer(modifier = Modifier.height(23f.bhp()))
-
-                // 검색 바
-                Box(
+                OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48f.bhp())
-                        .clip(RoundedCornerShape(30f.bhp()))
-                        .background(Color(0xFFFFFFFF))
-                        .border(1.dp, Color(0xFF000000), shape = RoundedCornerShape(30f.bhp())),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Text(
-                        text = "무슨 운동을 했어?",
+                        .heightIn(min = 72f.bhp()),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF000000),
+                        unfocusedBorderColor = Color(0xFF000000),
+                        cursorColor = Color(0xFF000000)
+                    ),
+                    shape = RoundedCornerShape(30f.bhp()),
+                    singleLine = true,
+                    value = query,
+                    onValueChange = { fitnessViewModel.onQueryChange(it) },
+                    label = { Text(
+                        text = "무슨 음식을 먹었어?",
                         style = DungGeunMo15,
                         fontSize = 15f.isp(),
                         color = Color(0xFFB5B5B5),
                         modifier = Modifier.padding(horizontal = 20f.wp())
+                    ) },
+                    textStyle = DungGeunMo15.copy(
+                        fontSize = 15f.isp(),
+                        color = Color(0xFF000000)
                     )
-                }
+                )
             }
         }
 
@@ -120,13 +133,13 @@ fun FitnessSearchScreen(
 
         // 3. 검색 기록 리스트
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            itemsIndexed(searchHistory) { index, item ->
+            items(suggestions) { fitness ->
                 SearchBarItem(
-                    modifier = Modifier.padding(horizontal = 27f.wp()),
-                    value = item,
-                    isLastItem = index == searchHistory.lastIndex,
+                    modifier = Modifier.padding(horizontal = 24f.wp()),
+                    value = fitness.name,
+                    //isLastItem = index == searchHistory.lastIndex,
                     onClick = {
-                        selectedItem = item
+                        selectedItem = fitness.name
                         showDialog = true
                     }
                 )
@@ -253,9 +266,3 @@ fun FitnessSearchBarItem(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-private fun FitnessSearchScreenPreview() {
-    FitnessSearchScreen()
-}

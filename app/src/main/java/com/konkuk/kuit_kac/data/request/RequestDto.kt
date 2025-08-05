@@ -39,3 +39,21 @@ data class DietRequestDto(
     @SerialName("foods")
     val foods: List<FoodRequestDto>
 )
+
+@Serializable
+data class RoutineRequestDto(
+    @SerialName("userId")
+    val userId: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("routineType")
+    val routineType: String,
+    @SerialName("routineExercises")
+    val routineExercises: List<FitnessRequestDto>
+)
+
+@Serializable
+data class FitnessRequestDto(
+    @SerialName("exerciseId")
+    val exerciseId: Int
+)

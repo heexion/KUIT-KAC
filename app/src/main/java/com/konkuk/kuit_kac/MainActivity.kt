@@ -40,7 +40,9 @@ import androidx.room.Room
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.FoodDatabase
+import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
+import com.konkuk.kuit_kac.local.parse.loadFitness
 import com.konkuk.kuit_kac.local.parse.loadFood
 import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
@@ -55,6 +57,8 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var foodDao: FoodDao
+    @Inject
+    lateinit var fitnessDao: FitnessDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -215,6 +219,12 @@ class MainActivity : ComponentActivity() {
                 foodDao.insertAll(foods)
             }
         }
+        lifecycleScope.launch {
+            if(!fitnessDao.hasAnyFitness()){
+                val fitnesses = loadFitness(applicationContext)
+                fitnessDao.insertAll(fitnesses)
+            }
+         }
     }
 }
 

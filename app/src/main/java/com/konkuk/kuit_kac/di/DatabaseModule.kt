@@ -2,8 +2,10 @@ package com.konkuk.kuit_kac.di
 
 import android.content.Context
 import androidx.room.Room
+import com.konkuk.kuit_kac.local.FitnessDatabase
 import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.local.FoodDatabase
+import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import dagger.Module
 import dagger.Provides
@@ -31,5 +33,22 @@ object DatabaseModule {
     @Provides
     fun provideFoodDao(database: FoodDatabase): FoodDao {
         return database.foodDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFitnessDatabase(@ApplicationContext context: Context): FitnessDatabase {
+        return Room.databaseBuilder(
+            context,
+            FitnessDatabase::class.java,
+            "fitness.db"
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
+    }
+
+    @Provides
+    fun provideFitnessDao(database: FitnessDatabase): FitnessDao {
+        return database.fitnessDao()
     }
 }

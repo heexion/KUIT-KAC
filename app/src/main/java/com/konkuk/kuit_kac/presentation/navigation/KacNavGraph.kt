@@ -1,6 +1,8 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
 
+import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -10,6 +12,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -26,6 +29,7 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
+import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailInputScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordAddScreen
@@ -54,6 +58,10 @@ import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietPatchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietSearchItemDetailScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietSearchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditResultScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditSearchItemDetailScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditSearchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditTempScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealEditTimeScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealFastingResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealMainScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealPatchScreen
@@ -210,6 +218,96 @@ fun KacNavGraph(
                 navController = navController
             )
         }
+
+        navigation(
+            route = "MealEditGraph",
+            startDestination = "MealEditGraph/MealEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&mealType={mealType}"
+        ){
+            composable(
+                route = "MealEditGraph/MealEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&mealType={mealType}",
+                arguments = listOf(
+                    navArgument("dietId") {
+                        type = NavType.IntType
+                        defaultValue = -1
+                    },
+                    navArgument("fwqRaw") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("mealType") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealEditGraph")
+                }
+                val args = backStackEntry.arguments
+                val dietId = args?.getInt("dietId") ?: -1
+                val fwqRaw = args?.getString("fwqRaw") ?: ""
+                val mealType = args?.getString("mealType") ?: ""
+                parentEntry.savedStateHandle["mealType"] = mealType
+
+                parentEntry.savedStateHandle["dietId"] = dietId
+                parentEntry.savedStateHandle["fwqRaw"] = fwqRaw
+
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+
+                MealEditTempScreen(
+                    navController = navController,
+                    mealViewModel = mealViewModel
+                )
+            }
+            composable(Route.MealEditTemp.route) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealEditGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealEditTempScreen(
+                    modifier = modifier,
+                    navController = navController,
+                    mealViewModel = mealViewModel
+                )
+            }
+
+                composable(
+                    "mealeditsearch"
+                ){backStackEntry ->
+                    val parentEntry = remember(backStackEntry){
+                        navController.getBackStackEntry("MealEditGraph")
+                    }
+                    val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                    MealEditSearchScreen(navController = navController, mealViewModel= mealViewModel)
+                }
+                composable(
+                    route = "meal_edit_search_detail/{foodName}",
+                ) { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("MealEditGraph")
+                    }
+                    val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                    val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+                    MealEditSearchItemDetailScreen(
+                        foodName = foodName,
+                        navController = navController,
+                        mealViewModel = mealViewModel
+                    )
+                }
+            composable(Route.MealTime.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealEditGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealEditTimeScreen(
+                    navController = navController,
+                    mealViewModel = mealViewModel
+                )
+            }
+        }
+
+
+
 
         navigation(
             route = "DietGraph",
@@ -425,7 +523,8 @@ fun KacNavGraph(
             FitnessEditResultScreen(navController = navController)
         }
         composable(Route.FitnessSearch.route) {
-            FitnessSearchScreen(navController = navController)
+            FitnessSearchScreen(navController = navController
+            )
         }
         composable(route = Route.Fitness.route){
             FitnessMainScreen(
