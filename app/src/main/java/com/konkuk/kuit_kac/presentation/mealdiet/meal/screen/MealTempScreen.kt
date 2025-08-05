@@ -45,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
@@ -220,7 +221,17 @@ fun MealTempScreen(
                 .height(122f.bhp())
                 .padding(top = 12f.bhp(), start = 56.58f.wp())
         ) {
-            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+//            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    num = 1,
+                    ellipseLength = 122.0,
+                    mascotLength = 102.0,
+                )
+            }
             Image(
                 modifier = Modifier
                     .width(197.37698f.wp())
