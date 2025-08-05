@@ -48,7 +48,7 @@ fun MealRecordCard(
             .width(364f.wp())
             .wrapContentHeight()
             .clip(RoundedCornerShape(16f.bhp()))
-            .border(1.dp, Color(0xFF000000), RoundedCornerShape(16f.bhp()))
+            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
             .background(Color(0xFFFFFFFF))
     ) {
         // 헤더
