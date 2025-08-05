@@ -44,6 +44,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
@@ -99,18 +101,30 @@ fun MealEditResultScreen(
             colorFilter = ColorFilter.tint(shadow),
             contentDescription = null,
         )
-        EllipseNyam(
-            mascotLength = 139.0,
-            ellipseLength = 232.0,
-            modifier = Modifier
-                .offset(x=-20f.wp(), y = 255f.hp())
+//        EllipseNyam(
+//            mascotLength = 139.0,
+//            ellipseLength = 232.0,
+//            modifier = Modifier
+//                .offset(x=-20f.wp(), y = 255f.hp())
+//        )
+//        Image(
+//            modifier = Modifier
+//                .padding(top = 342.12f.hp(), start = 86.5f.wp())
+//                .size(338f.wp(),338f.bhp()),
+//            painter = painterResource(id = nyameeImg),
+//            contentDescription = null,
+//        )
+
+        HamcoachGif(
+            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            num = 2,
+            ellipseLength = 222.0,
+            mascotLength = 200.0
         )
-        Image(
-            modifier = Modifier
-                .padding(top = 342.12f.hp(), start = 86.5f.wp())
-                .size(338f.wp(),338f.bhp()),
-            painter = painterResource(id = nyameeImg),
-            contentDescription = null,
+        NyameeGif(
+            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+            num = 5,
+            sizePercent = 1.35f
         )
 
         // 말풍선
