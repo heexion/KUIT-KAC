@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,10 +28,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
@@ -41,6 +41,7 @@ import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeNutritionCircleGraph
 import com.konkuk.kuit_kac.presentation.home.component.HomeSummaryBox
 import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
+import com.konkuk.kuit_kac.presentation.home.viewmodel.HomeSummaryViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -50,22 +51,37 @@ import kotlin.random.Random
 @Composable
 fun HomeMainScreen(
     modifier: Modifier = Modifier,
-    goal: Int,
-    current: Int,
-    left: Int,
-    navController: NavHostController
+    navController: NavHostController,
+    userId: Int,
+    viewModel: HomeSummaryViewModel = hiltViewModel()
 ) {
+    val summary by viewModel.summary
+    val error by viewModel.error
+    var randNum by remember { mutableIntStateOf(1) }
     val isLate = true
     var hamcoachNum by remember { mutableIntStateOf(1) }
-    var randNum by remember { mutableIntStateOf(1) }
-
-    LaunchedEffect(Unit) {
+    
+    LaunchedEffect(userId) {
+        viewModel.loadSummary(userId)
         if (!isLate) randNum = Random.nextInt(3) + 1
         else {
             randNum = 4
             hamcoachNum = 3
         }
     }
+
+    // 로딩 상태 처리
+    if (summary == null) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    // API 응답에서 값 추출
+    val goal = summary?.dailyKcalorieGoal ?: 0
+    val current = summary?.weight ?: 0
+    val left = summary?.remainingKcalorie ?: 0
 
     HomeBackgroundComponent()
     Box(
@@ -105,10 +121,7 @@ fun HomeMainScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .padding(
-                            bottom = 29.89f.bhp()
-                        ),
-                    //.offset(x = 178.27f.wp(), y = 58.11f.hp()),
+                        .padding(bottom = 29.89f.bhp()),
                     text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
                     style = DungGeunMo17,
                     fontSize = 17f.isp(),
@@ -117,86 +130,63 @@ fun HomeMainScreen(
                 )
             }
 
-
             Image(
                 modifier = Modifier
                     .size(94.13432f.wp(), 53f.bhp())
                     .offset(y = 311f.hp(), x = 68.38f.wp())
-                    .clickable(
-                        onClick = {
-                            navController.navigate(Route.HomeScale.route)
-                        }
-                    ),
+                    .clickable {
+                        navController.navigate(Route.HomeScale.route)
+                    },
                 painter = painterResource(R.drawable.img_home_weight),
                 contentDescription = "weight measurer"
             )
         }
 
-        // 밑에 남은 칼로리 화면
+        // 하단 요약 UI
         Column(
             modifier = Modifier
                 .padding(top = 377f.hp())
                 .fillMaxSize()
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 75f.wp(),
-                        topEnd = 75f.wp()
-                    )
-                )
+                .clip(RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                     )
                 )
-                .border(
-                    1.dp, color = Color(0xFF000000), RoundedCornerShape(
-                        topStart = 75f.wp(), topEnd = 75f.wp()
-                    )
-                ),
+                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp())),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier
-                    .padding(top = 42f.bhp()),
+                modifier = Modifier.padding(top = 42f.bhp()),
                 text = "오늘 남은 칼로리",
                 color = Color(0xFF000000),
                 style = DungGeunMo20,
                 fontSize = 20f.isp()
             )
             Text(
-                modifier = Modifier
-                    .padding(top = 7.61f.bhp()),
-                text = "300kcal",
+                modifier = Modifier.padding(top = 7.61f.bhp()),
+                text = "${left}kcal",
                 style = DungGeunMo35,
                 fontSize = 35f.isp(),
                 color = Color(0xFFFFA100)
             )
             Row(
-                modifier = Modifier
-                    .padding(
-                        top = 24.39f.bhp()
-                    ),
+                modifier = Modifier.padding(top = 24.39f.bhp()),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(19.86f.wp())
             ) {
-                HomeNutritionCircleGraph(
-                    goal = goal,
-                    left = left,
-                )
-                Column(
-                    modifier = Modifier,
-                ) {
+                HomeNutritionCircleGraph(goal = goal, left = left)
+                Column {
                     HomeSummaryBox(
                         title = "목표 일일 칼로리",
-                        value = goal.toString() + "kcal",
+                        value = "${goal}kcal",
                         width = 154f.wp(),
                         height = 70f.bhp()
                     )
                     HomeSummaryBox(
-                        modifier = Modifier
-                            .padding(top = 12f.bhp()),
+                        modifier = Modifier.padding(top = 12f.bhp()),
                         title = "현재 체중",
-                        value = current.toString() + "kg",
+                        value = "${current}kg",
                         width = 154f.wp(),
                         height = 70f.bhp()
                     )
@@ -207,9 +197,9 @@ fun HomeMainScreen(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun HomeMainScreenPreview() {
-    val navController = rememberNavController()
-    HomeMainScreen(current = 55, goal = 2300, left = 800, navController = navController)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeMainScreenPreview() {
+//    val navController = rememberNavController()
+//    HomeMainScreen(current = 55, goal = 2300, left = 800, navController = navController)
+//}

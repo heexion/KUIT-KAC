@@ -6,8 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -63,7 +61,6 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealSearchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTimeScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route.FitnessDetailInput
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingActivityLevel
@@ -112,12 +109,11 @@ fun KacNavGraph(
 
         composable(Route.Home.route) {
             HomeMainScreen(
-                goal = 2300,
-                current = 55,
-                left = 300,
-                navController = navController
+                navController = navController,
+                userId = 1 // 여기에 실제 사용자 ID 값 넣기
             )
         }
+
 
         composable(Route.HomeObservation.route) {
             HomeObservationScreen(

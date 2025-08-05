@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,23 +32,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
-import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.component.VerticalScrollbar
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.response.CoachReportResponseDto
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeObservationBox
-import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
+import com.konkuk.kuit_kac.presentation.home.viewmodel.CoachReportViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+
+
+
+
 
 @Composable
 fun HomeObservationScreen(
@@ -54,6 +60,13 @@ fun HomeObservationScreen(
     navController: NavHostController
 ) {
     val lazyState = rememberLazyListState()
+    val viewModel: CoachReportViewModel = hiltViewModel()
+    val coachReport = viewModel.coachReport.value
+
+    LaunchedEffect(Unit) {
+        viewModel.loadCoachReport(userId = 1)
+    }
+
 
     Box(
         modifier = Modifier
@@ -145,13 +158,17 @@ fun HomeObservationScreen(
                     modifier = Modifier.padding(vertical = 14.39f.bhp())
                 )
 
-                val observeList = listOf(
-                    "외식 2회",
-                    "공복 시간 적음",
-                    "잦은 술자리",
-                    "수시로 배달 어플",
-                    "잦은 야식"
-                )
+                val observeList = remember(key1 = coachReport) {
+                    mutableListOf<String>().apply {
+                        coachReport?.let { report: CoachReportResponseDto ->
+                            if (report.diningOutNum > 0) add("외식 ${report.diningOutNum}회")
+                            if (report.fastingLevel == "LOW") add("공복 시간 적음")
+                            if (report.drinkingLevel == "LOW") add("잦은 술자리")
+                            if (report.deliveryLevel == "LOW") add("수시로 배달 어플")
+                            if (report.lateNightLevel == "LOW") add("잦은 야식")
+                        }
+                    }
+                }
 
                 Box() {
                     LazyColumn(
