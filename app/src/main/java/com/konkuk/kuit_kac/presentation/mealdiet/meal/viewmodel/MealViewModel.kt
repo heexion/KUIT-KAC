@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel
 
+import android.content.Context
 import com.konkuk.kuit_kac.data.request.MealRequestDto
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
 
@@ -12,14 +13,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.data.request.FoodRequestDto
+import com.konkuk.kuit_kac.data.request.SimpleRequestDto
+import com.konkuk.kuit_kac.data.request.SnackFoodRequestDto
+import com.konkuk.kuit_kac.data.request.SnackRequestDto
 import com.konkuk.kuit_kac.data.response.MealResponseDto
 import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.repository.DietRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -31,8 +37,42 @@ import javax.inject.Inject
 class MealViewModel @Inject constructor(
     private val mealRepository: MealRepository,
     private val foodRepository: FoodRepository,
+    @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle
 ):ViewModel() {
+    private val prefs = context.getSharedPreferences("meal_prefs", Context.MODE_PRIVATE)
+    private val FASTING_START_KEY = "fasting_started_at"
+    fun isPastNext3AM(startedAtMillis: Long): Boolean {
+        val now = java.time.ZonedDateTime.now(java.time.ZoneId.of("Asia/Seoul"))
+        val started = java.time.Instant.ofEpochMilli(startedAtMillis)
+            .atZone(java.time.ZoneId.of("Asia/Seoul"))
+
+        val next3AM = started.toLocalDate()
+            .plusDays(if (started.hour >= 3) 1 else 0)
+            .atTime(3, 0)
+            .atZone(java.time.ZoneId.of("Asia/Seoul"))
+
+        return now.isAfter(next3AM)
+    }
+    fun saveFastingStartTimeForType(mealType: String) {
+        val key = "fasting_started_at_$mealType"
+        prefs.edit().putLong(key, System.currentTimeMillis()).apply()
+    }
+
+    fun getFastingStartTimeForType(mealType: String): Long {
+        val key = "fasting_started_at_$mealType"
+        return prefs.getLong(key, -1L)
+    }
+
+    fun clearFastingStartTimeForType(mealType: String) {
+        val key = "fasting_started_at_$mealType"
+        prefs.edit().remove(key).apply()
+    }
+
+    fun isStillFastingForType(mealType: String): Boolean {
+        val startedAt = getFastingStartTimeForType(mealType)
+        return startedAt != -1L && !isPastNext3AM(startedAt)
+    }
     private val _createMealState = mutableStateOf<Boolean?>(null)
     val createMealState: State<Boolean?> get() = _createMealState
     val formattedTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
@@ -42,6 +82,31 @@ class MealViewModel @Inject constructor(
 
     private val _selectType = mutableStateOf<String?>(null)
     val selectType: State<String?> get() = _selectType
+    private val _createSimpleSuccessState = mutableStateOf<Boolean?>(null)
+    val createSimpleSuccessState: State<Boolean?> get() = _createSimpleSuccessState
+
+    fun createSimple(){
+        val request = SimpleRequestDto(
+            userId = 1,
+            dietType = selectType.value?:""
+        )
+        viewModelScope.launch {
+            runCatching {
+                mealRepository.createSimple(request)
+            }
+                .onSuccess {
+                    Log.d("API", "Success")
+                    _createSimpleSuccessState.value = true
+                    Log.e("createSimple", "success")
+                    val now = System.currentTimeMillis()
+                    prefs.edit().putLong("fasting_started_at", now).apply()
+                }
+                .onFailure {
+                    _createSimpleSuccessState.value = true
+                    Log.e("createSimple", it.message?: "Unknown error")
+                }
+        }
+    }
 
 
     fun editMeal(
@@ -103,6 +168,66 @@ class MealViewModel @Inject constructor(
                 .onFailure {
                     _createMealState.value = false
                     Log.e("creatDiet", it.message?: "Unknown error")
+                }
+        }
+    }
+    private val _changeSnackState = mutableStateOf<Boolean?>(null)
+    val changeSnackState: State<Boolean?> get() = _changeSnackState
+    fun changeSnack(){
+        val foods = selectedFoods.map {
+            SnackFoodRequestDto(
+                foodId = it.food.id,
+                quantity = it.quantity,
+                dietTime = selectedTime.value?:""
+            )
+        }
+        val request = SnackRequestDto(
+            userId = 1,
+            name = selectType.value + "식단",
+            foods = foods
+        )
+        viewModelScope.launch {
+            runCatching {
+                mealRepository.changeSnack(dietId = dietId.value?:1,request)
+            }
+                .onSuccess {
+                    Log.d("API", "Success")
+                    _changeSnackState.value = true
+                    Log.e("changeSnack", "success")
+                }
+                .onFailure {
+                    _changeSnackState.value = false
+                    Log.e("changeSnack", it.message?: "Unknown error")
+                }
+        }
+    }
+    private val _createSnackState = mutableStateOf<Boolean?>(null)
+    val createSnackState: State<Boolean?> get() = _createSnackState
+    fun createSnack(){
+        val foods = selectedFoods.map {
+            SnackFoodRequestDto(
+                foodId = it.food.id,
+                quantity = it.quantity,
+                dietTime = selectedTime.value?:""
+            )
+        }
+        val request = SnackRequestDto(
+            userId = 1,
+            name = selectType.value + "식단",
+            foods = foods
+        )
+        viewModelScope.launch {
+            runCatching {
+            mealRepository.createSnack(request)
+        }
+                .onSuccess {
+                    Log.d("API", "Success")
+                    _createSnackState.value = true
+                    Log.e("createSnack", "success")
+                }
+                .onFailure {
+                    _createSnackState.value = false
+                    Log.e("creatSnack", it.message?: "Unknown error")
                 }
         }
     }
@@ -242,7 +367,10 @@ class MealViewModel @Inject constructor(
 
     private val _dietId = mutableStateOf<Int?>(null)
     val dietId: State<Int?> get() = _dietId
-
+    fun addFoodsFromDiet(foodList: List<FoodWithQuantity>) {
+        _selectedFoods.clear()
+        _selectedFoods.addAll(foodList)
+    }
 
 }
 

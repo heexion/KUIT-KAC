@@ -57,3 +57,35 @@ data class FitnessRequestDto(
     @SerialName("exerciseId")
     val exerciseId: Int
 )
+
+@Serializable
+data class SimpleRequestDto(
+    @SerialName("userId")
+    val userId:Int,
+    @SerialName("dietType")
+    val dietType:String,
+    @SerialName("dietEntryType")
+    val dietEntryType: String = "단식"
+)
+
+@Serializable
+data class SnackRequestDto(
+    @SerialName("userId")
+    val userId:Int,
+    @SerialName("name")
+    val name:String,
+    @SerialName("dietEntryType")
+    val dietEntryType:String = "기록",
+    @SerialName("foods")
+    val foods: List<SnackFoodRequestDto>
+)
+
+@Serializable
+data class SnackFoodRequestDto(
+    @SerialName("foodId")
+    val foodId: Int,
+    @SerialName("quantity")
+    val quantity: Float,
+    @SerialName("dietTime")
+    val dietTime: String
+)

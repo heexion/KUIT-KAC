@@ -12,31 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealDetailCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealTopBarWithSearch
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.foodInfoMap
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.FoodWithQuantity
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
-
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun DietSearchItemDetailScreen(
+fun DietEditSearchItemDetailScreen(
     foodName: String,
     navController: NavHostController,
     foodViewModel: FoodViewModel = hiltViewModel(),
@@ -115,7 +107,7 @@ fun DietSearchItemDetailScreen(
                 onClick = {
                     foodInfo?.let { food ->
                         dietViewModel.addFood(food, quantity)
-                        navController.navigate("Diet")
+                        navController.navigate("DietEditTemp")
                     }
                 },
                 value = "추가하기",
@@ -125,17 +117,4 @@ fun DietSearchItemDetailScreen(
 
         }
     }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun DietSearchItemDetailScreenPreview() {
-    val navController = rememberNavController()
-
-    DietSearchItemDetailScreen(
-        foodName = "돼지고기 김치찌개",
-        navController = navController
-    )
 }

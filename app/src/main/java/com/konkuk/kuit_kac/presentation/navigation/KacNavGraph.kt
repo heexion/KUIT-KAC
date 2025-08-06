@@ -52,6 +52,9 @@ import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietCreateScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietEditSearchItemDetailScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietEditSearchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietEditTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietExistScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietMainScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietPatchScreen
@@ -220,6 +223,85 @@ fun KacNavGraph(
         }
 
         navigation(
+            route = "DietEditGraph",
+            startDestination = "DietEditGraph/DietEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&name={name}"
+        ){
+            composable(
+                route = "DietEditGraph/DietEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&name={name}",
+                arguments = listOf(
+                    navArgument("dietId") {
+                        type = NavType.IntType
+                        defaultValue = -1
+                    },
+                    navArgument("fwqRaw") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("name") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+            ){backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("DietEditGraph")
+                }
+                val args = backStackEntry.arguments
+                val dietId = args?.getInt("dietId") ?: -1
+                val fwqRaw = args?.getString("fwqRaw") ?: ""
+                val name = args?.getString("name") ?: ""
+                parentEntry.savedStateHandle["name"] = name
+
+                parentEntry.savedStateHandle["dietId"] = dietId
+                parentEntry.savedStateHandle["fwqRaw"] = fwqRaw
+                Log.d("navgraph", "dietId=$dietId,name=$name")
+
+                val dietViewModel = hiltViewModel<DietViewModel>(parentEntry)
+                DietEditTempScreen(
+                    navController = navController,
+                    dietViewModel = dietViewModel
+                )
+
+            }
+            composable(
+                "dieteditsearch"
+            ){backStackEntry ->
+                val parentEntry = remember(backStackEntry){
+                    navController.getBackStackEntry("DietEditGraph")
+                }
+                DietEditSearchScreen(
+                    modifier = modifier,
+                    navController = navController,
+                )
+            }
+            composable(
+                route = "diet_edit_search_detail/{foodName}"
+            ){ backStackEntry ->
+                val parentEntry = remember(backStackEntry){
+                    navController.getBackStackEntry("DietEditGraph")
+                }
+                val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+                val dietViewModel = hiltViewModel<DietViewModel>(parentEntry)
+                DietEditSearchItemDetailScreen(
+                    navController = navController,
+                    dietViewModel = dietViewModel,
+                    foodName = foodName
+                )
+            }
+            composable("DietEditTemp") { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("DietEditGraph")
+                }
+                val dietViewModel = hiltViewModel<DietViewModel>(parentEntry)
+                DietEditTempScreen(
+                    modifier = modifier,
+                    navController = navController,
+                    dietViewModel = dietViewModel
+                )
+            }
+        }
+
+        navigation(
             route = "MealEditGraph",
             startDestination = "MealEditGraph/MealEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&mealType={mealType}"
         ){
@@ -364,9 +446,35 @@ fun KacNavGraph(
 
         navigation(
             route = "MealGraph/{mealType}",
-            startDestination = Route.MealSearch.route,
+            startDestination = Route.MealRecord.route,
             arguments = listOf(navArgument("mealType") { defaultValue = "" })
         ){
+            composable(
+                Route.MealRecord.route
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealGraph/{mealType}")
+                }
+                val mealType = parentEntry.arguments?.getString("mealType") ?: ""
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealRecordScreen(
+                    navController = navController
+                )
+            }
+            composable(
+                Route.MealPatch.route
+            ) {
+                backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealGraph/{mealType}")
+                }
+                val mealType = parentEntry.arguments?.getString("mealType") ?: ""
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealPatchScreen(
+                    navController = navController,
+                    mealViewModel = mealViewModel
+                )
+            }
             composable(
                 Route.MealSearch.route
             ){backStackEntry ->

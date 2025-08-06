@@ -41,4 +41,8 @@ class FoodViewModel@Inject constructor(
         }
     }
 
+    suspend fun getFoodByName(name: String): Food? {
+        return repository.getFood(name)
+    }
+
 }

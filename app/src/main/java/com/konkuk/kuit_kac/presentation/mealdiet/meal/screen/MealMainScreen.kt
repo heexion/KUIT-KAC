@@ -87,13 +87,12 @@ fun MealMainScreen(
     var showDialog by remember { mutableStateOf(false) }
     var dialogMealType by remember { mutableStateOf("") }
     var showAutoRecordDialog by remember { mutableStateOf(false) }
-
     val initialStates = mealTypeList.map { type ->
         val matched = mealCards.find { it.mealType == type }
         MealState(
             mealType = type,
             mealCardData = matched,
-            isFasting = false
+            isFasting = mealViewModel.isStillFastingForType(type) && matched == null
         )
     }
     val mealStates = remember(mealCards) {
@@ -223,6 +222,10 @@ fun MealMainScreen(
                                 mealType = label,
                                 navController = navController,
                                 onFastingClick = {
+
+                                    mealViewModel.setType(state.mealType)
+                                    mealViewModel.createSimple()
+                                    mealViewModel.saveFastingStartTimeForType(state.mealType)
                                     mealStates[index] = state.copy(isFasting = true)
                                 }
                             )
@@ -283,6 +286,7 @@ fun MealMainScreen(
                                 .clickable {
                                     val idx = mealTypeList.indexOf(dialogMealType)
                                     if (idx != -1) {
+                                        mealViewModel.clearFastingStartTimeForType(dialogMealType)
                                         mealStates[idx] = mealStates[idx].copy(isFasting = false)
                                     }
                                     showDialog = false

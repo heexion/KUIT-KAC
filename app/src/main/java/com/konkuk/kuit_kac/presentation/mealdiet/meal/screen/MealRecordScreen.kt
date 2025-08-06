@@ -173,7 +173,7 @@ fun MealRecordScreen(
                         )
                     )
                     .clickable(
-                        onClick = { navController.navigate(Route.MealGraph.route) }
+                        onClick = { navController.navigate(Route.MealSearch.route) }
                     ),
                 contentAlignment = Alignment.Center
             ) {
