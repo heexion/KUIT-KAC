@@ -54,6 +54,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -142,9 +143,21 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                 modifier = Modifier
                     .fillMaxWidth()
             ){
-                EllipseNyam(ellipseLength = 137.54, mascotLength = 82.37,
-                    modifier = Modifier
-                        .offset(134f.wp(),94f.bhp()))
+//                EllipseNyam(ellipseLength = 137.54, mascotLength = 82.37,
+//                    modifier = Modifier
+//                        .offset(134f.wp(),94f.bhp()))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HamcoachGif(
+                        num = 1,
+                        ellipseLength = 137.54,
+                        mascotLength = 112.0,
+                    )
+                }
+
                 Image(
                     painter = painterResource(R.drawable.img_diet_maintextballoon),
                     contentDescription = "text balloon",

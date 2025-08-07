@@ -38,6 +38,9 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingIntroduce
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -90,9 +93,14 @@ fun OnboardingInputResultScreen(
                 .padding(horizontal = 24.4f.wp()),
             verticalAlignment = Alignment.Top
         ) {
-            EllipseNyam(
+//            EllipseNyam(
+//                ellipseLength = 191.2,
+//                mascotLength = 114.5
+//            )
+            HamcoachGif(
+                num = 1,
                 ellipseLength = 191.2,
-                mascotLength = 114.5
+                mascotLength = 165.0,
             )
 
             Box(
@@ -137,12 +145,18 @@ fun OnboardingInputResultScreen(
                     .offset(y = 8f.bhp())
             )
 
-            NyamCoach(
-                modifier = Modifier
-                    .width(247f.wp())
-                    .height(305f.bhp())
-                    .align(Alignment.Center)
+//            NyamCoach(
+//                modifier = Modifier
+//                    .width(247f.wp())
+//                    .height(305f.bhp())
+//                    .align(Alignment.Center)
+//            )
+
+            NyameeGif(
+                num = 1,
+                sizePercent = 1.5f
             )
+
         }
 
         // 하단 말풍선

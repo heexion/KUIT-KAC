@@ -34,6 +34,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDelivery
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -111,12 +112,23 @@ fun OnboardingNyamCoachScreen(
         )
 
         // 캐릭터 이미지
-        NyamCoach(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 350f.bhp())
-                .size(width = 198.31f.wp(), height = 244.866f.bhp())
-        )
+//        NyamCoach(
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
+//                .padding(top = 350f.bhp())
+//                .size(width = 198.31f.wp(), height = 244.866f.bhp())
+//        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            NyameeGif(
+                modifier=Modifier.padding(top = 250f.bhp(), start = 5f.wp()),
+                num = 1,
+                sizePercent = 1f
+            )
+        }
 
         // 그림자 이미지
         Image(
