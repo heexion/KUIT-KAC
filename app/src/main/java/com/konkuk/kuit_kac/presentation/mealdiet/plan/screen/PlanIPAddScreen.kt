@@ -1,9 +1,11 @@
 package com.konkuk.kuit_kac.presentation.diet.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -30,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -38,6 +42,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanDietCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -47,10 +52,17 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun PlanIPAddScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit){
+        mealViewModel.getPlan(userId = 1)
+    }
+    val meal = mealViewModel.getPlanState.value
+    fun isMealTypeExist(type: String): Boolean {
+        return meal?.any { it.dietType == type }?:false
+    }
     val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -122,28 +134,63 @@ fun PlanIPAddScreen(
                         .height(37f.bhp())
                         .background(
                             color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42f.bhp())
-                        )
+                        ),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Text(
+                        text = mealViewModel.planDate.value?:"2025-12-12",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp()
+                    )
                     //Todo: 달력 구현 후 추가
                 }
                 Spacer(modifier = Modifier.size(22.5f.bhp()))
                 PlanDietCard(
-                    "아침", listOf("식단 추가"),
-                    onClick = { navController.navigate(Route.DietPatch.route) },
-                    isEdit = false
+                    "아침",
+                    listOf(if(isMealTypeExist("아침")){ "아침 식단"}
+                    else{"식단 추가" }
+                    ),
+                    onClick = {
+                        mealViewModel.setType("아침")
+                        navController.navigate("PlanIPSearch") },
+                    editOnClick = {mealViewModel.resolveFoodsFromPlanType("아침") {
+                        Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
+                        navController.navigate("PlanIPTemp")
+                    }},
+                    isEdit = isMealTypeExist("아침")
                 )
                 Spacer(modifier = Modifier.size(20f.bhp()))
                 PlanDietCard(
-                    "점심", listOf("식단 추가"),
-                    onClick = { navController.navigate(Route.DietPatch.route) },
-                    isEdit = false
+                    "점심",
+                    listOf(if(isMealTypeExist("점심")){ "점심 식단"}
+                    else{"식단 추가" }
+                    ),
+                    onClick = {
+                        mealViewModel.setType("점심")
+                        navController.navigate("PlanIPSearch") },
+                    editOnClick = {
+                        if (mealViewModel.getPlanState.value != null) {
+                            mealViewModel.resolveFoodsFromPlanType("점심") {
+                                Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
+                                navController.navigate("PlanIPTemp")
+                            }
+                        } else {
+                            Log.e("PlanIPAdd", "Plan data not ready yet!")
+                        }
+                    },
+                    isEdit = isMealTypeExist("점심")
                 )
                 Spacer(modifier = Modifier.size(20f.bhp()))
                 PlanDietCard(
                     "저녁",
-                    listOf("식단 추가"),
-                    onClick = { navController.navigate(Route.DietPatch.route) },
-                    isEdit = false
+                    listOf(if(isMealTypeExist("저녁")){ "식단 추가"}
+                        else{"저녁식단" }
+                    ),
+                    onClick = {
+                        mealViewModel.setType("저녁")
+                        navController.navigate("PlanIPSearch") },
+                    isEdit = isMealTypeExist("저녁")
                 )
                 Spacer(modifier = Modifier.size(40.46f.bhp()))
                 Box(
@@ -151,7 +198,9 @@ fun PlanIPAddScreen(
                         .fillMaxWidth()
                         .height(65f.bhp())
                         .clickable {
-                            navController.navigate("plan_in_person_add_complete")
+                            if(isMealTypeExist("아침")&&isMealTypeExist("점심")&&isMealTypeExist("저녁")){
+                                navController.navigate(Route.MealFastingResult.route)
+                            }
                         }
                 ) {
                     Image(

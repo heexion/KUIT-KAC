@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.data.service
 
 import com.konkuk.kuit_kac.data.request.MealRequestDto
+import com.konkuk.kuit_kac.data.request.PlanRequestDto
 import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
 import com.konkuk.kuit_kac.data.response.MealResponseDto
@@ -50,4 +51,20 @@ interface MealService {
         @Path("dietId") dietId: Int,
         @Body request: SnackRequestDto
     ): Response<Unit>
+
+    @POST("diets/plans")
+    suspend fun createPlan(
+        @Body request: PlanRequestDto
+    ): Response<Unit>
+
+    @PUT("diets/plans/{dietId}")
+    suspend fun changePlan(
+        @Path("dietId") dietId: Int,
+        @Body request: PlanRequestDto
+    ): Response<Unit>
+
+    @GET("diets/plans/profiles")
+    suspend fun getPlan(
+        @Query("userId") userId: Int
+    ): Response<List<MealResponseDto>>
 }

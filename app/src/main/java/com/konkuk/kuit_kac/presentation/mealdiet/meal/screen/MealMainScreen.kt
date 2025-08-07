@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -80,9 +81,12 @@ fun MealMainScreen(
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
+        mealViewModel.getPlan(userId = 1)
         mealViewModel.getRecord(userId = 1)
     }
-    val mealCards = mealViewModel.mealCardData.value
+    val planList   by mealViewModel.getPlanState
+    val recordList by mealViewModel.getRecordState
+    val mealCards  by mealViewModel.mealCardData
     val mealTypeList = listOf("아침", "점심", "저녁", "간식")
     var showDialog by remember { mutableStateOf(false) }
     var dialogMealType by remember { mutableStateOf("") }
@@ -98,15 +102,19 @@ fun MealMainScreen(
     val mealStates = remember(mealCards) {
         mutableStateListOf<MealState>().apply { addAll(initialStates) }
     }
-
-
-    LaunchedEffect(mealCards) {
-        val isAllBlank = mealStates.all { it.mealCardData == null && !it.isFasting }
-        val hasPlan = mealCards.isNotEmpty()
-        if (isAllBlank && hasPlan) {
-            showAutoRecordDialog = true
+    val missingTypes by remember(planList, recordList) {
+        derivedStateOf {
+            val planned   = planList.orEmpty().map { it.dietType }.toSet()
+            val recorded  = recordList.orEmpty().map { it.dietType }.toSet()
+            planned - recorded
         }
     }
+    LaunchedEffect(planList, recordList) {
+        showAutoRecordDialog = planList.orEmpty().isNotEmpty() && missingTypes.isNotEmpty()
+    }
+
+
+
 
     val scrollState = rememberScrollState()
 
@@ -347,10 +355,15 @@ fun MealMainScreen(
                                 )
                                 .border(1.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
                                 .clickable {
-                                    mealCards.forEach { card ->
-                                        val index = mealTypeList.indexOf(card.mealType)
-                                        if (index != -1) {
-                                            mealStates[index] = mealStates[index].copy(mealCardData = card)
+                                    val missingDtos = planList.orEmpty()
+                                        .filter { it.dietType in missingTypes }
+
+                                    mealViewModel.postAllUnrecordedPlans()
+                                    missingDtos.forEach { dto ->
+                                        val idx = mealTypeList.indexOf(dto.dietType)
+                                        if (idx != -1) {
+                                            val card = mealViewModel.parseToMealCardData(dto)
+                                            mealStates[idx] = mealStates[idx].copy(mealCardData = card)
                                         }
                                     }
                                     showAutoRecordDialog = false

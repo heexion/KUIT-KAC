@@ -76,6 +76,9 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.MealTimeScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.TimeInputResultScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPSearchScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPTempScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanItemScreen
 import com.konkuk.kuit_kac.presentation.navigation.Route.FitnessDetailInput
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingActivityLevel
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
@@ -297,6 +300,70 @@ fun KacNavGraph(
                     modifier = modifier,
                     navController = navController,
                     dietViewModel = dietViewModel
+                )
+            }
+        }
+
+        navigation(
+            route = "PlanIPGraph",
+            startDestination = "PlanIPGraph/plan_in_person_add?date={date}"
+        ){
+            composable(
+                route = "PlanIPGraph/plan_in_person_add?date={date}",
+                arguments = listOf(
+                    navArgument("date"){
+                        type = NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+            ){ backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("PlanIpGraph")
+                }
+                val args = backStackEntry.arguments
+                val date = args?.getString("name")?: ""
+                parentEntry.savedStateHandle["date"] = date
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                PlanIPAddScreen(
+                    mealViewModel = mealViewModel,
+                    navController = navController
+                )
+            }
+            composable(
+                route = "PlanIPSearch"
+            ){ backStackEntry->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("PlanIpGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                PlanIPSearchScreen(
+                    navController = navController
+                )
+            }
+            composable(
+                route = "plan_search_detail/{foodName}"
+            ){backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("PlanIPGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+                PlanItemScreen(
+                    navController = navController,
+                    mealViewModel = mealViewModel,
+                    foodName = foodName
+                )
+            }
+            composable(
+                route = "PlanIPTemp"
+            ){ backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("PlanIpGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                PlanIPTempScreen(
+                    mealViewModel = mealViewModel,
+                     navController = navController
                 )
             }
         }

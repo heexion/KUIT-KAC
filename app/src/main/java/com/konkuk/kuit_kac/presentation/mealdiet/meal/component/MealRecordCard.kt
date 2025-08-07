@@ -110,7 +110,6 @@ fun MealRecordCard(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                             navController.navigate("MealGraph/${mealType}")
-
                     }
                 )
 

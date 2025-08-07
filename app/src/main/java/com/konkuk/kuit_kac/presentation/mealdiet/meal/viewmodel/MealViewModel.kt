@@ -16,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.data.request.FoodRequestDto
+import com.konkuk.kuit_kac.data.request.PlanRequestDto
 import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackFoodRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
@@ -28,6 +29,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
 import java.time.Instant
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -85,6 +87,30 @@ class MealViewModel @Inject constructor(
     private val _createSimpleSuccessState = mutableStateOf<Boolean?>(null)
     val createSimpleSuccessState: State<Boolean?> get() = _createSimpleSuccessState
 
+    private val _planCheck = mutableStateOf<Int?>(null)
+    val planCheck: State<Int?> get() = _planCheck
+
+    private val _selectedPlanMeals = mutableStateOf<List<MealResponseDto>>(emptyList())
+    val selectedPlanMeals: State<List<MealResponseDto>> get() = _selectedPlanMeals
+    fun resolveFoodsFromPlanType(dietType: String, onResolved: () -> Unit) {
+        val plan = getPlanState.value ?: return
+        val selected = plan.find { it.dietType == dietType } ?: return
+        _dietId.value = selected.id
+
+        viewModelScope.launch {
+            val resolved = selected.dietFoods.mapNotNull { entry ->
+                val food = foodRepository.getFood(entry.food.name)
+                val quantity = entry.quantity.toFloat()
+                if (food != null && quantity != null) {
+                    FoodWithQuantity(food, quantity)
+                } else null
+            }
+            _selectedFoods.clear()
+            _selectedFoods.addAll(resolved)
+            _planCheck.value = 1
+            onResolved()
+        }
+    }
     fun createSimple(){
         val request = SimpleRequestDto(
             userId = 1,
@@ -104,6 +130,123 @@ class MealViewModel @Inject constructor(
                 .onFailure {
                     _createSimpleSuccessState.value = true
                     Log.e("createSimple", it.message?: "Unknown error")
+                }
+        }
+    }
+    private val _createPlanState = mutableStateOf<Boolean?>(null)
+    val createPlanState: State<Boolean?> get() = _createPlanState
+    fun createPlan(){
+        val foods = selectedFoods.map {
+            FoodRequestDto(
+                foodId = it.food.id,
+                quantity = it.quantity
+            )
+        }
+        val request = PlanRequestDto(
+            userId = 1,
+            dietType = selectType.value?:",",
+            foods = foods
+        )
+        viewModelScope.launch {
+            runCatching {
+                mealRepository.createPlan(request)
+            }
+                .onSuccess {
+                    Log.d("API", "Success")
+                    _createPlanState.value = true
+                    Log.e("createPlan", "success")
+                }
+                .onFailure {
+                    _createPlanState.value = false
+                    Log.e("createPlan", it.message?: "Unknown error")
+                }
+        }
+    }
+    private val _getPlanSuccessState = mutableStateOf<Boolean?>(null)
+    val getPlanSuccessState: State<Boolean?> get() = _getPlanSuccessState
+
+    private val _getPlanState = mutableStateOf<List<MealResponseDto>?>(null)
+    val getPlanState: State<List<MealResponseDto>?> get() = _getPlanState
+    fun getPlan(userId: Int) {
+        viewModelScope.launch {
+            runCatching { mealRepository.getPlan(userId) }
+                .onSuccess { response ->
+                    if (response.isSuccessful) {
+                        _getPlanState.value = response.body().orEmpty()
+                        _getPlanSuccessState.value = true
+                        _planCheck.value = 0
+                        getRecord(userId)           // still load existing records here
+                    } else {
+                        _getPlanSuccessState.value = false
+                    }
+                }
+                .onFailure { _getPlanSuccessState.value = false }
+        }
+    }
+    fun postAllUnrecordedPlans() {
+        val plans   = _getPlanState.value.orEmpty()
+        val records = _getRecordState.value.orEmpty().map { it.dietType }
+
+        plans.forEach { planDto ->
+            if (!records.contains(planDto.dietType)) {
+                postMealFromPlan(planDto)
+            }
+        }
+    }
+    private fun postMealFromPlan(dto: MealResponseDto) {
+        // map plan foods into request payload
+        val foods = dto.dietFoods.map { foodItem ->
+            FoodRequestDto(
+                foodId   = foodItem.food.id,
+                quantity = foodItem.quantity.toFloat()
+            )
+        }
+
+        val request = MealRequestDto(
+            userId   = 1,
+            dietType = dto.dietType,
+            foods    = foods,
+            name     = "${dto.dietType}식단",
+            dietTime = "12:00:00"
+        )
+
+        viewModelScope.launch {
+            runCatching {
+                mealRepository.createMeal(request)
+            }
+                .onSuccess {
+                    Log.d("AutoPost", "Posted plan for ${dto.dietType}")
+                }
+                .onFailure {
+                    Log.e("AutoPost", "Failed for ${dto.dietType}", it)
+                }
+        }
+    }
+    private val _changePlanSuccessState = mutableStateOf<Boolean?>(null)
+    val changePlanSuccessState: State<Boolean?> get() = _changePlanSuccessState
+    fun changePlan(){
+        val foods = selectedFoods.map {
+            FoodRequestDto(
+                foodId = it.food.id,
+                quantity = it.quantity
+            )
+        }
+        val request = PlanRequestDto(
+            userId = 1,
+            dietType = selectType.value?:"",
+            foods = foods
+        )
+        viewModelScope.launch {
+            kotlin.runCatching {
+                mealRepository.changePlan(dietId = dietId.value?:1, request)
+            }.onSuccess {
+                Log.d("API", "Success")
+                _changePlanSuccessState.value = true
+                Log.e("changePlan", "success")
+            }
+                .onFailure {
+                    _changePlanSuccessState.value = false
+                    Log.e("changePlan", it.message?: "Unknown error")
                 }
         }
     }
@@ -234,30 +377,41 @@ class MealViewModel @Inject constructor(
     private val _selectedFoods = mutableStateListOf<FoodWithQuantity>()
     val selectedFoods: List<FoodWithQuantity> get() = _selectedFoods
 
+    private val _planDate = mutableStateOf<String?>(null)
+    val planDate: State<String?> get() = _planDate
+
     init {
-        val dietId = savedStateHandle.get<Int>("dietId") ?: -1
-        val fwqRawString = savedStateHandle.get<String>("fwqRaw") ?: ""
-        val mealType = savedStateHandle.get<String>("mealType") ?: ""
-
-        if(mealType.isNotEmpty()){
-            setType(mealType)
+        val date = savedStateHandle.get<String>("date") ?: ""
+        if(date.isNotEmpty()){
+            _planDate.value = date
         }
+    }
 
-        Log.d("MealViewModel", "dietId=$dietId, fwqRawString=$fwqRawString")
+    init {
+            val dietId = savedStateHandle.get<Int>("dietId") ?: -1
+            val fwqRawString = savedStateHandle.get<String>("fwqRaw") ?: ""
+            val mealType = savedStateHandle.get<String>("mealType") ?: ""
 
-        if (dietId != -1 && fwqRawString.isNotEmpty()) {
-            val parsed = fwqRawString.split(",").mapNotNull {
-                val parts = it.split(":")
-                if (parts.size == 2) {
-                    val name = parts[0]
-                    val quantity = parts[1].toFloatOrNull()?.toString() ?: return@mapNotNull null
-                    name to quantity
-                } else null
+            if (mealType.isNotEmpty()) {
+                setType(mealType)
             }
 
-            Log.d("MealViewModel", "Calling getTemp with parsed fwqRaw=$parsed")
-            getTemp(dietId, parsed)
-        }
+            Log.d("MealViewModel", "dietId=$dietId, fwqRawString=$fwqRawString")
+
+            if (dietId != -1 && fwqRawString.isNotEmpty()) {
+                val parsed = fwqRawString.split(",").mapNotNull {
+                    val parts = it.split(":")
+                    if (parts.size == 2) {
+                        val name = parts[0]
+                        val quantity =
+                            parts[1].toFloatOrNull()?.toString() ?: return@mapNotNull null
+                        name to quantity
+                    } else null
+                }
+
+                Log.d("MealViewModel", "Calling getTemp with parsed fwqRaw=$parsed")
+                getTemp(dietId, parsed)
+            }
     }
 
     fun getTemp(dietId: Int, fwqRaw: List<Pair<String, String>>) {

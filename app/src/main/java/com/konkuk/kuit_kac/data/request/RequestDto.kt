@@ -89,3 +89,13 @@ data class SnackFoodRequestDto(
     @SerialName("dietTime")
     val dietTime: String
 )
+
+@Serializable
+data class PlanRequestDto(
+    @SerialName("userId")
+    val userId:Int,
+    @SerialName("dietType")
+    val dietType:String,
+    @SerialName("foods")
+    val foods: List<FoodRequestDto>
+)

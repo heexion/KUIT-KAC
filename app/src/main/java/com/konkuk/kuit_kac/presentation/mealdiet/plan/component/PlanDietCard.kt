@@ -32,6 +32,7 @@ fun PlanDietCard(
     dietTime: String,
     dietValue: List<String>,
     onClick: () -> Unit = {},
+    editOnClick: () -> Unit = {},
     isEdit: Boolean = true
 ) {
     Column(
@@ -124,7 +125,7 @@ fun PlanDietCard(
                         .padding(end = 11.06f.wp())
                         .size(25.35508f.wp(), 25.35508f.bhp())
                         .align(Alignment.CenterEnd)
-                        .clickable { onClick() },
+                        .clickable { editOnClick() },
                     contentScale = ContentScale.FillBounds,
                     contentDescription = null,
                 )
