@@ -153,7 +153,7 @@ fun OnboardingBackScreen(
 
         NyameeGif(
             modifier = Modifier
-                .offset(x = 50f.wp(), y = 300f.bhp())
+                .offset(x = 60f.wp(), y = 300f.bhp())
                 .alpha(nyamAlpha),
             num = 1,
             sizePercent = 1.35f

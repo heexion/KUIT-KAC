@@ -35,6 +35,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingNyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -110,13 +112,27 @@ fun OnboardingHamCoachScreen(
         )
 
         // 캐릭터 이미지
-        EllipseNyam(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 325f.bhp()),
-            ellipseLength = 293.6,
-            mascotLength = 171.4
-        )
+//        EllipseNyam(
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
+//                .padding(top = 325f.bhp()),
+//            ellipseLength = 293.6,
+//            mascotLength = 171.4
+//        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            HamcoachGif(
+                modifier = Modifier
+                    .padding(top = 340f.bhp()),
+                num = 1,
+                ellipseLength = 293.6,
+                mascotLength = 269.0,
+            )
+        }
+
+
 
         // 그림자 이미지
         Image(
