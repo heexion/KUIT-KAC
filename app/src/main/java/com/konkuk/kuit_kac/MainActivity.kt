@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 val backArrowRoutes = setOf(
                     // 여기다가 뒤로가기 버튼 있으면 추가
                     Route.HomeNutrition.route,
-                    Route.HomeAnalysis.route,
+//                    Route.HomeAnalysis.route,
                     Route.HomeObservation.route,
                     Route.HomeScale.route,
                     Route.DietCreate.route,
@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                 val planButtonRoutes = setOf(
                     Route.Home.route,
                     Route.HomeNutrition.route,
-                    Route.HomeAnalysis.route,
+//                    Route.HomeAnalysis.route,
                     Route.HomeObservation.route,
                     Route.Diet.route,
                     Route.DietExist.route,

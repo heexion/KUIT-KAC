@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,6 +47,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemCard
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -59,7 +61,7 @@ fun FitnessDetailRecordAddScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    // 운동 데이터 예시 (ViewModel로 수정 필요)
+    // 운동 데이터 예시 (todo: ViewModel로 수정 필요)
     val fitnessList = listOf(
         FitnessDetailData(
             id = 1,
@@ -95,6 +97,18 @@ fun FitnessDetailRecordAddScreen(
                     .align(Alignment.TopCenter)
             )
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 137.82f.bhp()),
+                    num = 1,
+                    ellipseLength = 145.62891,
+                    mascotLength = 110.0,
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -118,15 +132,18 @@ fun FitnessDetailRecordAddScreen(
                     modifier = Modifier.padding(bottom = 28f.bhp())
                 )
             }
-            Spacer(modifier = Modifier.height(25.7f.bhp()))
+//            Spacer(modifier = Modifier.height(25.7f.bhp()))
+            Spacer(modifier = Modifier.height(257f.bhp()))
 
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.bhp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .align(Alignment.TopCenter)
+//                    .padding(top = 112.12f.bhp()),
+//                mascotLength = 87.70016,
+//                ellipseLength = 145.62891
+//            )
+
+
         }
 
         Spacer(modifier = Modifier.height(24f.bhp()))

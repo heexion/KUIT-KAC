@@ -40,10 +40,12 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
+import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.data.response.MealResponseDto
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -194,7 +196,13 @@ fun DietCard(
                         end = 29.68f.bhp()
                     )
             ) {
-                EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+//                EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+                HamcoachGif(
+                    num = 1,
+                    ellipseLength = 122.0,
+                    mascotLength = 100.0,
+                )
+
                 Image(
                     modifier = Modifier
                         .width(197.37698f.wp())

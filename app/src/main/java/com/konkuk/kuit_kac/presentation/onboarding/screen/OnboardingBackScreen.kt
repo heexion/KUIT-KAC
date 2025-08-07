@@ -13,6 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,8 +38,11 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import kotlin.random.Random
 
 @Composable
 fun OnboardingBackScreen(
@@ -121,29 +129,43 @@ fun OnboardingBackScreen(
             contentDescription = null,
         )
 
-        // Ellipse + 햄코치 (왼쪽)
-        EllipseNyam(
-            mascotLength = 139.0,
-            ellipseLength = 232.0,
-            modifier = Modifier.offset(x = -20f.wp(), y = 255f.hp())
+//        // Ellipse + 햄코치 (왼쪽)
+//        EllipseNyam(
+//            mascotLength = 139.0,
+//            ellipseLength = 232.0,
+//            modifier = Modifier.offset(x = -20f.wp(), y = 255f.hp())
+//        )
+//
+//        // 냠코치 (오른쪽)
+//        NyamCoach(
+//            modifier = Modifier
+//                .padding(top = 342.12f.hp(), start = 126f.wp())
+//                .size(width = 338f.wp(), height = 338f.bhp()),
+//            alpha = nyamAlpha
+//        )
+
+        HamcoachGif(
+            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            num = 1,
+            ellipseLength = 222.0,
+            mascotLength = 200.0
         )
 
-        // 냠코치 (오른쪽)
-        NyamCoach(
+        NyameeGif(
             modifier = Modifier
-                .padding(top = 342.12f.hp(), start = 126f.wp())
-                .size(width = 338f.wp(), height = 338f.bhp()),
-            alpha = nyamAlpha
+                .offset(x = 60f.wp(), y = 300f.bhp())
+                .alpha(nyamAlpha),
+            num = 1,
+            sizePercent = 1.35f
         )
+
     }
 }
-
 
 
 @Preview
 @Composable
 private fun OnboardingBackScreenPreview() {
-
 
 
     Box(

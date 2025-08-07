@@ -24,6 +24,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeScale
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -68,14 +69,21 @@ fun OnboardingMainHomeNyamScreen(
         )
 
         // 4. 냠이 캐릭터
-        NyamCoach(
-            modifier = Modifier
-                .width(206.44f.wp())
-                .height(268.4f.bhp())
-                .align(Alignment.TopStart)
-                .offset(x = 148f.wp(), y = 150f.bhp()),
-            alpha = 1f
+//        NyamCoach(
+//            modifier = Modifier
+//                .width(206.44f.wp())
+//                .height(268.4f.bhp())
+//                .align(Alignment.TopStart)
+//                .offset(x = 148f.wp(), y = 150f.bhp()),
+//            alpha = 1f
+//        )
+
+        NyameeGif(
+            modifier = Modifier.offset(x = 50f.wp(), y = 35f.bhp()),
+            num = 1,
+            sizePercent = 1f
         )
+
     }
 }
 

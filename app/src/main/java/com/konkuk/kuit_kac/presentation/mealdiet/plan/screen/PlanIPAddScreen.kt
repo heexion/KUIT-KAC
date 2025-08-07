@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,6 +44,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanDietCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -87,13 +89,26 @@ fun PlanIPAddScreen(
                     .align(Alignment.TopCenter)
             )
 
-            EllipseNyam(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 112.12f.hp()),
-                mascotLength = 87.70016,
-                ellipseLength = 145.62891
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .align(Alignment.TopCenter)
+//                    .padding(top = 112.12f.hp()),
+//                mascotLength = 87.70016,
+//                ellipseLength = 145.62891
+//            )
+
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 112.12f.hp()),
+                    num = 1,
+                    ellipseLength = 145.62891,
+                    mascotLength = 110.0,
+                )
+            }
 
             Box(
                 modifier = Modifier
@@ -190,6 +205,16 @@ fun PlanIPAddScreen(
                     onClick = {
                         mealViewModel.setType("저녁")
                         navController.navigate("PlanIPSearch") },
+                    editOnClick = {
+                        if (mealViewModel.getPlanState.value != null) {
+                            mealViewModel.resolveFoodsFromPlanType("저녁") {
+                                Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
+                                navController.navigate("PlanIPTemp")
+                            }
+                        } else {
+                            Log.e("PlanIPAdd", "Plan data not ready yet!")
+                        }
+                    },
                     isEdit = isMealTypeExist("저녁")
                 )
                 Spacer(modifier = Modifier.size(40.46f.bhp()))

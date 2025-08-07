@@ -1,11 +1,8 @@
 package com.konkuk.kuit_kac.data.request
 
-import com.konkuk.kuit_kac.local.Food
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.Instant
-import java.util.Date
 
 @Serializable
 data class MealRequestDto(
@@ -99,3 +96,13 @@ data class PlanRequestDto(
     @SerialName("foods")
     val foods: List<FoodRequestDto>
 )
+
+@Serializable
+data class WeightRequestDto(
+    @SerialName("userId") val userId: Int,
+    @SerialName("weight") val weight: Float
+)
+
+
+
+

@@ -23,6 +23,7 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeNyam
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
@@ -53,16 +54,25 @@ fun OnboardingMainHomeHamScreen(
                 .background(Color(0xAA000000))
         )
 
+        HamcoachGif(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 20f.wp(), top = 80f.bhp()),
+            num = 1,
+            ellipseLength = 147.6,
+            mascotLength = 120.0,
+        )
+
         // 햄코치 + 말풍선 그룹
         Box(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(start = 29f.wp(), top = 115f.bhp())
         ) {
-            EllipseNyam(
-                ellipseLength = 147.6,
-                mascotLength = 88.4
-            )
+//            EllipseNyam(
+//                ellipseLength = 147.6,
+//                mascotLength = 88.4
+//            )
 
             Text(
                 text = "햄코치를 터치하면\n관찰일지를 확인할 수 있어!",

@@ -15,13 +15,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,9 +45,13 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.diet.component.PlanColorType
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 // 식단 추천 완료 화면
 @Composable
@@ -52,12 +59,12 @@ fun PlanAICompleteScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    var isDateSelected = remember { mutableStateOf(false) }
-
     var buttonValue = "저장하기"
     var navigateValue = "plan_result"
+    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
-    if (isDateSelected.value) {
+    if (selectedDate != null) {
         buttonValue = "확인해볼래!"
         navigateValue = "plan_ai_detail"
     }
@@ -82,13 +89,25 @@ fun PlanAICompleteScreen(
                 .align(Alignment.TopCenter)
         )
 
-        EllipseNyam(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 194.22f.hp()),
-            mascotLength = 127.45568,
-            ellipseLength = 212.81445
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            HamcoachGif(
+                modifier = Modifier.offset(y = 194.22f.hp()),
+                num = 1,
+                ellipseLength = 212.81445,
+                mascotLength = 175.0,
+            )
+        }
+
+//        EllipseNyam(
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
+//                .padding(top = 194.22f.hp()),
+//            mascotLength = 127.45568,
+//            ellipseLength = 212.81445
+//        )
 
         Box(
             modifier = Modifier
@@ -137,35 +156,18 @@ fun PlanAICompleteScreen(
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.padding(start = 17.5f.wp())
+                    modifier = Modifier.padding(horizontal = 17.5f.wp(), vertical = 22.98f.bhp())
                 ) {
-                    Text(
-                        text = "날짜 선택하기",
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp(),
-                        color = Color(0xFF000000),
-                        modifier = Modifier
-                            .padding(top = 22.98f.bhp(), bottom = 10.02f.bhp())
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8f.wp())
-                    ) {
-                        PlanColorType(value = "AI 식단 날짜", image = R.drawable.ic_plan_circle_yellow)
-                        PlanColorType(value = "외식", image = R.drawable.ic_plan_circle_blue)
-                        PlanColorType(value = "술자리", image = R.drawable.ic_plan_circle_pink)
-                    }
-                }
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(266.65f.bhp())
-                        .padding(start = 23.34f.wp(), end = 26.89f.wp(),
-                        top = 33.57f.bhp(), bottom = 30.71f.bhp())
-                        .background(Color.LightGray)
-                        .clickable {
-                            isDateSelected.value = !isDateSelected.value
+                    PlanCalendar(
+                        modifier = Modifier.padding(),
+                        taggedDATES = taggedDates,
+                        isTagDetailShow = true,
+                        onDateSelected = { date ->
+                            selectedDate = date
                         }
-                )   // TODO : 달력 추후 추가
+                    )
+                }
+
                 Column {
                     PlanConfirmButton(
                         modifier = Modifier.padding(
@@ -180,7 +182,10 @@ fun PlanAICompleteScreen(
                         height = 65f
                     )
                     Spacer(
-                        modifier = Modifier.size(115f.bhp()- WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
+                        modifier = Modifier.size(
+                            150f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                                .calculateBottomPadding()
+                        ),
                     )
                 }
             }

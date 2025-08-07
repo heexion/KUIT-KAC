@@ -40,6 +40,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
 import com.konkuk.kuit_kac.presentation.onboarding.component.SubButton
@@ -98,9 +99,14 @@ fun OnboardingInputScreen(
                 .padding(horizontal = 24.4f.wp()),
             verticalAlignment = Alignment.Top
         ) {
-            EllipseNyam(
+//            EllipseNyam(
+//                ellipseLength = 191.2,
+//                mascotLength = 114.5
+//            )
+            HamcoachGif(
+                num = 1,
                 ellipseLength = 191.2,
-                mascotLength = 114.5
+                mascotLength = 165.0,
             )
 
             Box(

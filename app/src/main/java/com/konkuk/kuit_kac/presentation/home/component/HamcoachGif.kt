@@ -30,7 +30,7 @@ fun HamcoachGif(
             painter = painterResource(R.drawable.img_component_ellipse),
             contentDescription = "Nyam Ellipse"
         )
-
+        // 1:기본 2:엄지척 3:화남 4:고민중(로딩)
         when (num) {
             1 -> GifImage(
                 modifier = Modifier
@@ -47,6 +47,26 @@ fun HamcoachGif(
                     .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
                     .offset(x = 10f.wp()),
                 drawableId = R.drawable.gif_hamcoach_thumbsup,
+                onClick = { onClick() },
+                actualWidth = 88.43783f.wp(),
+                actualHeight = 88.43783f.bhp()
+            )
+
+            3 -> GifImage(
+                modifier = Modifier
+                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
+                    .offset(x = 10f.wp()),
+                drawableId = R.drawable.gif_hamcoach_angry,
+                onClick = { onClick() },
+                actualWidth = 88.43783f.wp(),
+                actualHeight = 88.43783f.bhp()
+            )
+
+            4->  GifImage(
+                modifier = Modifier
+                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
+                    .offset(x = 10f.wp(), y = -10f.bhp()),
+                drawableId = R.drawable.gif_hamcoach_thinking_loading,
                 onClick = { onClick() },
                 actualWidth = 88.43783f.wp(),
                 actualHeight = 88.43783f.bhp()

@@ -1,22 +1,22 @@
 package com.konkuk.kuit_kac.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.konkuk.kuit_kac.BuildConfig
+import com.konkuk.kuit_kac.data.service.CoachReportApiService
 import com.konkuk.kuit_kac.data.service.DietService
+import com.konkuk.kuit_kac.data.service.HomeSummaryApiService
+import com.konkuk.kuit_kac.data.service.HomeWeightService
 import com.konkuk.kuit_kac.data.service.MealService
 import com.konkuk.kuit_kac.data.service.RoutineService
+import com.konkuk.kuit_kac.data.service.NutritionService
 import com.konkuk.kuit_kac.local.service.FoodService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -42,6 +42,30 @@ object ApiModule {
     @Singleton
     fun provideRoutineService(retrofit: Retrofit): RoutineService =
         retrofit.create(RoutineService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNutritionService(retrofit: Retrofit): NutritionService =
+        retrofit.create(NutritionService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideHomeSummaryApiService(retrofit: Retrofit): HomeSummaryApiService {
+        return retrofit.create(HomeSummaryApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoachReportApiService(retrofit: Retrofit): CoachReportApiService =
+        retrofit.create(CoachReportApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideHomeWeightService(retrofit: Retrofit): HomeWeightService =
+        retrofit.create(HomeWeightService::class.java)
+
+
+
 }
 @Module
 @InstallIn(SingletonComponent::class)
@@ -69,3 +93,5 @@ object NetworkModule {
             .build()
     }
 }
+
+

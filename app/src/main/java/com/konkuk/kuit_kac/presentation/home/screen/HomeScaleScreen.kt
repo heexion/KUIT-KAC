@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -46,6 +47,7 @@ import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
+import com.konkuk.kuit_kac.presentation.home.viewmodel.WeightViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -61,24 +63,28 @@ fun HomeScaleScreen(
     navController: NavHostController,
     weight: Double = 0.0
 ) {
+    val viewModel: WeightViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
     val clicked = remember { mutableStateOf(false) }
-    var buttonText = "수정하기"
-    var scaleText = "${weight}kg"
-    var textSize = DungGeunMo35
+
+    // 서버에서 가져온 최근 체중
+    val weightInfo by viewModel.weightInfo
+
+    // 화면 진입 시 getWeight 호출
+    LaunchedEffect(Unit) {
+        viewModel.getWeight(userId = 1)
+    }
+
+    val weight = weightInfo?.weight ?: 0.0
+    val buttonText = if (weight == 0.0) "기록하기" else "수정하기"
+    val scaleText = if (weight == 0.0) "기록 되지 않음!" else "${weight}kg"
+    val textSize = if (weight == 0.0) DungGeunMo27 else DungGeunMo35
 
     var randNum by remember { mutableIntStateOf(1) }
 
     LaunchedEffect(Unit) {
         randNum = Random.nextInt(3) + 1
     }
-
-    if (weight == 0.0) {
-        buttonText = "기록하기"
-        scaleText = "기록 되지 않음!"
-        textSize = DungGeunMo27
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
