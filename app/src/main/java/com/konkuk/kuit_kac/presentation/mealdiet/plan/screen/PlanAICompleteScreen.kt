@@ -183,7 +183,7 @@ fun PlanAICompleteScreen(
                     )
                     Spacer(
                         modifier = Modifier.size(
-                            115f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                            150f.bhp() - WindowInsets.navigationBars.asPaddingValues()
                                 .calculateBottomPadding()
                         ),
                     )
