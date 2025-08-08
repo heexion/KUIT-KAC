@@ -53,6 +53,8 @@ import com.konkuk.kuit_kac.presentation.home.screen.HomeObservationScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeResultScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleInputScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeScaleScreen
+import com.konkuk.kuit_kac.presentation.login.screen.LoginEmailScreen
+import com.konkuk.kuit_kac.presentation.login.screen.LoginMainScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietCreateScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietEditSearchItemDetailScreen
@@ -205,7 +207,7 @@ fun KacNavGraph(
                 onFastedClick = {},
             )
         }
-        composable(Route.MealPatch.route){
+        composable(Route.MealPatch.route) {
             MealPatchScreen(
                 modifier = modifier,
                 navController = navController
@@ -220,7 +222,7 @@ fun KacNavGraph(
         composable(Route.MealSearch.route) {
             MealSearchScreen(navController = navController)
         }
-        composable(Route.MealTime.route){
+        composable(Route.MealTime.route) {
             MealTimeScreen(
                 navController = navController
             )
@@ -228,10 +230,10 @@ fun KacNavGraph(
         navigation(
             route = "RoutineRecordGraph",
             startDestination = "RoutineRecordEdit"
-        ){
+        ) {
             composable(
                 route = "RoutineRecordEdit"
-            ){backStackEntry->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineRecordGraph")
                 }
@@ -245,7 +247,7 @@ fun KacNavGraph(
             }
             composable(
                 route = "FitnessDetailInput"
-            ){backStackEntry ->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineRecordGraph")
                 }
@@ -259,10 +261,10 @@ fun KacNavGraph(
         navigation(
             route = "FitnessAddGraph",
             startDestination = "FitnessRecordSearch"
-        ){
+        ) {
             composable(
                 route = "FitnessRecordSearch"
-            ){backStackEntry->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("FitnessAddGraph")
                 }
@@ -290,7 +292,7 @@ fun KacNavGraph(
             }
             composable(
                 route = "FitnessAddRecordEdit"
-            ){backStackEntry->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("FitnessAddGraph")
                 }
@@ -304,10 +306,10 @@ fun KacNavGraph(
         navigation(
             route = "RecordEditGraph",
             startDestination = "RecordMain"
-        ){
+        ) {
             composable(
                 route = "RecordMain"
-            ){backStackEntry ->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RecordEditGraph")
                 }
@@ -321,7 +323,7 @@ fun KacNavGraph(
             }
             composable(
                 route = Route.FitnessRecordEdit.route
-            ){backStackEntry->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RecordEditGraph")
                 }
@@ -333,7 +335,7 @@ fun KacNavGraph(
             }
             composable(
                 route = Route.FitnessSearch.route
-            ){backStackEntry->
+            ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RecordEditGraph")
                 }
@@ -368,21 +370,21 @@ fun KacNavGraph(
                 route = "RoutineEditGraph/RoutineEdit?routineId={routineId}&name={name}",
                 arguments = listOf(
                     navArgument("routineId") { type = NavType.IntType; defaultValue = -1 },
-                    navArgument("name"      ) { type = NavType.StringType; defaultValue = "" }
+                    navArgument("name") { type = NavType.StringType; defaultValue = "" }
                 )
             ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineEditGraph")
                 }
-                val args      = backStackEntry.arguments!!
+                val args = backStackEntry.arguments!!
                 val routineId = args.getInt("routineId")
-                val name      = args.getString("name") ?: ""
+                val name = args.getString("name") ?: ""
                 parentEntry.savedStateHandle["routineId"] = routineId
-                parentEntry.savedStateHandle["name"]      = name
+                parentEntry.savedStateHandle["name"] = name
                 val vm = hiltViewModel<RoutineViewModel>(parentEntry)
                 FitnessEditScreen(modifier, navController, vm)
             }
-            composable(Route.FitnessCreate.route){backStackEntry->
+            composable(Route.FitnessCreate.route) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineEditGraph")
                 }
@@ -392,7 +394,7 @@ fun KacNavGraph(
                     routineViewModel = routineViewModel
                 )
             }
-            composable(Route.FitnessSearch.route){backStackEntry->
+            composable(Route.FitnessSearch.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineEditGraph")
                 }
@@ -402,7 +404,7 @@ fun KacNavGraph(
                     routineViewModel = routineViewModel
                 )
             }
-            composable(Route.FitnessEdit.route){ backStackEntry ->
+            composable(Route.FitnessEdit.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineEditGraph")
                 }
@@ -417,7 +419,7 @@ fun KacNavGraph(
         navigation(
             route = "DietEditGraph",
             startDestination = "DietEditGraph/DietEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&name={name}"
-        ){
+        ) {
             composable(
                 route = "DietEditGraph/DietEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&name={name}",
                 arguments = listOf(
@@ -434,7 +436,7 @@ fun KacNavGraph(
                         defaultValue = ""
                     }
                 )
-            ){backStackEntry ->
+            ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietEditGraph")
                 }
@@ -457,8 +459,8 @@ fun KacNavGraph(
             }
             composable(
                 "dieteditsearch"
-            ){backStackEntry ->
-                val parentEntry = remember(backStackEntry){
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietEditGraph")
                 }
                 DietEditSearchScreen(
@@ -468,8 +470,8 @@ fun KacNavGraph(
             }
             composable(
                 route = "diet_edit_search_detail/{foodName}"
-            ){ backStackEntry ->
-                val parentEntry = remember(backStackEntry){
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietEditGraph")
                 }
                 val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
@@ -496,21 +498,21 @@ fun KacNavGraph(
         navigation(
             route = "PlanIPGraph",
             startDestination = "PlanIPGraph/plan_in_person_add?date={date}"
-        ){
+        ) {
             composable(
                 route = "PlanIPGraph/plan_in_person_add?date={date}",
                 arguments = listOf(
-                    navArgument("date"){
+                    navArgument("date") {
                         type = NavType.StringType
                         defaultValue = ""
                     }
                 )
-            ){ backStackEntry ->
+            ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIpGraph")
                 }
                 val args = backStackEntry.arguments
-                val date = args?.getString("name")?: ""
+                val date = args?.getString("name") ?: ""
                 parentEntry.savedStateHandle["date"] = date
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
                 PlanIPAddScreen(
@@ -520,7 +522,7 @@ fun KacNavGraph(
             }
             composable(
                 route = "PlanIPSearch"
-            ){ backStackEntry->
+            ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIpGraph")
                 }
@@ -531,7 +533,7 @@ fun KacNavGraph(
             }
             composable(
                 route = "plan_search_detail/{foodName}"
-            ){backStackEntry ->
+            ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIPGraph")
                 }
@@ -545,14 +547,14 @@ fun KacNavGraph(
             }
             composable(
                 route = "PlanIPTemp"
-            ){ backStackEntry ->
+            ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIpGraph")
                 }
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
                 PlanIPTempScreen(
                     mealViewModel = mealViewModel,
-                     navController = navController
+                    navController = navController
                 )
             }
         }
@@ -560,7 +562,7 @@ fun KacNavGraph(
         navigation(
             route = "MealEditGraph",
             startDestination = "MealEditGraph/MealEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&mealType={mealType}"
-        ){
+        ) {
             composable(
                 route = "MealEditGraph/MealEditTemp?dietId={dietId}&fwqRaw={fwqRaw}&mealType={mealType}",
                 arguments = listOf(
@@ -609,30 +611,30 @@ fun KacNavGraph(
                 )
             }
 
-                composable(
-                    "mealeditsearch"
-                ){backStackEntry ->
-                    val parentEntry = remember(backStackEntry){
-                        navController.getBackStackEntry("MealEditGraph")
-                    }
-                    val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
-                    MealEditSearchScreen(navController = navController, mealViewModel= mealViewModel)
+            composable(
+                "mealeditsearch"
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealEditGraph")
                 }
-                composable(
-                    route = "meal_edit_search_detail/{foodName}",
-                ) { backStackEntry ->
-                    val parentEntry = remember(backStackEntry) {
-                        navController.getBackStackEntry("MealEditGraph")
-                    }
-                    val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
-                    val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
-                    MealEditSearchItemDetailScreen(
-                        foodName = foodName,
-                        navController = navController,
-                        mealViewModel = mealViewModel
-                    )
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                MealEditSearchScreen(navController = navController, mealViewModel = mealViewModel)
+            }
+            composable(
+                route = "meal_edit_search_detail/{foodName}",
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("MealEditGraph")
                 }
-            composable(Route.MealTime.route) {backStackEntry ->
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
+                MealEditSearchItemDetailScreen(
+                    foodName = foodName,
+                    navController = navController,
+                    mealViewModel = mealViewModel
+                )
+            }
+            composable(Route.MealTime.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("MealEditGraph")
                 }
@@ -651,14 +653,14 @@ fun KacNavGraph(
         }*/
         composable(
             route = "FitnessRecordMain"
-        ){
+        ) {
             FitnessRecordMainScreen(
                 navController = navController,
                 selectedTab = "기록",
                 onTabClick = {}
             )
         }
-        composable(route = "FitnessRecord"){
+        composable(route = "FitnessRecord") {
             FitnessRecordScreen(
                 navController = navController
             )
@@ -666,8 +668,8 @@ fun KacNavGraph(
         navigation(
             route = "RoutineGraph",
             startDestination = Route.FitnessCreate.route
-        ){
-            composable(Route.FitnessCreate.route){backStackEntry->
+        ) {
+            composable(Route.FitnessCreate.route) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineGraph")
                 }
@@ -677,7 +679,7 @@ fun KacNavGraph(
                     routineViewModel = routineViewModel
                 )
             }
-            composable(Route.FitnessSearch.route){backStackEntry->
+            composable(Route.FitnessSearch.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineGraph")
                 }
@@ -687,7 +689,7 @@ fun KacNavGraph(
                     routineViewModel = routineViewModel
                 )
             }
-            composable(Route.FitnessEdit.route){ backStackEntry ->
+            composable(Route.FitnessEdit.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineGraph")
                 }
@@ -702,9 +704,9 @@ fun KacNavGraph(
         navigation(
             route = "DietGraph",
             startDestination = Route.DietCreate.route
-        ){
-            composable(Route.DietCreate.route) {backStackEntry ->
-                val parentEntry = remember(backStackEntry){
+        ) {
+            composable(Route.DietCreate.route) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }
                 val dietViewModel = hiltViewModel<DietViewModel>(parentEntry)
@@ -716,8 +718,8 @@ fun KacNavGraph(
             }
             composable(
                 Route.DietSearch.route
-            ){backStackEntry ->
-                val parentEntry = remember(backStackEntry){
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }
                 DietSearchScreen(
@@ -727,8 +729,8 @@ fun KacNavGraph(
             }
             composable(
                 route = "diet_search_detail/{foodName}"
-            ){ backStackEntry ->
-                val parentEntry = remember(backStackEntry){
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }
                 val foodName = backStackEntry.arguments?.getString("foodName") ?: ""
@@ -739,7 +741,7 @@ fun KacNavGraph(
                     foodName = foodName
                 )
             }
-            composable(Route.DietPatch.route){backStackEntry ->
+            composable(Route.DietPatch.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }
@@ -756,7 +758,7 @@ fun KacNavGraph(
             route = "MealGraph/{mealType}",
             startDestination = Route.MealRecord.route,
             arguments = listOf(navArgument("mealType") { defaultValue = "" })
-        ){
+        ) {
             composable(
                 Route.MealRecord.route
             ) { backStackEntry ->
@@ -771,8 +773,7 @@ fun KacNavGraph(
             }
             composable(
                 Route.MealPatch.route
-            ) {
-                backStackEntry ->
+            ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("MealGraph/{mealType}")
                 }
@@ -785,13 +786,13 @@ fun KacNavGraph(
             }
             composable(
                 Route.MealSearch.route
-            ){backStackEntry ->
-                val parentEntry = remember(backStackEntry){
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("MealGraph/{mealType}")
                 }
                 val mealType = parentEntry.arguments?.getString("mealType") ?: ""
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
-                MealSearchScreen(navController = navController, mealViewModel= mealViewModel)
+                MealSearchScreen(navController = navController, mealViewModel = mealViewModel)
             }
             composable(
                 route = "meal_search_detail/{foodName}",
@@ -814,7 +815,7 @@ fun KacNavGraph(
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
                 MealTempScreen(navController = navController, mealViewModel = mealViewModel)
             }
-            composable(Route.MealTime.route) {backStackEntry ->
+            composable(Route.MealTime.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("MealGraph/{mealType}")
                 }
@@ -830,7 +831,6 @@ fun KacNavGraph(
                 )
             }
         }
-
 
 
 //        composable(Route.HomeAnalysis.route) {
@@ -932,10 +932,11 @@ fun KacNavGraph(
             FitnessEditResultScreen(navController = navController)
         }
         composable(Route.FitnessSearch.route) {
-            FitnessSearchScreen(navController = navController
+            FitnessSearchScreen(
+                navController = navController
             )
         }
-        composable(route = Route.Fitness.route){
+        composable(route = Route.Fitness.route) {
             FitnessMainScreen(
                 navController = navController,
                 onFastedClick = { /* 구현 */ },
@@ -944,7 +945,7 @@ fun KacNavGraph(
                 onTabClick = { /* 탭 클릭 시 동작 */ }
             )
         }
-        composable(route = Route.FitnessExist.route){
+        composable(route = Route.FitnessExist.route) {
             val sampleFitnessData = listOf(
                 FitnessData(
                     id = 1,
@@ -1014,7 +1015,8 @@ fun KacNavGraph(
             val name = backStackEntry.arguments?.getString("name") ?: ""
             FitnessDetailRecordScreen(
                 navController = navController,
-                name = name)
+                name = name
+            )
         }
 
         composable(Route.FitnessRecordResult.route) {
@@ -1092,6 +1094,14 @@ fun KacNavGraph(
         }
         composable(route = OnboardingMainHomeScale.route) {
             OnboardingMainHomeScaleScreen(navController = navController)
+        }
+
+        // 로그인
+        composable(route = Route.LoginMain.route) {
+            LoginMainScreen(navController = navController)
+        }
+        composable(route = Route.LoginEmail.route) {
+            LoginEmailScreen(navController = navController)
         }
 
 
