@@ -40,12 +40,19 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
+data class FoodItem(
+    val icon: Painter,
+    val name: String,
+    val quantity: String,
+    val isNightSnack: Boolean = false
+)
+
 @Composable
 fun MealCard(
     mealType: String,
     totalKcal: String,
-    foodList: List<Triple<Painter, String, String>>, // (icon, name, quantity)
-    onEditClick: () -> Unit
+    foodList: List<FoodItem>,
+    onEditClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -74,14 +81,22 @@ fun MealCard(
                     .padding(horizontal = 16f.wp(), vertical = 11.1f.bhp()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "$mealType ", style = DungGeunMo20,
-                    fontSize = 20f.isp(), color = Color(0xFF000000))
-                Text(text = "(총 $totalKcal)", style = DungGeunMo17,
-                    fontSize = 17f.isp(), color = Color(0xFF713E3A))
+                Text(
+                    text = "$mealType ",
+                    style = DungGeunMo20,
+                    fontSize = 20f.isp(),
+                    color = Color(0xFF000000)
+                )
+                Text(
+                    text = "(총 $totalKcal)",
+                    style = DungGeunMo17,
+                    fontSize = 17f.isp(),
+                    color = Color(0xFF713E3A)
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
                     modifier = Modifier
-                        .size(30.16f.wp(),29.66f.bhp())
+                        .size(30.16f.wp(), 29.66f.bhp())
                         .clickable { onEditClick() }
                 ) {
                     Image(
@@ -93,7 +108,7 @@ fun MealCard(
                         painter = painterResource(id = R.drawable.ic_record),
                         contentDescription = "Pencil Icon",
                         modifier = Modifier
-                            .size(26.76f.wp(),26.76f.bhp())
+                            .size(26.76f.wp(), 26.76f.bhp())
                             .align(Alignment.Center)
                     )
                 }
@@ -106,6 +121,7 @@ fun MealCard(
                 .fillMaxWidth()
                 .height(154f.bhp())
         ) {
+            // 기본 배경 전체
             Image(
                 painter = painterResource(id = R.drawable.img_diet_card_bg),
                 contentDescription = null,
@@ -115,6 +131,7 @@ fun MealCard(
                     .clip(RoundedCornerShape(bottomStart = 16f.bhp(), bottomEnd = 16f.bhp()))
             )
 
+            // 음식 리스트
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -122,29 +139,51 @@ fun MealCard(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                foodList.forEach { (icon, name, quantity) ->
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(
-                            painter = icon,
-                            contentDescription = name,
-                            modifier = Modifier.size(72f.wp(),72f.bhp())
-                        )
-                        Spacer(modifier = Modifier.height(6f.bhp()))
-                        Text(
-                            text = name,
-                            style = DungGeunMo15,
-                            fontSize = 15f.isp(),
-                            color = Color(0xFF000000),
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(2f.bhp()))
-                        Text(
-                            text = quantity,
-                            style = DungGeunMo12,
-                            fontSize = 12f.isp(),
-                            color = Color(0xFF713E3A),
-                            textAlign = TextAlign.Center
-                        )
+                foodList.forEach { item ->
+                    Box(
+                        modifier = Modifier
+                            .width(76f.wp())
+                            .height(135f.bhp())
+                    ) {
+                        // 음식 배경 (밤 간식일 경우만)
+                        if (item.isNightSnack) {
+                            Image(
+                                painter = painterResource(id = R.drawable.bg_nightsnack),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
+                                modifier = Modifier
+                                    .size(76f.wp(), 135f.bhp())
+                                    .clip(RoundedCornerShape(12.dp))
+                            )
+                        }
+
+                        // 음식 아이템 내용
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.align(Alignment.Center)
+                        ) {
+                            Image(
+                                painter = item.icon,
+                                contentDescription = item.name,
+                                modifier = Modifier.size(72f.wp(), 72f.bhp())
+                            )
+                            Spacer(modifier = Modifier.height(6f.bhp()))
+                            Text(
+                                text = item.name,
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(2f.bhp()))
+                            Text(
+                                text = item.quantity,
+                                style = DungGeunMo12,
+                                fontSize = 12f.isp(),
+                                color = Color(0xFF713E3A),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
@@ -152,17 +191,37 @@ fun MealCard(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MealCardPreview() {
     MealCard(
         mealType = "아침",
         totalKcal = "390kcal",
         foodList = listOf(
-            Triple(painterResource(R.drawable.ic_sweetpotato), "고구마", "0.5개"),
-            Triple(painterResource(R.drawable.ic_misc_foods), "단백질\n쉐이크", "300ml"),
-            Triple(painterResource(R.drawable.ic_chickenbreast), "닭가슴살", "0.5접시"),
-            Triple(painterResource(R.drawable.ic_salad), "단호박\n샐러드", "0.5개")
+            FoodItem(
+                icon = painterResource(R.drawable.ic_sweetpotato),
+                name = "고구마",
+                quantity = "0.5개",
+                isNightSnack = false
+            ),
+            FoodItem(
+                icon = painterResource(R.drawable.ic_misc_foods),
+                name = "단백질\n쉐이크",
+                quantity = "300ml",
+                isNightSnack = true // 야식 예시
+            ),
+            FoodItem(
+                icon = painterResource(R.drawable.ic_chickenbreast),
+                name = "닭가슴살",
+                quantity = "0.5접시",
+                isNightSnack = false
+            ),
+            FoodItem(
+                icon = painterResource(R.drawable.ic_salad),
+                name = "단호박\n샐러드",
+                quantity = "0.5개",
+                isNightSnack = true // 야식 예시
+            )
         ),
         onEditClick = { /* 편집 */ }
     )

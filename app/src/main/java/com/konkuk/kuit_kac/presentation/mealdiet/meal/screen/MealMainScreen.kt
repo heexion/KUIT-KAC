@@ -1,8 +1,5 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,45 +27,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
-import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealState
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.FoodItem
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealFastingCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealRecordCard
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.FoodWithQuantity
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-
 
 
 @Composable
@@ -198,20 +183,25 @@ fun MealMainScreen(
                                 MealCard(
                                     mealType = state.mealCardData.mealType,
                                     totalKcal = state.mealCardData.totalKcal,
-                                    foodList = state.mealCardData.foodList.map { (drawableId, name, quantity) ->
-                                        Triple(painterResource(id = drawableId), name, quantity)
-                                    },
+                                    foodList = state.mealCardData.foodList.map { triple ->
+                                        FoodItem(
+                                            icon = painterResource(id = triple.first),      // drawableId
+                                            name = triple.second,                            // name
+                                            quantity = triple.third,                         // quantity
+                                            isNightSnack = state.mealCardData.registeredHour?.let { it >= 21 } ?: false
+                                        )
+                                    }
+                                    ,
                                     onEditClick = {
                                         val dietId = state.mealCardData.dietId
                                         val fwqRaw = state.mealCardData.foodList.joinToString(",") { (_, name, quantity) ->
                                             "$name:${quantity.removeSuffix("g")}"
                                         }
                                         val mealType = state.mealCardData.mealType
-                                        Log.d("type", "${mealType}")
-
                                         navController.navigate("MealEditGraph/MealEditTemp?dietId=${dietId}&fwqRaw=${fwqRaw}&mealType=${mealType}")
                                     }
                                 )
+
                             }
 
                         }
