@@ -1,9 +1,11 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +21,15 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +41,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.screen.RecordMealButton
-import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
@@ -43,6 +49,9 @@ fun MealRecordCard(
     navController: NavHostController,
     onFastingClick: () -> Unit
 ) {
+
+    var currentImage by remember { mutableStateOf(R.drawable.ic_eo_drink_button) }
+
     Column(
         modifier = Modifier
             .width(364f.wp())
@@ -74,8 +83,31 @@ fun MealRecordCard(
                     text = "$mealType ",
                     style = DungGeunMo20,
                     fontSize = 20f.isp(),
-                    color = Color(0xFF000000)
+                    color = Color(0xFF000000),
+                    modifier = Modifier.weight(1f) // 남은 공간을 차지
                 )
+
+                Image(
+                    painter = painterResource(id = currentImage),
+                    contentDescription = "외식 및 술자리 버튼",
+                    modifier = Modifier
+                        .width(123.dp)
+                        .height(25.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures { offset ->
+                                if (offset.x < size.width / 2) {
+                                    // 왼쪽 클릭 (외식)
+                                    currentImage = R.drawable.ic_eo_button
+                                    Log.d("Click", "외식 클릭됨")
+                                } else {
+                                    // 오른쪽 클릭 (술자리)
+                                    currentImage = R.drawable.ic_drink_button
+                                    Log.d("Click", "술자리 클릭됨")
+                                }
+                            }
+                        }
+                )
+
             }
         }
 

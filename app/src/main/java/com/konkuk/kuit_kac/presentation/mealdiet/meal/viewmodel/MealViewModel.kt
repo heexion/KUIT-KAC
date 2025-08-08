@@ -1,36 +1,27 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel
 
 import android.content.Context
-import com.konkuk.kuit_kac.data.request.MealRequestDto
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
-
 import android.util.Log
-import android.view.View
-import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.data.request.FoodRequestDto
+import com.konkuk.kuit_kac.data.request.MealRequestDto
 import com.konkuk.kuit_kac.data.request.PlanRequestDto
 import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackFoodRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
 import com.konkuk.kuit_kac.data.response.MealResponseDto
-import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.local.Food
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.repository.DietRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodRepository
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newCoroutineContext
-import java.time.Instant
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -491,22 +482,32 @@ class MealViewModel @Inject constructor(
             }
         }
     }
+
+
     private val _mealCardData = mutableStateOf<List<MealCardData>>(emptyList())
     val mealCardData: State<List<MealCardData>> = _mealCardData
     fun parseToMealCardData(dto: MealResponseDto): MealCardData {
+        val foodList = dto.dietFoods.map { foodItem ->
+            Triple(
+                foodItem.food.foodType.toDrawable(),
+                foodItem.food.name,
+                "${foodItem.quantity}g"
+            )
+        }
+
+        val registeredHour = dto.dietFoods.firstOrNull()?.dietTime
+            ?.split(":")?.getOrNull(0)
+            ?.toIntOrNull()
+
         return MealCardData(
             dietId = dto.id,
             mealType = dto.dietType,
             totalKcal = "${dto.totalKcal}kcal",
-            foodList = dto.dietFoods.map { foodItem ->
-                Triple(
-                    foodItem.food.foodType.toDrawable(),
-                    foodItem.food.name,
-                    "${foodItem.quantity}g"
-                )
-            }
+            foodList = foodList,
+            registeredHour = registeredHour
         )
     }
+
     val totalCarb: Double
         get() = selectedFoods.sumOf { it.food.carb * it.quantity }
 
@@ -526,6 +527,7 @@ class MealViewModel @Inject constructor(
         _selectedFoods.addAll(foodList)
     }
 
+
 }
 
 data class FoodWithQuantity(
@@ -534,9 +536,9 @@ data class FoodWithQuantity(
 )
 
 data class MealCardData(
-    val dietId: Int,
     val mealType: String,
     val totalKcal: String,
+    val dietId: Int,
     val foodList: List<Triple<Int, String, String>>,
-    val isPlanned: Boolean = false
+    val registeredHour: Int? = null
 )
