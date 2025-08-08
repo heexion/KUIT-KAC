@@ -5,8 +5,14 @@ import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.data.service.HomeSummaryApiService
 import com.konkuk.kuit_kac.data.service.HomeWeightService
 import com.konkuk.kuit_kac.data.service.MealService
+import com.konkuk.kuit_kac.data.service.RoutineService
+import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.data.service.NutritionService
 import com.konkuk.kuit_kac.local.dao.FoodDao
+import com.konkuk.kuit_kac.local.service.FoodService
+import com.konkuk.kuit_kac.presentation.fitness.RoutineRepository
+import com.konkuk.kuit_kac.presentation.fitness.RoutineRepositoryImpl
+import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
 import com.konkuk.kuit_kac.presentation.home.repository.CoachReportRepository
 import com.konkuk.kuit_kac.presentation.home.repository.CoachReportRepositoryImpl
 import com.konkuk.kuit_kac.presentation.home.repository.HomeSummaryRepository
@@ -39,6 +45,16 @@ object RepositoryModule {
     @Singleton
     fun providesFoodRepository(foodDao: FoodDao): FoodRepository =
         FoodRepository(foodDao)
+
+    @Provides
+    @Singleton
+    fun providesFitnessRepository(fitnessDao: FitnessDao): FitnessRepository =
+        FitnessRepository(fitnessDao)
+
+    @Provides
+    @Singleton
+    fun providesRoutineRepository(routineService: RoutineService): RoutineRepository =
+        RoutineRepositoryImpl(routineService)
 
     @Provides
     @Singleton

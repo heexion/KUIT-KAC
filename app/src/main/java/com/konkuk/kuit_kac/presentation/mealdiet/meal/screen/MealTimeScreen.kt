@@ -255,7 +255,12 @@ fun MealTimeScreen(
                     .padding(horizontal = 20f.wp(), vertical = 20f.bhp()),
                 onClick = {
                     mealViewModel.setMealTime(selectedHour, selectedMinute, isAM)
-                    mealViewModel.createMeal()
+                    if (mealViewModel.selectType.value == "간식"){
+                        mealViewModel.createSnack()
+                    }
+                    else{
+                        mealViewModel.createMeal()
+                    }
                     navController.navigate("time_input_result") },
                 value = "기록하기",
                 buttonHeight = 70f,

@@ -1,5 +1,8 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,10 +25,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -48,15 +54,21 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealState
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealFastingCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealRecordCard
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.FoodWithQuantity
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealCardData
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+
 
 
 @Composable
@@ -69,34 +81,40 @@ fun MealMainScreen(
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
+        mealViewModel.getPlan(userId = 1)
         mealViewModel.getRecord(userId = 1)
     }
-    val mealCards = mealViewModel.mealCardData.value
+    val planList   by mealViewModel.getPlanState
+    val recordList by mealViewModel.getRecordState
+    val mealCards  by mealViewModel.mealCardData
     val mealTypeList = listOf("아침", "점심", "저녁", "간식")
     var showDialog by remember { mutableStateOf(false) }
     var dialogMealType by remember { mutableStateOf("") }
     var showAutoRecordDialog by remember { mutableStateOf(false) }
-
     val initialStates = mealTypeList.map { type ->
         val matched = mealCards.find { it.mealType == type }
         MealState(
             mealType = type,
             mealCardData = matched,
-            isFasting = false
+            isFasting = mealViewModel.isStillFastingForType(type) && matched == null
         )
     }
     val mealStates = remember(mealCards) {
         mutableStateListOf<MealState>().apply { addAll(initialStates) }
     }
-
-
-    LaunchedEffect(mealCards) {
-        val isAllBlank = mealStates.all { it.mealCardData == null && !it.isFasting }
-        val hasPlan = mealCards.isNotEmpty()
-        if (isAllBlank && hasPlan) {
-            showAutoRecordDialog = true
+    val missingTypes by remember(planList, recordList) {
+        derivedStateOf {
+            val planned   = planList.orEmpty().map { it.dietType }.toSet()
+            val recorded  = recordList.orEmpty().map { it.dietType }.toSet()
+            planned - recorded
         }
     }
+    LaunchedEffect(planList, recordList) {
+        showAutoRecordDialog = planList.orEmpty().isNotEmpty() && missingTypes.isNotEmpty()
+    }
+
+
+
 
     val scrollState = rememberScrollState()
 
@@ -183,7 +201,16 @@ fun MealMainScreen(
                                     foodList = state.mealCardData.foodList.map { (drawableId, name, quantity) ->
                                         Triple(painterResource(id = drawableId), name, quantity)
                                     },
-                                    onEditClick = { navController.navigate(Route.MealPatch.route) }
+                                    onEditClick = {
+                                        val dietId = state.mealCardData.dietId
+                                        val fwqRaw = state.mealCardData.foodList.joinToString(",") { (_, name, quantity) ->
+                                            "$name:${quantity.removeSuffix("g")}"
+                                        }
+                                        val mealType = state.mealCardData.mealType
+                                        Log.d("type", "${mealType}")
+
+                                        navController.navigate("MealEditGraph/MealEditTemp?dietId=${dietId}&fwqRaw=${fwqRaw}&mealType=${mealType}")
+                                    }
                                 )
                             }
 
@@ -203,6 +230,10 @@ fun MealMainScreen(
                                 mealType = label,
                                 navController = navController,
                                 onFastingClick = {
+
+                                    mealViewModel.setType(state.mealType)
+                                    mealViewModel.createSimple()
+                                    mealViewModel.saveFastingStartTimeForType(state.mealType)
                                     mealStates[index] = state.copy(isFasting = true)
                                 }
                             )
@@ -263,6 +294,7 @@ fun MealMainScreen(
                                 .clickable {
                                     val idx = mealTypeList.indexOf(dialogMealType)
                                     if (idx != -1) {
+                                        mealViewModel.clearFastingStartTimeForType(dialogMealType)
                                         mealStates[idx] = mealStates[idx].copy(isFasting = false)
                                     }
                                     showDialog = false
@@ -323,10 +355,15 @@ fun MealMainScreen(
                                 )
                                 .border(1.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
                                 .clickable {
-                                    mealCards.forEach { card ->
-                                        val index = mealTypeList.indexOf(card.mealType)
-                                        if (index != -1) {
-                                            mealStates[index] = mealStates[index].copy(mealCardData = card)
+                                    val missingDtos = planList.orEmpty()
+                                        .filter { it.dietType in missingTypes }
+
+                                    mealViewModel.postAllUnrecordedPlans()
+                                    missingDtos.forEach { dto ->
+                                        val idx = mealTypeList.indexOf(dto.dietType)
+                                        if (idx != -1) {
+                                            val card = mealViewModel.parseToMealCardData(dto)
+                                            mealStates[idx] = mealStates[idx].copy(mealCardData = card)
                                         }
                                     }
                                     showAutoRecordDialog = false
@@ -511,13 +548,3 @@ fun RecordMealButton(
 //    )
 //}
 
-@Preview(showBackground = true)
-@Composable
-private fun MealMainScreenPreview() {
-    val navController = rememberNavController()
-    MealMainScreen(
-        navController = navController,
-        selectedTab = "기록",
-        onTabClick = {},
-    )
-}

@@ -115,7 +115,7 @@ fun DietSearchItemDetailScreen(
                 onClick = {
                     foodInfo?.let { food ->
                         dietViewModel.addFood(food, quantity)
-                        navController.navigate(Route.DietPatch.route)
+                        navController.navigate("Diet")
                     }
                 },
                 value = "추가하기",

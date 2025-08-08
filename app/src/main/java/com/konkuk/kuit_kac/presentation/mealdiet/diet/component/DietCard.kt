@@ -42,7 +42,9 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.response.MealResponseDto
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -54,6 +56,7 @@ fun DietCard(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     routineList: List<String> = listOf("아침", "점심", "저녁"),
+    dietList: List<MealResponseDto>
 ) {
     var expanded by remember { mutableStateOf(false) }
     val existList = listOf(
@@ -169,16 +172,18 @@ fun DietCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16f.bhp())
             ) {
-                existList.forEach { exist ->
-                    MealItemCard(
-                        foodNum = exist,
-                        image = R.drawable.ic_dumplings,
-                        foodName = "고기만두",
-                        foodAmount = 1f,
-                        foodKcal = 120,
-                        onDeleteClick = { },
-                        navController = navController
-                    )
+                dietList.forEach { meal ->
+                    meal.dietFoods.forEach {dietFood->
+                        MealItemCard(
+                            foodNum = dietFood.food.id,
+                            image = dietFood.food.foodType.toDrawable(),
+                            foodName = dietFood.food.name,
+                            foodAmount = dietFood.quantity.toFloat(),
+                            foodKcal = dietFood.food.calorie.toInt(),
+                            onDeleteClick = {},
+                            navController = navController
+                        )
+                    }
                 }
 
             }
@@ -231,11 +236,4 @@ fun DietCard(
 
         }
     }
-}
-
-@Preview
-@Composable
-private fun DietCardWithButtonPreview() {
-    val navController = rememberNavController()
-    DietCard(navController = navController)
 }

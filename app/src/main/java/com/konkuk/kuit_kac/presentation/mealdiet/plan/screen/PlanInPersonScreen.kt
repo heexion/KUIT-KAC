@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.diet.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -165,8 +166,9 @@ fun PlanInPersonScreen(
                         isAvailable = if (selectedDate != null) true
                         else false,
                         onClick = {
+                            Log.d("plan", "${selectedDate}")
                             if (selectedDate != null)
-                                navController.navigate("plan_in_person_add")
+                                navController.navigate("PlanIPGraph/plan_in_person_add?date={$selectedDate}")
                         },
                         value = "계획하기",
                         height = 65f

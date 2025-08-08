@@ -16,13 +16,18 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -43,25 +49,32 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Fitness
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import kotlinx.coroutines.launch
 
 @Composable
 fun FitnessRoutineEditScreen(
     navController: NavHostController,
     selectedTab: String,
     onTabClick: (String) -> Unit,
-    fitnessItems: List<FitnessData>
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
-    val Clicked = remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        routineViewModel.getRoutineTemplate(userId = 1)
+    }
+    val coroutineScope = rememberCoroutineScope()
+    val routines = routineViewModel.getRoutineTemplateState.value.orEmpty()
+    val pagerState = rememberPagerState { routines.size.coerceAtLeast(1) }
+    val rotateDegree = 10f
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
-
-            // 상단 배경
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,57 +167,69 @@ fun FitnessRoutineEditScreen(
                     ellipseLength = 137.5,
                     mascotLength = 116.0
                 )
-                //Spacer(modifier = Modifier.height(24f.bhp()))
-
-                // 루틴 카드
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(300f.bhp())
                         .padding(horizontal = 4f.wp())
                 ) {
-                    Image(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .graphicsLayer {
-                                scaleX = 1.38f
-                                scaleY = 1.0f
-                            },
-                        painter = painterResource(R.drawable.img_all_tilted_rectangle),
-                        contentDescription = "tilted Rectangle"
-                    )
-
-                    FitnessCard(
-                        navController = navController,
-                        title = "하체루틴_허벅지..",
-                        fitnessList = fitnessItems
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .offset(x = 182f.wp(), y = 25f.bhp())
-                            .size(35f.bhp(), 35f.bhp())
-                            .clip(RoundedCornerShape(11f.bhp()))
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxSize(),
+                        pageSpacing = 40f.bhp()
+                    ) {  page ->
+                        if(routines.isNotEmpty()) {
+                            val routine = routines[page]
+                            val fitnessList = routine.routineExerciseProfiles.map { profile ->
+                                Fitness(
+                                    id = profile.exercise.id,
+                                    name = profile.exercise.name,
+                                    targetMuscleGroup = profile.exercise.targetMuscleGroup,
+                                    metValue = profile.exercise.metValue.toDouble(),
+                                    type = 0
                                 )
+                            }
+                            val offset =
+                                (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                            FitnessCard(
+                                navController = navController,
+                                title = routine.name,
+                                fitnessList = fitnessList,
+                                modifier = Modifier
+                                    .graphicsLayer { rotationZ = -rotateDegree * offset }
                             )
-                            .clickable(onClick = { Clicked.value = true })
-                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(11f.bhp())),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.svg_all_point),
-                            contentDescription = "pointer",
-                            modifier = Modifier.size(9f.wp(), 13f.bhp())
-                        )
+                        } else {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Text("루틴이 없습니다", textAlign = TextAlign.Center)
+                            }
+                        }
+                    }
+
+                    if (pagerState.currentPage < routines.lastIndex) {
+                        Box(
+                            Modifier
+                                .align(Alignment.CenterEnd)
+                                .offset(x = 16.dp)
+                                .size(35f.bhp())
+                                .clip(RoundedCornerShape(11f.bhp()))
+                                .background(Brush.verticalGradient(listOf(Color.White, Color(0xFFFFB638))))
+                                .clickable {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    }
+                                }
+                                .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.svg_all_point),
+                                contentDescription = "Next",
+                                modifier = Modifier.size(9f.wp(), 13f.bhp())
+                            )
+                        }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(28f.bhp()))
-
-                // 하단 진행 버튼
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -216,7 +241,23 @@ fun FitnessRoutineEditScreen(
                             )
                         )
                         .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
-                        .clickable { /* 진행 액션 */ },
+                        .clickable {
+                            if (routines.isNotEmpty()) {
+                                val current = routines[pagerState.currentPage]
+                                val fitnessItems = current.routineExerciseProfiles.map { p ->
+                                    Fitness(
+                                        id = p.exercise.id,
+                                        name = p.exercise.name,
+                                        targetMuscleGroup = p.exercise.targetMuscleGroup,
+                                        metValue = p.exercise.metValue.toDouble(),
+                                        type = 0
+                                    )
+                                }
+                                routineViewModel.setSelectedRoutines(fitnessItems)
+                            }
+                            routineViewModel.setName(routines.first().name)
+                            navController.navigate("FitnessDetailInput")
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -263,13 +304,5 @@ fun PreviewFitnessRoutineEditScreen() {
             )
         )
     }
-
-
-    FitnessRoutineEditScreen(
-        navController = navController,
-        selectedTab = selectedTab,
-        onTabClick = { selectedTab = it },
-        fitnessItems = sampleItems
-    )
 }
 

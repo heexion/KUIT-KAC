@@ -20,6 +20,7 @@ sealed class Route(val route: String) {
     data object MealGraph: Route(route = "MealGraph/{mealType}")
     data object MealSearch: Route(route = "MealSearch")
     data object MealTemp: Route(route = "MealTemp")
+    data object MealEditTemp: Route(route = "MealEditTemp")
 
     data object PlanDiet : Route(route = "PlanDiet") // 식단 계획
     data object PlanAI : Route(route = "PlanAI") // 식단 AI 추천

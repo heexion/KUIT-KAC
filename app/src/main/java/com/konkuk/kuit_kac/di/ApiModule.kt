@@ -6,6 +6,7 @@ import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.data.service.HomeSummaryApiService
 import com.konkuk.kuit_kac.data.service.HomeWeightService
 import com.konkuk.kuit_kac.data.service.MealService
+import com.konkuk.kuit_kac.data.service.RoutineService
 import com.konkuk.kuit_kac.data.service.NutritionService
 import com.konkuk.kuit_kac.local.service.FoodService
 import dagger.Module
@@ -36,6 +37,11 @@ object ApiModule {
     @Singleton
     fun provideFoodService(retrofit: Retrofit): FoodService =
         retrofit.create(FoodService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRoutineService(retrofit: Retrofit): RoutineService =
+        retrofit.create(RoutineService::class.java)
 
     @Provides
     @Singleton

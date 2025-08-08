@@ -153,7 +153,7 @@ fun FitnessRecordScreen(
                     )
                     .clickable(
                         onClick = {
-                            navController.navigate(Route.FitnessRoutineEdit.route)
+                            navController.navigate("RoutineRecordGraph")
                         }
                     ),
                 contentAlignment = Alignment.Center
@@ -181,7 +181,7 @@ fun FitnessRecordScreen(
                         )
                     )
                     .clickable(
-                        onClick = { navController.navigate(Route.FitnessRoutineSearch.route) }
+                        onClick = { navController.navigate("FitnessAddGraph") }
                     )
                 ,
                 contentAlignment = Alignment.Center

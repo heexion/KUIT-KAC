@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -30,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -39,9 +41,12 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Fitness
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemData
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessRecordCard
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -51,9 +56,22 @@ fun FitnessRecordMainScreen(
     navController: NavHostController,
     selectedTab: String,
     onTabClick: (String) -> Unit,
-    fitnessItems: List<FitnessItemData>
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
-
+    LaunchedEffect(Unit) {
+        routineViewModel.getRoutineRecord(userId = 1)
+    }
+    val routine = routineViewModel.getRoutineRecordState.value
+    val latestRoutine = routine?.firstOrNull()
+    val routineFitnessItems = latestRoutine?.routineExerciseProfiles?.map { profile ->
+        Fitness(
+            id = profile.exercise.id,
+            name = profile.exercise.name,
+            targetMuscleGroup = profile.exercise.targetMuscleGroup,
+            metValue = profile.exercise.metValue.toDouble(),
+            type = 0
+        )
+    } ?: emptyList()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             // 상단 배경
@@ -117,7 +135,7 @@ fun FitnessRecordMainScreen(
             )
 
             // 운동 기록이 있을 때 / 없을 때 분기
-            if (fitnessItems.isEmpty()) {
+            if (routine?.isEmpty() != false) {
                 //운동 기록이 없을 때
 
                 Column(
@@ -137,7 +155,7 @@ fun FitnessRecordMainScreen(
                 ) {
                     Spacer(modifier = Modifier.height(28f.bhp()))
                     RecordFitnessMainButton(
-                        onClick = { navController.navigate(route = Route.FitnessCreate.route) }
+                        onClick = { navController.navigate("FitnessRecord") }
                     )
                     Spacer(modifier = Modifier.height(25f.bhp()))
                     Box(
@@ -208,8 +226,13 @@ fun FitnessRecordMainScreen(
 
                     FitnessRecordCard(
                         title = "오늘의 운동!",
-                        fitnessItems = fitnessItems,
-                        onEditClick = {},
+                        fitnessItems = routineFitnessItems,
+                        onEditClick = {
+                            routineViewModel.setSelectedRoutines(routineFitnessItems)
+                            routineViewModel.setName(latestRoutine?.name ?: "")
+                            routineViewModel.setRoutineId(latestRoutine?.id)
+                            navController.navigate(Route.FitnessRecordEdit.route)
+                        },
                         navController = navController,
                         isEditable = false
                     )
@@ -232,7 +255,7 @@ fun FitnessRecordMainScreen(
                         )
                     )
                 )
-                .border(1.dp, Color.Black, CircleShape)
+                .border(1.dp, Color(0xFF000000), CircleShape)
                 .alpha(0.85f)
                 .clickable { /* onCalendarClick() */ },
             contentAlignment = Alignment.Center
@@ -280,18 +303,6 @@ fun RecordFitnessMainButton(
 
 
 //기록 없을때 프리뷰
-@Preview(showBackground = true)
-@Composable
-fun FitnessRecordMainScreenPreview_Empty() {
-    val navController = rememberNavController()
-
-    FitnessRecordMainScreen(
-        navController = navController,
-        selectedTab = "기록",
-        onTabClick = {},
-        fitnessItems = emptyList() //  기록 없음
-    )
-}
 
 ////기록 있을때 프리뷰
 //@Preview(showBackground = true)

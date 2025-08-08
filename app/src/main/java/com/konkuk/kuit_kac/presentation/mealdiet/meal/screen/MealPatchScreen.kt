@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 import android.graphics.PathEffect
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,14 +10,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +32,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,36 +52,76 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.screen.DietSwipeCardPager
+import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.FoodWithQuantity
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.deepYellow
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 
 @Composable
 fun MealPatchScreen(modifier: Modifier = Modifier,
                     navController: NavHostController,
-                    routineList:List<String> = listOf("아침", "점심", "저녁")
+                    routineList:List<String> = listOf("아침", "점심", "저녁"),
+                    dietViewModel: DietViewModel = hiltViewModel(),
+                    mealViewModel: MealViewModel = hiltViewModel(),
+                    foodViewModel: FoodViewModel = hiltViewModel()
 ) {
+
     var expanded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val lazyState = rememberLazyListState()
-    val existList = listOf(
-        1,2,3,4,5,6,7,8
-    )
+    LaunchedEffect(Unit) {
+        dietViewModel.getDiet(userId = 1)
+    }
+    val dietList = dietViewModel.getDietState.value
+    val state = !dietList.isNullOrEmpty()
     val cal = 677;
+    val resolvedFoods = remember { mutableStateOf<List<FoodWithQuantity>>(emptyList()) }
+    Log.d("MealPatch", "${dietList}")
+    val pageCount = dietList?.size?:1
+    val pagerState = rememberPagerState(pageCount = {pageCount})
+    val currentPage = pagerState.currentPage
+    val currentDiet = dietList?.get(currentPage)
+
+    LaunchedEffect(currentPage, dietList) {
+        if (!dietList.isNullOrEmpty() && currentPage in dietList.indices) {
+            val selectedDiet = dietList[currentPage]
+            val result = coroutineScope {
+                selectedDiet.dietFoods.map { df ->
+                    async {
+                        val name = df.food.name
+                        val quantity = df.quantity?.toFloat()
+                        val food = foodViewModel.getFoodByName(name)
+                        if (food != null) FoodWithQuantity(food, quantity?:1f) else null
+                    }
+                }.awaitAll().filterNotNull()
+            }
+            resolvedFoods.value = result
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -175,161 +222,98 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                     color = Color(0xFF000000)
                 )
             }
-            Column(
-                modifier = Modifier
-                    .padding(top = 106f.bhp(),
-                        start = 24f.wp())
-                    .width(364f.wp())
-                    .clip(RoundedCornerShape(20f.bhp()))
-                    .background(color = Color(0xFFFFF1AB))
-                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
-            ){
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.Transparent)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 22f.bhp(), start = 94f.wp())
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .width(176f.wp())
-                                .height(28f.bhp())
-                                .clip(RoundedCornerShape(7f.bhp()))
-                                .background(Color(0xFFFFFCEE))
-                                .clickable { expanded = true },
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Text(
-                                text = "아침식단1",
-                                style = DungGeunMo17,
-                                fontSize = 17f.isp(),
-                                color = Color(0xFF000000),
-                                modifier = Modifier
-                                    .padding(start = 49.5f.wp())
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_dropdown),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .align(Alignment.CenterEnd)
-                                    .padding(end = 7f.wp())
-                                    .size(12f.wp(), 12f.bhp())
-                            )
-                        }
-
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier
-                                .width(176f.wp())
-                                .background(Color(0xFFFFF6C3))
-                        ) {
-                            routineList.forEachIndexed { index, routine ->
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(
-                                            text = routine,
-                                            fontSize = 16f.isp(),
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    },
-                                    onClick = {
-                                        expanded = false
-                                    }
-                                )
-
-                                if (index < routineList.lastIndex) {
-                                    Divider(
-                                        color = Color(0xFF999999),
-                                        modifier = Modifier.padding(horizontal = 7f.wp())
-                                    )
-                                }
-                            }
-                        }
-                        Box(
-                            modifier = Modifier
-                                .padding(start = 224f.wp())
-                                .size(26.75811f.bhp(), 26.75811f.bhp())
-                                .clip(RoundedCornerShape(13.27905f.bhp()))
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
-                                    )
-                                )
-                                .clickable {
-                                    navController.navigate(Route.DietPatch.route)
-                                }
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.img_diet_pen),
-                                contentDescription = "pen",
-                                modifier = Modifier
-                                    .fillMaxSize()
-                            )
-                        }
-                    }
-                }
+            if(state) {
                 Column(
                     modifier = Modifier
-                        .padding(top = 20f.bhp(),
-                            start = 16f.wp(), end = 15f.wp()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16f.bhp())
+                        .fillMaxWidth()
+                        .padding(top = 108f.bhp())
+                        .background(
+                            brush =
+                                Brush.radialGradient(
+                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
+                                    radius = 2000f
+                                )
+                        ),
                 ) {
-                    existList.forEach{exist->
-                        MealItemCard(
-                            foodNum = exist,
-                            image = R.drawable.ic_dumplings,
-                            foodName = "고기만두",
-                            foodAmount = 1f,
-                            foodKcal = 120,
-                            onDeleteClick = { },
-                            navController = navController
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        DietSwipeCardPager(
+                            navController = navController,
+                            modifier = Modifier.padding(start = 24f.wp()),
+                            dietList = dietList?: emptyList(),
+                            pagerState = pagerState
                         )
                     }
-                }
+                    Spacer(modifier = Modifier.height(38f.bhp()))
+// 하단 추가 버튼
+                    DefaultButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24f.wp()),
+                        onClick = {
+                            val selected = resolvedFoods.value
+                            val currentPage1 = pagerState.currentPage
+                            val selectedDiet = dietList?.get(currentPage1)
+
+                            mealViewModel.addFoodsFromDiet(selected)
+                            navController.navigate(Route.MealTemp.route)
+                        },
+                        value = "추가하기",
+                        buttonHeight = 70f,
+                        isOrange = true
+                    )
+                }}
+            else{
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(122f.bhp())
-                        .padding(top = 12f.bhp(), start = 32.56f.wp(),
-                            end = 29.68f.bhp())
-                ){
-                    EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+                        .size(364f.wp(),458f.bhp())
+                        .offset(y = 105f.bhp(), x = 24f.wp())
+                        .clip(RoundedCornerShape(20f.wp()))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
+                                radius = 1200f
+                            )
+                        )
+                ) {
                     Image(
+                        painter = painterResource(R.drawable.img_diet_maintextballoon),
+                        contentDescription = "text balloon",
                         modifier = Modifier
-                            .width(197.37698f.wp())
-                            .height(67.78002f.bhp())
-                            .offset(y = 22.2f.bhp(), x = 104.38f.wp()),
-                        painter = painterResource(R.drawable.img_home_existtextballoon),
-                        contentDescription = "text balloon"
+                            .size(219f.wp(),83f.bhp())
+                            .offset(x = 73f.wp(), y = 101f.bhp())
                     )
-                    Text(
+                    Box(
                         modifier = Modifier
-                            .size(135f.wp(),40f.bhp())
-                            .offset(142.26f.wp(),40.12f.bhp()),
-                        text = "총 "+ cal +"kcal이야!\n식단 수준은 양호해",
-                        lineHeight = 20f.isp(),
-                        style = DungGeunMo15,
-                        fontSize = 15f.isp(),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center
+                            .size(114f.wp(),44f.bhp())
+                            .offset(135.27f.wp(),113f.bhp()),
+                        contentAlignment = Alignment.Center
+                    ){
+                        Text(
+                            text = "현재식단이 비어있어요!",
+                            style = DungGeunMo17,
+                            fontSize = 17f.isp(),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    EllipseNyam(
+                        modifier = Modifier
+                            .offset(x = 87f.wp(), y = 174f.bhp())
+                            .clickable(
+                                onClick = {
+                                    navController.navigate(Route.DietExist.route)
+                                }
+                            ),
+                        ellipseLength = 182.0,
+                        mascotLength = 109.0
                     )
                 }
-                DietMultipleNutritionBar(
-                    modifier = Modifier
-                        .padding(start = 17f.wp(), end = 15f.wp(), top = 13.29f.bhp()),
-                    carb = 65f, protein = 18f, fat = 13f
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(20f.bhp())
-                )
             }
             Box(
                 modifier = Modifier

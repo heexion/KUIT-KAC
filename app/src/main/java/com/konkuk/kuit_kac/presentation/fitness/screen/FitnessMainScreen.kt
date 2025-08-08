@@ -1,29 +1,20 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,22 +28,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Fitness
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
-import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun FitnessMainScreen(
@@ -61,24 +52,21 @@ fun FitnessMainScreen(
     onTabClick: (String) -> Unit,
     onRecordClick: () -> Unit,
     onFastedClick: () -> Unit,
-    fitnessData: List<FitnessData>
-
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
-    val sampleList = listOf(
-        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, onDeleteClick = { }),
-        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
-        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
-    )
-    val pagerState = rememberPagerState { sampleList.size }
+    LaunchedEffect(Unit) {
+        routineViewModel.getRoutineTemplate(userId = 1)
+    }
 
+    // Fetch template routines
+    val routines = routineViewModel.getRoutineTemplateState.value.orEmpty()
+    val hasData = routines.isNotEmpty()
+    val pagerState = rememberPagerState { routines.size.coerceAtLeast(1) }
+    val coroutineScope = rememberCoroutineScope()
 
-    // val Clicked = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            // 상단 배경
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Top header with tabs
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,14 +77,13 @@ fun FitnessMainScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // 타이틀
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_fitness),
                             contentDescription = "운동 아이콘",
                             modifier = Modifier.size(20f.wp())
                         )
-                        Spacer(modifier = Modifier.width(4f.wp()))
+                        Spacer(Modifier.width(4f.wp()))
                         Text(
                             text = "운동",
                             style = DungGeunMo20,
@@ -104,72 +91,79 @@ fun FitnessMainScreen(
                             color = Color(0xFF713E3A)
                         )
                     }
-
-                    Spacer(modifier = Modifier.height(17.5f.bhp()))
-
-                    // 탭 버튼
+                    Spacer(Modifier.height(17.5f.bhp()))
                     Row(modifier = Modifier.fillMaxWidth()) {
                         SelectButton(
                             modifier = Modifier.weight(1f),
                             value = "운동 기록",
                             isSelected = selectedTab == "기록",
                             buttonHeight = 49,
-                            onClick = { onTabClick("기록") }
+                            onClick = {
+                                navController.navigate("RecordEditGraph")
+                                onTabClick("기록")
+                            }
                         )
-                        Spacer(modifier = Modifier.width(16f.wp()))
+                        Spacer(Modifier.width(16f.wp()))
                         SelectButton(
                             modifier = Modifier.weight(1f),
                             value = "나만의 운동 루틴",
                             isSelected = selectedTab == "나만의",
                             buttonHeight = 49,
                             onClick = {
-                                navController.navigate(route = Route.Fitness.route)
+                                navController.navigate(Route.Fitness.route)
                                 onTabClick("나만의")
                             }
                         )
                     }
                 }
             }
+            Divider(color = Color.Black, thickness = 1.dp)
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color(0xFF000000))
-            )
-
-            // 메인 콘텐츠
+            // Content area
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
                         brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0xFFFFF3C1),
-                                Color(0xFFFFFFFF),
-                                Color(0xFFFFF3C1)
-                            )
+                            listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
                         )
                     )
                     .padding(horizontal = 20f.wp()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(28f.bhp()))
+                Spacer(Modifier.height(28f.bhp()))
+                Row(
+                    modifier = Modifier
+                        .width(364f.wp())
+                        .height(49f.bhp())
+                        .border(1.dp, Color.Black, RoundedCornerShape(35f.wp()))
+                        .clickable { navController.navigate("RoutineGraph") }
+                        .padding(horizontal = 16f.wp()),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = "아이콘",
+                        modifier = Modifier.size(27f.wp())
+                    )
+                    Spacer(Modifier.width(8f.wp()))
+                    Text(
+                        text = if (selectedTab == "기록") "운동 기록하기" else "나만의 운동 루틴 생성하기",
+                        style = DungGeunMo20.copy(fontSize = 17f.isp())
+                    )
+                }
 
-                RecordFitnessButton(
-                    onClick = { navController.navigate(route = Route.FitnessCreate.route) }
-                )
+                Spacer(Modifier.height(27f.bhp()))
 
-                Spacer(modifier = Modifier.height(27f.bhp()))
-
-                if (fitnessData.isEmpty()) {
-                    // 운동이 없을 때
+                if (!hasData) {
+                    // Empty state
                     Box(
                         modifier = Modifier
                             .width(364f.wp())
                             .height(458f.bhp())
                             .clip(RoundedCornerShape(20f.bhp()))
-                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
+                            .border(1.dp, Color.Black, RoundedCornerShape(20f.bhp()))
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.img_meal_bg),
@@ -177,71 +171,103 @@ fun FitnessMainScreen(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.matchParentSize()
                         )
-
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(top = 88f.bhp()),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            SpeechBubble(messageText = "현재 운동 루틴이\n비어있어요!")
-//                            EllipseNyam(
-//                                ellipseLength = 182.0, mascotLength = 109.0,
-//                                modifier = Modifier
-//                                    .clickable(
-//                                        onClick = {
-//                                            navController.navigate(Route.FitnessExist.route)
-//                                        }
-//                                    ))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                HamcoachGif(
-                                    num = 1,
-                                    ellipseLength = 182.0,
-                                    mascotLength = 156.0,
-                                    onClick = {
-                                        navController.navigate(Route.FitnessExist.route)
-                                    }
-                                )
-                            }
-
+                            Text(
+                                text = if (selectedTab == "기록") "현재 운동 기록이 비어있어요!" else "현재 루틴이 비어있어요!",
+                                style = DungGeunMo20.copy(fontSize = 20f.isp()),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(Modifier.height(16f.bhp()))
+                            HamcoachGif(
+                                num = 1,
+                                ellipseLength = 182.0,
+                                mascotLength = 156.0,
+                                onClick = { navController.navigate(Route.FitnessExist.route) }
+                            )
                         }
                     }
                 } else {
-                    // 루틴 있을 때
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(
+                    // Data state: show pager of templates
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Image(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 4f.wp())
-                        ) {
-                            Image(
-                                modifier = Modifier
-                                    .matchParentSize()
-                                    .graphicsLayer {
-                                        scaleX = 1.38f
-                                        scaleY = 1.0f
-                                    },
-                                painter = painterResource(R.drawable.img_all_tilted_rectangle),
-                                contentDescription = "tilted Rectangle"
-                            )
-                            SwipeCardPager(
+                                .matchParentSize()
+                                .graphicsLayer { scaleX = 1.38f },
+                            painter = painterResource(R.drawable.img_all_tilted_rectangle),
+                            contentDescription = null
+                        )
+                        HorizontalPager(
+                            state = pagerState,
+                            pageSpacing = 40f.wp(),
+                            modifier = Modifier.fillMaxWidth()
+                        ) { page ->
+                            val template = routines[page]
+                            val exercises = template.routineExerciseProfiles.map { profile ->
+                                Fitness(
+                                    id = profile.exercise.id,
+                                    name = profile.exercise.name,
+                                    targetMuscleGroup = profile.exercise.targetMuscleGroup,
+                                    metValue = profile.exercise.metValue.toDouble(),
+                                    type = 0
+                                )
+                            }
+                            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                            FitnessCard(
                                 navController = navController,
-                                pagerState = pagerState,
-                                sampleList = sampleList
+                                title = template.name,
+                                fitnessList = exercises,
+                                modifier = Modifier.graphicsLayer { rotationZ = -10f * pageOffset },
+                                onEditClick = {
+                                    val encodedName = Uri.encode(template.name)
+                                    navController.navigate(
+                                        "RoutineEditGraph/RoutineEdit?routineId=${template.id}&name=${encodedName}"
+                                    )
+                                }
                             )
                         }
-
-                        Spacer(modifier = Modifier.height(12f.bhp()))
-
-                        CustomPagerIndicator(
-                            pagerState = pagerState,
-                            pageCount = sampleList.size,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 4f.bhp())
+                    }
+                    Spacer(Modifier.height(12f.bhp()))
+                    // Pager indicators
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8f.bhp()),
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        repeat(routines.size) { idx ->
+                            val selected = pagerState.currentPage == idx
+                            Box(
+                                Modifier
+                                    .size(8f.bhp())
+                                    .clip(CircleShape)
+                                    .background(if (selected) Color.Black else Color(0xFFCCCCCC))
+                            )
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .offset(x = (-20).dp, y = (-40).dp)
+                            .size(35f.bhp())
+                            .clip(RoundedCornerShape(11f.bhp()))
+                            .background(
+                                brush = Brush.verticalGradient(listOf(Color.White, Color(0xFFFFB638)))
+                            )
+                            .clickable {
+                                coroutineScope.launch {
+                                    val next = (pagerState.currentPage + 1).coerceAtMost(routines.lastIndex)
+                                    pagerState.animateScrollToPage(next)
+                                }
+                            }
+                            .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.svg_all_point),
+                            contentDescription = null,
+                            modifier = Modifier.size(9f.wp(), 13f.bhp())
                         )
                     }
                 }
@@ -250,182 +276,15 @@ fun FitnessMainScreen(
     }
 }
 
-@Composable
-fun CustomPagerIndicator(
-    pagerState: PagerState,
-    pageCount: Int,
-    modifier: Modifier = Modifier,
-    activeColor: Color = Color(0xFF000000),
-    inactiveColor: Color = Color(0xFFCCCCCC),
-    indicatorSize: Dp = 8f.bhp(),
-    spacing: Dp = 8f.bhp()
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(spacing),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(pageCount) { index ->
-            val isSelected = pagerState.currentPage == index
-            Box(
-                modifier = Modifier
-                    .size(indicatorSize)
-                    .clip(CircleShape)
-                    .background(if (isSelected) activeColor else inactiveColor)
-            )
-        }
-    }
-}
-
-
-@Composable
-fun SpeechBubble(messageText: String) {
-    Box(
-        modifier = Modifier
-            .width(219f.wp())
-            .height(83f.bhp()),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
-            contentDescription = null,
-            modifier = Modifier.matchParentSize()
-        )
-        Text(
-            text = messageText,
-            style = DungGeunMo20.copy(fontSize = 20f.isp()),
-            lineHeight = 28f.isp(),
-            color = Color.Black,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 2f.bhp(), bottom = 20f.bhp())
-        )
-    }
-}
-
-@Composable
-fun SwipeCardPager(
-    navController: NavHostController,
-    pagerState: PagerState,
-    sampleList: List<FitnessData>
-) {
-    val rotateDegree = 10F
-    val coroutineScope = rememberCoroutineScope()
-
-    Box {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxWidth(),
-            pageSpacing = 40f.wp()
-        ) { page ->
-            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-            FitnessCard(
-                navController = navController,
-                title = "하체루틴_허벅지..",
-                fitnessList = sampleList,
-                modifier = Modifier.graphicsLayer {
-                    rotationZ = -rotateDegree * pageOffset
-                }
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .offset(x = 182f.wp(), y = 25f.bhp())
-                .size(35f.bhp(), 35f.bhp())
-                .clip(RoundedCornerShape(11f.bhp()))
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
-                    )
-                )
-                .clickable {
-                    coroutineScope.launch {
-                        val nextPage = (pagerState.currentPage + 1).coerceAtMost(sampleList.size - 1)
-                        pagerState.animateScrollToPage(nextPage)
-                    }
-                }
-                .border(1.dp, Color(0xFF000000), RoundedCornerShape(11f.bhp())),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.svg_all_point),
-                contentDescription = "pointer",
-                modifier = Modifier.size(9f.wp(), 13f.bhp())
-            )
-        }
-    }
-}
-
-
-@OptIn(ExperimentalFoundationApi::class)
-fun PagerState.offsetForPage(page: Int) = (currentPage - page) + currentPageOffsetFraction
-
-@Composable
-fun RecordFitnessButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .width(364f.wp())
-            .height(49f.bhp())
-            .border(
-                width = 1.dp,
-                color = Color.Black,
-                shape = RoundedCornerShape(35f.wp())
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 16f.wp()),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_plus),
-            contentDescription = "운동 기록 아이콘",
-            modifier = Modifier.size(27f.wp())
-        )
-        Spacer(modifier = Modifier.width(8f.wp()))
-        Text(
-            text = "나만의 운동 루틴 생성하기",
-            style = DungGeunMo20.copy(fontSize = 17f.isp()),
-            color = Color.Black
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun FitnessMainScreenPreview() {
     val navController = rememberNavController()
-
-    val sampleFitnessData = listOf(
-        FitnessData(
-            id = 1,
-            name = "레그 컬",
-            imageRes = R.drawable.ic_lowerbody, // 실제 리소스 있어야 함
-            onDeleteClick = {}
-        ),
-        FitnessData(
-            id = 2,
-            name = "레그 프레스",
-            imageRes = R.drawable.ic_lowerbody,
-            onDeleteClick = {}
-        ),
-        FitnessData(
-            id = 3,
-            name = "레그 익스텐션",
-            imageRes = R.drawable.ic_lowerbody,
-            onDeleteClick = {}
-        )
-    )
-
     FitnessMainScreen(
         navController = navController,
         selectedTab = "기록",
         onTabClick = {},
         onRecordClick = {},
-        onFastedClick = {},
-        fitnessData = sampleFitnessData
+        onFastedClick = {}
     )
 }

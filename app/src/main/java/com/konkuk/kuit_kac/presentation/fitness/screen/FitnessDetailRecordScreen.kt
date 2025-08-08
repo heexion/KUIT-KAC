@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -42,30 +43,43 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.DetailRecordCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun FitnessDetailRecordScreen(
-    name: String,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    name: String,
+    routineViewModel: RoutineViewModel= hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
+    val exercise = routineViewModel.selectedRoutines
+        .filterNotNull()
+        .firstOrNull { it.name == name }
+
+    if (exercise == null) {
+
+        navController.popBackStack()
+        return
+    }
+
     val particle = getObjectParticle(name)
     val message = "'$name'$particle 했구나!\n고생했어!"
+    val initial = routineViewModel.getRecord(exercise.id)
+    var time by remember { mutableStateOf(initial.minutes.toString()) }
+    var intensity by remember { mutableStateOf(initial.intensity) }
+    var detail by remember { mutableStateOf(initial.detail) }
 
-    var time by remember { mutableStateOf("0") }
-    var intensity by remember { mutableStateOf(-1) }
-    var detail by remember { mutableStateOf("") }
-
-    val isAllFilled = time.toIntOrNull()?.let { it > 0 } == true && intensity >= 0 && detail.isNotBlank()
+    val isAllFilled = time.toIntOrNull()?.let { it > 0 } == true && intensity >= 0
 
     Column(
         modifier = modifier
@@ -185,8 +199,10 @@ fun FitnessDetailRecordScreen(
         PlanConfirmButton(
             modifier = Modifier.padding(horizontal = 24f.wp()),
             onClick = {
-                // TODO: 실제 데이터 저장 로직이 있다면 먼저 실행한 후 이동
-                navController.navigate("fitness_detail_add")
+                routineViewModel.updateMinutes(exercise.id, time)
+                routineViewModel.updateIntensity(exercise.id, intensity)
+                routineViewModel.updateDetail(exercise.id, detail)
+                navController.navigate(Route.FitnessRecordEdit.route)
             },
             isAvailable = isAllFilled,
             value = "추가하기"

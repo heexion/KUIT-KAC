@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -42,6 +44,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -49,7 +52,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun MealRecordScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     Box(
         modifier = Modifier
@@ -186,7 +189,7 @@ fun MealRecordScreen(
                         )
                     )
                     .clickable(
-                        onClick = { navController.navigate(Route.MealGraph.route) }
+                        onClick = { navController.navigate(Route.MealSearch.route) }
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -205,6 +208,7 @@ fun MealRecordScreen(
                     )
                 }
             }
+
         }
     }
 }
