@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -44,7 +46,6 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.fitness.screen.offsetForPage
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietCard
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
@@ -132,44 +133,6 @@ fun DietMainScreen(
                 ),
         )
         {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 28f.bhp()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(364f.wp(), 49f.bhp())
-                        .clip(RoundedCornerShape(24f.bhp()))
-                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(24f.bhp()))
-                        .clickable(
-                            onClick = {
-                                navController.navigate(Route.DietCreate.route)
-                            }
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        modifier = Modifier,
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.img_diet_cross),
-                            contentDescription = "plus",
-                            modifier = Modifier
-                                .size(14.20361f.wp(),14.20361f.bhp())
-                        )
-                        Text(
-                            text = "나만의 식단 생성하기",
-                            style = DungGeunMo17,
-                            fontSize = 17f.isp(),
-                            color = Color(0xFF000000)
-                        )
-                    }
-                }
-            }
             if(state) {
                 Column(
                     modifier = Modifier
@@ -185,7 +148,7 @@ fun DietMainScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 28f.bhp()),
+                            .padding(top = 60f.bhp()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                     DietSwipeCardPager(
@@ -273,6 +236,35 @@ fun DietMainScreen(
                             ),
                         ellipseLength = 182.0,
                         mascotLength = 109.0
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)     // position at the top center of the parent Box
+                    .padding(top = 28f.bhp())        // same offset you used before
+                    .zIndex(1f)                      // ensure it draws above the pager/empty UI
+                    .size(364f.wp(), 49f.bhp())
+                    .clip(RoundedCornerShape(24f.bhp()))
+                    .border(1.dp, Color.Black, RoundedCornerShape(24f.bhp()))
+                    .clickable { navController.navigate(Route.DietCreate.route) },
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.img_diet_cross),
+                        contentDescription = "plus",
+                        modifier = Modifier.size(14.2f.wp(), 14.2f.bhp())
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "나만의 식단 생성하기",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp(),
+                        color = Color.Black
                     )
                 }
             }

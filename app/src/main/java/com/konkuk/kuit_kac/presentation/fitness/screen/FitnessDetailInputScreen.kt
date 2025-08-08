@@ -33,18 +33,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.DetailRecordCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditIntensityCard
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -52,31 +58,20 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun FitnessDetailInputScreen(
     modifier: Modifier = Modifier,
-    fitnessList: List<FitnessData>
+    routineViewModel: RoutineViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val scrollState = rememberScrollState()
+    val selected = routineViewModel.selectedRoutines.filterNotNull()
 
-    val timeInputs = remember { fitnessList.associate { it.id to mutableStateOf("0") } }
-    val intensityInputs = remember { fitnessList.associate { it.id to mutableStateOf(-1) } }
-    val detailInputs = remember { fitnessList.associate { it.id to mutableStateOf("") } }
-
-    val isAllFilled = fitnessList.all { item ->
-        val time = timeInputs[item.id]?.value?.toIntOrNull() ?: 0
-        val intensity = intensityInputs[item.id]?.value ?: -1
-        val detail = detailInputs[item.id]?.value ?: ""
-        time > 0 && intensity >= 0 && detail.isNotBlank()
+    val isAllFilled = selected.all { f ->
+        val r = routineViewModel.getRecord(f.id)
+        r.minutes > 0 && r.intensity >= 0
     }
+    val totalKcal = routineViewModel.totalKcal()
 
-    val totalKcal = fitnessList.sumOf { item ->
-        val time = timeInputs[item.id]?.value?.toIntOrNull() ?: 0
-        val factor = when (intensityInputs[item.id]?.value) {
-            0 -> 3
-            1 -> 5
-            2 -> 8
-            else -> 0
-        }
-        time * factor
-    }
+
+
 
     Column(
         modifier = Modifier
@@ -145,10 +140,10 @@ fun FitnessDetailInputScreen(
 //                ellipseLength = 145.62891
 //            )
         }
-
-        fitnessList.forEach { item ->
+        selected.forEach { item ->
             Spacer(modifier = Modifier.height(24f.bhp()))
 
+            // name
             Box(
                 modifier = Modifier
                     .padding(start = 24f.wp())
@@ -156,36 +151,32 @@ fun FitnessDetailInputScreen(
                     .height(40f.bhp())
                     .clip(RoundedCornerShape(15f.bhp()))
                     .background(
-                        brush = Brush.verticalGradient(
-                            listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
-                        )
+                        brush = Brush.verticalGradient(listOf(Color.White, Color(0xFFFFE667)))
                     )
-                    .border(1.5.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
+                    .border(1.5.dp, Color.Black, RoundedCornerShape(20f.bhp())),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = item.name,
-                    style = DungGeunMo15,
-                    color = Color(0xFF000000)
-                )
+                Text(text = item.name, style = DungGeunMo15, color = Color.Black)
             }
+
+            val record = routineViewModel.getRecord(item.id)
 
             EditFieldCard(
                 title = "운동 시간",
-                value = timeInputs[item.id]?.value ?: "0",
-                onValueChange = { timeInputs[item.id]?.value = it },
+                value = record.minutes.toString(),
+                onValueChange = { routineViewModel.updateMinutes(item.id, it) },
                 unitLabel = "분"
             )
 
             EditIntensityCard(
-                selectedIndex = intensityInputs[item.id]?.value ?: -1,
-                onSelect = { intensityInputs[item.id]?.value = it }
+                selectedIndex = record.intensity,
+                onSelect = { routineViewModel.updateIntensity(item.id, it) }
             )
 
             DetailRecordCard(
                 title = "상세 기록",
-                value = detailInputs[item.id]?.value ?: "",
-                onValueChange = { detailInputs[item.id]?.value = it }
+                value = record.detail,
+                onValueChange = { routineViewModel.updateDetail(item.id, it) }
             )
         }
 
@@ -245,13 +236,16 @@ fun FitnessDetailInputScreen(
             modifier = Modifier
                 .padding(horizontal = 24f.wp()),
             onClick = {
-                // TODO: 기록 저장 로직 작성
+                routineViewModel.setType("기록")
+                routineViewModel.createRoutine()
+                navController.navigate(Route.FitnessEditResult.route)
             },
             isAvailable = isAllFilled,
             value = "기록하기")
-
-
+        Spacer(modifier = Modifier
+            .height(200f.bhp()))
     }
+
 }
 
 
@@ -281,6 +275,4 @@ fun PreviewFitnessDetailInputScreen() {
             onDeleteClick = {}
         )
     )
-
-    FitnessDetailInputScreen(fitnessList = sampleFitnessList)
 }

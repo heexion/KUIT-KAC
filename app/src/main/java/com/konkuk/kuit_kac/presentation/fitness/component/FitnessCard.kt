@@ -50,6 +50,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
@@ -66,10 +67,12 @@ fun FitnessCard(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     title: String,
-    fitnessList: List<FitnessData>,
+    fitnessList: List<Fitness>,
     isEditable: Boolean = true,
     routineList: List<String> = listOf("루틴1", "루틴2", "루틴3"),
-    onRoutineSelect: (String) -> Unit = {}
+    onRoutineSelect: (String) -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedTitle by remember { mutableStateOf(title) }
@@ -207,7 +210,7 @@ fun FitnessCard(
                             )
                         )
                         .clickable {
-                            navController.navigate(Route.FitnessEdit.route)
+                            onEditClick()
                         }
                 ) {
                     Image(
@@ -229,9 +232,9 @@ fun FitnessCard(
             fitnessList.forEach { item ->
                 FitnessItem(
                     FitnessNum = item.id,
-                    image = item.imageRes,
+                    image = R.drawable.ic_lowerbody,
                     FitnessName = item.name,
-                    onDeleteClick = item.onDeleteClick,
+                    onDeleteClick = {},
                     isEditable = isEditable
                 )
             }
@@ -331,16 +334,4 @@ fun FitnessCardPreview() {
             )
         )
     }
-
-    // 선택된 루틴 Log 출력
-    FitnessCard(
-        navController = navController,
-        title = "하체루틴_허벅지..",
-        fitnessList = sampleList,
-        isEditable = true, // true로 바꾸면 펜 아이콘 보이고 드롭다운 사라짐
-        routineList = listOf("하체루틴", "전신루틴", "상체루틴"),
-        onRoutineSelect = { selected ->
-            Log.d("선택된 루틴", selected)
-        }
-    )
 }

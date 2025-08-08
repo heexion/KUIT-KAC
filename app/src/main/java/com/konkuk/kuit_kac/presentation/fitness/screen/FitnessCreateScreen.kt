@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -47,7 +48,9 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -55,7 +58,8 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 @Composable
 fun FitnessCreateScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     var title by remember { mutableStateOf("") }
     Box(
@@ -151,6 +155,7 @@ fun FitnessCreateScreen(
                     .background(color = Color(0xFFFFFFFF))
                     .clickable(
                         onClick = {
+                            routineViewModel.setName(title)
                             navController.navigate(Route.FitnessSearch.route)
                         }
                     )

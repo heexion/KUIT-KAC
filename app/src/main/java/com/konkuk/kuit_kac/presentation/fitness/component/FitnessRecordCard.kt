@@ -33,6 +33,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -47,7 +48,7 @@ data class FitnessItemData(
 @Composable
 fun FitnessRecordCard(
     title: String,
-    fitnessItems: List<FitnessItemData>,
+    fitnessItems: List<Fitness>,
     onEditClick: () -> Unit,
     navController: NavHostController,
     isEditable: Boolean = false
@@ -92,7 +93,7 @@ fun FitnessRecordCard(
                     modifier = Modifier
                         .size(30.16f.wp(), 29.66f.bhp())
                         .clickable {
-                            navController.navigate(Route.FitnessRecordEdit)
+                            onEditClick()
                         }
                 ) {
                     Image(
@@ -137,11 +138,11 @@ fun FitnessRecordCard(
                 fitnessItems.forEachIndexed { index, item ->
                     FitnessItemCard(
                         FitnessNum = index,
-                        image = item.imageRes,
+                        image = R.drawable.ic_lowerbody,
                         FitnessName = item.name,
-                        FitnessAmount = item.setCount,
-                        FitnessKcal = item.kcal,
-                        onDeleteClick = item.onDeleteClick,
+                        FitnessAmount = 2,
+                        FitnessKcal = 110,
+                        onDeleteClick = {},
                         isEditable = isEditable
                     )
                 }
@@ -181,11 +182,4 @@ fun FitnessRecordCardPreview() {
         )
     )
 
-    FitnessRecordCard(
-        title = "오늘의 운동!",
-        fitnessItems = sampleFitnessItems,
-        onEditClick = {}, // 현재는 사용되지 않지만 유지
-        navController = navController, // 필수
-        isEditable = false
-    )
 }

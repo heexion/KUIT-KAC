@@ -55,7 +55,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun FitnessDetailRecordScreen(
+fun FitnessAddDetailRecordScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     name: String,
@@ -202,29 +202,11 @@ fun FitnessDetailRecordScreen(
                 routineViewModel.updateMinutes(exercise.id, time)
                 routineViewModel.updateIntensity(exercise.id, intensity)
                 routineViewModel.updateDetail(exercise.id, detail)
-                navController.navigate(Route.FitnessRecordEdit.route)
+                navController.navigate("FitnessAddRecordEdit")
             },
             isAvailable = isAllFilled,
             value = "추가하기"
         )
     }
-}
-
-
-fun getObjectParticle(word: String): String {
-    val lastChar = word.lastOrNull() ?: return "를"
-    val unicode = lastChar.code
-    val hasBatchim = (unicode - 0xAC00) % 28 != 0
-    return if (hasBatchim) "을" else "를"
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FitnessDetailRecordScreenPreview() {
-    val navController = rememberNavController()
-    FitnessDetailRecordScreen(
-        name = "스쿼트",
-        navController = navController
-    )
 }
 

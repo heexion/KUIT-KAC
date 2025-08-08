@@ -52,10 +52,10 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.offsetForPage
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.data.response.MealResponseDto
-import com.konkuk.kuit_kac.presentation.fitness.screen.offsetForPage
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietCard
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2

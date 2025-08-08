@@ -44,10 +44,10 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
-import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItem
+import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemCard
+import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -55,13 +55,12 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun FitnessEditScreen(modifier: Modifier = Modifier,
-                      navController: NavHostController,
-                      routineViewModel: RoutineViewModel = hiltViewModel()
+fun FitnessAddRecordEditScreen(modifier: Modifier = Modifier,
+                            navController: NavHostController,
+                            routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
-    val selectedRoutines = routineViewModel.selectedRoutines
-
+    val selected = routineViewModel.selectedRoutines.filterNotNull()
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
@@ -83,7 +82,7 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                 modifier = Modifier
                     .offset(x = 70.31f.wp())
                     .size(272f.wp(),96f.bhp()),
-                painter = painterResource(R.drawable.img_fitnessedit_textballoon),
+                painter = painterResource(R.drawable.img_fitnessrecordedit_text),
                 contentDescription = "textballoon"
             )
 //            EllipseNyam(
@@ -91,7 +90,6 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
 //                    .offset(y = 80f.bhp(), x = 117f.wp()),
 //                ellipseLength = 177.17578, mascotLength = 106.1115
 //            )
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -103,8 +101,6 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                     mascotLength = 145.0,
                 )
             }
-
-
             Column(
                 modifier = Modifier
                     .padding(top = 256f.bhp(), start = 24f.wp())
@@ -124,7 +120,7 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                 ){
                     Text(
                         modifier = Modifier,
-                        text = routineViewModel.routineName.value?:"운동 루틴",
+                        text = "오늘의 운동!",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
                         color = Color(0xFF000000),
@@ -137,16 +133,24 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16f.bhp())
                 ) {
-                    selectedRoutines.forEach { item ->
-                        FitnessItem(
-                            FitnessNum = item?.id?:1,
-                            image = R.drawable.ic_lowerbody,
-                            FitnessName = item?.name?:"",
-                            isEditable = true,
-                            onDeleteClick = {
-                                routineViewModel.removeRoutine(item?: Fitness(0,"","",1.0,0))
-                            }
-                        )
+                    if (selected.isEmpty()) {
+                        Text("선택된 운동이 없습니다.", style = DungGeunMo17)
+                    } else {
+                        selected.forEach { f ->
+                            val rec =
+                                routineViewModel.getRecord(f.id)
+                            val kcal = routineViewModel.kcalFor(f.id)
+
+                            FitnessItemCard(
+                                image = R.drawable.ic_lowerbody,
+                                FitnessName = f.name,
+                                FitnessAmount = rec.minutes,
+                                FitnessKcal = kcal,
+                                onDeleteClick = { routineViewModel.removeRoutine(f) },
+                                FitnessNum = f.id,
+                                isEditable = true
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(8f.bhp()))
@@ -171,7 +175,7 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                         }
                         .clickable(
                             onClick = {
-                                navController.navigate(route = Route.FitnessSearch.route)
+                                navController.navigate("FitnessRecordSearch")
                             }
                         ),
                     horizontalArrangement = Arrangement.Center,
@@ -218,14 +222,10 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                 )
                 .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.wp()))
                 .clickable {
+                    routineViewModel.setName("오늘의 루틴")
                     routineViewModel.setType("기록")
-                    if(routineViewModel.routineId.value != null){
-                        routineViewModel.changeRoutine()
-                    }
-                    else{
-                        routineViewModel.createRoutine()
-                    }
-                    navController.navigate(Route.FitnessEditResult.route)},
+                    routineViewModel.createRoutine()
+                    navController.navigate("meal_edit_result")},
             contentAlignment = Alignment.Center
         ){
             Text(
@@ -244,20 +244,4 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
         )
     }
 
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun FitnessEditScreenPreview(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    val sampleList =remember { mutableStateListOf(
-        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, {}),
-        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, {}),
-        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, {})
-    )}
-
-    FitnessEditScreen(
-        navController = navController
-    )
 }

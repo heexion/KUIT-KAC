@@ -39,8 +39,11 @@ class FitnessViewModel@Inject constructor(
             fitness = repository.getFitness(name)
         }
     }
-    suspend fun getFitnessByName(name: String): Fitness? {
-        return repository.getFitness(name)
+    fun getFitnessByName(name: String): Fitness? {
+        viewModelScope.launch {
+            fitness= repository.getFitness(name)
+        }
+        return  fitness
     }
 
 }

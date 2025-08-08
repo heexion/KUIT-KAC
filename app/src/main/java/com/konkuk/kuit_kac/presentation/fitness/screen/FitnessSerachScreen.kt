@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,6 +47,9 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.request.FitnessRequestDto
+import com.konkuk.kuit_kac.local.Fitness
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -58,11 +62,12 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun FitnessSearchScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    fitnessViewModel: FitnessViewModel = hiltViewModel()
+    fitnessViewModel: FitnessViewModel = hiltViewModel(),
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     val query = fitnessViewModel.query
     val suggestions = fitnessViewModel.suggestions
-    var selectedItem by remember { mutableStateOf("") }
+    var selectedItem by remember { mutableStateOf<Fitness?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -139,7 +144,7 @@ fun FitnessSearchScreen(
                     value = fitness.name,
                     //isLastItem = index == searchHistory.lastIndex,
                     onClick = {
-                        selectedItem = fitness.name
+                        selectedItem = fitness
                         showDialog = true
                     }
                 )
@@ -173,7 +178,7 @@ fun FitnessSearchScreen(
                     modifier = Modifier.align(Alignment.Center)
                 ) {
                     Text(
-                        text = "‘$selectedItem’",
+                        text = "‘${selectedItem?.name}’",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
                         color = Color(0xFF000000)
@@ -200,8 +205,21 @@ fun FitnessSearchScreen(
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
                             .clickable {
                                 // TODO: 추가 로직
+                                if(routineViewModel.exerciseRecords.isNotEmpty()){
+                                    val f = selectedItem
+                                    if (f != null) {
+                                        routineViewModel.ensureExercise(f) // make sure it's in selectedRoutines + records map
+                                        val encoded = Uri.encode(f.name)
+                                        navController.navigate("FitnessDetailRecord/$encoded")
+                                    }
+                                }
+                                else{
+                                    routineViewModel.addRoutine(
+                                        selectedItem?:Fitness(0,"","",1.0,0)
+                                    )
+                                    navController.navigate(route = Route.FitnessEdit.route)
+                                }
                                 showDialog = false
-                                navController.navigate(route = Route.FitnessEdit.route)
                             },
                         contentAlignment = Alignment.Center
                     ) {

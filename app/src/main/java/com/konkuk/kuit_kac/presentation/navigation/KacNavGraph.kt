@@ -26,8 +26,11 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddCompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
+import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessAddDetailRecordScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessAddRecordEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailInputScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessDetailRecordAddScreen
@@ -37,7 +40,9 @@ import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessFastInputScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessMainScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordEditScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordMainScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordResultScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineSearchScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessSearchScreen
@@ -219,6 +224,194 @@ fun KacNavGraph(
             MealTimeScreen(
                 navController = navController
             )
+        }
+        navigation(
+            route = "RoutineRecordGraph",
+            startDestination = "RoutineRecordEdit"
+        ){
+            composable(
+                route = "RoutineRecordEdit"
+            ){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineRecordGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessRoutineEditScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel,
+                    selectedTab = "기록",
+                    onTabClick = {}
+                )
+            }
+            composable(
+                route = "FitnessDetailInput"
+            ){backStackEntry ->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineRecordGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessDetailInputScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController
+                )
+            }
+        }
+        navigation(
+            route = "FitnessAddGraph",
+            startDestination = "FitnessRecordSearch"
+        ){
+            composable(
+                route = "FitnessRecordSearch"
+            ){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("FitnessAddGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessRoutineSearchScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController,
+                )
+            }
+            composable(
+                route = "FitnessAddDetailRecord/{name}",
+                arguments = listOf(navArgument("name") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("FitnessAddGraph")
+                }
+                val vm = hiltViewModel<RoutineViewModel>(parentEntry)
+                val nameArg = backStackEntry.arguments?.getString("name") ?: ""
+
+                FitnessAddDetailRecordScreen(
+                    navController = navController,
+                    name = nameArg,
+                    routineViewModel = vm
+                )
+            }
+            composable(
+                route = "FitnessAddRecordEdit"
+            ){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("FitnessAddGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessAddRecordEditScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController,
+                )
+            }
+        }
+        navigation(
+            route = "RecordEditGraph",
+            startDestination = "RecordMain"
+        ){
+            composable(
+                route = "RecordMain"
+            ){backStackEntry ->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RecordEditGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessRecordMainScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController,
+                    selectedTab = "기록",
+                    onTabClick = {}
+                )
+            }
+            composable(
+                route = Route.FitnessRecordEdit.route
+            ){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RecordEditGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessRecordEditScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController,
+                )
+            }
+            composable(
+                route = Route.FitnessSearch.route
+            ){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RecordEditGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessSearchScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController,
+                )
+            }
+            composable(
+                route = "FitnessDetailRecord/{name}",
+                arguments = listOf(navArgument("name") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RecordEditGraph")
+                }
+                val vm = hiltViewModel<RoutineViewModel>(parentEntry)
+                val nameArg = backStackEntry.arguments?.getString("name") ?: ""
+
+                FitnessDetailRecordScreen(
+                    navController = navController,
+                    name = nameArg,
+                    routineViewModel = vm
+                )
+            }
+        }
+        navigation(
+            route = "RoutineEditGraph",
+            startDestination = "RoutineEditGraph/RoutineEdit?routineId={routineId}&name={name}"
+        ) {
+            composable(
+                route = "RoutineEditGraph/RoutineEdit?routineId={routineId}&name={name}",
+                arguments = listOf(
+                    navArgument("routineId") { type = NavType.IntType; defaultValue = -1 },
+                    navArgument("name"      ) { type = NavType.StringType; defaultValue = "" }
+                )
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineEditGraph")
+                }
+                val args      = backStackEntry.arguments!!
+                val routineId = args.getInt("routineId")
+                val name      = args.getString("name") ?: ""
+                parentEntry.savedStateHandle["routineId"] = routineId
+                parentEntry.savedStateHandle["name"]      = name
+                val vm = hiltViewModel<RoutineViewModel>(parentEntry)
+                FitnessEditScreen(modifier, navController, vm)
+            }
+            composable(Route.FitnessCreate.route){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineEditGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessCreateScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel
+                )
+            }
+            composable(Route.FitnessSearch.route){backStackEntry->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineEditGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parentEntry)
+                FitnessSearchScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel
+                )
+            }
+            composable(Route.FitnessEdit.route){ backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineEditGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parentEntry)
+                FitnessEditScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel
+                )
+            }
         }
 
         navigation(
@@ -450,9 +643,61 @@ fun KacNavGraph(
                 )
             }
         }
-
-
-
+        /*navigation(
+            route = "RoutineRecordGraph",
+            startDestination = "FitnessRecordMain"
+        ){
+            composable("FitnessRecordMain")
+        }*/
+        composable(
+            route = "FitnessRecordMain"
+        ){
+            FitnessRecordMainScreen(
+                navController = navController,
+                selectedTab = "기록",
+                onTabClick = {}
+            )
+        }
+        composable(route = "FitnessRecord"){
+            FitnessRecordScreen(
+                navController = navController
+            )
+        }
+        navigation(
+            route = "RoutineGraph",
+            startDestination = Route.FitnessCreate.route
+        ){
+            composable(Route.FitnessCreate.route){backStackEntry->
+                val parenEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parenEntry)
+                FitnessCreateScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel
+                )
+            }
+            composable(Route.FitnessSearch.route){backStackEntry->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parentEntry)
+                FitnessSearchScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel
+                )
+            }
+            composable(Route.FitnessEdit.route){ backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("RoutineGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parentEntry)
+                FitnessEditScreen(
+                    navController = navController,
+                    routineViewModel = routineViewModel
+                )
+            }
+        }
 
         navigation(
             route = "DietGraph",
@@ -681,13 +926,6 @@ fun KacNavGraph(
             // 예: 샘플 데이터 전달
             FitnessEditScreen(
                 navController = navController,
-                fitnessList = remember {
-                    mutableStateListOf(
-                        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, onDeleteClick = { }),
-                        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, onDeleteClick = { }),
-                        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, onDeleteClick = { })
-                    )
-                }
             )
         }
         composable(Route.FitnessEditResult.route) {
@@ -700,7 +938,6 @@ fun KacNavGraph(
         composable(route = Route.Fitness.route){
             FitnessMainScreen(
                 navController = navController,
-                fitnessData = listOf(),
                 onFastedClick = { /* 구현 */ },
                 onRecordClick = { /* 구현 */ },
                 selectedTab = "0", // Int면 타입 맞춰서 수정
@@ -735,20 +972,11 @@ fun KacNavGraph(
                 onTabClick = {},
                 onRecordClick = {},
                 onFastedClick = {},
-                fitnessData = sampleFitnessData
             )
         }
         composable(route = Route.FitnessRecordEdit.route) {
             FitnessRecordEditScreen(
-                navController = navController,
-                fitnessList = remember {
-                    mutableStateListOf(
-                        // 실제 데이터 필요 시 ViewModel 연동
-                        FitnessData(id = 0, imageRes = R.drawable.ic_lowerbody, name = "레그 컬", onDeleteClick = {}),
-                        FitnessData(id = 1, imageRes = R.drawable.ic_lowerbody, name = "레그 프레스", onDeleteClick = {}),
-                        FitnessData(id = 2, imageRes = R.drawable.ic_lowerbody, name = "레그 익스텐션", onDeleteClick = {})
-                    )
-                }
+                navController = navController
             )
         }
         composable(route = Route.FitnessRoutineEdit.route) {
@@ -779,15 +1007,14 @@ fun KacNavGraph(
                 navController = navController,
                 selectedTab = "기록",
                 onTabClick = { /* 탭 전환 로직 */ },
-                fitnessItems = sampleData
             )
         }
 
         composable("fitness/detail/{name}") { backStackEntry ->
             val name = backStackEntry.arguments?.getString("name") ?: ""
             FitnessDetailRecordScreen(
-                name = name,
-                navController = navController)
+                navController = navController,
+                name = name)
         }
 
         composable(Route.FitnessRecordResult.route) {
@@ -804,34 +1031,6 @@ fun KacNavGraph(
         composable(Route.FitnessDetailRecordAdd.route) {
             FitnessDetailRecordAddScreen(navController = navController)
         }
-        composable(route = FitnessDetailInput.route) {
-            val sampleFitnessList = listOf(
-                FitnessData(
-                    id = 1,
-                    name = "레그 컬",
-                    imageRes = R.drawable.ic_lowerbody,
-                    onDeleteClick = {}
-                ),
-                FitnessData(
-                    id = 2,
-                    name = "레그 프레스",
-                    imageRes = R.drawable.ic_lowerbody,
-                    onDeleteClick = {}
-                ),
-                FitnessData(
-                    id = 3,
-                    name = "레그 익스텐션",
-                    imageRes = R.drawable.ic_lowerbody,
-                    onDeleteClick = {}
-                )
-            )
-
-            FitnessDetailInputScreen(
-                fitnessList = sampleFitnessList,
-                modifier = Modifier
-            )
-        }
-//뷰모델로 바꿔야함 위에꺼 아래처럼
 //        composable(route = FitnessDetailInput.route) {
 //            val viewModel: FitnessViewModel = hiltViewModel()
 //            FitnessDetailInputScreen(
