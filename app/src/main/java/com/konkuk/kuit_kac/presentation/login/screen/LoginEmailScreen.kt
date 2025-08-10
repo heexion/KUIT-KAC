@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +47,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 
@@ -54,7 +58,11 @@ fun LoginEmailScreen(
     navController: NavHostController
 ) {
     val email: String = "user_id@naver.com"
-    var showSheet by remember { mutableStateOf(false) }
+    var showSheet by remember { mutableStateOf(true) }
+    var agreeAll by remember { mutableStateOf(false) }
+    var agreeService by remember { mutableStateOf(false) }
+    var agreePrivacy by remember { mutableStateOf(false) }
+    var agreeOptional by remember { mutableStateOf(false) }
     val sheetHeight = 452f.bhp()
 
     val offsetY by animateDpAsState(
@@ -62,6 +70,11 @@ fun LoginEmailScreen(
         animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing),
         label = "sheetOffset"
     )
+
+    LaunchedEffect(agreeService, agreePrivacy, agreeOptional) {
+        agreeAll = agreeService && agreePrivacy && agreeOptional
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -129,7 +142,7 @@ fun LoginEmailScreen(
         }
 
         DefaultButton(
-            onClick = {showSheet = true},
+            onClick = { showSheet = true },
             value = "다음으로",
             buttonHeight = 70f,
             isOrange = true,
@@ -159,7 +172,8 @@ fun LoginEmailScreen(
                 Column(
                     modifier = Modifier
                         .clip(RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
-                        .height(452f.bhp()).fillMaxWidth()
+                        .height(452f.bhp())
+                        .fillMaxWidth()
                         .background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
@@ -178,7 +192,149 @@ fun LoginEmailScreen(
                         text = "약관에 동의해줘",
                         style = DungGeunMo24,
                         color = Color(0xFF000000),
-                        modifier = Modifier.padding(top = 7.89f.bhp())
+                        modifier = Modifier.padding(top = 7.89f.bhp(), bottom = 25f.bhp())
+                    )
+                    Row(
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFF000000),
+                                shape = RoundedCornerShape(size = 10.dp)
+                            )
+                            .fillMaxWidth()
+                            .height(59f.bhp())
+                            .background(
+                                color = Color(0xFFFFF1AB),
+                                shape = RoundedCornerShape(size = 10.dp)
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.size(16f.wp()))
+
+                        CheckBoxLogin(
+                            chekced = agreeAll,
+                            onCheckedChanged = {
+                                val newValue = !agreeAll
+                                agreeAll = newValue
+                                agreeService = newValue
+                                agreePrivacy = newValue
+                                agreeOptional = newValue
+                            })
+                        Text(
+                            text = "약관 전체 동의",
+                            style = DungGeunMo17,
+                            fontSize = 17f.isp(),
+                            color = Color(0xFF000000),
+                            modifier = Modifier
+                                .padding(start = 16f.wp())
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(29f.bhp()))
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(27f.bhp())
+                                .padding(start = 16f.wp()),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CheckBoxLogin(
+                                chekced = agreeService,
+                                onCheckedChanged = { agreeService = it }
+                            )
+                            Text(
+                                text = "서비스 이용약관 전체동의(필수)",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xB2292929),
+                                modifier = Modifier
+                                    .padding(start = 15f.wp())
+                            )
+                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_login_right_arrow),
+                            modifier = Modifier
+                                .size(7f.wp(), 14f.bhp())
+                                .align(Alignment.CenterEnd),
+                            contentScale = ContentScale.FillBounds,
+                            contentDescription = null,
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(19f.bhp()))
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(27f.bhp())
+                                .padding(start = 16f.wp()),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CheckBoxLogin(
+                                chekced = agreePrivacy,
+                                onCheckedChanged = { agreePrivacy = it }
+                            )
+                            Text(
+                                text = "개인 정보 수집 및 이용 동의(필수)",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xB2292929),
+                                modifier = Modifier
+                                    .padding(start = 15f.wp())
+                            )
+                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_login_right_arrow),
+                            modifier = Modifier
+                                .size(7f.wp(), 14f.bhp())
+                                .align(Alignment.CenterEnd),
+                            contentScale = ContentScale.FillBounds,
+                            contentDescription = null,
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(19f.bhp()))
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(27f.bhp())
+                                .padding(start = 16f.wp()),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CheckBoxLogin(
+                                chekced = agreeOptional,
+                                onCheckedChanged = { agreeOptional = it }
+                            )
+                            Text(
+                                text = "선택약관(선택)",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xB2292929),
+                                modifier = Modifier
+                                    .padding(start = 15f.wp())
+                            )
+                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_login_right_arrow),
+                            modifier = Modifier
+                                .size(7f.wp(), 14f.bhp())
+                                .align(Alignment.CenterEnd),
+                            contentScale = ContentScale.FillBounds,
+                            contentDescription = null,
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(28f.bhp()))
+                    DefaultButton(
+                        onClick = {},
+                        value = "확인했어",
+                        buttonHeight = 70f,
+                        isOrange = true,
+                        isUnableToClick = !agreeAll
                     )
                 }
             }
@@ -191,4 +347,24 @@ fun LoginEmailScreen(
 private fun LoginEmailScreenPreview() {
     val navController = rememberNavController()
     LoginEmailScreen(navController = navController)
+}
+
+@Composable
+fun CheckBoxLogin(
+    modifier: Modifier = Modifier,
+    chekced: Boolean = false,
+    onCheckedChanged: (Boolean) -> Unit = {}
+) {
+    var checkbox: Int = R.drawable.ic_login_unchecked_box
+    if (chekced) checkbox = R.drawable.ic_login_checked_box
+    Image(
+        painter = painterResource(id = checkbox),
+        modifier = Modifier
+            .size(27f.wp(), 27f.bhp())
+            .clickable {
+                onCheckedChanged(!chekced)
+            },
+        contentScale = ContentScale.FillBounds,
+        contentDescription = null,
+    )
 }

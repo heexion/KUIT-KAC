@@ -27,19 +27,25 @@ fun DefaultButton(
     onClick: () -> Unit,
     value: String,
     buttonHeight: Float,
-    isOrange: Boolean = false
+    isOrange: Boolean = false,
+    isUnableToClick: Boolean = false
 ) {
-    val image = if (isOrange) {
+    var image = if (isOrange) {
         R.drawable.bg_orange_button_default
     } else {
         R.drawable.bg_yellow_button_default
+    }
+    var onclick = onClick
+    if (isUnableToClick) {
+        image = R.drawable.bg_button_gray
+        onclick = {}
     }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(buttonHeight.bhp())
-            .clickable { onClick() }
+            .clickable { onclick() }
     ) {
         Image(
             modifier = Modifier
