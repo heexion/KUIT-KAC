@@ -70,6 +70,8 @@ sealed class Route(val route: String) {
     data object OnboardingMainHomeNyam : Route(route = "onboarding_main_home_nyam")
     data object OnboardingMainHomeScale : Route(route = "onboarding_main_home_scale")
 
+    data object LoginMain : Route(route = "login_main")
+    data object LoginEmail : Route(route = "login_email")
 
 
 

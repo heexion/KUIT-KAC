@@ -119,7 +119,9 @@ class MainActivity : ComponentActivity() {
                     "meal_edit_result",
                     "plan_ai_loading",
                     "plan_result",
-                    Route.FitnessEditResult.route
+                    Route.FitnessEditResult.route,
+                    Route.LoginMain.route,
+                    Route.LoginEmail.route
                 )
                 val backArrowRoutes = setOf(
                     // 여기다가 뒤로가기 버튼 있으면 추가
@@ -136,7 +138,8 @@ class MainActivity : ComponentActivity() {
                     Route.FitnessSearch.route,
                     Route.FitnessCreate.route,
                     Route.MealPatch.route,
-                    Route.DietPatch.route
+                    Route.DietPatch.route,
+                    Route.LoginEmail.route
                 )
                 val planButtonRoutes = setOf(
                     Route.Home.route,

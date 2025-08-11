@@ -277,8 +277,8 @@ fun QuantitySelector(
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
-                textStyle = DungGeunMo20.copy(
-                    fontSize = 20f.isp(),
+                textStyle = DungGeunMo17.copy(
+                    fontSize = 17f.isp(),
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center
                 ),
