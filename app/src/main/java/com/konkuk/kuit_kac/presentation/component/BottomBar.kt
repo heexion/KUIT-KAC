@@ -12,14 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.presentation.navigation.Route
 
 @Composable
@@ -27,11 +25,6 @@ fun BottomBar(
     navController: NavController
 ) {
     val selectedRoute = remember { mutableStateOf(Route.Home.route) }
-    val density = LocalDensity.current
-
-    // 화면 가로폭 구하기
-    val screenWidthPx = LocalConfiguration.current.screenWidthDp.dp
-    val imageHeightDp = screenWidthPx * (141f / 415f) // 비율 유지
 
     // 선택된 메뉴에 따른 배경 이미지
     val backgroundRes = when (selectedRoute.value) {
@@ -44,7 +37,7 @@ fun BottomBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(imageHeightDp)
+            .height(141f.bhp()) // 세로 비율 유지
     ) {
         // 배경 이미지
         Image(
@@ -82,6 +75,7 @@ fun BottomBar(
         )
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
