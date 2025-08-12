@@ -206,7 +206,7 @@ fun DietPatchScreen(
                             .background(color = Color(0xFFFFFFFF))
                             .clickable(
                                 onClick = {
-                                    navController.navigate(Route.FitnessSearch.route)
+                                    navController.navigate(Route.DietSearch.route)
                                 }
                             )
                             .drawBehind {
@@ -242,7 +242,7 @@ fun DietPatchScreen(
                             contentDescription = "plus"
                         )
                         Text(
-                            text = "운동 추가하기",
+                            text = "식단 추가하기",
                             style = DungGeunMo15,
                             fontSize = 15f.isp(),
                             color = Color(0xFF000000),

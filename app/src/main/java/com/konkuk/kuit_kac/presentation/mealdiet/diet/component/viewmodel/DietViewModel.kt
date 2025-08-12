@@ -124,6 +124,15 @@ class DietViewModel @Inject constructor(
     ){
         _dietName.value =name
     }
+    private val _tempSearch = mutableStateOf<String?>(null)
+    val tempSearch: State<String?> get() = _tempSearch
+    fun getTempSearch(item: String){
+        _tempSearch.value = ""
+        _tempSearch.value = item
+    }
+    fun clearTempSearch(){
+        _tempSearch.value = ""
+    }
     val totalCalorie: Int
         get() = selectedFoods.sumOf { (it.food.calorie * it.quantity).toInt() }
 

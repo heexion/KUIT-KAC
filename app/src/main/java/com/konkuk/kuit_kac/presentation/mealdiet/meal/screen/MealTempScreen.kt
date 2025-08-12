@@ -125,7 +125,7 @@ fun MealTempScreen(
                     ) {
                         Text(
                             modifier = Modifier,
-                            text = "아침식단1",
+                            text = mealViewModel.selectType.value + "식단1",
                             style = DungGeunMo17,
                             fontSize = 17f.isp(),
                             color = Color(0xFF000000),
@@ -204,7 +204,7 @@ fun MealTempScreen(
                             contentDescription = "plus"
                         )
                         Text(
-                            text = "운동 추가하기",
+                            text = "식단 추가하기",
                             style = DungGeunMo15,
                             fontSize = 15f.isp(),
                             color = Color(0xFF000000),

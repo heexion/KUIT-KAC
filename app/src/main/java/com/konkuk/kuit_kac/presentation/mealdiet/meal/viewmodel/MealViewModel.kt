@@ -66,6 +66,15 @@ class MealViewModel @Inject constructor(
         val startedAt = getFastingStartTimeForType(mealType)
         return startedAt != -1L && !isPastNext3AM(startedAt)
     }
+    private val _tempSearch = mutableStateOf<String?>(null)
+    val tempSearch: State<String?> get() = _tempSearch
+    fun getTempSearch(item: String){
+        _tempSearch.value = ""
+        _tempSearch.value = item
+    }
+    fun clearTempSearch(){
+        _tempSearch.value = ""
+    }
     private val _createMealState = mutableStateOf<Boolean?>(null)
     val createMealState: State<Boolean?> get() = _createMealState
     val formattedTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))

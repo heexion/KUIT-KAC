@@ -68,8 +68,12 @@ fun DietEditSearchItemDetailScreen(
                 placeholderTextStyle = DungGeunMo20,
                 showClearButton = true,
                 onBackClick = { navController.popBackStack() },
-                onSearchClick = { },
-                onClearClick = {}
+                onSearchClick = { dietViewModel.getTempSearch(foodName)
+                                navController.popBackStack()},
+                onClearClick = {
+                    dietViewModel.clearTempSearch()
+                    navController.navigate("dieteditsearch")
+                }
             )
 
             Spacer(modifier = Modifier.height(82f.bhp()))
