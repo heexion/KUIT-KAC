@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -61,19 +62,31 @@ class MainActivity : ComponentActivity() {
     lateinit var fitnessDao: FitnessDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+        val requestPostNoti = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (!granted) {
+                Toast.makeText(this, "알림 권한이 필요해요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPostNoti.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                    data = Uri.parse("package:$packageName")
+            val pm = getSystemService(POWER_SERVICE) as PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                runCatching {
+                    startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                        data = Uri.parse("package:$packageName")
+                    })
                 }
-                startActivity(intent)
             }
         }
         val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
@@ -85,19 +98,18 @@ class MainActivity : ComponentActivity() {
             startActivity(intent)
         }
         if (!isNotificationServiceEnabled(this)) {
-            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-            startActivity(intent)
+            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Alert Channel"
-            val descriptionText = "Shows alerts when 주문 접수 is detected"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("alert_channel", name, importance).apply {
-                description = descriptionText
+            val channel = NotificationChannel(
+                "alert_channel",
+                "Alerts",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Shows alerts when 주문 접수 is detected"
             }
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+            NotificationManagerCompat.from(this).createNotificationChannel(channel)
         }
 
         WindowCompat.getInsetsController(window, window.decorView).apply {
