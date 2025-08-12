@@ -1,4 +1,5 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +48,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
@@ -104,11 +106,23 @@ fun MealEditTempScreen(
                 painter = painterResource(R.drawable.img_diet_patchballoon),
                 contentDescription = "textballoon"
             )
-            EllipseNyam(
-                modifier = Modifier
-                    .offset(y = 72f.bhp(), x = 117f.wp()),
-                ellipseLength = 177.17578, mascotLength = 106.1115
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .offset(y = 72f.bhp(), x = 117f.wp()),
+//                ellipseLength = 177.17578, mascotLength = 106.1115
+//            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 72f.bhp()),
+                    num = 1,
+                    ellipseLength = 177.17575,
+                    mascotLength = 145.0,
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .padding(top = 256f.hp(), start = 24f.wp())
@@ -183,12 +197,13 @@ fun MealEditTempScreen(
                             )
                             .drawBehind {
                                 val strokeWidth = 3.dp.toPx()
-                                val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
-                                    floatArrayOf(
-                                        4.dp.toPx(),
-                                        4.dp.toPx()
-                                    ), 0f
-                                )
+                                val pathEffect =
+                                    androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                                        floatArrayOf(
+                                            4.dp.toPx(),
+                                            4.dp.toPx()
+                                        ), 0f
+                                    )
                                 val rect = Rect(0f, 0f, size.width, size.height)
 
                                 drawRoundRect(
@@ -198,7 +213,7 @@ fun MealEditTempScreen(
                                     cornerRadius = CornerRadius(15.dp.toPx())
                                 )
                             }
-                            .clickable (
+                            .clickable(
                                 onClick = {
                                     navController.navigate("mealeditsearch")
                                 }
@@ -259,7 +274,8 @@ fun MealEditTempScreen(
         DietMultipleNutritionBar(
             modifier = Modifier
                 .padding(start = 41f.wp(), end = 39f.wp(), top = 13.29f.bhp()),
-            carb = mealViewModel.totalCarb.toFloat(), protein = mealViewModel.totalProtein.toFloat(),
+            carb = mealViewModel.totalCarb.toFloat(),
+            protein = mealViewModel.totalProtein.toFloat(),
             fat = mealViewModel.totalFat.toFloat()
         )
         Box(

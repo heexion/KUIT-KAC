@@ -196,12 +196,12 @@ fun DietCard(
                         end = 29.68f.bhp()
                     )
             ) {
-//                EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
-                HamcoachGif(
-                    num = 1,
-                    ellipseLength = 122.0,
-                    mascotLength = 100.0,
-                )
+                EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+//                HamcoachGif(
+//                    num = 1,
+//                    ellipseLength = 122.0,
+//                    mascotLength = 100.0,
+//                )
 
                 Image(
                     modifier = Modifier

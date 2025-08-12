@@ -67,7 +67,7 @@ fun DietMultipleNutritionBar(
                 text = "탄 "+ carb + "g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo12,
-                fontSize = 14f.isp(),
+                fontSize = 13f.isp(),
                 color = Color(0xFF000000)
             )
         }
@@ -96,7 +96,7 @@ fun DietMultipleNutritionBar(
                 text = "단 "+protein+"g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
-                fontSize = 14f.isp(),
+                fontSize = 13f.isp(),
                 color = Color(0xFF000000)
             )
         }
@@ -124,7 +124,7 @@ fun DietMultipleNutritionBar(
                 text = "지 "+fat+"g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
-                fontSize = 14f.isp(),
+                fontSize = 13f.isp(),
                 color = Color(0xFF000000)
             )
         }
