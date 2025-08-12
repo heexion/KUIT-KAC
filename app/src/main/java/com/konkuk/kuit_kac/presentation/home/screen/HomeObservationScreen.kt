@@ -178,7 +178,7 @@ fun HomeObservationScreen(
                             start = 32f.wp(),
                             end = 32f.wp(),
                             bottom = 70f.bhp()
-                        )
+                        ).fillMaxWidth()
                     ) {
                         items(observeList) { observe ->
                             HomeObservationBox(
