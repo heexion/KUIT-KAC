@@ -29,11 +29,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,7 +76,7 @@ fun DietExistScreen(
     routineList: List<String> = listOf("아침", "점심", "저녁")
 ) {
     val pageCount = 4
-    val pagerState = rememberPagerState(pageCount = {pageCount})
+    val pagerState = rememberPagerState(pageCount = { pageCount })
     var expanded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val lazyState = rememberLazyListState()
@@ -209,135 +211,183 @@ fun DietSwipeCardPager(
     val rotateDegree = 10f
     val coroutineScope = rememberCoroutineScope()
 
+    val infinitePageCount = Int.MAX_VALUE
+    val initialPage = infinitePageCount / 2 - ((infinitePageCount / 2) % dietList.size)
+    val actualPageCount = dietList.size
+
+    val pageState = rememberPagerState(
+        initialPage = initialPage,
+        pageCount = { infinitePageCount }
+    )
+
     Box(modifier = modifier) {
         HorizontalPager(
-            state = pagerState,
+            state = pageState,
             modifier = Modifier.fillMaxWidth(),
-            pageSpacing = 40.dp
+            pageSpacing = 40.dp,
         ) { page ->
-            val meal = dietList[page]
+            val realPage = page % actualPageCount
+            val meal = dietList[realPage]
             val totalKcal = meal.totalKcal.toInt()
 
-            Column(
-                modifier = Modifier
-                    .width(364f.wp())
-                    .clip(RoundedCornerShape(20f.wp()))
-                    .background(color = Color(0xFFFFF1AB))
-                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
-                    .graphicsLayer {
-                        val pageOffset = pagerState.offsetForPage(page)
-                        rotationZ = -rotateDegree * pageOffset
-                    }
-                    .padding(bottom = 20f.bhp())
+            Box(
+                modifier = Modifier.graphicsLayer {
+                    val pageOffset = pageState.offsetForPage(page)
+                    rotationZ = -rotateDegree * pageOffset
+                }
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .width(364f.wp())
+                        .clip(RoundedCornerShape(20f.wp()))
+                        .background(color = Color(0xFFFFF1AB))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
+
+                        .padding(bottom = 20f.bhp())
                 ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 22f.bhp(), start = 94f.wp())
+                                .width(176f.wp())
+                                .height(28f.bhp())
+                                .clip(RoundedCornerShape(7f.wp()))
+                                .background(color = Color(0xFFFFFCEE)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = meal.name,
+                                style = DungGeunMo17,
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 22f.bhp(), start = 48.79f.wp())
+                                .size(26.75811f.wp(), 26.75811f.bhp())
+                                .clip(RoundedCornerShape(13.27905f.wp()))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color.White, Color(0xFFFFB638))
+                                    )
+                                )
+                                .clickable {
+                                    val dietId = meal.id
+                                    val name = meal.name
+                                    val fwqRaw = meal.dietFoods.joinToString(",") { dietFood ->
+                                        val foodName = dietFood.food.name
+                                        val quantity = dietFood.quantity
+                                        "${foodName}:${quantity}"
+                                    }
+
+                                    val encodedName = Uri.encode(name)
+                                    val encodedFwq = Uri.encode(fwqRaw)
+
+                                    navController.navigate("DietEditGraph/DietEditTemp?dietId=${dietId}&fwqRaw=${encodedFwq}&name=${encodedName}")
+                                }
+                        ) {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painterResource(R.drawable.img_diet_pen),
+                                contentDescription = "pen"
+                            )
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 20f.bhp(), start = 16f.wp(), end = 15f.wp()),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16f.bhp())
+                    ) {
+                        meal.dietFoods.forEach { dietFood ->
+                            MealItemCard(
+                                foodNum = dietFood.food.id,
+                                image = dietFood.food.foodType.toDrawable(),
+                                foodName = dietFood.food.name,
+                                foodAmount = dietFood.quantity.toFloat(),
+                                foodKcal = (dietFood.food.calorie * dietFood.quantity).toInt(),
+                                onDeleteClick = {},
+                                navController = navController
+                            )
+                        }
+                    }
+
                     Box(
                         modifier = Modifier
-                            .padding(top = 22f.bhp(), start = 94f.wp())
-                            .width(176f.wp())
-                            .height(28f.bhp())
-                            .clip(RoundedCornerShape(7f.wp()))
-                            .background(color = Color(0xFFFFFCEE)),
-                        contentAlignment = Alignment.Center
+                            .fillMaxWidth()
+                            .height(122f.bhp())
+                            .padding(top = 12f.bhp(), start = 32.56f.wp(), end = 29.68f.bhp())
                     ) {
+                        EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+                        Image(
+                            modifier = Modifier
+                                .width(197.37.dp)
+                                .height(67.78.dp)
+                                .offset(y = 22.2f.bhp(), x = 104.38f.wp()),
+                            painter = painterResource(R.drawable.img_home_existtextballoon),
+                            contentDescription = "text balloon"
+                        )
                         Text(
-                            text = meal.name,
-                            style = DungGeunMo17,
-                            fontSize = 17f.isp(),
+                            modifier = Modifier
+                                .size(135f.wp(), 40f.bhp())
+                                .offset(142.26f.wp(), 40.12f.bhp()),
+                            text = "총 $totalKcal kcal이야!\n식단 수준은 ${meal.foodStatusType}",
+                            lineHeight = 20f.isp(),
+                            style = DungGeunMo15,
+                            fontSize = 15f.isp(),
                             color = Color(0xFF000000),
                             textAlign = TextAlign.Center
                         )
                     }
-
-                    Box(
+                    DietMultipleNutritionBar(
                         modifier = Modifier
-                            .padding(top = 22f.bhp(), start = 48.79f.wp())
-                            .size(26.75811f.wp(), 26.75811f.bhp())
-                            .clip(RoundedCornerShape(13.27905f.wp()))
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(Color.White, Color(0xFFFFB638))
-                                )
-                            )
-                            .clickable {
-                                val dietId = meal.id
-                                val name = meal.name
-                                val fwqRaw = meal.dietFoods.joinToString(",") { dietFood ->
-                                    val foodName = dietFood.food.name
-                                    val quantity = dietFood.quantity
-                                    "${foodName}:${quantity}"
-                                }
-
-                                val encodedName = Uri.encode(name)
-                                val encodedFwq = Uri.encode(fwqRaw)
-
-                                navController.navigate("DietEditGraph/DietEditTemp?dietId=${dietId}&fwqRaw=${encodedFwq}&name=${encodedName}")
-                            }
-                    ) {
-                        Image(
-                            modifier = Modifier.fillMaxSize(),
-                            painter = painterResource(R.drawable.img_diet_pen),
-                            contentDescription = "pen"
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(top = 20f.bhp(), start = 16f.wp(), end = 15f.wp()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16f.bhp())
-                ) {
-                    meal.dietFoods.forEach { dietFood ->
-                        MealItemCard(
-                            foodNum = dietFood.food.id,
-                            image = dietFood.food.foodType.toDrawable(),
-                            foodName = dietFood.food.name,
-                            foodAmount = dietFood.quantity.toFloat(),
-                            foodKcal = (dietFood.food.calorie * dietFood.quantity).toInt(),
-                            onDeleteClick = {},
-                            navController = navController
-                        )
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(122f.bhp())
-                        .padding(top = 12f.bhp(), start = 32.56f.wp(), end = 29.68f.bhp())
-                ) {
-                    EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
-                    Image(
-                        modifier = Modifier
-                            .width(197.37.dp)
-                            .height(67.78.dp)
-                            .offset(y = 22.2f.bhp(), x = 104.38f.wp()),
-                        painter = painterResource(R.drawable.img_home_existtextballoon),
-                        contentDescription = "text balloon"
-                    )
-                    Text(
-                        modifier = Modifier
-                            .size(135f.wp(), 40f.bhp())
-                            .offset(142.26f.wp(), 40.12f.bhp()),
-                        text = "총 $totalKcal kcal이야!\n식단 수준은 ${meal.foodStatusType}",
-                        lineHeight = 20f.isp(),
-                        style = DungGeunMo15,
-                        fontSize = 15f.isp(),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center
+                            .padding(start = 17f.wp(), end = 15f.wp(), top = 13.29f.bhp()),
+                        carb = 65f,
+                        protein = 18f,
+                        fat = 13f
                     )
                 }
-                DietMultipleNutritionBar(
-                    modifier = Modifier
-                        .padding(start = 17f.wp(), end = 15f.wp(), top = 13.29f.bhp()),
-                    carb = 65f,
-                    protein = 18f,
-                    fat = 13f
-                )
             }
         }
+
+        //왼쪽 버튼
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .offset(x = (-10f).wp(), y = 0f.bhp())
+                .size(35f.bhp(), 35f.bhp())
+                .clip(RoundedCornerShape(11f.bhp()))
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color.White, Color(0xFFFFB638))
+                    )
+                )
+                .clickable {
+                    coroutineScope.launch {
+                        val nextPage = (pageState.currentPage - 1)
+                        pageState.animateScrollToPage(nextPage)
+                    }
+                }
+                .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(R.drawable.svg_all_point),
+                contentDescription = "pointer",
+                modifier = Modifier
+                    .size(9f.wp(), 13f.bhp())
+                    .graphicsLayer {
+                        scaleX = -1f // 좌우반전
+                    }
+            )
+        }
+
+        //오른쪽 버튼
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -351,9 +401,8 @@ fun DietSwipeCardPager(
                 )
                 .clickable {
                     coroutineScope.launch {
-                        val nextPage = (pagerState.currentPage + 1)
-                            .coerceAtMost(dietList.size - 1)
-                        pagerState.animateScrollToPage(nextPage)
+                        val nextPage = (pageState.currentPage + 1)
+                        pageState.animateScrollToPage(nextPage)
                     }
                 }
                 .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
@@ -368,13 +417,9 @@ fun DietSwipeCardPager(
     }
 }
 
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun DietExistScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     DietExistScreen(navController = navController)
 }
-
