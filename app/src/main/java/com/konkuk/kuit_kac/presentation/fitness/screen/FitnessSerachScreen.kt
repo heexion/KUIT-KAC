@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -34,8 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,10 +50,8 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.data.request.FitnessRequestDto
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
-import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -69,11 +70,19 @@ fun FitnessSearchScreen(
     val suggestions = fitnessViewModel.suggestions
     var selectedItem by remember { mutableStateOf<Fitness?>(null) }
     var showDialog by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current // 포커스 매니저
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFFFFFBE8))
+            // 바깥 클릭 시 포커스 해제
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus()
+            }
     ) {
         // 1 + 2. 상단바 + 검색바 통합 박스
         Box(
@@ -106,6 +115,7 @@ fun FitnessSearchScreen(
                 }
 
                 Spacer(modifier = Modifier.height(23f.bhp()))
+
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -119,16 +129,24 @@ fun FitnessSearchScreen(
                     singleLine = true,
                     value = query,
                     onValueChange = { fitnessViewModel.onQueryChange(it) },
-                    label = { Text(
-                        text = "무슨 운동을 했어?",
-                        style = DungGeunMo15,
-                        fontSize = 15f.isp(),
-                        color = Color(0xFFB5B5B5),
-                        modifier = Modifier.padding(horizontal = 20f.wp())
-                    ) },
+                    label = {
+                        Text(
+                            text = "무슨 운동을 했어?",
+                            style = DungGeunMo15,
+                            fontSize = 15f.isp(),
+                            color = Color(0xFFB5B5B5),
+                            modifier = Modifier.padding(horizontal = 20f.wp())
+                        )
+                    },
                     textStyle = DungGeunMo15.copy(
                         fontSize = 15f.isp(),
                         color = Color(0xFF000000)
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() } // Done 누르면 포커스 해제
                     )
                 )
             }
@@ -140,17 +158,19 @@ fun FitnessSearchScreen(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(suggestions) { fitness ->
                 SearchBarItem(
-                    modifier = Modifier.padding(horizontal = 24f.wp()),
-                    value = fitness.name,
-                    //isLastItem = index == searchHistory.lastIndex,
-                    onClick = {
-                        selectedItem = fitness
-                        showDialog = true
-                    }
+                    modifier = Modifier
+                        .padding(horizontal = 24f.wp())
+                        .clickable {
+                            focusManager.clearFocus() // 리스트 클릭 시 포커스 해제
+                            selectedItem = fitness
+                            showDialog = true
+                        },
+                    value = fitness.name
                 )
             }
         }
     }
+
     if (showDialog) {
         Dialog(onDismissRequest = { showDialog = false }) {
             Box(
@@ -168,7 +188,6 @@ fun FitnessSearchScreen(
                     tint = Color(0xFF000000),
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        // .padding(top = 4.dp, end = 4.dp)
                         .size(20.dp)
                         .clickable { showDialog = false }
                 )
@@ -205,17 +224,16 @@ fun FitnessSearchScreen(
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
                             .clickable {
                                 // TODO: 추가 로직
-                                if(routineViewModel.exerciseRecords.isNotEmpty()){
+                                if (routineViewModel.exerciseRecords.isNotEmpty()) {
                                     val f = selectedItem
                                     if (f != null) {
-                                        routineViewModel.ensureExercise(f) // make sure it's in selectedRoutines + records map
+                                        routineViewModel.ensureExercise(f)
                                         val encoded = Uri.encode(f.name)
                                         navController.navigate("FitnessDetailRecord/$encoded")
                                     }
-                                }
-                                else{
+                                } else {
                                     routineViewModel.addRoutine(
-                                        selectedItem?:Fitness(0,"","",1.0,0)
+                                        selectedItem ?: Fitness(0, "", "", 1.0, 0)
                                     )
                                     navController.navigate(route = Route.FitnessEdit.route)
                                 }

@@ -1,6 +1,8 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,14 +14,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -43,11 +50,19 @@ fun MealEditSearchScreen(
 ) {
     val query = foodViewModel.query
     val suggestions = foodViewModel.suggestions
+    val focusManager = LocalFocusManager.current // 포커스 매니저
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFFFFFBE8))
+            // 바깥 터치 시 포커스 해제
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus()
+            }
     ) {
         // 1 + 2. 상단바 + 검색바 통합 박스
         Box(
@@ -69,9 +84,6 @@ fun MealEditSearchScreen(
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-
-
-                    // 타이틀
                     Text(
                         text = "식단 검색하기",
                         style = DungGeunMo20,
@@ -97,16 +109,24 @@ fun MealEditSearchScreen(
                     singleLine = true,
                     value = query,
                     onValueChange = { foodViewModel.onQueryChange(it) },
-                    label = { Text(
-                        text = "무슨 음식을 먹었어?",
-                        style = DungGeunMo15,
-                        fontSize = 15f.isp(),
-                        color = Color(0xFFB5B5B5),
-                        modifier = Modifier.padding(horizontal = 20f.wp())
-                    ) },
+                    label = {
+                        Text(
+                            text = "무슨 음식을 먹었어?",
+                            style = DungGeunMo15,
+                            fontSize = 15f.isp(),
+                            color = Color(0xFFB5B5B5),
+                            modifier = Modifier.padding(horizontal = 20f.wp())
+                        )
+                    },
                     textStyle = DungGeunMo15.copy(
                         fontSize = 15f.isp(),
                         color = Color(0xFF000000)
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() } // Done 키 입력 시 포커스 해제
                     )
                 )
             }
@@ -118,16 +138,18 @@ fun MealEditSearchScreen(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(suggestions) { food ->
                 SearchBarItem(
-                    modifier = Modifier.padding(horizontal = 24f.wp()),
-                    value = food.name,
-                    //isLastItem = index == searchHistory.lastIndex,
-                    onClick = {
-                        navController.navigate("meal_edit_search_detail/${food.name}")
-                    }
+                    modifier = Modifier
+                        .padding(horizontal = 24f.wp())
+                        .clickable {
+                            focusManager.clearFocus() // 아이템 클릭 시 포커스 해제
+                            navController.navigate("meal_edit_search_detail/${food.name}")
+                        },
+                    value = food.name
                 )
             }
         }
     }
+
     Spacer(
         modifier = Modifier
             .padding(bottom = 120f.bhp())

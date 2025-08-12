@@ -1,6 +1,5 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.value
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,8 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -39,13 +38,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -63,28 +59,24 @@ fun DietCreateScreen(
     dietViewModel: DietViewModel = hiltViewModel()
 ) {
     var title by remember { mutableStateOf("") }
+    var hasFocus by remember { mutableStateOf(false) } // 포커스 상태 추적
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFFFFF3C1), Color(0xFFFFFCEE),Color(0xFFFFF3C1))
+                    colors = listOf(Color(0xFFFFF3C1), Color(0xFFFFFCEE), Color(0xFFFFF3C1))
                 )
             )
-    ){
+    ) {
         Image(
             painter = painterResource(R.drawable.img_diet_createtextballoon),
             contentDescription = "text balloon",
             modifier = Modifier
                 .padding(top = 12f.hp(), start = 78f.wp())
-                .size(272f.wp(),98f.bhp())
+                .size(272f.wp(), 98f.bhp())
         )
-//        EllipseNyam(
-//            modifier = Modifier
-//                .padding(top = 84f.hp(), start = 117f.wp()),
-//            mascotLength = 106.1115,
-//            ellipseLength = 177.17575
-//        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -97,6 +89,7 @@ fun DietCreateScreen(
                 mascotLength = 145.0,
             )
         }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,34 +97,40 @@ fun DietCreateScreen(
                 .height(458f.bhp())
                 .clip(shape = RoundedCornerShape(20f.bhp()))
                 .background(color = Color(0xFFFFF1AB))
-                .border(1.dp,Color(0xFF000000), RoundedCornerShape(20f.bhp())),
+                .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
                     .padding(top = 22f.bhp())
                     .background(color = Color(0xFFFFFCEE))
-            ){
+            ) {
                 TextField(
                     modifier = Modifier
                         .width(176f.wp())
-                        .heightIn(min=56f.bhp()),
+                        .heightIn(min = 56f.bhp())
+                        .onFocusChanged { focusState ->
+                            hasFocus = focusState.isFocused
+                        },
                     value = title,
-                    onValueChange = {
-                        title = it
-
-                                    },
-                    placeholder = { Box(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ){Text(
-                        text = "제목을 입력해줘",
-                        textAlign = TextAlign.Center,
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp(),
-                        color = Color(0xFF999999)
-                    )} },
+                    onValueChange = { title = it },
+                    placeholder = {
+                        // 값이 없고 포커스가 없을 때만 표시
+                        if (title.isEmpty() && !hasFocus) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "제목을 입력해줘",
+                                    textAlign = TextAlign.Center,
+                                    style = DungGeunMo17,
+                                    fontSize = 17f.isp(),
+                                    color = Color(0xFF999999)
+                                )
+                            }
+                        }
+                    },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
@@ -147,6 +146,7 @@ fun DietCreateScreen(
                     )
                 )
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,9 +162,10 @@ fun DietCreateScreen(
                     )
                     .drawBehind {
                         val strokeWidth = 3.dp.toPx()
-                        val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 4.dp.toPx()), 0f)
-                        val rect = Rect(0f, 0f, size.width, size.height)
-
+                        val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                            floatArrayOf(4.dp.toPx(), 4.dp.toPx()),
+                            0f
+                        )
                         drawRoundRect(
                             color = Color(0xFF000000),
                             style = Stroke(width = strokeWidth, pathEffect = pathEffect),
@@ -177,7 +178,7 @@ fun DietCreateScreen(
             ) {
                 Image(
                     modifier = Modifier
-                        .size(19f.wp(),19f.bhp())
+                        .size(19f.wp(), 19f.bhp())
                         .padding(end = 7f.wp()),
                     painter = painterResource(R.drawable.img_diet_plus),
                     contentDescription = "plus"
@@ -193,6 +194,7 @@ fun DietCreateScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
