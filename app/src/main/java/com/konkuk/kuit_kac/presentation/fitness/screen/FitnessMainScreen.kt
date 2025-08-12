@@ -239,9 +239,6 @@ fun FitnessMainScreen(
                             val pageOffset =
                                 (pageState.currentPage - page) + pageState.currentPageOffsetFraction
 
-                            val currentPage = pageState.currentPage % routines.size
-                            Text(text="page: $page \n initialPage: $initialPage \n currentPage: $currentPage \n actualPageCount: $actualPageCount", color = Color(0xFF000000))
-
                             FitnessCard(
                                 navController = navController,
                                 title = template.name,
