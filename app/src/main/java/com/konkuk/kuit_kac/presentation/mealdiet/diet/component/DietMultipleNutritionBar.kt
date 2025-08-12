@@ -33,6 +33,10 @@ fun DietMultipleNutritionBar(
     protein: Float,
     fat: Float,
 ) {
+    val total = protein + carb + fat
+    val carbP = (carb / total) * 100
+    val proP = (protein / total) * 100
+    val fatP = (fat / total) * 100
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,7 +45,11 @@ fun DietMultipleNutritionBar(
     ) {
         Box(
             modifier = Modifier
-                .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
+                .shadow(
+                    elevation = 0.dp,
+                    spotColor = Color(0xFF000000),
+                    ambientColor = Color(0xFF000000)
+                )
                 .width(19.42188f.bhp())
                 .height(19.42188f.bhp())
                 .clip(RoundedCornerShape(9.71094f.bhp()))
@@ -51,11 +59,11 @@ fun DietMultipleNutritionBar(
         Box(
             modifier = Modifier
                 .padding(start = 0.29f.wp())
-                .size(68f.wp(),20f.bhp()),
+                .size(68f.wp(), 20f.bhp()),
             contentAlignment = Alignment.Center
         ){
             Text(
-                text = "탄 360.2g",
+                text = "탄 "+ carb + "g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
@@ -65,7 +73,11 @@ fun DietMultipleNutritionBar(
         Box(
             modifier = Modifier
                 .padding(start = 8f.wp())
-                .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
+                .shadow(
+                    elevation = 0.dp,
+                    spotColor = Color(0xFF000000),
+                    ambientColor = Color(0xFF000000)
+                )
                 .width(19.42188f.bhp())
                 .height(19.42188f.bhp())
                 .clip(RoundedCornerShape(9.71094f.bhp()))
@@ -75,12 +87,12 @@ fun DietMultipleNutritionBar(
         Box(
             modifier = Modifier
                 .padding(start = 0.29f.wp())
-                .size(68f.wp(),20f.bhp()),
+                .size(68f.wp(), 20f.bhp()),
             contentAlignment = Alignment.Center
 
         ){
             Text(
-                text = "단 123g",
+                text = "단 "+protein+"g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
@@ -90,7 +102,11 @@ fun DietMultipleNutritionBar(
         Box(
             modifier = Modifier
                 .padding(start = 8f.wp())
-                .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
+                .shadow(
+                    elevation = 0.dp,
+                    spotColor = Color(0xFF000000),
+                    ambientColor = Color(0xFF000000)
+                )
                 .width(19.42188f.bhp())
                 .height(19.42188f.bhp())
                 .clip(RoundedCornerShape(9.71094f.bhp()))
@@ -100,11 +116,11 @@ fun DietMultipleNutritionBar(
         Box(
             modifier = Modifier
                 .padding(start = 0.29f.wp())
-                .size(68f.wp(),20f.bhp()),
+                .size(68f.wp(), 20f.bhp()),
             contentAlignment = Alignment.Center
         ){
             Text(
-                text = "지 51.8g",
+                text = "지 "+fat+"g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
@@ -117,7 +133,11 @@ fun DietMultipleNutritionBar(
             .fillMaxWidth()
             .height(53.6f.bhp())
             .clip(RoundedCornerShape(26.8f.bhp()))
-            .shadow(elevation = 0.dp, spotColor = Color(0xFF000000), ambientColor = Color(0xFF000000))
+            .shadow(
+                elevation = 0.dp,
+                spotColor = Color(0xFF000000),
+                ambientColor = Color(0xFF000000)
+            )
             .border(1.dp, Color(0xFF000000), shape = RoundedCornerShape(26.8f.bhp()))
     ){
         Box(
@@ -130,7 +150,7 @@ fun DietMultipleNutritionBar(
             Text(
                 modifier = Modifier
                     .padding(start = 10f.wp()),
-                text = carb.toInt().toString() + "%",
+                text = carbP.toInt().toString() + "%",
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
                 color = Color(0xFF000000)
@@ -146,7 +166,7 @@ fun DietMultipleNutritionBar(
             Text(
                 modifier = Modifier
                     .padding(start = 10f.wp()),
-                text = protein.toInt().toString() + "%",
+                text = proP.toInt().toString() + "%",
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
                 color = Color(0xFF000000)
@@ -162,7 +182,7 @@ fun DietMultipleNutritionBar(
             Text(
                 modifier = Modifier
                     .padding(start = 10f.wp()),
-                text = fat.toInt().toString() + "%",
+                text = fatP.toInt().toString() + "%",
                 style = DungGeunMo15,
                 fontSize = 15f.isp(),
                 color = Color(0xFF000000)

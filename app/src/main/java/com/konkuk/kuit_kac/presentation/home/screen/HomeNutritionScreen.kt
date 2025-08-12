@@ -139,7 +139,9 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
                         )
 
                     } else if (error != null) {
-                        Text("영양 정보 불러오기 실패: $error")
+                        Box(
+                            modifier = Modifier
+                        )
                     } else {
                         CircularProgressIndicator()
                     }

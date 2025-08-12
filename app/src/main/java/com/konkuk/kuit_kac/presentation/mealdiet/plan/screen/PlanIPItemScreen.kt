@@ -69,8 +69,10 @@ fun PlanItemScreen(
                 placeholderTextStyle = DungGeunMo20,
                 showClearButton = true,
                 onBackClick = { navController.popBackStack() },
-                onSearchClick = { },
-                onClearClick = {}
+                onSearchClick = { mealViewModel.getTempSearch(foodName)
+                    navController.popBackStack() },
+                onClearClick = {mealViewModel.clearTempSearch()
+                    navController.navigate("PlanIPSearch")}
             )
 
             Spacer(modifier = Modifier.height(82f.bhp()))
