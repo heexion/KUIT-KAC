@@ -263,12 +263,12 @@ fun DietPatchScreen(
                 .height(122f.bhp())
                 .padding(top = 12f.bhp(), start = 56.58f.wp())
         ) {
-//            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
-            HamcoachGif(
-                num = 1,
-                ellipseLength = 122.0,
-                mascotLength = 100.0,
-            )
+            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+//            HamcoachGif(
+//                num = 1,
+//                ellipseLength = 122.0,
+//                mascotLength = 100.0,
+//            )
 
             Image(
                 modifier = Modifier
@@ -333,7 +333,7 @@ fun DietPatchScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(115f.bhp())
+                .height(130f.bhp())
                 .background(Color.Transparent)
         )
     }
