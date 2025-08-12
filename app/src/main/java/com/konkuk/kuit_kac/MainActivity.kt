@@ -58,6 +58,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var foodDao: FoodDao
+
     @Inject
     lateinit var fitnessDao: FitnessDao
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -216,7 +217,14 @@ class MainActivity : ComponentActivity() {
                                 .padding(end = 25f.wp(), bottom = 93f.bhp())
                                 .size(61f.wp(), 61f.bhp())
                                 .align(Alignment.BottomEnd)
-                                .clickable { navController.navigate(Route.PlanDiet.route) },
+                                .clickable {
+                                    navController.navigate(Route.PlanDiet.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            inclusive = false
+                                        }
+                                        launchSingleTop = true
+                                    }
+                                },
                             painter = painterResource(id = R.drawable.ic_navigate_plan),
                             contentDescription = "",
                         )
@@ -229,17 +237,17 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            if(!foodDao.hasAnyFood()){
+            if (!foodDao.hasAnyFood()) {
                 val foods = loadFood(applicationContext)
                 foodDao.insertAll(foods)
             }
         }
         lifecycleScope.launch {
-            if(!fitnessDao.hasAnyFitness()){
+            if (!fitnessDao.hasAnyFitness()) {
                 val fitnesses = loadFitness(applicationContext)
                 fitnessDao.insertAll(fitnesses)
             }
-         }
+        }
     }
 }
 
