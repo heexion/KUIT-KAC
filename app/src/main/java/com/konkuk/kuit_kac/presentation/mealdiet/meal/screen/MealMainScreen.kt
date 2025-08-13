@@ -199,7 +199,8 @@ fun MealMainScreen(
                                         }
                                         val mealType = state.mealCardData.mealType
                                         navController.navigate("MealEditGraph/MealEditTemp?dietId=${dietId}&fwqRaw=${fwqRaw}&mealType=${mealType}")
-                                    }
+                                    },
+                                    mealViewModel = mealViewModel
                                 )
 
                             }
