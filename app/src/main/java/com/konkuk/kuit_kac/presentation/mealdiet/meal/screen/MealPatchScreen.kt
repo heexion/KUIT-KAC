@@ -82,12 +82,13 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
 @Composable
-fun MealPatchScreen(modifier: Modifier = Modifier,
-                    navController: NavHostController,
-                    routineList:List<String> = listOf("아침", "점심", "저녁"),
-                    dietViewModel: DietViewModel = hiltViewModel(),
-                    mealViewModel: MealViewModel = hiltViewModel(),
-                    foodViewModel: FoodViewModel = hiltViewModel()
+fun MealPatchScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    routineList: List<String> = listOf("아침", "점심", "저녁"),
+    dietViewModel: DietViewModel = hiltViewModel(),
+    mealViewModel: MealViewModel = hiltViewModel(),
+    foodViewModel: FoodViewModel = hiltViewModel()
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -101,8 +102,8 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
     val cal = 677;
     val resolvedFoods = remember { mutableStateOf<List<FoodWithQuantity>>(emptyList()) }
     Log.d("MealPatch", "${dietList}")
-    val pageCount = dietList?.size?:1
-    val pagerState = rememberPagerState(pageCount = {pageCount})
+    val pageCount = dietList?.size ?: 1
+    val pagerState = rememberPagerState(pageCount = { pageCount })
     val currentPage = pagerState.currentPage
     val currentDiet = dietList?.get(currentPage)
 
@@ -115,7 +116,7 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                         val name = df.food.name
                         val quantity = df.quantity?.toFloat()
                         val food = foodViewModel.getFoodByName(name)
-                        if (food != null) FoodWithQuantity(food, quantity?:1f) else null
+                        if (food != null) FoodWithQuantity(food, quantity ?: 1f) else null
                     }
                 }.awaitAll().filterNotNull()
             }
@@ -143,7 +144,7 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
             ) {
                 Image(
                     modifier = Modifier
-                        .size(28.8584f.wp(),28.8584f.bhp()),
+                        .size(28.8584f.wp(), 28.8584f.bhp()),
                     painter = painterResource(R.drawable.ic_alcohol),
                     contentDescription = "utensils"
                 )
@@ -157,8 +158,10 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 17f.bhp(),
-                        start = 24f.wp(), end = 24f.wp()),
+                    .padding(
+                        top = 17f.bhp(),
+                        start = 24f.wp(), end = 24f.wp()
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 SelectButton2(
@@ -179,26 +182,30 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(brush =
-                    Brush.radialGradient(
-                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                        radius = 2000f
-                    )
+                .background(
+                    brush =
+                        Brush.radialGradient(
+                            colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
+                            radius = 2000f
+                        )
                 ),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-            ){
+            ) {
 //                EllipseNyam(ellipseLength = 137.54, mascotLength = 82.37,
 //                    modifier = Modifier
 //                        .offset(134f.wp(),94f.bhp()))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = 94f.bhp()),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     HamcoachGif(
+
                         num = 1,
                         ellipseLength = 137.54,
                         mascotLength = 112.0,
@@ -209,12 +216,12 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                     painter = painterResource(R.drawable.img_diet_maintextballoon),
                     contentDescription = "text balloon",
                     modifier = Modifier
-                        .offset(66f.wp(),25.3f.bhp())
-                        .size(282f.wp(),110f.bhp())
+                        .offset(66f.wp(), 25.3f.bhp())
+                        .size(282f.wp(), 110f.bhp())
                 )
                 Text(
                     modifier = Modifier
-                        .offset(79.2f.wp(),52.6f.bhp()),
+                        .offset(79.2f.wp(), 52.6f.bhp()),
                     text = "너만의 식단들이야!\n어떤 식단을 진행했는지 골라줘!",
                     textAlign = TextAlign.Center,
                     style = DungGeunMo17,
@@ -222,7 +229,7 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                     color = Color(0xFF000000)
                 )
             }
-            if(state) {
+            if (state) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -243,7 +250,7 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                         DietSwipeCardPager(
                             navController = navController,
                             modifier = Modifier.padding(start = 24f.wp()),
-                            dietList = dietList?: emptyList(),
+                            dietList = dietList ?: emptyList(),
                             pagerState = pagerState
                         )
                     }
@@ -265,11 +272,11 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                         buttonHeight = 70f,
                         isOrange = true
                     )
-                }}
-            else{
+                }
+            } else {
                 Box(
                     modifier = Modifier
-                        .size(364f.wp(),458f.bhp())
+                        .size(364f.wp(), 458f.bhp())
                         .offset(y = 105f.bhp(), x = 24f.wp())
                         .clip(RoundedCornerShape(20f.wp()))
                         .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
@@ -284,15 +291,15 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
                         painter = painterResource(R.drawable.img_diet_maintextballoon),
                         contentDescription = "text balloon",
                         modifier = Modifier
-                            .size(219f.wp(),83f.bhp())
+                            .size(219f.wp(), 83f.bhp())
                             .offset(x = 73f.wp(), y = 101f.bhp())
                     )
                     Box(
                         modifier = Modifier
-                            .size(114f.wp(),44f.bhp())
-                            .offset(135.27f.wp(),113f.bhp()),
+                            .size(114f.wp(), 44f.bhp())
+                            .offset(135.27f.wp(), 113f.bhp()),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         Text(
                             text = "현재식단이 비어있어요!",
                             style = DungGeunMo17,
@@ -329,5 +336,5 @@ fun MealPatchScreen(modifier: Modifier = Modifier,
 @Composable
 fun MealPatchScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    MealPatchScreen(navController=navController)
+    MealPatchScreen(navController = navController)
 }

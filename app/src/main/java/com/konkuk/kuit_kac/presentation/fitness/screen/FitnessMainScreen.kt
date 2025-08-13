@@ -5,9 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -63,6 +72,16 @@ fun FitnessMainScreen(
     val hasData = routines.isNotEmpty()
     val pagerState = rememberPagerState { routines.size.coerceAtLeast(1) }
     val coroutineScope = rememberCoroutineScope()
+
+
+    val infinitePageCount = Int.MAX_VALUE
+    val actualPageCount = routines.size.coerceAtLeast(1)
+    val initialPage = infinitePageCount / 2 - ((infinitePageCount / 2) % actualPageCount)
+
+    val pageState = rememberPagerState(
+        initialPage = initialPage-1,
+        pageCount = { infinitePageCount }
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -194,19 +213,20 @@ fun FitnessMainScreen(
                 } else {
                     // Data state: show pager of templates
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Image(
-                            modifier = Modifier
-                                .matchParentSize()
-                                .graphicsLayer { scaleX = 1.38f },
-                            painter = painterResource(R.drawable.img_all_tilted_rectangle),
-                            contentDescription = null
-                        )
+//                        Image(
+//                            modifier = Modifier
+//                                .matchParentSize()
+//                                .graphicsLayer { scaleX = 1.38f },
+//                            painter = painterResource(R.drawable.img_all_tilted_rectangle),
+//                            contentDescription = null
+//                        )
                         HorizontalPager(
-                            state = pagerState,
+                            state = pageState,
                             pageSpacing = 40f.wp(),
                             modifier = Modifier.fillMaxWidth()
                         ) { page ->
-                            val template = routines[page]
+                            val realPage = page % actualPageCount
+                            val template = routines[realPage]
                             val exercises = template.routineExerciseProfiles.map { profile ->
                                 Fitness(
                                     id = profile.exercise.id,
@@ -216,7 +236,9 @@ fun FitnessMainScreen(
                                     type = 0
                                 )
                             }
-                            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                            val pageOffset =
+                                (pageState.currentPage - page) + pageState.currentPageOffsetFraction
+
                             FitnessCard(
                                 navController = navController,
                                 title = template.name,
@@ -230,15 +252,77 @@ fun FitnessMainScreen(
                                 }
                             )
                         }
+
+                        // 왼쪽 버튼
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
+                                .offset(x = (-10f).wp(), y = 0f.bhp())
+                                .size(35f.bhp(), 35f.bhp())
+                                .clip(RoundedCornerShape(11f.bhp()))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color.White, Color(0xFFFFB638))
+                                    )
+                                )
+                                .clickable {
+                                    coroutineScope.launch {
+                                        val nextPage = (pageState.currentPage - 1)
+                                        pageState.animateScrollToPage(nextPage)
+                                    }
+                                }
+                                .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.svg_all_point),
+                                contentDescription = "pointer",
+                                modifier = Modifier
+                                    .size(9f.wp(), 13f.bhp())
+                                    .graphicsLayer {
+                                        scaleX = -1f // 좌우반전
+                                    }
+                            )
+                        }
+                        // 오른쪽 버튼
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .offset(x = 180f.wp(), y = 0f.bhp())
+                                .size(35f.bhp(), 35f.bhp())
+                                .clip(RoundedCornerShape(11f.bhp()))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color.White, Color(0xFFFFB638))
+                                    )
+                                )
+                                .clickable {
+                                    coroutineScope.launch {
+                                        val nextPage = (pageState.currentPage + 1)
+                                        pageState.animateScrollToPage(nextPage)
+                                    }
+                                }
+                                .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.svg_all_point),
+                                contentDescription = "pointer",
+                                modifier = Modifier.size(9f.wp(), 13f.bhp())
+                            )
+                        }
+
                     }
+
                     Spacer(Modifier.height(12f.bhp()))
                     // Pager indicators
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8f.bhp()),
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     ) {
+                        val currentPage = pageState.currentPage % routines.size
                         repeat(routines.size) { idx ->
-                            val selected = pagerState.currentPage == idx
+                            val selected = currentPage == idx
                             Box(
                                 Modifier
                                     .size(8f.bhp())
@@ -247,29 +331,8 @@ fun FitnessMainScreen(
                             )
                         }
                     }
-                    Box(
-                        modifier = Modifier
-                            .offset(x = (-20).dp, y = (-40).dp)
-                            .size(35f.bhp())
-                            .clip(RoundedCornerShape(11f.bhp()))
-                            .background(
-                                brush = Brush.verticalGradient(listOf(Color.White, Color(0xFFFFB638)))
-                            )
-                            .clickable {
-                                coroutineScope.launch {
-                                    val next = (pagerState.currentPage + 1).coerceAtMost(routines.lastIndex)
-                                    pagerState.animateScrollToPage(next)
-                                }
-                            }
-                            .border(1.dp, Color.Black, RoundedCornerShape(11f.bhp())),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.svg_all_point),
-                            contentDescription = null,
-                            modifier = Modifier.size(9f.wp(), 13f.bhp())
-                        )
-                    }
+
+
                 }
             }
         }

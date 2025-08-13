@@ -24,6 +24,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
 @Composable
@@ -65,8 +66,8 @@ fun DietMultipleNutritionBar(
             Text(
                 text = "탄 "+ carb + "g",
                 textAlign = TextAlign.Center,
-                style = DungGeunMo15,
-                fontSize = 15f.isp(),
+                style = DungGeunMo12,
+                fontSize = 13f.isp(),
                 color = Color(0xFF000000)
             )
         }
@@ -95,7 +96,7 @@ fun DietMultipleNutritionBar(
                 text = "단 "+protein+"g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
-                fontSize = 15f.isp(),
+                fontSize = 13f.isp(),
                 color = Color(0xFF000000)
             )
         }
@@ -123,7 +124,7 @@ fun DietMultipleNutritionBar(
                 text = "지 "+fat+"g",
                 textAlign = TextAlign.Center,
                 style = DungGeunMo15,
-                fontSize = 15f.isp(),
+                fontSize = 13f.isp(),
                 color = Color(0xFF000000)
             )
         }

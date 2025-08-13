@@ -94,11 +94,22 @@ fun MealTempScreen(
                 painter = painterResource(R.drawable.img_diet_patchballoon),
                 contentDescription = "textballoon"
             )
-            EllipseNyam(
-                modifier = Modifier
-                    .offset(y = 72f.bhp(), x = 117f.wp()),
-                ellipseLength = 177.17578, mascotLength = 106.1115
-            )
+//            EllipseNyam(
+//                modifier = Modifier
+//                    .offset(y = 72f.bhp(), x = 117f.wp()),
+//                ellipseLength = 177.17578, mascotLength = 106.1115
+//            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                HamcoachGif(
+                    modifier = Modifier.offset(y = 72f.bhp()),
+                    num = 1,
+                    ellipseLength = 177.17575,
+                    mascotLength = 145.0,
+                )
+            }
             Box(
                 modifier = Modifier
                     .padding(top = 256f.hp(), start = 24f.wp())
@@ -225,17 +236,17 @@ fun MealTempScreen(
                 .height(122f.bhp())
                 .padding(top = 12f.bhp(), start = 56.58f.wp())
         ) {
-//            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                HamcoachGif(
-                    num = 1,
-                    ellipseLength = 122.0,
-                    mascotLength = 102.0,
-                )
-            }
+            EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.Center
+//            ) {
+//                HamcoachGif(
+//                    num = 1,
+//                    ellipseLength = 122.0,
+//                    mascotLength = 102.0,
+//                )
+//            }
             Image(
                 modifier = Modifier
                     .width(197.37698f.wp())

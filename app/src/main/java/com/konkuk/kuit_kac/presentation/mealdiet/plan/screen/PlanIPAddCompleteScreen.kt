@@ -256,16 +256,16 @@ fun PlanIPAddCompleteScreen(
                             end = 14.5f.bhp()
                         )
                 ) {
-//                    EllipseNyam(
-//                        ellipseLength = 153.68867, mascotLength = 93.27386
-//                    )
-
-                    HamcoachGif(
-                        modifier = Modifier.offset(),
-                        num = 1,
-                        ellipseLength = 153.68,
-                        mascotLength = 120.0,
+                    EllipseNyam(
+                        ellipseLength = 153.68867, mascotLength = 93.27386
                     )
+
+//                    HamcoachGif(
+//                        modifier = Modifier.offset(),
+//                        num = 1,
+//                        ellipseLength = 153.68,
+//                        mascotLength = 120.0,
+//                    )
 
                     Box(
                         modifier = Modifier
