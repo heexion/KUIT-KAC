@@ -91,10 +91,11 @@ fun OnboardingInputScreen(
         Dialog(onDismissRequest = { showDialog = false }) {
             Box(
                 modifier = Modifier
-                    .width(320f.wp())
-                    .clip(RoundedCornerShape(16.dp))
+                    .width(364f.wp())
+                    .height(202f.bhp())
+                    .clip(RoundedCornerShape(30.dp))
                     .background(Color(0xFFFEF9EC))
-                    .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
+                    .border(2.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
                     .padding(vertical = 32f.bhp(), horizontal = 24f.wp())
             ) {
                 Icon(
@@ -113,8 +114,8 @@ fun OnboardingInputScreen(
                 ) {
                     Text(
                         text = "기간 대비 감량폭이 커!\n계속 진행할까?",
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp(),
+                        style = DungGeunMo20,
+                        fontSize = 20f.isp(),
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center
                     )
@@ -125,24 +126,27 @@ fun OnboardingInputScreen(
                         horizontalArrangement = Arrangement.spacedBy(12f.wp()),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // 수정하기 버튼
-                        PlanConfirmButtonCustom(
-                            modifier = Modifier.weight(1f),
-                            value = "수정할게!",
-                            backgroundRes = R.drawable.bg_plan_confirm_button_selected,
-                            onClick = { showDialog = false }
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(12f.wp()),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // 수정하기 버튼
+                            PlanConfirmButtonCustom(
+                                backgroundRes = R.drawable.bg_onboarding_input_edit_button,
+                                onClick = { showDialog = false }
+                            )
 
-                        // 진행하기 버튼
-                        PlanConfirmButtonCustom(
-                            modifier = Modifier.weight(1f),
-                            value = "진행할게",
-                            backgroundRes = R.drawable.bg_plan_confirm_button_default,
-                            onClick = {
-                                showDialog = false
-                                proceedNext()
-                            }
-                        )
+                            // 진행하기 버튼
+                            PlanConfirmButtonCustom(
+                                backgroundRes = R.drawable.bg_onboarding_input_go_button,
+                                onClick = {
+                                    showDialog = false
+                                    proceedNext()
+                                }
+                            )
+                        }
+
+
                     }
                 }
             }
@@ -613,31 +617,26 @@ fun WeightInputBox(
 @Composable
 fun PlanConfirmButtonCustom(
     modifier: Modifier = Modifier,
-    value: String,
     backgroundRes: Int,
     onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
-            .height(48f.bhp())
-            .clip(RoundedCornerShape(30f.bhp()))
+            .width(126f.wp())
+            .height(56f.bhp())
             .clickable { onClick() }
     ) {
         Image(
             painter = painterResource(backgroundRes),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.matchParentSize()
-        )
-        Text(
-            text = value,
-            style = DungGeunMo17,
-            fontSize = 17f.isp(),
-            color = Color(0xFF000000),
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
+
+
+
 
 @Preview(showBackground = true)
 @Composable
