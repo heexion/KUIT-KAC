@@ -151,7 +151,17 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingDelivery.route,
                     Route.OnboardingMainHomeHam.route,
                     Route.OnboardingMainHomeNyam.route,
-                    Route.OnboardingMainHomeScale.route
+                    Route.OnboardingMainHomeScale.route,
+
+                    Route.OnboardingAiMeal.route,
+                    Route.OnboardingMeal.route,
+                    Route.OnboardingAiIntro.route,
+                    Route.OnboardingGray.route,
+                    Route.OnboardingYellow.route,
+                    Route.OnboardingEoDrink.route,
+                    Route.OnboardingCheck.route,
+                    Route.OnboardingFinal.route,
+                    Route.OnboardingFloatingButton.route
                 )
 
                 val shouldHideBottomBar =

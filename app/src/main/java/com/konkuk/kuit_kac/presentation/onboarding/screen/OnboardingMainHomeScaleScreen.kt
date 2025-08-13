@@ -24,7 +24,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.navigation.Route.Home
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFloatingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
@@ -36,7 +36,7 @@ fun OnboardingMainHomeScaleScreen(
         modifier = modifier
             .fillMaxSize()
             .clickable {
-                navController.navigate(Home.route)
+                navController.navigate(OnboardingFloatingButton.route)
             }
     ) {
         // 1. 배경 이미지

@@ -82,11 +82,18 @@ import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPSearchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanItemScreen
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingActivityLevel
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAiIntro
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAiMeal
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingCheck
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDelivery
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDiet
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDietSpeed
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingEoDrink
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFailEx
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFinal
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFloatingButton
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingGray
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingHamCoach
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInput
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
@@ -94,16 +101,25 @@ import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingIntroduce
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeHam
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeNyam
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeScale
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMeal
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingNyamCoach
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingPreferType
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingStart
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingWeek
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingYellow
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingActivityLevelScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAiIntroScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAiMealScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAppetiteScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingCheckScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingDeliveryScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingDietScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingDietSpeedScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingEoDrinkScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingFailExScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingFinalScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingFloatingButtonScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingGrayScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingHamCoachScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingInputResultScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingInputScreen
@@ -111,10 +127,12 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingIntroduceScr
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeHamScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeNyamScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeScaleScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMealScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingNyamCoachScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingStartScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingYellowScreen
 
 
 @Composable
@@ -1129,6 +1147,34 @@ fun KacNavGraph(
         }
         composable(route = OnboardingMainHomeScale.route) {
             OnboardingMainHomeScaleScreen(navController = navController)
+        }
+
+        composable(OnboardingAiMeal.route) {
+            OnboardingAiMealScreen(navController = navController)
+        }
+        composable(OnboardingMeal.route) {
+            OnboardingMealScreen(navController = navController)
+        }
+        composable(OnboardingAiIntro.route) {
+            OnboardingAiIntroScreen(navController = navController)
+        }
+        composable(OnboardingGray.route) {
+            OnboardingGrayScreen(navController = navController)
+        }
+        composable(OnboardingYellow.route) {
+            OnboardingYellowScreen(navController = navController)
+        }
+        composable(OnboardingEoDrink.route) {
+            OnboardingEoDrinkScreen(navController = navController)
+        }
+        composable(OnboardingCheck.route) {
+            OnboardingCheckScreen(navController = navController)
+        }
+        composable(OnboardingFinal.route) {
+            OnboardingFinalScreen(navController = navController)
+        }
+        composable(OnboardingFloatingButton.route) {
+            OnboardingFloatingButtonScreen(navController = navController)
         }
 
         // 로그인

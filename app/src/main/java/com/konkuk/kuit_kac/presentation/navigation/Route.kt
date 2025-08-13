@@ -70,6 +70,20 @@ sealed class Route(val route: String) {
     data object OnboardingMainHomeHam : Route(route = "onboarding_main_home_ham")
     data object OnboardingMainHomeNyam : Route(route = "onboarding_main_home_nyam")
     data object OnboardingMainHomeScale : Route(route = "onboarding_main_home_scale")
+    data object OnboardingAiMeal : Route(route = "onboarding_ai_meal")
+    data object OnboardingMeal : Route(route = "onboarding_meal")
+    data object OnboardingAiIntro : Route(route = "onboarding_ai_intro")
+    data object OnboardingGray : Route(route = "onboarding_gray")
+    data object OnboardingYellow : Route(route = "onboarding_yellow")
+    data object OnboardingEoDrink : Route(route = "onboarding_eo_drink")
+    data object OnboardingCheck : Route(route = "onboarding_check")
+    data object OnboardingFinal : Route(route = "onboarding_final")
+    data object OnboardingFloatingButton : Route(route = "onboarding_floating_button")
+
+
+
+
+
 
     data object LoginMain : Route(route = "login_main")
     data object LoginEmail : Route(route = "login_email")
