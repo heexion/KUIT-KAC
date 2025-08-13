@@ -53,6 +53,7 @@ sealed class Route(val route: String) {
     data object FitnessDetailInput : Route(route = "fitness_detail_input")
 
     //온보딩
+
     data object OnboardingDiet : Route(route = "onboarding_diet")
     data object OnboardingFailEx : Route(route = "onboarding_fail_ex")
     data object OnboardingAppetite : Route(route = "onboarding_appetite")

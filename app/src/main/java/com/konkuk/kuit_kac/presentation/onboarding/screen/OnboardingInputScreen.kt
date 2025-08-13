@@ -2,6 +2,8 @@ package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -32,10 +37,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -51,10 +57,12 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun OnboardingInputScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    selectedMode: String, // 추가: 선택한 모드 받기
     onNextClick: (List<String>) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
     val bubbleText = "이제 기본적인\n정보 입력이 필요해!"
+
     var selectedGender by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
     var height by remember { mutableStateOf("") }
@@ -67,6 +75,79 @@ fun OnboardingInputScreen(
             && weightCurrent.isNotEmpty()
             && weightTarget.isNotEmpty()
 
+    // 모달 표시 여부
+    var showDialog by remember { mutableStateOf(false) }
+
+    // 다음 화면 이동 함수
+    fun proceedNext() {
+        onNextClick(
+            listOf(selectedGender, age, height, weightCurrent, weightTarget)
+        )
+        navController.navigate(OnboardingInputResult.route)
+    }
+
+    // 모달 UI
+    if (showDialog) {
+        Dialog(onDismissRequest = { showDialog = false }) {
+            Box(
+                modifier = Modifier
+                    .width(320f.wp())
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFFFEF9EC))
+                    .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
+                    .padding(vertical = 32f.bhp(), horizontal = 24f.wp())
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_close),
+                    contentDescription = "닫기",
+                    tint = Color(0xFF000000),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(20.dp)
+                        .clickable { showDialog = false }
+                )
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.align(Alignment.Center)
+                ) {
+                    Text(
+                        text = "기간 대비 감량폭이 커!\n계속 진행할까?",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp(),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(24f.bhp()))
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12f.wp()),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // 수정하기 버튼
+                        PlanConfirmButtonCustom(
+                            modifier = Modifier.weight(1f),
+                            value = "수정할게!",
+                            backgroundRes = R.drawable.bg_plan_confirm_button_selected,
+                            onClick = { showDialog = false }
+                        )
+
+                        // 진행하기 버튼
+                        PlanConfirmButtonCustom(
+                            modifier = Modifier.weight(1f),
+                            value = "진행할게",
+                            backgroundRes = R.drawable.bg_plan_confirm_button_default,
+                            onClick = {
+                                showDialog = false
+                                proceedNext()
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -78,6 +159,7 @@ fun OnboardingInputScreen(
                 )
             )
     ) {
+        // 기존 UI 그대로 유지
         Box(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "냠코치",
@@ -99,10 +181,6 @@ fun OnboardingInputScreen(
                 .padding(horizontal = 24.4f.wp()),
             verticalAlignment = Alignment.Top
         ) {
-//            EllipseNyam(
-//                ellipseLength = 191.2,
-//                mascotLength = 114.5
-//            )
             HamcoachGif(
                 num = 1,
                 ellipseLength = 191.2,
@@ -134,6 +212,7 @@ fun OnboardingInputScreen(
 
         Spacer(modifier = Modifier.height(24.7f.bhp()))
 
+        // 성별
         Box(
             modifier = Modifier
                 .padding(horizontal = 24.4f.wp())
@@ -183,6 +262,7 @@ fun OnboardingInputScreen(
             }
         }
 
+        // 나이
         Box(
             modifier = Modifier
                 .padding(start = 24.4f.wp(), end = 24.4f.wp(), top = 16f.bhp())
@@ -217,6 +297,7 @@ fun OnboardingInputScreen(
             }
         }
 
+        // 키
         Box(
             modifier = Modifier
                 .padding(start = 24.4f.wp(), end = 24.4f.wp(), top = 16f.bhp())
@@ -251,6 +332,7 @@ fun OnboardingInputScreen(
             }
         }
 
+        // 체중
         Box(
             modifier = Modifier
                 .padding(start = 24.4f.wp(), end = 24.4f.wp(), top = 16f.bhp())
@@ -292,12 +374,14 @@ fun OnboardingInputScreen(
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(33f.bhp()))
 
+        // 다음 버튼
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32f.bhp()), // 하단 여백
+                .padding(bottom = 32f.bhp()),
             contentAlignment = Alignment.Center
         ) {
             PlanConfirmButton(
@@ -306,25 +390,30 @@ fun OnboardingInputScreen(
                 height = 65f,
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
-                    if (isAvailable) {
-                        // 예시: 입력된 값들을 리스트로 넘김
-                        onNextClick(
-                            listOf(
-                                selectedGender,
-                                age,
-                                height,
-                                weightCurrent,
-                                weightTarget
-                            )
-                        )
-                        navController.navigate(OnboardingInputResult.route)
+                    if (!isAvailable) return@PlanConfirmButton
+
+                    val lossAmount =
+                        (weightCurrent.toFloatOrNull() ?: 0f) -
+                                (weightTarget.toFloatOrNull() ?: 0f)
+
+                    val limit = when (selectedMode) {
+                        "냠냠모드" -> 12
+                        "코치모드" -> 8
+                        "올인모드" -> 5
+                        else -> Int.MAX_VALUE
+                    }
+
+                    if (lossAmount >= limit) {
+                        showDialog = true
+                    } else {
+                        proceedNext()
                     }
                 }
             )
         }
     }
-
 }
+
 
 
 @Composable
@@ -521,11 +610,42 @@ fun WeightInputBox(
     }
 }
 
+@Composable
+fun PlanConfirmButtonCustom(
+    modifier: Modifier = Modifier,
+    value: String,
+    backgroundRes: Int,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(48f.bhp())
+            .clip(RoundedCornerShape(30f.bhp()))
+            .clickable { onClick() }
+    ) {
+        Image(
+            painter = painterResource(backgroundRes),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize()
+        )
+        Text(
+            text = value,
+            style = DungGeunMo17,
+            fontSize = 17f.isp(),
+            color = Color(0xFF000000),
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun OnboardingInputScreenPreview() {
     val navController = rememberNavController()
-    OnboardingInputScreen(navController = navController)
-
+    OnboardingInputScreen(
+        navController = navController,
+        selectedMode = "코치모드", // 테스트용 모드
+        onNextClick = {}
+    )
 }
