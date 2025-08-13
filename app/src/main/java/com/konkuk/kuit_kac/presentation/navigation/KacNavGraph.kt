@@ -122,12 +122,27 @@ fun KacNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-
+    val context = LocalContext.current
+    val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    val isFirstLaunch = prefs.getBoolean("isFirstLaunch", true)
 
     NavHost(
         navController = navController,
-        startDestination = Route.Home.route,
+        startDestination = if (isFirstLaunch) OnboardingStart.route else Route.Home.route
     ) {
+
+        // 온보딩 스타트
+        composable(route = OnboardingStart.route) {
+            OnboardingStartScreen(
+                navController = navController,
+                onFinish = {
+                    prefs.edit().putBoolean("isFirstLaunch", false).apply()
+                    navController.navigate(OnboardingDiet.route) {
+                        popUpTo(OnboardingStart.route) { inclusive = true }
+                    }
+                }
+            )
+        }
 
         composable(Route.Home.route) {
             HomeMainScreen(

@@ -29,13 +29,13 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDiet
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun OnboardingStartScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onFinish: () -> Unit
 ) {
 
     Box(
@@ -97,19 +97,23 @@ fun OnboardingStartScreen(
                         .calculateBottomPadding()
                 ),
             onClick = {
-                navController.navigate(OnboardingDiet.route)
+                onFinish()
             },
             value = "좋아!",
             buttonHeight = 70f,
             isOrange = false
         )
+
     }
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun OnboardingStartScreenPreview() {
     val navController = rememberNavController()
-    OnboardingStartScreen(navController = navController)
+    OnboardingStartScreen(
+        navController = navController,
+        onFinish = {} // 프리뷰용 빈 콜백
+    )
 }
