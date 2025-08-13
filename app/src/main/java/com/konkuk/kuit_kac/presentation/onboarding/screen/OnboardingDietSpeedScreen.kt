@@ -28,12 +28,11 @@ import com.konkuk.kuit_kac.presentation.onboarding.component.ModeSelectButton
 fun OnboardingDietSpeedScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onNavigate: () -> Unit
+    onNavigate: (String) -> Unit // 선택한 모드를 넘김
 ) {
     var selectedTitle by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = modifier.fillMaxSize()) {
-        // 배경
         OnboardingBackScreen(
             bubbleText = "다이어트 속도는\n어느정도가 좋아?",
             bubbleFontSize = 24f.isp(),
@@ -60,7 +59,7 @@ fun OnboardingDietSpeedScreen(
                 showBadge = false,
                 onClick = {
                     selectedTitle = "냠냠모드"
-                    onNavigate()
+                    onNavigate("냠냠모드")
                 }
             )
 
@@ -73,7 +72,7 @@ fun OnboardingDietSpeedScreen(
                 showBadge = true,
                 onClick = {
                     selectedTitle = "코치모드"
-                    onNavigate()
+                    onNavigate("코치모드")
                 }
             )
 
@@ -86,18 +85,19 @@ fun OnboardingDietSpeedScreen(
                 showBadge = false,
                 onClick = {
                     selectedTitle = "올인모드"
-                    onNavigate()
+                    onNavigate("올인모드")
                 }
             )
         }
     }
 }
 
-@Preview
+
+@Preview(showBackground = true)
 @Composable
 private fun OnboardingDietSpeedScreenPreview() {
-
     val navController = rememberNavController()
+
     OnboardingDietSpeedScreen(
         navController = navController,
         onNavigate = {}

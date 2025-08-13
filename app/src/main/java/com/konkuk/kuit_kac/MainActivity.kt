@@ -37,10 +37,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.local.FoodDatabase
 import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFitness
@@ -124,6 +122,7 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = navController
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
+
                 val hideBottomBarRoutes = setOf(
                     Route.HomeScaleInput.route,
                     Route.HomeResult.route,
@@ -134,8 +133,32 @@ class MainActivity : ComponentActivity() {
                     "plan_result",
                     Route.FitnessEditResult.route,
                     Route.LoginMain.route,
-                    Route.LoginEmail.route
+                    Route.LoginEmail.route,
+
+                    // 온보딩 화면들
+                    Route.OnboardingStart.route,
+                    Route.OnboardingDiet.route,
+                    Route.OnboardingFailEx.route,
+                    Route.OnboardingAppetite.route,
+                    Route.OnboardingWeek.route,
+                    Route.OnboardingPreferType.route,
+                    Route.OnboardingDietSpeed.route,
+                    Route.OnboardingActivityLevel.route,
+                    Route.OnboardingInputResult.route,
+                    Route.OnboardingIntroduce.route,
+                    Route.OnboardingHamCoach.route,
+                    Route.OnboardingNyamCoach.route,
+                    Route.OnboardingDelivery.route,
+                    Route.OnboardingMainHomeHam.route,
+                    Route.OnboardingMainHomeNyam.route,
+                    Route.OnboardingMainHomeScale.route
                 )
+
+                val shouldHideBottomBar =
+                    hideBottomBarRoutes.any { currentRoute?.startsWith(it) == true } ||
+                            currentRoute?.startsWith("${Route.OnboardingInput.route}/") == true
+
+
                 val backArrowRoutes = setOf(
                     // 여기다가 뒤로가기 버튼 있으면 추가
                     Route.HomeNutrition.route,
@@ -171,7 +194,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .then(
-                            if (currentRoute !in hideBottomBarRoutes) {
+                            if (!shouldHideBottomBar) {
                                 Modifier.padding(
                                     bottom = WindowInsets.navigationBars
                                         .asPaddingValues()
@@ -186,7 +209,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         bottomBar = {
                             // 특정 화면들에서 bottomBar 보이지 않게 설정
-                            if (currentRoute !in hideBottomBarRoutes) {
+                            if (!shouldHideBottomBar) {
                                 BottomBar(
                                     navController
                                 )

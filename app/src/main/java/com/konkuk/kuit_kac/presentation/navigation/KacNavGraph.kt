@@ -1,13 +1,13 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
 
+import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -28,7 +28,6 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanInPersonScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
-import com.konkuk.kuit_kac.presentation.fitness.local.FitnessViewModel
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessAddDetailRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessAddRecordEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessCreateScreen
@@ -46,7 +45,6 @@ import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineSearchScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessSearchScreen
-import com.konkuk.kuit_kac.presentation.home.screen.HomeAnalysisScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeMainScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeNutritionScreen
 import com.konkuk.kuit_kac.presentation.home.screen.HomeObservationScreen
@@ -83,7 +81,6 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPSearchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanItemScreen
-import com.konkuk.kuit_kac.presentation.navigation.Route.FitnessDetailInput
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingActivityLevel
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDelivery
@@ -99,6 +96,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeNyam
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeScale
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingNyamCoach
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingPreferType
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingStart
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingWeek
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingActivityLevelScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAppetiteScreen
@@ -115,6 +113,7 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeNyam
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeScaleScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingNyamCoachScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingStartScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
 
 
@@ -123,10 +122,27 @@ fun KacNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    val isFirstLaunch = prefs.getBoolean("isFirstLaunch", true)
+
     NavHost(
         navController = navController,
-        startDestination = Route.Home.route,
+        startDestination = if (isFirstLaunch) OnboardingStart.route else Route.Home.route
     ) {
+
+        // 온보딩 스타트
+        composable(route = OnboardingStart.route) {
+            OnboardingStartScreen(
+                navController = navController,
+                onFinish = {
+                    prefs.edit().putBoolean("isFirstLaunch", false).apply()
+                    navController.navigate(OnboardingDiet.route) {
+                        popUpTo(OnboardingStart.route) { inclusive = true }
+                    }
+                }
+            )
+        }
 
         composable(Route.Home.route) {
             HomeMainScreen(
@@ -1057,20 +1073,39 @@ fun KacNavGraph(
         composable(OnboardingPreferType.route) {
             OnboardingPreferTypeScreen(navController = navController)
         }
+
         composable(route = OnboardingDietSpeed.route) {
             OnboardingDietSpeedScreen(
                 navController = navController,
-                onNavigate = {
-                    navController.navigate(OnboardingActivityLevel.route)
+                onNavigate = { selectedMode ->
+                    navController.navigate("${OnboardingActivityLevel.route}/$selectedMode")
                 }
             )
         }
-        composable(route = OnboardingActivityLevel.route) {
-            OnboardingActivityLevelScreen(navController = navController)
+
+        composable(
+            route = "${OnboardingActivityLevel.route}/{mode}",
+            arguments = listOf(navArgument("mode") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
+            OnboardingActivityLevelScreen(
+                navController = navController,
+                selectedMode = selectedMode
+            )
         }
-        composable(route = OnboardingInput.route) {
-            OnboardingInputScreen(navController = navController)
+
+        composable(
+            route = "${OnboardingInput.route}/{mode}",
+            arguments = listOf(navArgument("mode") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
+            OnboardingInputScreen(
+                navController = navController,
+                selectedMode = selectedMode
+            )
         }
+
+
         composable(route = OnboardingInputResult.route) {
             OnboardingInputResultScreen(navController = navController)
         }

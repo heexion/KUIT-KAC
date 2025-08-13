@@ -32,9 +32,11 @@ import com.konkuk.kuit_kac.presentation.onboarding.component.CustomImageSlider
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
 @Composable
-fun OnboardingActivityLevelScreen(modifier: Modifier = Modifier
-,navController: NavHostController
-                                  ) {
+fun OnboardingActivityLevelScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    selectedMode: String // 이전 화면에서 받은 모드
+) {
     var activityLevel by remember { mutableStateOf(0) }
 
     val activityMent = listOf(
@@ -46,7 +48,6 @@ fun OnboardingActivityLevelScreen(modifier: Modifier = Modifier
     )
 
     Box(modifier = modifier.fillMaxSize()) {
-        // 배경 + 말풍선 + 슬라이더
         OnboardingBackScreen(
             bubbleText = "평소 활동량을 알려줘!",
             bubbleFontSize = 24f.isp(),
@@ -59,7 +60,7 @@ fun OnboardingActivityLevelScreen(modifier: Modifier = Modifier
                 .padding(bottom = 16.4f.bhp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 말풍선 + 텍스트
+            // 말풍선
             Box(
                 modifier = Modifier
                     .width(233f.wp())
@@ -93,22 +94,26 @@ fun OnboardingActivityLevelScreen(modifier: Modifier = Modifier
 
             Spacer(modifier = Modifier.height(55.5f.bhp()))
 
+            // 다음 버튼
             RecordButton(
                 value = "다음으로",
                 onClick = {
-                    navController.navigate(OnboardingInput.route)
+                    navController.navigate("${OnboardingInput.route}/$selectedMode")
                 },
-                modifier = Modifier
-                    .height(65f.bhp())
+                modifier = Modifier.height(65f.bhp())
             )
         }
     }
 }
 
 
+
 @Preview
 @Composable
 private fun OnboardingActivityLevelScreenPreview() {
     val navController = rememberNavController()
-    OnboardingActivityLevelScreen(navController = navController)
+    OnboardingActivityLevelScreen(
+        navController = navController,
+        selectedMode = "코치모드"
+    )
 }
