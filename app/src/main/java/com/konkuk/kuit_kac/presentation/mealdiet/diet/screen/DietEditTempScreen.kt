@@ -53,7 +53,6 @@ import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -310,7 +309,9 @@ fun DietEditTempScreen(
                 .fillMaxWidth()
                 .padding(
                     top = 32f.bhp(),
-                    start = 17f.wp(), end = 15f.wp()
+                    start = 17f.wp(), end = 15f.wp(),
+                    bottom = 10f.bhp()
+
                 )
                 .height(70f.bhp())
                 .clip(RoundedCornerShape(20f.bhp()))

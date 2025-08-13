@@ -36,7 +36,6 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +45,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -55,6 +53,7 @@ import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -301,7 +300,9 @@ fun DietPatchScreen(
                 .fillMaxWidth()
                 .padding(
                     top = 32f.bhp(),
-                    start = 17f.wp(), end = 15f.wp()
+                    start = 17f.wp(), end = 15f.wp(),
+                    bottom = 10f.bhp()
+
                 )
                 .height(70f.bhp())
                 .clip(RoundedCornerShape(20f.bhp()))
