@@ -1073,22 +1073,30 @@ fun KacNavGraph(
         composable(OnboardingPreferType.route) {
             OnboardingPreferTypeScreen(navController = navController)
         }
+
         composable(route = OnboardingDietSpeed.route) {
             OnboardingDietSpeedScreen(
                 navController = navController,
-                onNavigate = {
-                    navController.navigate(OnboardingActivityLevel.route)
+                onNavigate = { selectedMode ->
+                    navController.navigate("${OnboardingActivityLevel.route}/$selectedMode")
                 }
             )
         }
-        composable(route = OnboardingActivityLevel.route) {
-            OnboardingActivityLevelScreen(navController = navController)
+
+        composable(
+            route = "${OnboardingActivityLevel.route}/{mode}",
+            arguments = listOf(navArgument("mode") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
+            OnboardingActivityLevelScreen(
+                navController = navController,
+                selectedMode = selectedMode
+            )
         }
+
         composable(
             route = "${OnboardingInput.route}/{mode}",
-            arguments = listOf(
-                navArgument("mode") { type = NavType.StringType }
-            )
+            arguments = listOf(navArgument("mode") { type = NavType.StringType })
         ) { backStackEntry ->
             val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
             OnboardingInputScreen(
@@ -1096,6 +1104,7 @@ fun KacNavGraph(
                 selectedMode = selectedMode
             )
         }
+
 
         composable(route = OnboardingInputResult.route) {
             OnboardingInputResultScreen(navController = navController)
