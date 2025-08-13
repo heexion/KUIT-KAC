@@ -122,6 +122,7 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = navController
                     .currentBackStackEntryAsState()
                     .value?.destination?.route
+
                 val hideBottomBarRoutes = setOf(
                     Route.HomeScaleInput.route,
                     Route.HomeResult.route,
@@ -143,7 +144,6 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingPreferType.route,
                     Route.OnboardingDietSpeed.route,
                     Route.OnboardingActivityLevel.route,
-                    Route.OnboardingInput.route,
                     Route.OnboardingInputResult.route,
                     Route.OnboardingIntroduce.route,
                     Route.OnboardingHamCoach.route,
@@ -153,6 +153,12 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingMainHomeNyam.route,
                     Route.OnboardingMainHomeScale.route
                 )
+
+                val shouldHideBottomBar =
+                    hideBottomBarRoutes.any { currentRoute?.startsWith(it) == true } ||
+                            currentRoute?.startsWith("${Route.OnboardingInput.route}/") == true
+
+
                 val backArrowRoutes = setOf(
                     // 여기다가 뒤로가기 버튼 있으면 추가
                     Route.HomeNutrition.route,
@@ -188,7 +194,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .then(
-                            if (currentRoute !in hideBottomBarRoutes) {
+                            if (!shouldHideBottomBar) {
                                 Modifier.padding(
                                     bottom = WindowInsets.navigationBars
                                         .asPaddingValues()
@@ -203,7 +209,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         bottomBar = {
                             // 특정 화면들에서 bottomBar 보이지 않게 설정
-                            if (currentRoute !in hideBottomBarRoutes) {
+                            if (!shouldHideBottomBar) {
                                 BottomBar(
                                     navController
                                 )
