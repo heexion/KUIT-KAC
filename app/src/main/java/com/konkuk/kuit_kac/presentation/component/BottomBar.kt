@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -24,22 +27,23 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 fun BottomBar(
     navController: NavController
 ) {
-//    val selectedRoute = remember { mutableStateOf(Route.Home.route) }
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var selectedRoute = navBackStackEntry?.destination?.route
+    val selectedRoute = remember { mutableStateOf(Route.Home.route) }
+//    val navBackStackEntry by navController.currentBackStackEntryAsState()
+//    var selectedRoute = navBackStackEntry?.destination?.route
 
     // 선택된 메뉴에 따른 배경 이미지
-    val backgroundRes = when (selectedRoute) {
-        Route.Home.route -> R.drawable.img_bottomhome
-        Route.Diet.route -> R.drawable.img_bottommeal
-        Route.Fitness.route -> R.drawable.img_bottomfitness
-        else -> R.drawable.img_bottombar
+    val backgroundRes = when (selectedRoute.value) {
+        Route.Home.route -> R.drawable.img_bottomhome2
+        Route.Diet.route -> R.drawable.img_bottommeal2
+        Route.Fitness.route -> R.drawable.img_bottomfitness2
+        else -> R.drawable.img_bottombar2
     }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(141f.bhp()) // 세로 비율 유지
+            .offset(y= (30f).bhp())
     ) {
         // 배경 이미지
         Image(
@@ -60,15 +64,15 @@ fun BottomBar(
 
                         when {
                             x < widthPx / 3 -> {
-                                selectedRoute = Route.Diet.route
+                                selectedRoute.value = Route.Diet.route
                                 navController.navigate(Route.Diet.route)
                             }
                             x < widthPx * 2 / 3 -> {
-                                selectedRoute = Route.Home.route
+                                selectedRoute.value = Route.Home.route
                                 navController.navigate(Route.Home.route)
                             }
                             else -> {
-                                selectedRoute = Route.Fitness.route
+                                selectedRoute.value = Route.Fitness.route
                                 navController.navigate(Route.Fitness.route)
                             }
                         }
