@@ -221,11 +221,11 @@ fun MealMainScreen(
                                 mealType = label,
                                 navController = navController,
                                 onFastingClick = {
-
                                     mealViewModel.setType(state.mealType)
                                     mealViewModel.createSimple()
                                     mealViewModel.saveFastingStartTimeForType(state.mealType)
                                     mealStates[index] = state.copy(isFasting = true)
+                                    navController.navigate(Route.MealFastingResult.route)
                                 }
                             )
                         }

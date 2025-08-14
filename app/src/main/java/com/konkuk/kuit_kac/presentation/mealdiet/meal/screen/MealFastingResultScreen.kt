@@ -171,7 +171,7 @@ fun MealFastingResultScreen(
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                 .clickable(
                     onClick = {
-                        navController.navigate(Route.Home.route)
+                        navController.popBackStack()
                     }
                 ),
         ) {
