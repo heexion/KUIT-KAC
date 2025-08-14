@@ -29,6 +29,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
@@ -97,7 +98,8 @@ fun OnboardingStartScreen(
                         .calculateBottomPadding()
                 ),
             onClick = {
-                onFinish()
+                navController.navigate(Route.OnboardingDiet.route)
+//                onFinish()
             },
             value = "좋아!",
             buttonHeight = 70f,

@@ -137,12 +137,12 @@ fun OnboardingBackScreen(
 //        )
 //
 //        // 냠코치 (오른쪽)
-//        NyamCoach(
-//            modifier = Modifier
-//                .padding(top = 342.12f.hp(), start = 126f.wp())
-//                .size(width = 338f.wp(), height = 338f.bhp()),
-//            alpha = nyamAlpha
-//        )
+        NyamCoach(
+            modifier = Modifier
+                .padding(top = 342.12f.hp(), start = 126f.wp())
+                .size(width = 338f.wp(), height = 338f.bhp()),
+            alpha = nyamAlpha
+        )
 
         HamcoachGif(
             modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
@@ -151,13 +151,13 @@ fun OnboardingBackScreen(
             mascotLength = 200.0
         )
 
-        NyameeGif(
-            modifier = Modifier
-                .offset(x = 60f.wp(), y = 300f.bhp())
-                .alpha(nyamAlpha),
-            num = 1,
-            sizePercent = 1.35f
-        )
+//        NyameeGif(
+//            modifier = Modifier
+//                .offset(x = 60f.wp(), y = 300f.bhp())
+//                .alpha(nyamAlpha),
+//            num = 1,
+//            sizePercent = 1.35f
+//        )
 
     }
 }
