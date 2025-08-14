@@ -176,7 +176,7 @@ fun MealFastingResultScreen(
                 ),
         ) {
             Text(
-                text = "홈으로 돌아가기",
+                text = "식단 기록으로 돌아가기",
                 style = DungGeunMo20,
                 fontSize = 20f.isp(),
                 color = Color(0xFF000000),
