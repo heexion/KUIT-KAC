@@ -271,6 +271,11 @@ fun DietSwipeCardPager(
                                 .padding(top = 22f.bhp(), start = 48.79f.wp())
                                 .size(26.75811f.wp(), 26.75811f.bhp())
                                 .clip(RoundedCornerShape(13.27905f.wp()))
+                                .border(
+                                    width = 1.dp,
+                                    shape = RoundedCornerShape(13.27905f.bhp()),
+                                    color = Color(0xff000000)
+                                )
                                 .background(
                                     brush = Brush.verticalGradient(
                                         colors = listOf(Color.White, Color(0xFFFFB638))

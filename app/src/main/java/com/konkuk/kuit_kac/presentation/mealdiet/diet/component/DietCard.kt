@@ -145,6 +145,11 @@ fun DietCard(
                             .padding(start = 224f.wp())
                             .size(26.75811f.bhp(), 26.75811f.bhp())
                             .clip(RoundedCornerShape(13.27905f.bhp()))
+                            .border(
+                                width = 1.dp,
+                                shape = RoundedCornerShape(13.27905f.bhp()),
+                                color = Color(0xff000000)
+                            )
                             .background(
                                 Brush.verticalGradient(
                                     colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
