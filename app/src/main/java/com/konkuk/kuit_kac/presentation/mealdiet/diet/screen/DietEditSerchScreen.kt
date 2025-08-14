@@ -141,9 +141,11 @@ fun DietEditSearchScreen(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
                         .clickable {
-                            focusManager.clearFocus() // 아이템 클릭 시 포커스 해제
-                            navController.navigate("diet_edit_search_detail/${food.name}")
                         },
+                    onClick = {
+                        focusManager.clearFocus() // 아이템 클릭 시 포커스 해제
+                        navController.navigate("diet_edit_search_detail/${food.name}")
+                    },
                     value = food.name
                 )
             }

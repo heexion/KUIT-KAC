@@ -28,10 +28,10 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun SearchBarItem(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { },
+    onClick: () -> Unit= {},
     value: String,
     isLastItem: Boolean = false,
-    isCloseIconExist: Boolean = true
+    isCloseIconExist: Boolean = false
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -76,7 +76,4 @@ fun SearchBarItem(
 @Preview(showBackground = true)
 @Composable
 private fun SearchBarItemPreview() {
-    SearchBarItem(
-        value = "마라탕"
-    )
 }

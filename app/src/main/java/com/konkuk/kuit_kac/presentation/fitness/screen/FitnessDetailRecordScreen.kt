@@ -170,7 +170,8 @@ fun FitnessDetailRecordScreen(
             Text(
                 text = name,
                 style = DungGeunMo15,
-                color = Color(0xFF000000)
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
             )
         }
 
