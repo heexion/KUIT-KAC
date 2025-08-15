@@ -171,12 +171,12 @@ fun MealFastingResultScreen(
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                 .clickable(
                     onClick = {
-                        navController.navigate(Route.Home.route)
+                        navController.popBackStack()
                     }
                 ),
         ) {
             Text(
-                text = "홈으로 돌아가기",
+                text = "식단 기록으로 돌아가기",
                 style = DungGeunMo20,
                 fontSize = 20f.isp(),
                 color = Color(0xFF000000),

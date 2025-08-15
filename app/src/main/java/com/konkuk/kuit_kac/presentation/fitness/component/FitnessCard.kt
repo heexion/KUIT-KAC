@@ -204,6 +204,11 @@ fun FitnessCard(
                         .padding(top = 22f.bhp(), start = 13.9f.wp())
                         .size(26.75811f.wp(), 26.75811f.bhp())
                         .clip(RoundedCornerShape(13.27905f.bhp()))
+                        .border(
+                            width = 1.dp,
+                            shape = RoundedCornerShape(13.27905f.bhp()),
+                            color = Color(0xff000000)
+                        )
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
@@ -244,7 +249,6 @@ fun FitnessCard(
 }
 
 
-
 @Composable
 fun FitnessItem(
     modifier: Modifier = Modifier,
@@ -266,7 +270,7 @@ fun FitnessItem(
         Image(
             painter = painterResource(image),
             contentDescription = "",
-            modifier = Modifier.size(68f.wp(),68f.bhp())
+            modifier = Modifier.size(68f.wp(), 68f.bhp())
         )
 
         Spacer(modifier = Modifier.width(12f.wp()))

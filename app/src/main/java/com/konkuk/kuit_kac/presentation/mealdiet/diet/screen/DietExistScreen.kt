@@ -131,12 +131,13 @@ fun DietExistScreen(
                         .clickable {
                             navController.navigate(Route.DietCreate.route)
                         },
-                    value = "식단기록"
+                    value = "식단 기록"
                 )
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp()),
-                    value = "나만의 식단"
+                    value = "나만의 식단",
+                    isSelected = true
                 )
             }
         }
@@ -271,6 +272,11 @@ fun DietSwipeCardPager(
                                 .padding(top = 22f.bhp(), start = 48.79f.wp())
                                 .size(26.75811f.wp(), 26.75811f.bhp())
                                 .clip(RoundedCornerShape(13.27905f.wp()))
+                                .border(
+                                    width = 1.dp,
+                                    shape = RoundedCornerShape(13.27905f.bhp()),
+                                    color = Color(0xff000000)
+                                )
                                 .background(
                                     brush = Brush.verticalGradient(
                                         colors = listOf(Color.White, Color(0xFFFFB638))

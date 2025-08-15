@@ -45,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealState
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.FoodItem
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealCard
@@ -54,6 +55,7 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import com.konkuk.kuit_kac.ui.theme.deepYellow
 
 
 @Composable
@@ -69,9 +71,9 @@ fun MealMainScreen(
         mealViewModel.getPlan(userId = 1)
         mealViewModel.getRecord(userId = 1)
     }
-    val planList   by mealViewModel.getPlanState
+    val planList by mealViewModel.getPlanState
     val recordList by mealViewModel.getRecordState
-    val mealCards  by mealViewModel.mealCardData
+    val mealCards by mealViewModel.mealCardData
     val mealTypeList = listOf("아침", "점심", "저녁", "간식")
     var showDialog by remember { mutableStateOf(false) }
     var dialogMealType by remember { mutableStateOf("") }
@@ -89,8 +91,8 @@ fun MealMainScreen(
     }
     val missingTypes by remember(planList, recordList) {
         derivedStateOf {
-            val planned   = planList.orEmpty().map { it.dietType }.toSet()
-            val recorded  = recordList.orEmpty().map { it.dietType }.toSet()
+            val planned = planList.orEmpty().map { it.dietType }.toSet()
+            val recorded = recordList.orEmpty().map { it.dietType }.toSet()
             planned - recorded
         }
     }
@@ -99,66 +101,127 @@ fun MealMainScreen(
     }
 
 
-
-
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.fillMaxSize()
-        .verticalScroll(
-            state = scrollState
-        ),
-        ) {
-        Box(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(
+                state = scrollState
+            ),
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Color(0xFFFFF1AB))
-                .padding(start = 24f.wp(), end = 24f.wp(), top = 16f.hp(), bottom = 14.5f.bhp())
+                .height(165f.bhp())
+                .background(color = deepYellow)
+                .border(1.dp, Color(0xFF000000))
         ) {
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_diet),
-                        contentDescription = "식단 아이콘",
-                        modifier = Modifier.size(28.8584f.wp(), 28.8584f.bhp())
-                    )
-                    Spacer(modifier = Modifier.width(4f.wp()))
-                    Text(
-                        text = "식단",
-                        style = DungGeunMo20,
-                        fontSize = 20f.isp(),
-                        color = Color(0xFF713E3A)
-                    )
-                }
-                Spacer(modifier = Modifier.height(17.5f.bhp()))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    SelectButton(
-                        modifier = Modifier.weight(1f),
-                        value = "식단 기록",
-                        isSelected = selectedTab == "기록",
-                        buttonHeight = 49,
-                        onClick = { onTabClick("기록") }
-                    )
-                    Spacer(modifier = Modifier.width(16.21f.wp()))
-                    SelectButton(
-                        modifier = Modifier.weight(1f),
-                        value = "나만의 식단",
-                        isSelected = selectedTab == "나만의",
-                        buttonHeight = 49,
-                        onClick = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16f.hp()),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(28.8584f.wp(), 28.8584f.bhp()),
+                    painter = painterResource(R.drawable.ic_diet),
+                    contentDescription = "utensils"
+                )
+                Text(
+                    text = "식단",
+                    style = DungGeunMo20,
+                    fontSize = 20f.isp(),
+                    color = Color(0xFF000000)
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 17f.bhp(),
+                        start = 24f.wp(), end = 24f.wp()
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                SelectButton2(
+                    modifier = Modifier
+                        .size(174f.wp(), 49f.bhp())
+                        .clickable {
+                            onTabClick("기록")
+                        },
+                    isSelected = selectedTab == "기록",
+                    value = "식단 기록"
+                )
+                SelectButton2(
+                    modifier = Modifier
+                        .size(174f.wp(), 49f.bhp())
+                        .clickable {
                             navController.navigate(Route.Diet.route)
                             onTabClick("나만의")
-                        }
-                    )
-                }
+                        },
+                    isSelected = selectedTab == "나만의",
+                    value = "나만의 식단"
+                )
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1f.bhp())
-                .background(Color(0xFF000000))
-        )
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(color = Color(0xFFFFF1AB))
+//                .padding(start = 24f.wp(), end = 24f.wp(), top = 16f.hp(), bottom = 14.5f.bhp())
+//        ) {
+//            Column(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.ic_diet),
+//                        contentDescription = "식단 아이콘",
+//                        modifier = Modifier.size(28.8584f.wp(), 28.8584f.bhp())
+//                    )
+//                    Spacer(modifier = Modifier.width(4f.wp()))
+//                    Text(
+//                        text = "식단",
+//                        style = DungGeunMo20,
+//                        fontSize = 20f.isp(),
+//                        color = Color(0xFF713E3A)
+//                    )
+//                }
+//                Spacer(modifier = Modifier.height(17.5f.bhp()))
+//                Row(modifier = Modifier.fillMaxWidth()) {
+//                    SelectButton(
+//                        modifier = Modifier.weight(1f),
+//                        value = "식단 기록",
+//                        isSelected = selectedTab == "기록",
+//                        buttonHeight = 49,
+//                        onClick = { onTabClick("기록") }
+//                    )
+//                    Spacer(modifier = Modifier.width(16.21f.wp()))
+//                    SelectButton(
+//                        modifier = Modifier.weight(1f),
+//                        value = "나만의 식단",
+//                        isSelected = selectedTab == "나만의",
+//                        buttonHeight = 49,
+//                        onClick = {
+//                            navController.navigate(Route.Diet.route)
+//                            onTabClick("나만의")
+//                        }
+//                    )
+//                }
+//            }
+//        }
+
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(1f.bhp())
+//                .background(Color(0xFF000000))
+//        )
 
         Column(
             modifier = Modifier
@@ -188,15 +251,16 @@ fun MealMainScreen(
                                             icon = painterResource(id = triple.first),      // drawableId
                                             name = triple.second,                            // name
                                             quantity = triple.third,                         // quantity
-                                            isNightSnack = state.mealCardData.registeredHour?.let { it >= 21 } ?: false
+                                            isNightSnack = state.mealCardData.registeredHour?.let { it >= 21 }
+                                                ?: false
                                         )
-                                    }
-                                    ,
+                                    },
                                     onEditClick = {
                                         val dietId = state.mealCardData.dietId
-                                        val fwqRaw = state.mealCardData.foodList.joinToString(",") { (_, name, quantity) ->
-                                            "$name:${quantity.removeSuffix("g")}"
-                                        }
+                                        val fwqRaw =
+                                            state.mealCardData.foodList.joinToString(",") { (_, name, quantity) ->
+                                                "$name:${quantity.removeSuffix("g")}"
+                                            }
                                         val mealType = state.mealCardData.mealType
                                         navController.navigate("MealEditGraph/MealEditTemp?dietId=${dietId}&fwqRaw=${fwqRaw}&mealType=${mealType}")
                                     },
@@ -206,6 +270,7 @@ fun MealMainScreen(
                             }
 
                         }
+
                         state.isFasting -> {
                             MealFastingCard(
                                 mealType = label,
@@ -216,16 +281,17 @@ fun MealMainScreen(
                                 }
                             )
                         }
+
                         else -> {
                             MealRecordCard(
                                 mealType = label,
                                 navController = navController,
                                 onFastingClick = {
-
                                     mealViewModel.setType(state.mealType)
                                     mealViewModel.createSimple()
                                     mealViewModel.saveFastingStartTimeForType(state.mealType)
                                     mealStates[index] = state.copy(isFasting = true)
+                                    navController.navigate(Route.MealFastingResult.route)
                                 }
                             )
                         }
@@ -235,7 +301,8 @@ fun MealMainScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200f.bhp())){}
+                    .height(200f.bhp())
+            ) {}
         }
 
 
@@ -325,7 +392,10 @@ fun MealMainScreen(
                             .clickable { showAutoRecordDialog = false }
                     )
 
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.align(Alignment.Center)) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
                         Text(
                             text = "오늘 계획된 식단이 있어!\n그대로 기록해줄까?",
                             style = DungGeunMo17,
@@ -354,7 +424,8 @@ fun MealMainScreen(
                                         val idx = mealTypeList.indexOf(dto.dietType)
                                         if (idx != -1) {
                                             val card = mealViewModel.parseToMealCardData(dto)
-                                            mealStates[idx] = mealStates[idx].copy(mealCardData = card)
+                                            mealStates[idx] =
+                                                mealStates[idx].copy(mealCardData = card)
                                         }
                                     }
                                     showAutoRecordDialog = false
@@ -374,7 +445,6 @@ fun MealMainScreen(
         }
     }
 }
-
 
 
 //@Composable
@@ -485,7 +555,7 @@ fun RecordMealButton(
         Image(
             painter = painterResource(id = R.drawable.ic_record),
             contentDescription = "식단 기록 아이콘",
-            modifier = Modifier.size(27f.wp(),27f.bhp())
+            modifier = Modifier.size(27f.wp(), 27f.bhp())
         )
         Spacer(modifier = Modifier.width(8f.wp()))
         Text(

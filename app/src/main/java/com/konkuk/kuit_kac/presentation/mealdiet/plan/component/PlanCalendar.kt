@@ -331,8 +331,8 @@ fun PlanCalendar(
                         modifier = Modifier.weight(0.5f),
                         onClick = {
                             breakfastClicked.value = !breakfastClicked.value
-                            lunchClicked.value = false
-                            dinnerClicked.value = false
+//                            lunchClicked.value = false
+//                            dinnerClicked.value = false
                         },
                         isSelected = breakfastClicked.value,
                         isBlue = blueClicked.value,
@@ -345,8 +345,8 @@ fun PlanCalendar(
                         modifier = Modifier.weight(0.5f),
                         onClick = {
                             lunchClicked.value = !lunchClicked.value
-                            breakfastClicked.value = false
-                            dinnerClicked.value = false
+//                            breakfastClicked.value = false
+//                            dinnerClicked.value = false
                         },
                         isSelected = lunchClicked.value,
                         isBlue = blueClicked.value,
@@ -359,8 +359,8 @@ fun PlanCalendar(
                         modifier = Modifier.weight(0.5f),
                         onClick = {
                             dinnerClicked.value = !dinnerClicked.value
-                            lunchClicked.value = false
-                            breakfastClicked.value = false
+//                            lunchClicked.value = false
+//                            breakfastClicked.value = false
                         },
                         isSelected = dinnerClicked.value,
                         isBlue = blueClicked.value,
@@ -407,8 +407,7 @@ fun PlanCalendar(
 private fun PlanCalendarPreview() {
     val taggedDates = remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
     PlanCalendar(
-        taggedDATES = taggedDates.value,
-        isTagButton = true
+        taggedDATES = taggedDates.value, isTagButton = true,
     )
 }
 
