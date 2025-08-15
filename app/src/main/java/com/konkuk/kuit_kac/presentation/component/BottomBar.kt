@@ -28,22 +28,27 @@ fun BottomBar(
     navController: NavController
 ) {
     val selectedRoute = remember { mutableStateOf(Route.Home.route) }
-//    val navBackStackEntry by navController.currentBackStackEntryAsState()
-//    var selectedRoute = navBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    var currentRoute = navBackStackEntry?.destination?.route
 
     // 선택된 메뉴에 따른 배경 이미지
-    val backgroundRes = when (selectedRoute.value) {
+    var backgroundRes = when (selectedRoute.value) {
         Route.Home.route -> R.drawable.img_bottomhome2
         Route.Diet.route -> R.drawable.img_bottommeal2
         Route.Fitness.route -> R.drawable.img_bottomfitness2
         else -> R.drawable.img_bottombar2
     }
 
+    if (currentRoute == Route.PlanDiet.route) {
+        backgroundRes = R.drawable.img_bottombar2
+        selectedRoute.value = Route.PlanDiet.route
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(141f.bhp()) // 세로 비율 유지
-            .offset(y= (30f).bhp())
+            .offset(y = (30f).bhp())
     ) {
         // 배경 이미지
         Image(
@@ -62,15 +67,21 @@ fun BottomBar(
                         val widthPx = size.width
                         val x = offset.x
 
+                        if (currentRoute == Route.PlanDiet.route) {
+
+                        }
+
                         when {
                             x < widthPx / 3 -> {
                                 selectedRoute.value = Route.Diet.route
                                 navController.navigate(Route.Diet.route)
                             }
+
                             x < widthPx * 2 / 3 -> {
                                 selectedRoute.value = Route.Home.route
                                 navController.navigate(Route.Home.route)
                             }
+
                             else -> {
                                 selectedRoute.value = Route.Fitness.route
                                 navController.navigate(Route.Fitness.route)
@@ -87,5 +98,5 @@ fun BottomBar(
 @Composable
 private fun BottomBarPreview() {
     val navController = rememberNavController()
-    BottomBar( navController = navController)
+    BottomBar(navController = navController)
 }
