@@ -20,29 +20,37 @@ class WeightViewModel @Inject constructor(
     val postSuccess: State<Boolean?> = _postSuccess
 
     private val _weightInfo = mutableStateOf<WeightResponseDto?>(null)
-    val weightInfo: State<WeightResponseDto?>  = _weightInfo
+    val weightInfo: State<WeightResponseDto?> = _weightInfo
+
+    private val _error = mutableStateOf<String?>(null)
+    val error: State<String?> = _error
 
     fun postWeight(userId: Int, weight: Float) {
         viewModelScope.launch {
-            val result = runCatching {
-                repository.postWeight(WeightRequestDto(userId, weight))
-            }
-            _postSuccess.value = result.isSuccess
+            repository.postWeight(WeightRequestDto(userId, weight))
+                .onSuccess { _postSuccess.value = true }
+                .onFailure { e ->
+                    _postSuccess.value = false
+                    _error.value = e.message
+                }
         }
     }
 
     fun putWeight(userId: Int, weight: Float) {
         viewModelScope.launch {
             repository.putWeight(WeightRequestDto(userId, weight))
+                .onFailure { e -> _error.value = e.message }
         }
     }
 
     fun getWeight(userId: Int) {
         viewModelScope.launch {
-            val result = repository.getWeight(userId)
-            if (result.isSuccessful) {
-                _weightInfo.value = result.body()
-            }
+            repository.getWeight(userId)
+                .onSuccess { _weightInfo.value = it }
+                .onFailure { e ->
+                    _weightInfo.value = WeightResponseDto(0f, "")
+                    _error.value = e.message
+                }
         }
     }
 }
