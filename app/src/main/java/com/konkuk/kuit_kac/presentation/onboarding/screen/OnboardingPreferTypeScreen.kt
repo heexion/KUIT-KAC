@@ -29,13 +29,10 @@ import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDietSpeed
 fun OnboardingPreferTypeScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onNextClick: (List<String>) -> Unit = {},
 
 ) {
     val options = listOf("패스트푸드", "한식", "중식", "양식", "아시안", "튀김류")
     val selectedOptions = remember { mutableStateListOf<String>() }
-
-    val navController = rememberNavController()
 
     val onNextClick: (List<String>) -> Unit = {
         navController.navigate(OnboardingDietSpeed.route)
