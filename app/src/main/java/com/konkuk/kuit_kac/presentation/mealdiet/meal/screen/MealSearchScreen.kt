@@ -23,13 +23,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,6 +59,7 @@ fun MealSearchScreen(
     val query = foodViewModel.query
     val suggestions = foodViewModel.suggestions
     val focusManager = LocalFocusManager.current // 포커스 매니저
+    val uniqueSuggestions = suggestions.distinctBy { it.name }
 
     Column(
         modifier = modifier
@@ -112,7 +117,9 @@ fun MealSearchScreen(
                     shape = RoundedCornerShape(30f.bhp()),
                     singleLine = true,
                     value = query,
-                    onValueChange = { foodViewModel.onQueryChange(it) },
+                    onValueChange = {
+                        foodViewModel.onQueryChange(it)
+                    },
                     label = {
                         Text(
                             text = "무슨 음식을 먹었어?",
@@ -140,14 +147,17 @@ fun MealSearchScreen(
 
         // 3. 검색 기록 리스트
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(suggestions) { food ->
+            items(uniqueSuggestions, key = {it.name}) { food ->
                 SearchBarItem(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
                         .clickable {
-                            focusManager.clearFocus() // 아이템 클릭 시 커서 해제
-                            navController.navigate("meal_search_detail/${food.name}")
+
                         },
+                    onClick = {
+                        focusManager.clearFocus() // 아이템 클릭 시 커서 해제
+                        navController.navigate("meal_search_detail/${food.name}")
+                    },
                     value = food.name
                 )
             }

@@ -142,9 +142,11 @@ fun DietSearchScreen(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
                         .clickable {
-                            focusManager.clearFocus() // 클릭 시 포커스 해제
-                            navController.navigate("diet_search_detail/${food.name}")
                         },
+                    onClick = {
+                        focusManager.clearFocus() // 클릭 시 포커스 해제
+                        navController.navigate("diet_search_detail/${food.name}")
+                    },
                     value = food.name
                 )
             }

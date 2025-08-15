@@ -162,7 +162,7 @@ fun DietEditTempScreen(
                                     .fillMaxWidth(),
                                 contentAlignment = Alignment.Center
                             ){Text(
-                                text = originalName?:"제목을 입력해주세요",
+                                text = "제목 입력",
                                 textAlign = TextAlign.Center,
                                 style = DungGeunMo17,
                                 fontSize = 17f.isp(),

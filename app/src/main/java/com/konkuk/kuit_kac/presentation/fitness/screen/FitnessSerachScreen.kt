@@ -161,10 +161,12 @@ fun FitnessSearchScreen(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
                         .clickable {
-                            focusManager.clearFocus() // 리스트 클릭 시 포커스 해제
-                            selectedItem = fitness
-                            showDialog = true
                         },
+                    onClick = {
+                        focusManager.clearFocus()
+                        selectedItem = fitness
+                        showDialog = true
+                    },
                     value = fitness.name
                 )
             }
