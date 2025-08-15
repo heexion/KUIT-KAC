@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,29 +44,26 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietCard
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.deepYellow
-import kotlinx.coroutines.launch
 
 @Composable
 fun DietMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     dietViewModel: DietViewModel = hiltViewModel()
-    ) {
+) {
     LaunchedEffect(Unit) {
         dietViewModel.getDiet(userId = 1)
     }
     val dietList = dietViewModel.getDietState.value
     val state = !dietList.isNullOrEmpty()
-    val pageCount = dietList?.size?:1
-    val pagerState = rememberPagerState(pageCount = {pageCount})
+    val pageCount = dietList?.size ?: 1
+    val pagerState = rememberPagerState(pageCount = { pageCount })
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,8 +84,8 @@ fun DietMainScreen(
             ) {
                 Image(
                     modifier = Modifier
-                        .size(28.8584f.wp(),28.8584f.bhp()),
-                    painter = painterResource(R.drawable.ic_alcohol),
+                        .size(28.8584f.wp(), 28.8584f.bhp()),
+                    painter = painterResource(R.drawable.ic_diet),
                     contentDescription = "utensils"
                 )
                 Text(
@@ -103,8 +98,10 @@ fun DietMainScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 17f.bhp(),
-                        start = 24f.wp(), end = 24f.wp()),
+                    .padding(
+                        top = 17f.bhp(),
+                        start = 24f.wp(), end = 24f.wp()
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 SelectButton2(
@@ -113,27 +110,29 @@ fun DietMainScreen(
                         .clickable {
                             navController.navigate(Route.Meal.route)
                         },
-                    value = "식단기록"
+                    value = "식단 기록"
                 )
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp()),
-                    value = "나만의 식단"
+                    value = "나만의 식단",
+                    isSelected = true
                 )
             }
         }
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush =
-                    Brush.radialGradient(
-                        colors = listOf(Color(0xFFFFFFFF),Color(0xFFFFF4C1)),
-                        radius = 2000f
-                    )
+                .background(
+                    brush =
+                        Brush.radialGradient(
+                            colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
+                            radius = 2000f
+                        )
                 ),
         )
         {
-            if(state) {
+            if (state) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -151,23 +150,24 @@ fun DietMainScreen(
                             .padding(top = 60f.bhp()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                    DietSwipeCardPager(
-                        navController = navController,
-                        modifier = Modifier.padding(top = 28f.bhp(), start = 24f.wp()),
-                        dietList?: emptyList(),
-                        pagerState = pagerState
-                    )
-                    Spacer(
-                        modifier = Modifier.size(
-                            170f.bhp() - WindowInsets.navigationBars.asPaddingValues()
-                                .calculateBottomPadding()
-                        ),
-                    )
-            }}}
-            else{
+                        DietSwipeCardPager(
+                            navController = navController,
+                            modifier = Modifier.padding(top = 28f.bhp(), start = 24f.wp()),
+                            dietList ?: emptyList(),
+                            pagerState = pagerState
+                        )
+                        Spacer(
+                            modifier = Modifier.size(
+                                170f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                                    .calculateBottomPadding()
+                            ),
+                        )
+                    }
+                }
+            } else {
                 Box(
                     modifier = Modifier
-                        .size(364f.wp(),458f.bhp())
+                        .size(364f.wp(), 458f.bhp())
                         .offset(y = 105f.bhp(), x = 24f.wp())
                         .clip(RoundedCornerShape(20f.wp()))
                         .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
@@ -182,15 +182,15 @@ fun DietMainScreen(
                         painter = painterResource(R.drawable.img_diet_maintextballoon),
                         contentDescription = "text balloon",
                         modifier = Modifier
-                            .size(219f.wp(),83f.bhp())
+                            .size(219f.wp(), 83f.bhp())
                             .offset(x = 73f.wp(), y = 101f.bhp())
                     )
                     Box(
                         modifier = Modifier
-                            .size(114f.wp(),44f.bhp())
-                            .offset(135.27f.wp(),113f.bhp()),
+                            .size(114f.wp(), 44f.bhp())
+                            .offset(135.27f.wp(), 113f.bhp()),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         Text(
                             text = "현재식단이 비어있어요!",
                             style = DungGeunMo17,
@@ -212,20 +212,20 @@ fun DietMainScreen(
 //                    mascotLength = 109.0
 //                )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    HamcoachGif(
-                        modifier = Modifier.offset(y = 174f.bhp()),
-                        num = 1,
-                        ellipseLength = 182.0,
-                        mascotLength = 160.0,
-                        onClick = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        HamcoachGif(
+                            modifier = Modifier.offset(y = 174f.bhp()),
+                            num = 1,
+                            ellipseLength = 182.0,
+                            mascotLength = 160.0,
+                            onClick = {
                                 navController.navigate(Route.DietExist.route)
                             }
-                    )
-                }
+                        )
+                    }
                     EllipseNyam(
                         modifier = Modifier
                             .offset(x = 87f.wp(), y = 174f.bhp())

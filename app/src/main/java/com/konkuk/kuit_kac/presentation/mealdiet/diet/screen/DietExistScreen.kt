@@ -131,12 +131,13 @@ fun DietExistScreen(
                         .clickable {
                             navController.navigate(Route.DietCreate.route)
                         },
-                    value = "식단기록"
+                    value = "식단 기록"
                 )
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp()),
-                    value = "나만의 식단"
+                    value = "나만의 식단",
+                    isSelected = true
                 )
             }
         }
