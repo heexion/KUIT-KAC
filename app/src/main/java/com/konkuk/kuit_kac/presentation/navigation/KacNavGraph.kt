@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.edit
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -133,7 +134,6 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeSc
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingStartScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingYellowScreen
-import androidx.core.content.edit
 
 
 @Composable

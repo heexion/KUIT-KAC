@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -127,7 +128,7 @@ fun FitnessMainScreen(
                     SelectButton2(
                         modifier = Modifier
                             .size(174f.wp(), 49f.bhp())
-                            .clickable {
+                            .noRippleClickable {
                                 navController.navigate("RecordEditGraph")
                                 onTabClick("기록")
                             },
@@ -137,7 +138,7 @@ fun FitnessMainScreen(
                     SelectButton2(
                         modifier = Modifier
                             .size(174f.wp(), 49f.bhp())
-                            .clickable {
+                            .noRippleClickable {
                                 navController.navigate(Route.Fitness.route)
                                 onTabClick("나만의")
                             },
@@ -187,7 +188,7 @@ fun FitnessMainScreen(
                         .width(364f.wp())
                         .height(49f.bhp())
                         .border(1.dp, Color.Black, RoundedCornerShape(35f.wp()))
-                        .clickable { navController.navigate("RoutineGraph") }
+                        .noRippleClickable { navController.navigate("RoutineGraph") }
                         .padding(horizontal = 16f.wp()),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
@@ -296,7 +297,7 @@ fun FitnessMainScreen(
                                         colors = listOf(Color.White, Color(0xFFFFB638))
                                     )
                                 )
-                                .clickable {
+                                .noRippleClickable {
                                     coroutineScope.launch {
                                         val nextPage = (pageState.currentPage - 1)
                                         pageState.animateScrollToPage(nextPage)
@@ -327,7 +328,7 @@ fun FitnessMainScreen(
                                         colors = listOf(Color.White, Color(0xFFFFB638))
                                     )
                                 )
-                                .clickable {
+                                .noRippleClickable {
                                     coroutineScope.launch {
                                         val nextPage = (pageState.currentPage + 1)
                                         pageState.animateScrollToPage(nextPage)

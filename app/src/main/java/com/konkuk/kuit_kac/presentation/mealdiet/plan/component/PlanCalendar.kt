@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,7 +85,7 @@ fun PlanCalendar(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
+                modifier = Modifier.noRippleClickable {
                     selectedDate = null
                     pinkClicked.value = false
                     blueClicked.value = false

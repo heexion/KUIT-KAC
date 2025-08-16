@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.diet.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -89,7 +90,7 @@ fun DietCard(
                             .height(28f.bhp())
                             .clip(RoundedCornerShape(7f.bhp()))
                             .background(Color(0xFFFFFCEE))
-                            .clickable { expanded = true },
+                            .noRippleClickable { expanded = true },
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
@@ -155,7 +156,7 @@ fun DietCard(
                                     colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                                 )
                             )
-                            .clickable {
+                            .noRippleClickable {
                                 navController.navigate(Route.DietPatch.route)
                             }
                     ) {

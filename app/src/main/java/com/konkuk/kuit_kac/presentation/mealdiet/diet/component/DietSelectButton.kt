@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.diet.component
 
 import androidx.compose.foundation.Image
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

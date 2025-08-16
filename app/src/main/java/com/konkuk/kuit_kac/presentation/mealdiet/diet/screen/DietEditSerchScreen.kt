@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -140,7 +141,7 @@ fun DietEditSearchScreen(
                 SearchBarItem(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
-                        .clickable {
+                        .noRippleClickable {
                         },
                     onClick = {
                         focusManager.clearFocus() // 아이템 클릭 시 포커스 해제

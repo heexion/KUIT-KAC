@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -149,7 +150,7 @@ fun MealMainScreen(
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             onTabClick("기록")
                         },
                     isSelected = selectedTab == "기록",
@@ -158,7 +159,7 @@ fun MealMainScreen(
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             navController.navigate(Route.Diet.route)
                             onTabClick("나만의")
                         },
@@ -324,7 +325,7 @@ fun MealMainScreen(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .size(20.dp)
-                            .clickable { showDialog = false }
+                            .noRippleClickable { showDialog = false }
                     )
 
                     Column(
@@ -349,7 +350,7 @@ fun MealMainScreen(
                                     )
                                 )
                                 .border(1.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
-                                .clickable {
+                                .noRippleClickable {
                                     val idx = mealTypeList.indexOf(dialogMealType)
                                     if (idx != -1) {
                                         mealViewModel.clearFastingStartTimeForType(dialogMealType)
@@ -389,7 +390,7 @@ fun MealMainScreen(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .size(20.dp)
-                            .clickable { showAutoRecordDialog = false }
+                            .noRippleClickable { showAutoRecordDialog = false }
                     )
 
                     Column(
@@ -415,7 +416,7 @@ fun MealMainScreen(
                                     )
                                 )
                                 .border(1.dp, Color(0xFF000000), RoundedCornerShape(30.dp))
-                                .clickable {
+                                .noRippleClickable {
                                     val missingDtos = planList.orEmpty()
                                         .filter { it.dietType in missingTypes }
 
@@ -465,7 +466,7 @@ fun MealMainScreen(
 //            )
 //            .border(1.dp, Color.Black, shape = CircleShape)
 //            .shadow(elevation = 4.dp, shape = CircleShape, ambientColor = Color.Black.copy(alpha = 0.1f))
-//            .clickable { onClick() },
+//            .noRippleClickable { onClick() },
 //        contentAlignment = Alignment.Center
 //    ) {
 //        Image(
@@ -513,7 +514,7 @@ fun MealMainScreen(
 //            .height(48f.bhp())
 //            .clip(RoundedCornerShape(20f.bhp()))
 //            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
-//            .clickable { onClick() },
+//            .noRippleClickable { onClick() },
 //        contentAlignment = Alignment.Center
 //    ) {
 //        Image(
@@ -547,7 +548,7 @@ fun RecordMealButton(
                 color = Color(0xFF000000),
                 shape = RoundedCornerShape(35f.wp())
             )
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
             .padding(horizontal = 16f.wp()), // 내부 여백
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center

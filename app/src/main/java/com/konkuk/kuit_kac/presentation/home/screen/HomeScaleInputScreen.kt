@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -153,7 +154,7 @@ fun WeightInputModal(
                 if (isKeyboardVisible) Color(0x60000000)
                 else Color(0x80000000)
             )
-            .clickable {
+            .noRippleClickable {
                 focusManager.clearFocus()
             },
         verticalArrangement = Arrangement.Bottom,

@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -174,7 +175,7 @@ fun FitnessRoutineSearchScreen(
                         .align(Alignment.TopEnd)
                         // .padding(top = 4.dp, end = 4.dp)
                         .size(20.dp)
-                        .clickable { showDialog = false }
+                        .noRippleClickable { showDialog = false }
                 )
 
                 Column(
@@ -208,7 +209,7 @@ fun FitnessRoutineSearchScreen(
                                 )
                             )
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                            .clickable {
+                            .noRippleClickable {
                                 // TODO: 추가 로직
                                     val f = selectedItem
                                     if (f != null) {

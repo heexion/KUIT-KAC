@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,7 +70,7 @@ fun FitnessTopBarWithSearch(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .size(24f.bhp())
-                        .clickable { onBackClick() }
+                        .noRippleClickable { onBackClick() }
                 )
 
                 // 타이틀
@@ -91,7 +92,7 @@ fun FitnessTopBarWithSearch(
                     .clip(RoundedCornerShape(30f.bhp()))
                     .background(Color.White)
                     .border(1.5f.wp(), Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                    .clickable { onSearchClick() },
+                    .noRippleClickable { onSearchClick() },
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(
@@ -113,7 +114,7 @@ fun FitnessTopBarWithSearch(
                             contentDescription = "Clear Search",
                             modifier = Modifier
                                 .size(24f.bhp())
-                                .clickable { onClearClick() }
+                                .noRippleClickable { onClearClick() }
                         )
                     }
                 }

@@ -3,7 +3,7 @@ package com.konkuk.kuit_kac.presentation.home.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -134,7 +134,7 @@ fun HomeMainScreen(
                 modifier = Modifier
                     .size(94.13432f.wp(), 53f.bhp())
                     .offset(y = 311f.hp(), x = 68.38f.wp())
-                    .clickable {
+                    .noRippleClickable {
                         navController.navigate(Route.HomeScale.route)
                     },
                 painter = painterResource(R.drawable.img_home_weight),

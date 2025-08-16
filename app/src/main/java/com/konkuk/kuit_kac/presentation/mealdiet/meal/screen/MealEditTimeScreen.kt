@@ -371,7 +371,7 @@ fun MealEditTimeScreen(
 //                                color = if (isAM) Color(0xFF000000) else Color(0xB8707070)
 //                            ),
 //                            fontSize = 17f.isp(),
-//                            modifier = Modifier.clickable { isAM = true }
+//                            modifier = Modifier.noRippleClickable { isAM = true }
 //                        )
 //                        Spacer(modifier = Modifier.height(12f.bhp()))
 //                        Text(
@@ -381,7 +381,7 @@ fun MealEditTimeScreen(
 //                                color = if (!isAM) Color(0xFF000000) else Color(0xB8707070)
 //                            ),
 //                            fontSize = 24f.isp(),
-//                            modifier = Modifier.clickable { isAM = false }
+//                            modifier = Modifier.noRippleClickable { isAM = false }
 //                        )
 //                    }
 //
@@ -425,7 +425,7 @@ fun MealEditTimeScreen(
 //                                        ),
 //                                        modifier = Modifier
 //                                            .fillMaxWidth()
-//                                            .clickable { selectedHour = hour }
+//                                            .noRippleClickable { selectedHour = hour }
 //                                            .padding(vertical = 4f.bhp()),
 //                                        textAlign = TextAlign.Center
 //                                    )
@@ -460,7 +460,7 @@ fun MealEditTimeScreen(
 //                                        ),
 //                                        modifier = Modifier
 //                                            .fillMaxWidth()
-//                                            .clickable { selectedMinute = minute }
+//                                            .noRippleClickable { selectedMinute = minute }
 //                                            .padding(vertical = 4f.bhp()),
 //                                        textAlign = TextAlign.Center
 //                                    )

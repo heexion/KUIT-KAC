@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -111,7 +112,7 @@ fun FitnessRecordMainScreen(
                     SelectButton2(
                         modifier = Modifier
                             .size(174f.wp(), 49f.bhp())
-                            .clickable {
+                            .noRippleClickable {
                                 onTabClick("기록")
                             },
                         isSelected = selectedTab == "기록",
@@ -120,7 +121,7 @@ fun FitnessRecordMainScreen(
                     SelectButton2(
                         modifier = Modifier
                             .size(174f.wp(), 49f.bhp())
-                            .clickable {
+                            .noRippleClickable {
                                 navController.navigate(route = Route.Fitness.route)
                                 onTabClick("나만의")
                             },
@@ -236,7 +237,7 @@ fun FitnessRecordMainScreen(
 //                            EllipseNyam(
 //                                ellipseLength = 182.0,
 //                                mascotLength = 109.0,
-//                                modifier = Modifier.clickable {
+//                                modifier = Modifier.noRippleClickable {
 //                                    navController.navigate(Route.FitnessExist.route)
 //                                }
 //                            )
@@ -305,7 +306,7 @@ fun FitnessRecordMainScreen(
                 )
                 .border(1.dp, Color(0xFF000000), CircleShape)
                 .alpha(0.85f)
-                .clickable { /* onCalendarClick() */ },
+                .noRippleClickable { /* onCalendarClick() */ },
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -331,7 +332,7 @@ fun RecordFitnessMainButton(
                 color = Color.Black,
                 shape = RoundedCornerShape(35f.wp())
             )
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
             .padding(horizontal = 16f.wp()),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center

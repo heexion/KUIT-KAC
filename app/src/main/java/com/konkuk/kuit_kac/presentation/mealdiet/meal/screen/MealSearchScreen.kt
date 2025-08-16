@@ -4,6 +4,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -151,7 +152,7 @@ fun MealSearchScreen(
                 SearchBarItem(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
-                        .clickable {
+                        .noRippleClickable {
 
                         },
                     onClick = {

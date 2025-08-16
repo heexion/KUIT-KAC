@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,7 @@ fun OnboardingYellowScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState) // 스크롤 가능
-            .clickable {
+            .noRippleClickable {
                 // 다음 화면으로 이동
                 navController.navigate(OnboardingEoDrink.route)
             }

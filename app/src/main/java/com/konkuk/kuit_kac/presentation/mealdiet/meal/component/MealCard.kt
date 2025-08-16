@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -117,7 +118,7 @@ fun MealCard(
                 Box(
                     modifier = Modifier
                         .size(30.16f.wp(), 29.66f.bhp())
-                        .clickable { onEditClick() }
+                        .noRippleClickable { onEditClick() }
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_button_pencil),
@@ -306,7 +307,7 @@ fun MealCardTestMode(
                 Box(
                     modifier = Modifier
                         .size(30.16f.wp(), 29.66f.bhp())
-                        .clickable { onEditClick() }
+                        .noRippleClickable { onEditClick() }
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_button_pencil),
