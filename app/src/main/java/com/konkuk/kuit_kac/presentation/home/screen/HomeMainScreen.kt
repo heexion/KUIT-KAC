@@ -72,12 +72,12 @@ fun HomeMainScreen(
     */
 
     // 로딩 상태 처리
-    if (summary == null) {
+    /*if (summary == null) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
         return
-    }
+    }*/
 
     // API 응답에서 값 추출
     val goal = summary?.dailyKcalorieGoal ?: 0

@@ -47,7 +47,7 @@ fun HomeAnalysisScreen(modifier: Modifier = Modifier) {
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73f.hp())
+                .offset(y = 447.73f.hp())
         )
         Image(
             modifier = Modifier

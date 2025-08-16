@@ -41,5 +41,15 @@ fun HomeSubBackgroundComponent(modifier: Modifier = Modifier) {
             contentDescription = "background",
             contentScale = ContentScale.FillBounds
         )
+        Image(
+            modifier = Modifier
+                .offset(y = -10f.bhp())
+                .blur(radius = 3.799999952316284f.wp())
+                .width(508.22656f.wp())
+                .height(195.5752f.bhp()),
+            painter = painterResource(R.drawable.img_homegraphscreen_background),
+            contentDescription = "background",
+            contentScale = ContentScale.FillBounds
+        )
     }
 }
