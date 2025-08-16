@@ -204,7 +204,7 @@ fun OnboardingInputResultScreen(
             modifier = Modifier.padding(horizontal = 24f.wp())
         )
 
-        Spacer(modifier = Modifier.height(32f.bhp()))
+        Spacer(modifier = Modifier.height(16f.bhp()))
 
         RecordButton(
             value = "오~ 그렇구나!",
