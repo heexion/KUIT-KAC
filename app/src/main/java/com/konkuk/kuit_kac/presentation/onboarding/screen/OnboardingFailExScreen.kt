@@ -54,13 +54,12 @@ fun OnboardingFailExScreen(
     var directInputText by remember { mutableStateOf("") }
 
     fun toggle(option: String) {
+        isDirectInputMode = false
         if (selectedOptions.contains(option)) {
             selectedOptions.remove(option)
         } else {
-            selectedOptions.clear()
             selectedOptions.add(option)
         }
-        isDirectInputMode = false
     }
 
     Box(modifier = modifier.fillMaxSize()) {
