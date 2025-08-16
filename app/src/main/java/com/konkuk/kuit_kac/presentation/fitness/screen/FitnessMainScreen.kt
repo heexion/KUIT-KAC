@@ -194,14 +194,16 @@ fun FitnessMainScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_plus),
+                        painter = painterResource(id = R.drawable.img_diet_cross),
                         contentDescription = "아이콘",
-                        modifier = Modifier.size(27f.wp())
+                        modifier = Modifier.size(14.2f.wp(), 14.2f.bhp())
                     )
                     Spacer(Modifier.width(8f.wp()))
                     Text(
                         text = if (selectedTab == "기록") "운동 기록하기" else "나만의 운동 루틴 생성하기",
-                        style = DungGeunMo20.copy(fontSize = 17f.isp())
+                        style = DungGeunMo20.copy(fontSize = 17f.isp()),
+                        color = Color(0xFF000000)
+
                     )
                 }
 

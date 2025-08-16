@@ -70,6 +70,11 @@ fun DietMainScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                )
+            )
     ) {
         Column(
             modifier = Modifier
@@ -136,12 +141,10 @@ fun DietMainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    brush =
-                        Brush.radialGradient(
-                            colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                            radius = 2000f
-                        )
-                ),
+                    brush = Brush.verticalGradient(
+                        listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                    )
+                )
         )
         {
             if (state) {
@@ -149,12 +152,10 @@ fun DietMainScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            brush =
-                                Brush.radialGradient(
-                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                                    radius = 2000f
-                                )
-                        ),
+                            brush = Brush.verticalGradient(
+                                listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                            )
+                        )
                 ) {
                     Column(
                         modifier = Modifier
@@ -276,7 +277,7 @@ fun DietMainScreen(
                         text = "나만의 식단 생성하기",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
-                        color = Color.Black
+                        color = Color(0xFF000000)
                     )
                 }
             }
