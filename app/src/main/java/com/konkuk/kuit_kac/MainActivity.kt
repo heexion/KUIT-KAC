@@ -185,7 +185,22 @@ class MainActivity : ComponentActivity() {
                     Route.FitnessCreate.route,
                     Route.MealPatch.route,
                     Route.DietPatch.route,
-                    Route.LoginEmail.route
+                    Route.LoginEmail.route,
+
+                    // Onboarding 화면들
+                    Route.OnboardingDiet.route,
+                    Route.OnboardingFailEx.route,
+                    Route.OnboardingAppetite.route,
+                    Route.OnboardingWeek.route,
+                    Route.OnboardingPreferType.route,
+                    Route.OnboardingDietSpeed.route,
+                    Route.OnboardingActivityLevel.route,
+                    Route.OnboardingInput.route,
+                    Route.OnboardingInputResult.route,
+                    Route.OnboardingIntroduce.route,
+                    Route.OnboardingHamCoach.route,
+                    Route.OnboardingNyamCoach.route,
+                    Route.OnboardingDelivery.route
                 )
                 val planButtonRoutes = setOf(
                     Route.Home.route,

@@ -29,13 +29,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,7 +56,6 @@ import com.konkuk.kuit_kac.core.util.context.offsetForPage
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.data.response.MealResponseDto
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietCard
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.component.MealItemCard
@@ -295,12 +292,16 @@ fun DietSwipeCardPager(
                                     val encodedFwq = Uri.encode(fwqRaw)
 
                                     navController.navigate("DietEditGraph/DietEditTemp?dietId=${dietId}&fwqRaw=${encodedFwq}&name=${encodedName}")
-                                }
+                                },
+                                    contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                modifier = Modifier.fillMaxSize(),
-                                painter = painterResource(R.drawable.img_diet_pen),
-                                contentDescription = "pen"
+                                painter = painterResource(R.drawable.img_diet_pen2),
+                                contentDescription = "pen",
+                                modifier = Modifier
+                                    .width(24f.wp())
+                                    .height(24f.bhp())
+                                    .offset(x = (-2f).wp())
                             )
                         }
                     }
@@ -330,26 +331,36 @@ fun DietSwipeCardPager(
                             .padding(top = 12f.bhp(), start = 32.56f.wp(), end = 29.68f.bhp())
                     ) {
                         EllipseNyam(ellipseLength = 122.0, mascotLength = 73.06644)
-                        Image(
+
+                        // 말풍선 + 텍스트를 묶은 박스
+                        Box(
                             modifier = Modifier
-                                .width(197.37.dp)
-                                .height(67.78.dp)
+                                .width(197.37f.wp())
+                                .height(67.78f.bhp())
                                 .offset(y = 22.2f.bhp(), x = 104.38f.wp()),
-                            painter = painterResource(R.drawable.img_home_existtextballoon),
-                            contentDescription = "text balloon"
-                        )
-                        Text(
-                            modifier = Modifier
-                                .size(135f.wp(), 40f.bhp())
-                                .offset(142.26f.wp(), 40.12f.bhp()),
-                            text = "총 $totalKcal kcal이야!\n식단 수준은 ${meal.foodStatusType}",
-                            lineHeight = 20f.isp(),
-                            style = DungGeunMo15,
-                            fontSize = 15f.isp(),
-                            color = Color(0xFF000000),
-                            textAlign = TextAlign.Center
-                        )
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.img_home_existtextballoon),
+                                contentDescription = "text balloon",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
+                            )
+
+                            Text(
+                                text = "총 $totalKcal kcal이야!\n식단 수준은 ${meal.foodStatusType}",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                lineHeight = 20f.isp(),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .offset(x = 6f.wp())
+                            )
+                        }
                     }
+
                     DietMultipleNutritionBar(
                         modifier = Modifier
                             .padding(start = 17f.wp(), end = 15f.wp(), top = 13.29f.bhp()),

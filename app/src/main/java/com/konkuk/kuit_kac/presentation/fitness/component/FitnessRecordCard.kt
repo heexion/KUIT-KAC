@@ -34,7 +34,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.Fitness
-import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 data class FitnessItemData(
@@ -142,8 +141,7 @@ fun FitnessRecordCard(
                         FitnessName = item.name,
                         FitnessAmount = 2,
                         FitnessKcal = 110,
-                        onDeleteClick = {},
-                        isEditable = isEditable
+                        onDeleteClick = {}
                     )
                 }
             }

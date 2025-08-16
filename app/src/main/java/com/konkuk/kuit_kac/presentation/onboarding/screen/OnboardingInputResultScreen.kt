@@ -32,15 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
-import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingIntroduce
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -145,17 +142,17 @@ fun OnboardingInputResultScreen(
                     .offset(y = 8f.bhp())
             )
 
-//            NyamCoach(
-//                modifier = Modifier
-//                    .width(247f.wp())
-//                    .height(305f.bhp())
-//                    .align(Alignment.Center)
-//            )
-
-            NyameeGif(
-                num = 1,
-                sizePercent = 1.5f
+            NyamCoach(
+                modifier = Modifier
+                    .width(247f.wp())
+                    .height(305f.bhp())
+                    .align(Alignment.Center)
             )
+
+//            NyameeGif(
+//                num = 1,
+//                sizePercent = 1.5f
+//            )
 
         }
 
@@ -182,7 +179,9 @@ fun OnboardingInputResultScreen(
                     style = DungGeunMo17.copy(fontSize = 17f.isp()),
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 24f.wp())
+                    modifier = Modifier
+                        .padding(horizontal = 24f.wp())
+                        .offset(y = (-6f).bhp())
                 )
             }
         }
@@ -205,7 +204,7 @@ fun OnboardingInputResultScreen(
             modifier = Modifier.padding(horizontal = 24f.wp())
         )
 
-        Spacer(modifier = Modifier.height(32f.bhp()))
+        Spacer(modifier = Modifier.height(16f.bhp()))
 
         RecordButton(
             value = "오~ 그렇구나!",

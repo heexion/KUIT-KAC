@@ -92,7 +92,7 @@ fun OnboardingActivityLevelScreen(
                 onValueChange = { activityLevel = it }
             )
 
-            Spacer(modifier = Modifier.height(55.5f.bhp()))
+            Spacer(modifier = Modifier.height(20f.bhp()))
 
             // 다음 버튼
             RecordButton(

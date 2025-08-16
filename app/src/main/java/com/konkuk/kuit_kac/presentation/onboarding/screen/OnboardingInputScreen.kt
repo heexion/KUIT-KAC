@@ -379,7 +379,7 @@ fun OnboardingInputScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(33f.bhp()))
+        Spacer(modifier = Modifier.height(20f.bhp()))
 
         // 다음 버튼
         Box(
