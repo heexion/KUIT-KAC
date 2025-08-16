@@ -30,13 +30,11 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingNyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
@@ -90,7 +88,7 @@ fun OnboardingHamCoachScreen(
             )
             Text(
                 text = bubbleText,
-                style = DungGeunMo20.copy(fontSize = bubbleFontSize, lineHeight = 28.sp),
+                style = DungGeunMo20.copy(fontSize = bubbleFontSize),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
