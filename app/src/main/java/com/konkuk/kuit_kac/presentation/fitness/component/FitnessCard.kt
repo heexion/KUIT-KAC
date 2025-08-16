@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,7 +51,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.Fitness
-import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 
@@ -216,13 +215,16 @@ fun FitnessCard(
                         )
                         .clickable {
                             onEditClick()
-                        }
+                        },
+                    contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.img_diet_pen),
+                        painter = painterResource(R.drawable.img_diet_pen2),
                         contentDescription = "pen",
                         modifier = Modifier
-                            .fillMaxSize()
+                            .width(24f.wp())
+                            .height(24f.bhp())
+                            .offset(x = (-2f).wp())
                     )
                 }
             }

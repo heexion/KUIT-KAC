@@ -292,12 +292,16 @@ fun DietSwipeCardPager(
                                     val encodedFwq = Uri.encode(fwqRaw)
 
                                     navController.navigate("DietEditGraph/DietEditTemp?dietId=${dietId}&fwqRaw=${encodedFwq}&name=${encodedName}")
-                                }
+                                },
+                                    contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                modifier = Modifier.fillMaxSize(),
-                                painter = painterResource(R.drawable.img_diet_pen),
-                                contentDescription = "pen"
+                                painter = painterResource(R.drawable.img_diet_pen2),
+                                contentDescription = "pen",
+                                modifier = Modifier
+                                    .width(24f.wp())
+                                    .height(24f.bhp())
+                                    .offset(x = (-2f).wp())
                             )
                         }
                     }
