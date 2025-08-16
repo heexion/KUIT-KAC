@@ -59,6 +59,7 @@ fun PlanCalendar(
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }
     var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
+    var tempDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
 
     var breakfastClicked = remember { mutableStateOf(false) }
     var lunchClicked = remember { mutableStateOf(false) }
@@ -68,6 +69,7 @@ fun PlanCalendar(
 
     LaunchedEffect(taggedDATES) {
         taggedDates = taggedDATES
+        tempDates = taggedDATES
     }
 
     Column(
@@ -86,6 +88,7 @@ fun PlanCalendar(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.noRippleClickable {
+                    tempDates=taggedDATES
                     selectedDate = null
                     pinkClicked.value = false
                     blueClicked.value = false
@@ -204,7 +207,7 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tags = taggedDates[thisDate].orEmpty()
+                                val tags = tempDates[thisDate].orEmpty()
 
                                 var color = Color(0xFFFFFFFF)
 
@@ -376,18 +379,19 @@ fun PlanCalendar(
                 isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
                 onClick = {
                     if (confirmString == "다 입력했어!") {
+                        taggedDates = tempDates
                         onNavigateToDetail()
                     }
                     if (selectedDate != null) {
                         isAddedOnce.value = true
-                        val updated = taggedDates.toMutableMap()
+                        val updated = tempDates.toMutableMap()
                         val currentTags = updated[selectedDate!!]?.toMutableSet() ?: mutableSetOf()
 
                         if (blueClicked.value) currentTags.add(PlanTagType.EATING_OUT)
                         if (pinkClicked.value) currentTags.add(PlanTagType.DRINKING)
 
                         updated[selectedDate!!] = currentTags
-                        taggedDates = updated
+                        tempDates = updated
                     }
                     pinkClicked.value = false
                     blueClicked.value = false
