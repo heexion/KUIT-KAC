@@ -23,10 +23,9 @@ class HomeSummaryViewModel @Inject constructor(
 
     fun loadSummary(userId: Int) {
         viewModelScope.launch {
-            val result = repository.getHomeSummary(userId)
-            result
+            repository.getHomeSummary(userId)
                 .onSuccess { _summary.value = it }
-                .onFailure { _error.value = it.message }
+                .onFailure { _error.value = it.message ?: "알 수 없는 오류" }
         }
     }
 }

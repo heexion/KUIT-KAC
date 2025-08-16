@@ -75,7 +75,7 @@ fun HomeScaleScreen(
         viewModel.getWeight(userId = 1)
     }
 
-    val weight = weightInfo?.weight ?: 0.0
+    val weight = (weightInfo?.weight ?: 0f).toDouble()
     val buttonText = if (weight == 0.0) "기록하기" else "수정하기"
     val scaleText = if (weight == 0.0) "기록 되지 않음!" else "${weight}kg"
     val textSize = if (weight == 0.0) DungGeunMo27 else DungGeunMo35

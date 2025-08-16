@@ -15,7 +15,12 @@ class HomeSummaryRepositoryImpl @Inject constructor(
         return try {
             val response = apiService.getHomeSummary(userId)
             if (response.isSuccessful) {
-                Result.success(response.body()!!)
+                val body = response.body()
+                if (body != null) {
+                    Result.success(body)
+                } else {
+                    Result.failure(Exception("응답 본문이 비어있습니다"))
+                }
             } else {
                 Result.failure(Exception("요약 정보 불러오기 실패: 에러 코드 ${response.code()}"))
             }

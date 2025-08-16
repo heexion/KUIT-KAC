@@ -36,12 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.VerticalScrollbar
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.data.response.CoachReportResponseDto
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.home.component.HomeBackgroundComponent
 import com.konkuk.kuit_kac.presentation.home.component.HomeObservationBox
@@ -49,9 +47,6 @@ import com.konkuk.kuit_kac.presentation.home.component.HomeSubBackgroundComponen
 import com.konkuk.kuit_kac.presentation.home.viewmodel.CoachReportViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
-
-
-
 
 
 @Composable
@@ -62,11 +57,11 @@ fun HomeObservationScreen(
     val lazyState = rememberLazyListState()
     val viewModel: CoachReportViewModel = hiltViewModel()
     val coachReport = viewModel.coachReport.value
+    val error = viewModel.error.value
 
     LaunchedEffect(Unit) {
         viewModel.loadCoachReport(userId = 1)
     }
-
 
     Box(
         modifier = Modifier
@@ -78,12 +73,6 @@ fun HomeObservationScreen(
             modifier = Modifier
                 .offset(y = 477.73f.bhp())
         )
-//        EllipseNyam(
-//            modifier = Modifier
-//                .padding(top = 122f.hp())
-//                .align(Alignment.TopCenter),
-//            mascotLength = 136.0, ellipseLength = 227.0
-//        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -125,7 +114,6 @@ fun HomeObservationScreen(
             )
         }
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -158,49 +146,38 @@ fun HomeObservationScreen(
                     modifier = Modifier.padding(vertical = 14.39f.bhp())
                 )
 
-                val observeList = remember(key1 = coachReport) {
+                val observeList = remember(coachReport) {
                     mutableListOf<String>().apply {
-                        coachReport?.let { report: CoachReportResponseDto ->
-                            if (report.diningOutNum > 0) add("외식 ${report.diningOutNum}회")
-                            if (report.fastingLevel == "LOW") add("공복 시간 적음")
-                            if (report.drinkingLevel == "LOW") add("잦은 술자리")
-                            if (report.deliveryLevel == "LOW") add("수시로 배달 어플")
-                            if (report.lateNightLevel == "LOW") add("잦은 야식")
+                        coachReport?.let { report ->
+                            if ((report.diningOutNum ?: 0) > 0) add("외식 ${report.diningOutNum ?: 0}회")
+                            if ((report.fastingLevel ?: "") == "LOW") add("공복 시간 적음")
+                            if ((report.drinkingLevel ?: "") == "LOW") add("잦은 술자리")
+                            if ((report.deliveryLevel ?: "") == "LOW") add("수시로 배달 어플")
+                            if ((report.lateNightLevel ?: "") == "LOW") add("잦은 야식")
                         }
                     }
                 }
 
-                Box() {
-                    LazyColumn(
-                        state = lazyState,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
+                LazyColumn(
+                    state = lazyState,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(
                             start = 32f.wp(),
                             end = 32f.wp(),
                             bottom = 70f.bhp()
-                        ).fillMaxWidth()
-                    ) {
-                        items(observeList) { observe ->
-                            HomeObservationBox(
-                                value = observe,
-                            )
-                        }
+                        )
+                        .fillMaxWidth()
+                ) {
+                    items(observeList) { observe ->
+                        HomeObservationBox(value = observe)
                     }
-//                    VerticalScrollbar(
-//                        scrollState = lazyState,
-//                        modifier = Modifier
-//                            .align(Alignment.TopEnd)
-//                            .fillMaxHeight(0.6f)
-//                            .padding(end = 15f.wp(), top = 60f.bhp()),
-//                        thumbColor = Color(0xFFFFE667)
-//                    )
                 }
             }
         }
     }
-
-
 }
+
 
 @Preview(showBackground = true)
 @Composable
