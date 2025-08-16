@@ -73,7 +73,7 @@ fun FitnessAddDetailRecordScreen(
     }
 
     val particle = getObjectParticle(name)
-    val message = "'$name'$particle 했구나!\n고생했어!"
+    val message = "'$name'$particle 했구나! 고생했어!"
     val initial = routineViewModel.getRecord(exercise.id)
     var time by remember { mutableStateOf(initial.minutes.toString()) }
     var intensity by remember { mutableStateOf(initial.intensity) }
@@ -129,12 +129,12 @@ fun FitnessAddDetailRecordScreen(
                 )
                 Text(
                     text = message,
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    lineHeight = 22f.isp(),
+                    style = DungGeunMo15,
+                    fontSize = 15f.isp(),
+                    lineHeight = 20f.isp(),
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 28f.bhp())
+                    modifier = Modifier.padding(bottom = 24f.bhp(), start = 50f.wp(), end = 50f.wp())
                 )
             }
 
@@ -170,6 +170,7 @@ fun FitnessAddDetailRecordScreen(
             Text(
                 text = name,
                 style = DungGeunMo15,
+                fontSize = 10f.isp(),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center
             )
