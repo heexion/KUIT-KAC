@@ -133,12 +133,13 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeSc
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingStartScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingYellowScreen
+import androidx.core.content.edit
 
 
 @Composable
 fun KacNavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -153,8 +154,7 @@ fun KacNavGraph(
             OnboardingStartScreen(
                 navController = navController,
                 onFinish = {
-                    prefs.edit().putBoolean("isFirstLaunch", false).apply()
-                    navController.navigate(OnboardingStart.route)
+                    navController.navigate(OnboardingDiet.route)
                 }
             )
         }
@@ -1168,7 +1168,9 @@ fun KacNavGraph(
             OnboardingCheckScreen(navController = navController)
         }
         composable(OnboardingFinal.route) {
-            OnboardingFinalScreen(navController = navController)
+            OnboardingFinalScreen(navController = navController, onFinish = {
+                prefs.edit { putBoolean("isFirstLaunch", false) }
+            })
         }
         composable(OnboardingFloatingButton.route) {
             OnboardingFloatingButtonScreen(navController = navController)

@@ -98,8 +98,8 @@ fun OnboardingStartScreen(
                         .calculateBottomPadding()
                 ),
             onClick = {
-                navController.navigate(Route.OnboardingDiet.route)
-//                onFinish()
+//                navController.navigate(Route.OnboardingDiet.route)
+                onFinish()
             },
             value = "좋아!",
             buttonHeight = 70f,
