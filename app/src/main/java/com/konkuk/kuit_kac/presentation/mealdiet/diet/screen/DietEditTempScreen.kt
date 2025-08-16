@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -217,7 +218,7 @@ fun DietEditTempScreen(
                             .height(84f.bhp())
                             .clip(RoundedCornerShape(15.dp))
                             .background(color = Color(0xFFFFFFFF))
-                            .clickable(
+                            .noRippleClickable(
                                 onClick = {
                                     navController.navigate(Route.FitnessSearch.route)
                                 }
@@ -239,7 +240,7 @@ fun DietEditTempScreen(
                                     cornerRadius = CornerRadius(15.dp.toPx())
                                 )
                             }
-                            .clickable (
+                            .noRippleClickable(
                                 onClick = {
                                     dietViewModel.setName(name)
                                     navController.navigate("dieteditsearch")
@@ -322,7 +323,7 @@ fun DietEditTempScreen(
                         )
                 )
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
-                .clickable {
+                .noRippleClickable {
                     if (prevRoute == "plan_ai_detail" || prevRoute == "plan_in_person_add")
                         navController.popBackStack()
                     else

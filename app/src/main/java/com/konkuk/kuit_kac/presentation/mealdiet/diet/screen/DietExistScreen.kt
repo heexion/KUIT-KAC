@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -125,7 +126,7 @@ fun DietExistScreen(
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             navController.navigate(Route.DietCreate.route)
                         },
                     value = "식단 기록"
@@ -279,7 +280,7 @@ fun DietSwipeCardPager(
                                         colors = listOf(Color.White, Color(0xFFFFB638))
                                     )
                                 )
-                                .clickable {
+                                .noRippleClickable {
                                     val dietId = meal.id
                                     val name = meal.name
                                     val fwqRaw = meal.dietFoods.joinToString(",") { dietFood ->
@@ -384,7 +385,7 @@ fun DietSwipeCardPager(
                         colors = listOf(Color.White, Color(0xFFFFB638))
                     )
                 )
-                .clickable {
+                .noRippleClickable {
                     coroutineScope.launch {
                         val nextPage = (pageState.currentPage - 1)
                         pageState.animateScrollToPage(nextPage)
@@ -416,7 +417,7 @@ fun DietSwipeCardPager(
                         colors = listOf(Color.White, Color(0xFFFFB638))
                     )
                 )
-                .clickable {
+                .noRippleClickable {
                     coroutineScope.launch {
                         val nextPage = (pageState.currentPage + 1)
                         pageState.animateScrollToPage(nextPage)

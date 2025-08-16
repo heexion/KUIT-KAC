@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,7 +37,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun FitnessTopBarWithSearch(
     title: String,
     placeholderText: String = "무슨 운동을 했어?",
-    placeholderTextColor: Color = Color(0xFFB5B5B5),
+    placeholderTextColor: Color = Color(0xFF0F0E0E),
     placeholderTextStyle: TextStyle = DungGeunMo15,
     showClearButton: Boolean = false,
     onBackClick: () -> Unit,
@@ -69,7 +70,7 @@ fun FitnessTopBarWithSearch(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .size(24f.bhp())
-                        .clickable { onBackClick() }
+                        .noRippleClickable { onBackClick() }
                 )
 
                 // 타이틀
@@ -91,7 +92,7 @@ fun FitnessTopBarWithSearch(
                     .clip(RoundedCornerShape(30f.bhp()))
                     .background(Color.White)
                     .border(1.5f.wp(), Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                    .clickable { onSearchClick() },
+                    .noRippleClickable { onSearchClick() },
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(
@@ -113,7 +114,7 @@ fun FitnessTopBarWithSearch(
                             contentDescription = "Clear Search",
                             modifier = Modifier
                                 .size(24f.bhp())
-                                .clickable { onClearClick() }
+                                .noRippleClickable { onClearClick() }
                         )
                     }
                 }
@@ -128,7 +129,7 @@ fun PreviewFitnesslTopBarWithSearch() {
     FitnessTopBarWithSearch(
         title = "루틴 추가하기",
         placeholderText = "무슨 운동을 했어?",
-        placeholderTextColor = Color.Gray,
+        placeholderTextColor = Color(0xFF0F0E0E),
         placeholderTextStyle = DungGeunMo17,
         onBackClick = {},
         onSearchClick = {},

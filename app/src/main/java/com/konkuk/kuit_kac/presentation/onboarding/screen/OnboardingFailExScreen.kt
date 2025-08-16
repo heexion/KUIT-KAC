@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -168,7 +169,7 @@ fun DietSelectButton(
             .fillMaxWidth()
             .height(buttonHeight.toFloat().bhp())
             .clip(RoundedCornerShape(20f.bhp())) // 둥근 모서리 적용
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
     ) {
         // 배경 이미지는 항상 같은 거 사용
         Image(
@@ -213,7 +214,7 @@ fun ConfirmButton(
         modifier = modifier
             .fillMaxWidth()
             .height(height.bhp())
-            .clickable {
+            .noRippleClickable {
                 if (!isDirectInputMode || isEditingFinished || isAvailable) {
                     onClick()
                 }

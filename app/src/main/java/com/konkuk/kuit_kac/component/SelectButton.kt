@@ -1,7 +1,7 @@
 package com.konkuk.kuit_kac.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,7 +40,7 @@ fun SelectButton(
         modifier = modifier
             .fillMaxWidth()
             .height(buttonHeight.toFloat().bhp())
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
     ) {
         Image(
             modifier = Modifier

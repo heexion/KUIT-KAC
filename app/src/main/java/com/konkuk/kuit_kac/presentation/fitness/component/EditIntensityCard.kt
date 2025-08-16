@@ -2,7 +2,7 @@ package com.konkuk.kuit_kac.presentation.fitness.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -75,7 +75,7 @@ fun EditIntensityCard(
                         contentDescription = "운동 강도 $index",
                         modifier = Modifier
                             .size(28f.wp())
-                            .clickable { onSelect(index) }
+                            .noRippleClickable { onSelect(index) }
                     )
                 }
             }

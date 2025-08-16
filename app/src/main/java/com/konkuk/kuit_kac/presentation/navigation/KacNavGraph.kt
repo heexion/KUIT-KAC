@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.edit
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -138,7 +139,7 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingYellowScreen
 @Composable
 fun KacNavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -153,8 +154,7 @@ fun KacNavGraph(
             OnboardingStartScreen(
                 navController = navController,
                 onFinish = {
-                    prefs.edit().putBoolean("isFirstLaunch", false).apply()
-                    navController.navigate(OnboardingStart.route)
+                    navController.navigate(OnboardingDiet.route)
                 }
             )
         }
@@ -1168,7 +1168,9 @@ fun KacNavGraph(
             OnboardingCheckScreen(navController = navController)
         }
         composable(OnboardingFinal.route) {
-            OnboardingFinalScreen(navController = navController)
+            OnboardingFinalScreen(navController = navController, onFinish = {
+                prefs.edit { putBoolean("isFirstLaunch", false) }
+            })
         }
         composable(OnboardingFloatingButton.route) {
             OnboardingFloatingButtonScreen(navController = navController)

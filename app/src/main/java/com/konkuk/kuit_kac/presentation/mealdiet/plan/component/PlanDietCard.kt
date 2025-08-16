@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -97,7 +98,7 @@ fun PlanDietCard(
                             .padding(start = 16f.wp())
                             .size(11f.wp(), 11f.bhp())
                             .align(Alignment.CenterVertically)
-                            .clickable { onClick() },
+                            .noRippleClickable { onClick() },
                         contentScale = ContentScale.FillBounds,
                         contentDescription = null,
                     )
@@ -125,7 +126,7 @@ fun PlanDietCard(
                         .padding(end = 11.06f.wp())
                         .size(25.35508f.wp(), 25.35508f.bhp())
                         .align(Alignment.CenterEnd)
-                        .clickable { editOnClick() },
+                        .noRippleClickable { editOnClick() },
                     contentScale = ContentScale.FillBounds,
                     contentDescription = null,
                 )

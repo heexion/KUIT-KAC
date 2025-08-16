@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -175,7 +176,7 @@ fun LoginEmailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color(0x90000000))
-                    .clickable {
+                    .noRippleClickable {
                         if (showPolicy) {
                             showPolicy = false
                         } else
@@ -283,7 +284,7 @@ fun LoginEmailScreen(
                                 modifier = Modifier
                                     .size(7f.wp(), 14f.bhp())
                                     .align(Alignment.CenterEnd)
-                                    .clickable {
+                                    .noRippleClickable {
                                         policyText = policyService
                                         showPolicy = true
                                     },
@@ -320,7 +321,7 @@ fun LoginEmailScreen(
                                 modifier = Modifier
                                     .size(7f.wp(), 14f.bhp())
                                     .align(Alignment.CenterEnd)
-                                    .clickable {
+                                    .noRippleClickable {
                                         policyText = policyPrivacy
                                         showPolicy = true
                                     },
@@ -357,7 +358,7 @@ fun LoginEmailScreen(
                                 modifier = Modifier
                                     .size(7f.wp(), 14f.bhp())
                                     .align(Alignment.CenterEnd)
-                                    .clickable {
+                                    .noRippleClickable {
                                         policyText = policyOptional
                                         showPolicy = true
                                     },
@@ -463,7 +464,7 @@ fun CheckBoxLogin(
         painter = painterResource(id = checkbox),
         modifier = Modifier
             .size(27f.wp(), 27f.bhp())
-            .clickable {
+            .noRippleClickable {
                 onCheckedChanged(!chekced)
             },
         contentScale = ContentScale.FillBounds,

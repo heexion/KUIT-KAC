@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,7 +62,7 @@ fun HomeObservationBox(
 //                modifier = Modifier
 //                    .padding(9.46f.bhp())
 //                    .size(31.5f.wp(), 31.5f.bhp())
-//                    .clickable(
+//                    .noRippleClickable(
 //                        onClick = {
 //                            navController.navigate(Route.HomeAnalysis.route)
 //                        }

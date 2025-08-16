@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -173,7 +174,7 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
                                 cornerRadius = CornerRadius(15.dp.toPx())
                             )
                         }
-                        .clickable(
+                        .noRippleClickable(
                             onClick = {
                                 navController.navigate(route = Route.FitnessSearch.route)
                             }
@@ -221,7 +222,7 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
                     )
                 )
                 .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.wp()))
-                .clickable {
+                .noRippleClickable {
                     routineViewModel.changeRoutine()
                     navController.navigate("meal_edit_result")},
             contentAlignment = Alignment.Center

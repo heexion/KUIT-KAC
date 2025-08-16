@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +17,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.presentation.navigation.Route.Home
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingStart
 
 @Composable
 fun OnboardingFinalScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onFinish: () -> Unit={}
 ) {
     val scrollState = rememberScrollState()
 
@@ -28,9 +31,12 @@ fun OnboardingFinalScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState) // 스크롤 가능
-            .clickable {
+            .noRippleClickable {
                 // 다음 화면으로 이동
-                navController.navigate(Home.route)
+                onFinish()
+                navController.navigate(Home.route) {
+                    popUpTo(OnboardingStart.route) { inclusive = true }
+                }
             }
     ) {
         Image(

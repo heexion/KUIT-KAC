@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.login.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -114,7 +115,7 @@ fun LoginMainScreen(
                         .calculateBottomPadding()
                 )
                 .size(346.6669f.wp(), 52f.bhp())
-                .clickable { navController.navigate(Route.LoginEmail.route) },
+                .noRippleClickable { navController.navigate(Route.LoginEmail.route) },
             painter = painterResource(id = R.drawable.ic_kakao_login_wide),
             contentDescription = null,
         )

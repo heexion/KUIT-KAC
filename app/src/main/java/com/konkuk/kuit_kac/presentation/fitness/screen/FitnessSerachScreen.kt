@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -116,39 +117,41 @@ fun FitnessSearchScreen(
 
                 Spacer(modifier = Modifier.height(23f.bhp()))
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 72f.bhp()),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF000000),
-                        unfocusedBorderColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF000000)
-                    ),
-                    shape = RoundedCornerShape(30f.bhp()),
-                    singleLine = true,
-                    value = query,
-                    onValueChange = { fitnessViewModel.onQueryChange(it) },
-                    label = {
-                        Text(
-                            text = "무슨 운동을 했어?",
-                            style = DungGeunMo15,
+                OutlinedTextFieldBackground(color = Color(0xFFFFFFFF)) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 72f.bhp()),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF000000),
+                            unfocusedBorderColor = Color(0xFF000000),
+                            cursorColor = Color(0xFF000000)
+                        ),
+                        shape = RoundedCornerShape(30f.bhp()),
+                        singleLine = true,
+                        value = query,
+                        onValueChange = { fitnessViewModel.onQueryChange(it) },
+                        label = {
+                            Text(
+                                text = "무슨 운동을 했어?",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xFF0F0E0E),
+                                modifier = Modifier.padding(horizontal = 20f.wp())
+                            )
+                        },
+                        textStyle = DungGeunMo15.copy(
                             fontSize = 15f.isp(),
-                            color = Color(0xFFB5B5B5),
-                            modifier = Modifier.padding(horizontal = 20f.wp())
+                            color = Color(0xFF000000)
+                        ),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() } // Done 누르면 포커스 해제
                         )
-                    },
-                    textStyle = DungGeunMo15.copy(
-                        fontSize = 15f.isp(),
-                        color = Color(0xFF000000)
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { focusManager.clearFocus() } // Done 누르면 포커스 해제
                     )
-                )
+                }
             }
         }
 
@@ -160,7 +163,7 @@ fun FitnessSearchScreen(
                 SearchBarItem(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
-                        .clickable {
+                        .noRippleClickable {
                         },
                     onClick = {
                         focusManager.clearFocus()
@@ -191,7 +194,7 @@ fun FitnessSearchScreen(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .size(20.dp)
-                        .clickable { showDialog = false }
+                        .noRippleClickable { showDialog = false }
                 )
 
                 Column(
@@ -224,7 +227,7 @@ fun FitnessSearchScreen(
                                 )
                             )
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                            .clickable {
+                            .noRippleClickable {
                                 // TODO: 추가 로직
                                 if (routineViewModel.exerciseRecords.isNotEmpty()) {
                                     val f = selectedItem
@@ -271,7 +274,7 @@ fun FitnessSearchBarItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onClick() } //  Row 전체 클릭 가능
+                .noRippleClickable { onClick() } //  Row 전체 클릭 가능
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -289,7 +292,7 @@ fun FitnessSearchBarItem(
                     tint = Color.Black,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { onDeleteClick() } //  삭제 이벤트 따로 처리
+                        .noRippleClickable { onDeleteClick() } //  삭제 이벤트 따로 처리
                 )
         }
 
@@ -304,3 +307,21 @@ fun FitnessSearchBarItem(
     }
 }
 
+@Composable
+fun OutlinedTextFieldBackground(
+    color: Color,
+    content: @Composable () -> Unit
+) {
+    Box {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 8.dp)
+                .background(
+                    color,
+                    shape = RoundedCornerShape(30f.wp())
+                )
+        )
+        content()
+    }
+}

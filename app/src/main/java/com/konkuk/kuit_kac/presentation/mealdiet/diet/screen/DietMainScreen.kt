@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,6 +70,11 @@ fun DietMainScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                )
+            )
     ) {
         Column(
             modifier = Modifier
@@ -118,7 +124,7 @@ fun DietMainScreen(
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             navController.navigate(Route.Meal.route)
                         },
                     value = "식단 기록"
@@ -135,12 +141,10 @@ fun DietMainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    brush =
-                        Brush.radialGradient(
-                            colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                            radius = 2000f
-                        )
-                ),
+                    brush = Brush.verticalGradient(
+                        listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                    )
+                )
         )
         {
             if (state) {
@@ -148,12 +152,10 @@ fun DietMainScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            brush =
-                                Brush.radialGradient(
-                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                                    radius = 2000f
-                                )
-                        ),
+                            brush = Brush.verticalGradient(
+                                listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                            )
+                        )
                 ) {
                     Column(
                         modifier = Modifier
@@ -214,7 +216,7 @@ fun DietMainScreen(
 //                EllipseNyam(
 //                    modifier = Modifier
 //                        .offset(x = 87f.wp(), y = 174f.bhp())
-//                        .clickable(
+//                        .noRippleClickable(
 //                            onClick = {
 //                                navController.navigate(Route.DietExist.route)
 //                            }
@@ -240,7 +242,7 @@ fun DietMainScreen(
                     EllipseNyam(
                         modifier = Modifier
                             .offset(x = 87f.wp(), y = 174f.bhp())
-                            .clickable(
+                            .noRippleClickable(
                                 onClick = {
                                     navController.navigate(Route.DietExist.route)
                                 }
@@ -258,7 +260,7 @@ fun DietMainScreen(
                     .size(364f.wp(), 49f.bhp())
                     .clip(RoundedCornerShape(24f.bhp()))
                     .border(1.dp, Color.Black, RoundedCornerShape(24f.bhp()))
-                    .clickable { navController.navigate(Route.DietCreate.route) },
+                    .noRippleClickable { navController.navigate(Route.DietCreate.route) },
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -275,7 +277,7 @@ fun DietMainScreen(
                         text = "나만의 식단 생성하기",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
-                        color = Color.Black
+                        color = Color(0xFF000000)
                     )
                 }
             }

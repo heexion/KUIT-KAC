@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -118,7 +119,7 @@ fun FitnessRoutineEditScreen(
                     SelectButton2(
                         modifier = Modifier
                             .size(174f.wp(), 49f.bhp())
-                            .clickable {
+                            .noRippleClickable {
                                 onTabClick("기록")
                             },
                         isSelected = selectedTab == "기록",
@@ -127,7 +128,7 @@ fun FitnessRoutineEditScreen(
                     SelectButton2(
                         modifier = Modifier
                             .size(174f.wp(), 49f.bhp())
-                            .clickable {
+                            .noRippleClickable {
                                 navController.navigate(route = Route.Fitness.route)
                                 onTabClick("나만의")
                             },
@@ -275,7 +276,7 @@ fun FitnessRoutineEditScreen(
                                         )
                                     )
                                 )
-                                .clickable {
+                                .noRippleClickable {
                                     coroutineScope.launch {
                                         pagerState.animateScrollToPage(pagerState.currentPage + 1)
                                     }
@@ -303,7 +304,7 @@ fun FitnessRoutineEditScreen(
                             )
                         )
                         .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
-                        .clickable {
+                        .noRippleClickable {
                             if (routines.isNotEmpty()) {
                                 val current = routines[pagerState.currentPage]
                                 val fitnessItems = current.routineExerciseProfiles.map { p ->
