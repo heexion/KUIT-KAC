@@ -26,10 +26,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,6 +60,9 @@ fun MealTimeScreen(
     val hoursList = (1..12).map { it.toString().padStart(2, '0') }
     val minutesList = (0..59).map { it.toString().padStart(2, '0') }
 
+    val density = LocalDensity.current
+    val itemHeightPx = with(density) { 40f.bhp().toPx().toInt() }
+
     var selectedAmPm by remember { mutableStateOf("오전") }
     var selectedHour by remember { mutableStateOf("09") }
     var selectedMinute by remember { mutableStateOf("00") }
@@ -83,20 +88,29 @@ fun MealTimeScreen(
     val hourState = rememberLazyListState(initialFirstVisibleItemIndex = 500 + hoursList.indexOf(selectedHour))
     val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = 500 + minutesList.indexOf(selectedMinute))
 
-    fun LazyListState.centerIndex(itemSize: Int): Int {
-        return (firstVisibleItemIndex + 1).coerceIn(0, itemSize - 1)
+    // 중앙 인덱스 계산 (offset 포함 보정)
+    fun LazyListState.centerIndex(itemSize: Int, itemHeight: Int): Int {
+        val offset = firstVisibleItemScrollOffset
+        val add = if (offset > itemHeight / 2) 1 else 0
+        return (firstVisibleItemIndex + add).coerceIn(0, itemSize - 1)
     }
 
-    LaunchedEffect(hourState.isScrollInProgress) {
-        if (!hourState.isScrollInProgress) {
-            selectedHour = hourItems[hourState.centerIndex(hourItems.size)]
-        }
+    // 시: 스크롤 중에도 실시간 선택
+    LaunchedEffect(hourState) {
+        snapshotFlow { hourState.firstVisibleItemIndex to hourState.firstVisibleItemScrollOffset }
+            .collect {
+                val center = hourState.centerIndex(hourItems.size, itemHeightPx)
+                selectedHour = hourItems[center]
+            }
     }
 
-    LaunchedEffect(minuteState.isScrollInProgress) {
-        if (!minuteState.isScrollInProgress) {
-            selectedMinute = minuteItems[minuteState.centerIndex(minuteItems.size)]
-        }
+    // 분: 스크롤 중에도 실시간 선택
+    LaunchedEffect(minuteState) {
+        snapshotFlow { minuteState.firstVisibleItemIndex to minuteState.firstVisibleItemScrollOffset }
+            .collect {
+                val center = minuteState.centerIndex(minuteItems.size, itemHeightPx)
+                selectedMinute = minuteItems[center]
+            }
     }
 
     Box(
@@ -291,7 +305,6 @@ fun MealTimeScreen(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
