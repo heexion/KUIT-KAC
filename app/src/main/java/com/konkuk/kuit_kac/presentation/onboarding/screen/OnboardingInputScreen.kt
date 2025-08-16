@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.onboarding.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -105,7 +106,7 @@ fun OnboardingInputScreen(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .size(20.dp)
-                        .clickable { showDialog = false }
+                        .noRippleClickable { showDialog = false }
                 )
 
                 Column(
@@ -379,7 +380,7 @@ fun OnboardingInputScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(33f.bhp()))
+        Spacer(modifier = Modifier.height(20f.bhp()))
 
         // 다음 버튼
         Box(
@@ -624,7 +625,7 @@ fun PlanConfirmButtonCustom(
         modifier = modifier
             .width(126f.wp())
             .height(56f.bhp())
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
     ) {
         Image(
             painter = painterResource(backgroundRes),

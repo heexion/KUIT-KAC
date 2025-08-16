@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -167,7 +168,7 @@ fun MealPatchScreen(
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             navController.navigate(Route.DietCreate.route)
                         },
                     value = "식단 기록"
@@ -313,7 +314,7 @@ fun MealPatchScreen(
                     EllipseNyam(
                         modifier = Modifier
                             .offset(x = 87f.wp(), y = 174f.bhp())
-                            .clickable(
+                            .noRippleClickable(
                                 onClick = {
                                     navController.navigate(Route.DietExist.route)
                                 }

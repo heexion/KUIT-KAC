@@ -5,6 +5,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -161,7 +163,7 @@ fun MealRecordScreen(
                             listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
-                    .clickable(
+                    .noRippleClickable(
                         onClick = { navController.navigate(Route.MealPatch.route) }
                     ),
                 contentAlignment = Alignment.Center
@@ -188,7 +190,7 @@ fun MealRecordScreen(
                             listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
-                    .clickable(
+                    .noRippleClickable(
                         onClick = { navController.navigate(Route.MealSearch.route) }
                     ),
                 contentAlignment = Alignment.Center

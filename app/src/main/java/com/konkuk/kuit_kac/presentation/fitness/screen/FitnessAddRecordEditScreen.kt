@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemCard
@@ -173,7 +175,7 @@ fun FitnessAddRecordEditScreen(modifier: Modifier = Modifier,
                                 cornerRadius = CornerRadius(15.dp.toPx())
                             )
                         }
-                        .clickable(
+                        .noRippleClickable(
                             onClick = {
                                 navController.navigate("FitnessRecordSearch")
                             }
@@ -221,7 +223,7 @@ fun FitnessAddRecordEditScreen(modifier: Modifier = Modifier,
                     )
                 )
                 .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.wp()))
-                .clickable {
+                .noRippleClickable {
                     routineViewModel.setName("오늘의 루틴")
                     routineViewModel.setType("기록")
                     routineViewModel.createRoutine()

@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.fitness.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,7 +38,7 @@ fun FitnessSetAddCard(
             .height(60f.bhp())
             .clip(RoundedCornerShape(20f.bhp()))
             .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())) // 테두리만 있음
-            .clickable { onClick() },
+            .noRippleClickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Row(

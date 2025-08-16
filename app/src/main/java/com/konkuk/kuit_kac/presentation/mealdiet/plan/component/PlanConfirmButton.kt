@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 
 import androidx.compose.foundation.Image
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +36,7 @@ fun PlanConfirmButton(
         modifier = modifier
             .fillMaxWidth()
             .height(height.bhp())
-            .clickable { if (isAvailable) onClick() }
+            .noRippleClickable { if (isAvailable) onClick() }
     ) {
         Image(
             modifier = Modifier

@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -34,7 +33,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
-import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDelivery
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -89,7 +87,7 @@ fun OnboardingNyamCoachScreen(
             )
             Text(
                 text = bubbleText,
-                style = DungGeunMo20.copy(fontSize = bubbleFontSize, lineHeight = 28.sp),
+                style = DungGeunMo20.copy(fontSize = bubbleFontSize),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -111,24 +109,24 @@ fun OnboardingNyamCoachScreen(
                 .padding(top = 324.9f.bhp())
         )
 
-        // 캐릭터 이미지
-//        NyamCoach(
-//            modifier = Modifier
-//                .align(Alignment.TopCenter)
-//                .padding(top = 350f.bhp())
-//                .size(width = 198.31f.wp(), height = 244.866f.bhp())
-//        )
+         //캐릭터 이미지
+        NyamCoach(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 350f.bhp())
+                .size(width = 198.31f.wp(), height = 244.866f.bhp())
+        )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            NyameeGif(
-                modifier=Modifier.padding(top = 250f.bhp(), start = 5f.wp()),
-                num = 1,
-                sizePercent = 1f
-            )
-        }
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.Center
+//        ) {
+//            NyameeGif(
+//                modifier=Modifier.padding(top = 250f.bhp(), start = 5f.wp()),
+//                num = 1,
+//                sizePercent = 1f
+//            )
+//        }
 
         // 그림자 이미지
         Image(

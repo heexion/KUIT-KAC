@@ -1,7 +1,6 @@
 package com.konkuk.kuit_kac.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,11 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 
@@ -45,7 +43,7 @@ fun DefaultButton(
         modifier = modifier
             .fillMaxWidth()
             .height(buttonHeight.bhp())
-            .clickable { onclick() }
+            .noRippleClickable { onclick() }
     ) {
         Image(
             modifier = Modifier

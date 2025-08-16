@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -110,31 +111,36 @@ fun FitnessRoutineSearchScreen(
                 }
 
                 Spacer(modifier = Modifier.height(23f.bhp()))
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 72f.bhp()),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF000000),
-                        unfocusedBorderColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF000000)
-                    ),
-                    shape = RoundedCornerShape(30f.bhp()),
-                    singleLine = true,
-                    value = query,
-                    onValueChange = { fitnessViewModel.onQueryChange(it) },
-                    label = { Text(
-                        text = "무슨 음식을 먹었어?",
-                        style = DungGeunMo15,
-                        fontSize = 15f.isp(),
-                        color = Color(0xFFB5B5B5),
-                        modifier = Modifier.padding(horizontal = 20f.wp())
-                    ) },
-                    textStyle = DungGeunMo15.copy(
-                        fontSize = 15f.isp(),
-                        color = Color(0xFF000000)
+                OutlinedTextFieldBackground(color = Color(0xFFFFFFFF)) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 72f.bhp())
+                            .background(color = Color(0xffFFFFFF), RoundedCornerShape(30f.bhp())),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF000000),
+                            unfocusedBorderColor = Color(0xFF000000),
+                            cursorColor = Color(0xFF000000)
+                        ),
+                        shape = RoundedCornerShape(30f.bhp()),
+                        singleLine = true,
+                        value = query,
+                        onValueChange = { fitnessViewModel.onQueryChange(it) },
+                        label = {
+                            Text(
+                                text = "무슨 운동을 했어?",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xFF0F0E0E),
+                                modifier = Modifier.padding(horizontal = 20f.wp())
+                            )
+                        },
+                        textStyle = DungGeunMo15.copy(
+                            fontSize = 15f.isp(),
+                            color = Color(0xFF000000)
+                        )
                     )
-                )
+                }
             }
         }
 
@@ -174,7 +180,7 @@ fun FitnessRoutineSearchScreen(
                         .align(Alignment.TopEnd)
                         // .padding(top = 4.dp, end = 4.dp)
                         .size(20.dp)
-                        .clickable { showDialog = false }
+                        .noRippleClickable { showDialog = false }
                 )
 
                 Column(
@@ -208,7 +214,7 @@ fun FitnessRoutineSearchScreen(
                                 )
                             )
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                            .clickable {
+                            .noRippleClickable {
                                 // TODO: 추가 로직
                                     val f = selectedItem
                                     if (f != null) {

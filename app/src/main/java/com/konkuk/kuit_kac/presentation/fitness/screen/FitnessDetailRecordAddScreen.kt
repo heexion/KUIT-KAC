@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -304,7 +305,7 @@ fun FitnessDetailCard(
                     .height(84f.bhp())
                     .clip(RoundedCornerShape(15f.bhp()))
                     .background(color = Color(0xFFFFFFFF))
-                    .clickable {
+                    .noRippleClickable {
                         navController.navigate(Route.FitnessSearch.route)
                     }
                     .drawBehind {

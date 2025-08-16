@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.onboarding.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,7 @@ fun ModeSelectButton(
         modifier = modifier
             .width(364f.wp())
             .height(85f.bhp())
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
     ) {
         // 배경 이미지
         Image(

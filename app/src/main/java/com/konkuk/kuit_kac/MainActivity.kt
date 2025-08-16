@@ -16,7 +16,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -39,6 +38,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFitness
@@ -185,7 +185,22 @@ class MainActivity : ComponentActivity() {
                     Route.FitnessCreate.route,
                     Route.MealPatch.route,
                     Route.DietPatch.route,
-                    Route.LoginEmail.route
+                    Route.LoginEmail.route,
+
+                    // Onboarding 화면들
+                    Route.OnboardingDiet.route,
+                    Route.OnboardingFailEx.route,
+                    Route.OnboardingAppetite.route,
+                    Route.OnboardingWeek.route,
+                    Route.OnboardingPreferType.route,
+                    Route.OnboardingDietSpeed.route,
+                    Route.OnboardingActivityLevel.route,
+                    Route.OnboardingInput.route,
+                    Route.OnboardingInputResult.route,
+                    Route.OnboardingIntroduce.route,
+                    Route.OnboardingHamCoach.route,
+                    Route.OnboardingNyamCoach.route,
+                    Route.OnboardingDelivery.route
                 )
                 val planButtonRoutes = setOf(
                     Route.Home.route,
@@ -238,7 +253,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(start = 24.dp, top = 58.dp)
                                 .size(24.dp)
                                 .align(Alignment.TopStart)
-                                .clickable { navController.popBackStack() },
+                                .noRippleClickable { navController.popBackStack() },
                             painter = painterResource(id = R.drawable.ic_back_arrow),
                             contentDescription = "",
                         )
@@ -250,7 +265,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(end = 25f.wp(), bottom = 93f.bhp())
                                 .size(61f.wp(), 61f.bhp())
                                 .align(Alignment.BottomEnd)
-                                .clickable {
+                                .noRippleClickable {
                                     navController.navigate(Route.PlanDiet.route) {
                                         popUpTo(navController.graph.startDestinationId) {
                                             inclusive = false

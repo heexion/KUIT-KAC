@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +35,6 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.Fitness
-import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 data class FitnessItemData(
@@ -92,7 +92,7 @@ fun FitnessRecordCard(
                 Box(
                     modifier = Modifier
                         .size(30.16f.wp(), 29.66f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             onEditClick()
                         }
                 ) {
@@ -142,8 +142,7 @@ fun FitnessRecordCard(
                         FitnessName = item.name,
                         FitnessAmount = 2,
                         FitnessKcal = 110,
-                        onDeleteClick = {},
-                        isEditable = isEditable
+                        onDeleteClick = {}
                     )
                 }
             }

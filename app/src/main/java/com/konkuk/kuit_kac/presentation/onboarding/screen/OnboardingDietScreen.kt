@@ -18,6 +18,7 @@ import com.konkuk.kuit_kac.component.DefaultButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFailEx
 
 @Composable
@@ -50,7 +51,7 @@ fun OnboardingDietScreen(
                 buttonHeight = 70f,
                 isOrange = false,
                 onClick = {
-                    navController.navigate(OnboardingFailEx.route)
+                    navController.navigate(OnboardingAppetite.route)
                 }
             )
             DefaultButton(
