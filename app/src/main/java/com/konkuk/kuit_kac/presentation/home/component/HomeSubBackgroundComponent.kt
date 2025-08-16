@@ -43,7 +43,7 @@ fun HomeSubBackgroundComponent(modifier: Modifier = Modifier) {
         )
         Image(
             modifier = Modifier
-                .offset(y = -10f.bhp())
+                .offset(y = -20f.bhp())
                 .blur(radius = 3.799999952316284f.wp())
                 .width(508.22656f.wp())
                 .height(195.5752f.bhp()),

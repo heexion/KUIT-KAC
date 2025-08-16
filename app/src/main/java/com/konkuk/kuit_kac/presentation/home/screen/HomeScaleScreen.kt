@@ -94,7 +94,7 @@ fun HomeScaleScreen(
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73f.hp())
+                .offset(y = 400.73f.hp())
         )
         val scale = remember { Animatable(1f) }
         LaunchedEffect(clicked.value) {

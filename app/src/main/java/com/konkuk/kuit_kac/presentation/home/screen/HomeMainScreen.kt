@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.NyamNyamNyom
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -73,9 +74,7 @@ fun HomeMainScreen(
 
     // 로딩 상태 처리
     /*if (summary == null) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
+        NyamNyamNyom()
         return
     }*/
 
@@ -103,7 +102,7 @@ fun HomeMainScreen(
                 onClick = {
                     navController.navigate(Route.HomeNutrition.route)
                 },
-                modifier = Modifier.offset(x = 60f.wp(), y = 60f.bhp()),
+                modifier = Modifier.offset(x = 60f.wp(), y = 30f.bhp()),
                 num = randNum,
                 sizePercent = 0.93f
             )

@@ -61,7 +61,7 @@ fun HomeBackgroundComponent(
         )
             Image(
                 modifier = Modifier
-                    .requiredSize(529f.wp(), 264.5f.bhp()),
+                    .requiredSize(750f.wp(), 317.2f.bhp()),
                 painter = painterResource(R.drawable.home_background_bottom),
                 contentDescription = "homescreen background"
             )

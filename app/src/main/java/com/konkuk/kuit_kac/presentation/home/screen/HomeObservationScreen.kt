@@ -71,7 +71,7 @@ fun HomeObservationScreen(
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73f.bhp())
+                .offset(y = 400.73f.bhp())
         )
 
         Row(
