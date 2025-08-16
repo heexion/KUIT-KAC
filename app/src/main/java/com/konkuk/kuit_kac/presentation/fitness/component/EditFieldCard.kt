@@ -68,7 +68,7 @@ fun EditFieldCard(
                     value = value,
                     onValueChange = { input ->
                         val digitsOnly = input.filter { it.isDigit() }
-                        onValueChange(if (digitsOnly.isEmpty()) "0" else digitsOnly)
+                        onValueChange(if (digitsOnly.isEmpty()) "" else digitsOnly)
                     },
                     textStyle = DungGeunMo15.copy(
                         color = Color(0xFF000000),
@@ -82,6 +82,7 @@ fun EditFieldCard(
                         .padding(end = 4f.wp())
                         .background(Color(0xFFFFFFFF))
                 )
+
 
                 Text(
                     text = unitLabel,

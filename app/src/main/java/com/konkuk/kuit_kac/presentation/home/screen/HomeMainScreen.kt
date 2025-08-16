@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.home.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -60,15 +61,15 @@ fun HomeMainScreen(
     var randNum by remember { mutableIntStateOf(1) }
     val isLate = true
     var hamcoachNum by remember { mutableIntStateOf(1) }
-    
-    LaunchedEffect(userId) {
-        viewModel.loadSummary(userId)
+    Log.d("HomeMainScreen", summary?.dailyKcalorieGoal.toString())
+    /*LaunchedEffect(Unit) {
+        viewModel.getSummary(userId)
         if (!isLate) randNum = Random.nextInt(3) + 1
         else {
             randNum = 4
             hamcoachNum = 3
         }
-    }
+    */
 
     // 로딩 상태 처리
     if (summary == null) {

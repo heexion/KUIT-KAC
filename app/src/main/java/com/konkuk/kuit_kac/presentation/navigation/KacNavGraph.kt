@@ -142,7 +142,7 @@ fun KacNavGraph(
 ) {
     val context = LocalContext.current
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-    val isFirstLaunch = prefs.getBoolean("isFirstLaunch", true)
+    val isFirstLaunch = prefs.getBoolean("isFirstLaunch", false)
 
     NavHost(
         navController = navController,
