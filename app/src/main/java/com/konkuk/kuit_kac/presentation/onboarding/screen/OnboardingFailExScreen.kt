@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -35,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
@@ -83,35 +84,43 @@ fun OnboardingFailExScreen(
         ) {
             // 위에 선택 버튼들 항상 표시
             Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
-                SelectButton(
+                DietSelectButton(
                     value = options[0],
                     isSelected = selectedOptions.contains(options[0]),
                     buttonHeight = 70,
                     onClick = { toggle(options[0]) },
-                    modifier = Modifier.width(174f.wp())
+                    modifier = Modifier
+                        .width(174f.wp())
+                        .clip(RoundedCornerShape(20f.bhp()))
                 )
-                SelectButton(
+                DietSelectButton(
                     value = options[1],
                     isSelected = selectedOptions.contains(options[1]),
                     buttonHeight = 70,
                     onClick = { toggle(options[1]) },
-                    modifier = Modifier.width(174f.wp())
+                    modifier = Modifier
+                        .width(174f.wp())
+                        .clip(RoundedCornerShape(20f.bhp()))
                 )
             }
             Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
-                SelectButton(
+                DietSelectButton(
                     value = options[2],
                     isSelected = selectedOptions.contains(options[2]),
                     buttonHeight = 70,
                     onClick = { toggle(options[2]) },
-                    modifier = Modifier.width(174f.wp())
+                    modifier = Modifier
+                        .width(174f.wp())
+                        .clip(RoundedCornerShape(20f.bhp()))
                 )
-                SelectButton(
+                DietSelectButton(
                     value = options[3],
                     isSelected = selectedOptions.contains(options[3]),
                     buttonHeight = 70,
                     onClick = { toggle(options[3]) },
-                    modifier = Modifier.width(174f.wp())
+                    modifier = Modifier
+                        .width(174f.wp())
+                        .clip(RoundedCornerShape(20f.bhp()))
                 )
             }
 
@@ -145,6 +154,42 @@ fun OnboardingFailExScreen(
     }
 }
 
+//선택 됐을때 이미지 받으면 수정해야함
+@Composable
+fun DietSelectButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    isSelected: Boolean = false,
+    value: String,
+    buttonHeight: Int,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(buttonHeight.toFloat().bhp())
+            .clip(RoundedCornerShape(20f.bhp())) // 둥근 모서리 적용
+            .clickable { onClick() }
+    ) {
+        // 배경 이미지는 항상 같은 거 사용
+        Image(
+            painter = painterResource(R.drawable.img_dietfail_button),
+            contentDescription = "select button",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize()
+        )
+
+        // 텍스트
+        Text(
+            text = value,
+            style = DungGeunMo20,
+            fontSize = 20f.isp(),
+            lineHeight = 28f.isp(),
+            color =  Color(0xFF000000),
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
 @Composable
 fun ConfirmButton(
     modifier: Modifier = Modifier,
@@ -161,7 +206,7 @@ fun ConfirmButton(
     val image = if (isAvailable || isEditingFinished) {
         R.drawable.bg_plan_confirm_button_selected
     } else {
-        R.drawable.bg_confirmbutton
+        R.drawable.img_diet_confirm_button
     }
 
     Box(
