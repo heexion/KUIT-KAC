@@ -88,7 +88,7 @@ fun PlanCalendar(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.noRippleClickable {
-                    tempDates=taggedDATES
+                    tempDates = taggedDATES
                     selectedDate = null
                     pinkClicked.value = false
                     blueClicked.value = false
@@ -267,12 +267,20 @@ fun PlanCalendar(
                                                 )
                                         )
                                     else {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
-                                            modifier = Modifier.size(39f.wp(), 39f.bhp()),
-                                            contentScale = ContentScale.FillBounds,
-                                            contentDescription = null,
-                                        )
+                                        if (tags.isNotEmpty()) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.ic_plan_date_default_selected_tag),
+                                                modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                                contentScale = ContentScale.FillBounds,
+                                                contentDescription = null,
+                                            )
+                                        } else
+                                            Image(
+                                                painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
+                                                modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                                contentScale = ContentScale.FillBounds,
+                                                contentDescription = null,
+                                            )
                                     }
                                 }
                                 Text(
