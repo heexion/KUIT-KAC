@@ -37,7 +37,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 fun FitnessTopBarWithSearch(
     title: String,
     placeholderText: String = "무슨 운동을 했어?",
-    placeholderTextColor: Color = Color(0xFFB5B5B5),
+    placeholderTextColor: Color = Color(0xFF0F0E0E),
     placeholderTextStyle: TextStyle = DungGeunMo15,
     showClearButton: Boolean = false,
     onBackClick: () -> Unit,
@@ -129,7 +129,7 @@ fun PreviewFitnesslTopBarWithSearch() {
     FitnessTopBarWithSearch(
         title = "루틴 추가하기",
         placeholderText = "무슨 운동을 했어?",
-        placeholderTextColor = Color.Gray,
+        placeholderTextColor = Color(0xFF0F0E0E),
         placeholderTextStyle = DungGeunMo17,
         onBackClick = {},
         onSearchClick = {},

@@ -135,7 +135,7 @@ fun FitnessSearchScreen(
                             text = "무슨 운동을 했어?",
                             style = DungGeunMo15,
                             fontSize = 15f.isp(),
-                            color = Color(0xFFB5B5B5),
+                            color = Color(0xFF0F0E0E),
                             modifier = Modifier.padding(horizontal = 20f.wp())
                         )
                     },
