@@ -40,7 +40,7 @@ fun MealTopBarWithSearch(
     modifier: Modifier,
     title: String,
     placeholderText: String = "무슨 음식을 먹었어?",
-    placeholderTextColor: Color = Color(0xFFB5B5B5),
+    placeholderTextColor: Color = Color(0xFF0F0E0E),
     placeholderTextStyle: TextStyle = DungGeunMo15,
     showClearButton: Boolean = false,
     onBackClick: () -> Unit,
@@ -136,7 +136,7 @@ fun PreviewMealTopBarWithSearch() {
     MealTopBarWithSearch(
         title = "식단 검색하기",
         placeholderText = "무슨 음식을 먹었어?",
-        placeholderTextColor = Color.Gray,
+        placeholderTextColor = Color(0xFF0F0E0E),
         placeholderTextStyle = DungGeunMo17,
         onBackClick = {},
         onSearchClick = {},

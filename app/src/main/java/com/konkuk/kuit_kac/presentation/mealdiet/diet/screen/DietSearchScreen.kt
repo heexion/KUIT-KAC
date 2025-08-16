@@ -116,7 +116,7 @@ fun DietSearchScreen(
                             text = "무슨 음식을 먹었어?",
                             style = DungGeunMo15,
                             fontSize = 15f.isp(),
-                            color = Color(0xFFB5B5B5),
+                            color = Color(0xFF0F0E0E),
                             modifier = Modifier.padding(horizontal = 20f.wp())
                         )
                     },
