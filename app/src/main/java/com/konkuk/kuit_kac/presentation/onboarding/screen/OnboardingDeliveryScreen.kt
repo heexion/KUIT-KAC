@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -59,90 +60,92 @@ fun OnboardingDeliveryScreen(
                 )
             )
     ) {
-        HorizontalPager(state = pagerState) { page ->
-            Box(modifier = Modifier.fillMaxSize()) {
-                // 타이틀
-                Text(
-                    text = "냠코치",
-                    style = DungGeunMo20,
-                    fontSize = 20f.isp(),
-                    color = Color(0xFF713E3A),
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 20f.bhp())
-                )
+        // 👇 배경이나 텍스트는 Pager 밖 (고정됨)
+        // 타이틀
+        Text(
+            text = "냠코치",
+            style = DungGeunMo20,
+            fontSize = 20f.isp(),
+            color = Color(0xFF713E3A),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 20f.bhp())
+        )
 
-                // 배경 텍스트 박스
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 22f.bhp())
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.bg_onboarding_text),
-                        contentDescription = "텍스트 배경",
-                        modifier = Modifier
-                            .width(429.8f.wp())
-                            .height(144.8f.bhp())
-                    )
-                    Text(
-                        text = "배달 습관?\n냠코치가 바로 잡아줄게!",
-                        style = DungGeunMo24.copy(fontSize = 24f.isp()),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(horizontal = 16f.wp())
-                    )
-                }
-
-                // 페이지마다 다른 설명 텍스트
-                val detailText = when (page) {
-                    0 -> "식단이 비어 있을 땐, 배달 주문 알림을\n보고 내가 먼저 물어볼게!"
-                    else -> "오늘 식단 기록 끝났는데 또 배달?\n냠코치가 관리해줄게!"
-                }
-
-                Text(
-                    text = detailText,
-                    style = DungGeunMo17.copy(fontSize = 17f.isp()),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = (22f + 144.8f + 8f).bhp())
-                )
-
-                // 스마트폰 이미지
-                val imageRes = if (page == 0) R.drawable.bg_phone_1 else R.drawable.bg_phone
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = "배달 알림 예시",
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .width(333f.wp())
-                        .height(604f.bhp())
-                )
-
-                // RecordButton
-                RecordButton(
-                    value = "잘 알겠어!",
-                    onClick = {
-                        navController.navigate(OnboardingMainHomeHam.route)
-                    },
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .offset(y = (-80f).bhp())
-                        .height(65f.bhp())
-                )
-            }
+        // 배경 텍스트 박스
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 22f.bhp())
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.bg_onboarding_text),
+                contentDescription = "텍스트 배경",
+                modifier = Modifier
+                    .width(429.8f.wp())
+                    .height(144.8f.bhp())
+            )
+            Text(
+                text = "배달 습관?\n냠코치가 바로 잡아줄게!",
+                style = DungGeunMo24.copy(fontSize = 24f.isp()),
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 16f.wp())
+            )
         }
+
+        // 페이지마다 다른 설명 텍스트
+        val detailText = when (pagerState.currentPage) {
+            0 -> "식단이 비어 있을 땐, 배달 주문 알림을\n보고 내가 먼저 물어볼게!"
+            else -> "오늘 식단 기록 끝났는데 또 배달?\n냠코치가 관리해줄게!"
+        }
+        Text(
+            text = detailText,
+            style = DungGeunMo17.copy(fontSize = 17f.isp()),
+            color = Color(0xFF000000),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = (22f + 144.8f + 8f).bhp())
+        )
+
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .width(333f.wp())
+                .height(604f.bhp())
+        ) { page ->
+            val imageRes = if (page == 0) R.drawable.bg_phone_1 else R.drawable.bg_phone
+            Image(
+                painter = painterResource(id = imageRes),
+                contentDescription = "배달 알림 예시",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        // RecordButton
+        RecordButton(
+            value = "잘 알겠어!",
+            onClick = {
+                navController.navigate(OnboardingMainHomeHam.route)
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .offset(y = (-80f).bhp())
+                .height(65f.bhp())
+        )
 
         // 인디케이터
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 40f.bhp()),
+                .padding(bottom = 40f.bhp())
+                .alpha(0f),
             horizontalArrangement = Arrangement.spacedBy(8f.wp())
         ) {
             repeat(2) { index ->
@@ -150,7 +153,10 @@ fun OnboardingDeliveryScreen(
                     modifier = Modifier
                         .size(8f.wp())
                         .clip(CircleShape)
-                        .background(Color(0x00000000)) // Transparent
+                        .background(
+                            if (pagerState.currentPage == index) Color.Black
+                            else Color(0x33000000)
+                        )
                 )
             }
         }
