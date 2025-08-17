@@ -191,6 +191,20 @@ class MainActivity : ComponentActivity() {
                     Route.MealTemp.route,
                     Route.MealEditTemp.route,
 
+                    Route.MealEditResult.route,
+                    Route.MealEditSearchItem.route,
+                    Route.MealEditSearch.route,
+                    Route.MealEditTime.route,
+                    Route.MealMain.route,
+                    Route.MealSearchItemDetail.route,
+                    Route.TimeInputResult.route,
+
+                    Route.DietEditSearchItem.route,
+                    Route.DietEditSerch.route,
+                    Route.DietEditTemp.route,
+                    Route.DietMain.route,
+                    Route.DietSearchItemDetail.route,
+
                     // 식단 계획 관련
                     Route.PlanDiet.route,
                     Route.PlanAI.route,
@@ -212,6 +226,13 @@ class MainActivity : ComponentActivity() {
                     Route.FitnessFastInput.route,
                     Route.FitnessDetailRecordAdd.route,
                     Route.FitnessDetailInput.route,
+                    Route.FitnessRecordScreen.route,
+                    Route.FitnessDetailRecord("sample").route,
+                    Route.FitnessAddDetailRecord.route,
+                    Route.FitnessAddRecordEdit.route,
+                    Route.FitnessRecordMain.route,
+                    Route.FitnessRoutineDetailInput.route,
+
 
                     // 온보딩 관련
                     Route.OnboardingDiet.route,

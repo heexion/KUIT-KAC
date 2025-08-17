@@ -8,6 +8,12 @@ sealed class Route(val route: String) {
     data object DietPatch : Route(route = "DietPatch")
     data object DietSearch : Route(route = "DietSearch")
 
+    data object DietEditSearchItem : Route(route = "DietEditSearchItem")
+    data object DietEditSerch : Route(route = "DietEditSerch")
+    data object DietEditTemp : Route(route = "DietEditTemp")
+    data object DietMain : Route(route = "DietMain")
+    data object DietSearchItemDetail : Route(route = "DietSearchItemDetail")
+
     data object Meal : Route(route = "meal")
     data object MealExist: Route(route = "MealExist") // 나중에 삭제
     data object MealPatch: Route(route = "MealPatch")
@@ -21,6 +27,14 @@ sealed class Route(val route: String) {
     data object MealSearch: Route(route = "MealSearch")
     data object MealTemp: Route(route = "MealTemp")
     data object MealEditTemp: Route(route = "MealEditTemp")
+
+    data object MealEditResult : Route(route = "MealEditResult")
+    data object MealEditSearchItem : Route(route = "MealEditSearchItem")
+    data object MealEditSearch : Route(route = "MealEditSearch")
+    data object MealEditTime : Route(route = "MealEditTime")
+    data object MealMain : Route(route = "MealMain")
+    data object MealSearchItemDetail : Route(route = "MealSearchItemDetail")
+    data object TimeInputResult : Route(route = "TimeInputResult")
 
     data object PlanDiet : Route(route = "PlanDiet") // 식단 계획
     data object PlanAI : Route(route = "PlanAI") // 식단 AI 추천
@@ -51,6 +65,12 @@ sealed class Route(val route: String) {
     data object FitnessFastInput : Route(route = "fitness_fast_input")
     data object FitnessDetailRecordAdd : Route("fitness_detail_add")
     data object FitnessDetailInput : Route(route = "fitness_detail_input")
+    data object FitnessRecordScreen : Route(route = "fitness_record_screen")
+    data object FitnessAddDetailRecord : Route(route = "fitness_add_detail_record")
+    data object FitnessAddRecordEdit : Route(route = "fitness_add_record_edit")
+    data object FitnessRecordMain : Route(route = "fitness_record_main")
+    data object FitnessRoutineDetailInput : Route(route = "fitness_routine_detail_input")
+
 
     //온보딩
     data object OnboardingStart : Route(route = "onboarding_start")
