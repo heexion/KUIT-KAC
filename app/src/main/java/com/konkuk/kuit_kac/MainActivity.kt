@@ -170,24 +170,50 @@ class MainActivity : ComponentActivity() {
 
 
                 val backArrowRoutes = setOf(
-                    // 여기다가 뒤로가기 버튼 있으면 추가
+                    // 홈 관련
                     Route.HomeNutrition.route,
-//                    Route.HomeAnalysis.route,
                     Route.HomeObservation.route,
                     Route.HomeScale.route,
-                    Route.DietCreate.route,
-                    "plan_ai_detail",
-                    Route.PlanCheck.route,
-                    Route.MealSearch.route,
-                    Route.MealTime.route,
-                    Route.FitnessEdit.route,
-                    Route.FitnessSearch.route,
-                    Route.FitnessCreate.route,
-                    Route.MealPatch.route,
-                    Route.DietPatch.route,
-                    Route.LoginEmail.route,
+                    Route.HomeScaleInput.route,
+                    Route.HomeResult.route,
 
-                    // Onboarding 화면들
+                    // 식단/식사 관련
+                    Route.DietCreate.route,
+                    Route.DietExist.route,
+                    Route.DietPatch.route,
+                    Route.DietSearch.route,
+                    Route.MealTime.route,
+                    Route.MealRecord.route,
+                    Route.MealExist.route,
+                    Route.MealPatch.route,
+                    Route.MealFastingResult.route,
+                    Route.MealSearch.route,
+                    Route.MealTemp.route,
+                    Route.MealEditTemp.route,
+
+                    // 식단 계획 관련
+                    Route.PlanDiet.route,
+                    Route.PlanAI.route,
+                    Route.PlanInPerson.route,
+                    Route.PlanCheck.route,
+                    "plan_ai_detail",
+
+                    // 운동 관련
+                    Route.Fitness.route,
+                    Route.FitnessExist.route,
+                    Route.FitnessCreate.route,
+                    Route.FitnessSearch.route,
+                    Route.FitnessEdit.route,
+                    Route.FitnessEditResult.route,
+                    Route.FitnessRecordEdit.route,
+                    Route.FitnessRoutineEdit.route,
+                    Route.FitnessRecordResult.route,
+                    Route.FitnessRoutineSearch.route,
+                    Route.FitnessFastInput.route,
+                    Route.FitnessDetailRecordAdd.route,
+                    Route.FitnessDetailInput.route,
+
+                    // 온보딩 관련
                     Route.OnboardingDiet.route,
                     Route.OnboardingFailEx.route,
                     Route.OnboardingAppetite.route,
@@ -200,8 +226,24 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingIntroduce.route,
                     Route.OnboardingHamCoach.route,
                     Route.OnboardingNyamCoach.route,
-                    Route.OnboardingDelivery.route
+                    Route.OnboardingDelivery.route,
+                    Route.OnboardingMainHomeHam.route,
+                    Route.OnboardingMainHomeNyam.route,
+                    Route.OnboardingMainHomeScale.route,
+                    Route.OnboardingAiMeal.route,
+                    Route.OnboardingMeal.route,
+                    Route.OnboardingAiIntro.route,
+                    Route.OnboardingGray.route,
+                    Route.OnboardingYellow.route,
+                    Route.OnboardingEoDrink.route,
+                    Route.OnboardingCheck.route,
+                    Route.OnboardingFinal.route,
+                    Route.OnboardingFloatingButton.route,
+
+                    // 로그인 관련
+                    Route.LoginEmail.route
                 )
+
                 val planButtonRoutes = setOf(
                     Route.Home.route,
                     Route.HomeNutrition.route,
