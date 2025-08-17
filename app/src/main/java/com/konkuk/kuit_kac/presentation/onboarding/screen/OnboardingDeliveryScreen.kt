@@ -60,7 +60,7 @@ fun OnboardingDeliveryScreen(
                 )
             )
     ) {
-        // 👇 배경이나 텍스트는 Pager 밖 (고정됨)
+
         // 타이틀
         Text(
             text = "냠코치",
