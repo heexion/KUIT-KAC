@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -23,6 +24,11 @@ fun OnboardingCheckScreen(
     navController: NavHostController
 ) {
     val scrollState = rememberScrollState()
+
+    // 처음 진입 시 스크롤 위치 조정
+    LaunchedEffect(Unit) {
+        scrollState.scrollTo(100)
+    }
 
     Column(
         modifier = modifier
