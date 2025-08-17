@@ -3,8 +3,6 @@ package com.konkuk.kuit_kac.presentation.onboarding.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
@@ -133,13 +132,13 @@ fun OnboardingInputScreen(
                         ) {
                             // 수정하기 버튼
                             PlanConfirmButtonCustom(
-                                backgroundRes = R.drawable.bg_onboarding_input_edit_button,
+                                backgroundRes = R.drawable.bg_onboarding_input_edit_button2,
                                 onClick = { showDialog = false }
                             )
 
                             // 진행하기 버튼
                             PlanConfirmButtonCustom(
-                                backgroundRes = R.drawable.bg_onboarding_input_go_button,
+                                backgroundRes = R.drawable.bg_onboarding_input_go_button2,
                                 onClick = {
                                     showDialog = false
                                     proceedNext()
