@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.Loading
 import com.konkuk.kuit_kac.component.NyamNyamNyom
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
@@ -74,7 +76,7 @@ fun HomeMainScreen(
 
     // 로딩 상태 처리
     /*if (summary == null) {
-        NyamNyamNyom()
+        Loading()
         return
     }*/
 
@@ -102,7 +104,7 @@ fun HomeMainScreen(
                 onClick = {
                     navController.navigate(Route.HomeNutrition.route)
                 },
-                modifier = Modifier.offset(x = 60f.wp(), y = 30f.bhp()),
+                modifier = Modifier.offset(x = 60f.wp(), y = 60f.bhp()),
                 num = randNum,
                 sizePercent = 0.93f
             )
@@ -153,7 +155,12 @@ fun HomeMainScreen(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                     )
                 )
-                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp())),
+                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
+                .clickable (
+                    onClick = {
+                        navController.navigate("NyamNyamNyom")
+                    }
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

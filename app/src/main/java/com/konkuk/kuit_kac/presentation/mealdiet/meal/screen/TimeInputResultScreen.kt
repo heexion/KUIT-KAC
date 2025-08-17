@@ -121,7 +121,7 @@ fun TimeInputResultScreen(
         )
         NyameeGif(
             modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
-            num = 5,
+            num = 7,
             sizePercent = 1.35f
         )
 
