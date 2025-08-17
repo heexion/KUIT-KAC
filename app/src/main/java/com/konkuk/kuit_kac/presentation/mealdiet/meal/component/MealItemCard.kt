@@ -1,11 +1,8 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +28,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
@@ -43,7 +41,8 @@ fun MealItemCard(
     foodName: String,
     foodAmount: Float,
     foodKcal: Int,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    showDeleteButton: Boolean = true
 ) {
     var amountText = "${foodAmount}개"
     // Todo: 추후에 음식 종류 선별해서 개/ml/접시 등등으로 바꿔야 함
@@ -65,7 +64,7 @@ fun MealItemCard(
         Image(
             painter = painterResource(image),
             contentDescription = "",
-            modifier = Modifier.size(68f.wp(),68f.bhp())
+            modifier = Modifier.size(68f.wp(), 68f.bhp())
         )
 
         Spacer(modifier = Modifier.width(12f.wp()))
@@ -95,15 +94,19 @@ fun MealItemCard(
             )
         }
 
-        IconButton(
-            onClick = onDeleteClick,
-            modifier = Modifier.padding(end = 3f.wp()).size(24f.wp(),24f.bhp())
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_close),
-                contentDescription = "삭제",
-                tint = Color(0xFF999999)
-            )
+        if (showDeleteButton) {
+            IconButton(
+                onClick = onDeleteClick,
+                modifier = Modifier
+                    .padding(end = 3f.wp())
+                    .size(24f.wp(), 24f.bhp())
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_close),
+                    contentDescription = "삭제",
+                    tint = Color(0xFF999999)
+                )
+            }
         }
     }
 }

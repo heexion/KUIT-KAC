@@ -166,7 +166,8 @@ fun DietMainScreen(
                             navController = navController,
                             modifier = Modifier.padding(top = 28f.bhp(), start = 24f.wp()),
                             dietList ?: emptyList(),
-                            pagerState = pagerState
+                            pagerState = pagerState,
+                            showDeleteButton = false
                         )
                         Spacer(
                             modifier = Modifier.size(
