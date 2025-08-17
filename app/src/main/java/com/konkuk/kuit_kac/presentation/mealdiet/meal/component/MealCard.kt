@@ -6,8 +6,6 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +15,7 @@ import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -44,6 +44,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -117,22 +118,43 @@ fun MealCard(
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
                     modifier = Modifier
-                        .size(30.16f.wp(), 29.66f.bhp())
-                        .noRippleClickable { onEditClick() }
+                        .padding(top = 22f.bhp(), start = 13.9f.wp())
+                        .size(26.75811f.wp(), 26.75811f.bhp())
+                        .clip(RoundedCornerShape(13.27905f.bhp()))
+                        .border(
+                            width = 1.dp,
+                            shape = RoundedCornerShape(13.27905f.bhp()),
+                            color = Color(0xff000000)
+                        )
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
+                            )
+                        )
+                        .noRippleClickable { onEditClick() },
+                    contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_button_pencil),
-                        contentDescription = "Edit Button",
-                        modifier = Modifier.matchParentSize()
-                    )
+                    // 레코드 아이콘 (배경 역할)
                     Image(
                         painter = painterResource(id = R.drawable.ic_record),
+                        contentDescription = "Record Icon",
+                        modifier = Modifier
+                            .width(24f.wp())
+                            .height(24f.bhp())
+                            .offset(x = (-2f).wp())
+                    )
+
+                    // 펜 아이콘 (위에 올림)
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_button_pencil),
                         contentDescription = "Pencil Icon",
                         modifier = Modifier
-                            .size(26.76f.wp(), 26.76f.bhp())
-                            .align(Alignment.Center)
+                            .width(24f.wp())
+                            .height(24f.bhp())
+                            .offset(x = (-2f).wp())
                     )
                 }
+
             }
         }
 
