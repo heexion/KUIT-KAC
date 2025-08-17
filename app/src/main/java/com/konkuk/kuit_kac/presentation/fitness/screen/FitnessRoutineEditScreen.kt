@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,8 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,12 +41,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
@@ -137,8 +132,7 @@ fun FitnessRoutineEditScreen(
                     )
                 }
             }
-
-//                Column(
+            //                Column(
 //                    modifier = Modifier.fillMaxWidth(),
 //                    horizontalAlignment = Alignment.CenterHorizontally
 //                ) {
@@ -187,6 +181,7 @@ fun FitnessRoutineEditScreen(
 //                    .background(Color(0xFF000000))
 //            )
 
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -207,16 +202,10 @@ fun FitnessRoutineEditScreen(
                 // 안내 문구 + 햄스터
                 Image(
                     modifier = Modifier
-                        // .offset(x = 70.31f.wp())
                         .size(323f.wp(), 78f.bhp()),
-                    painter = painterResource(R.drawable.img_fitnessroutine_text),
+                    painter = painterResource(R.drawable.img_fitnessroutine_text2),
                     contentDescription = "textballoon"
                 )
-//                EllipseNyam(
-//                   // modifier = Modifier.padding(top = 8f.bhp()),
-//                    ellipseLength = 137.5,
-//                    mascotLength = 82.3
-//                )
 
                 HamcoachGif(
                     num = 1,
@@ -292,7 +281,9 @@ fun FitnessRoutineEditScreen(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(28f.bhp()))
+
+                Spacer(modifier = Modifier.height(4f.bhp()))
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -317,8 +308,8 @@ fun FitnessRoutineEditScreen(
                                     )
                                 }
                                 routineViewModel.setSelectedRoutines(fitnessItems)
+                                routineViewModel.setName(current.name) //  first() 대신 current -> 루틴이 없을때 앱 크래시 안나도록 수정함
                             }
-                            routineViewModel.setName(routines.first().name)
                             navController.navigate("FitnessDetailInput")
                         },
                     contentAlignment = Alignment.Center
@@ -332,11 +323,12 @@ fun FitnessRoutineEditScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(100f.hp()))
+
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
