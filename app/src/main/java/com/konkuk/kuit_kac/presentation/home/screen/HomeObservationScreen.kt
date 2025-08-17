@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.Loading
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -62,6 +63,10 @@ fun HomeObservationScreen(
     LaunchedEffect(Unit) {
         viewModel.loadCoachReport(userId = 1)
     }
+    if (coachReport == null) {
+        Loading()
+        return
+    }
 
     Box(
         modifier = Modifier
@@ -71,7 +76,7 @@ fun HomeObservationScreen(
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
             modifier = Modifier
-                .offset(y = 477.73f.bhp())
+                .offset(y = 400.73f.bhp())
         )
 
         Row(

@@ -1,11 +1,14 @@
 package com.konkuk.kuit_kac.presentation.home.repository
 
 import com.konkuk.kuit_kac.data.response.HomeSummaryResponseDto
+import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import com.konkuk.kuit_kac.data.service.HomeSummaryApiService
+import okhttp3.Response
 import javax.inject.Inject
 
 interface HomeSummaryRepository {
     suspend fun getHomeSummary(userId: Int): Result<HomeSummaryResponseDto>
+    suspend fun getSummary(userId: Int): retrofit2.Response<HomeSummaryResponseDto>
 }
 
 class HomeSummaryRepositoryImpl @Inject constructor(
@@ -27,5 +30,9 @@ class HomeSummaryRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun getSummary(userId: Int): retrofit2.Response<HomeSummaryResponseDto> {
+        return apiService.getHomeSummary(userId)
     }
 }

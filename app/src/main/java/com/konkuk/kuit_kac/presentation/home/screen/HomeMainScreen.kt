@@ -1,8 +1,10 @@
 package com.konkuk.kuit_kac.presentation.home.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.Loading
+import com.konkuk.kuit_kac.component.NyamNyamNyom
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -60,23 +64,21 @@ fun HomeMainScreen(
     var randNum by remember { mutableIntStateOf(1) }
     val isLate = true
     var hamcoachNum by remember { mutableIntStateOf(1) }
-    
-    LaunchedEffect(userId) {
-        viewModel.loadSummary(userId)
+    Log.d("HomeMainScreen", summary?.dailyKcalorieGoal.toString())
+    /*LaunchedEffect(Unit) {
+        viewModel.getSummary(userId)
         if (!isLate) randNum = Random.nextInt(3) + 1
         else {
             randNum = 4
             hamcoachNum = 3
         }
-    }
+    */
 
     // 로딩 상태 처리
-    if (summary == null) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
+    /*if (summary == null) {
+        Loading()
         return
-    }
+    }*/
 
     // API 응답에서 값 추출
     val goal = summary?.dailyKcalorieGoal ?: 0
@@ -153,7 +155,12 @@ fun HomeMainScreen(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                     )
                 )
-                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp())),
+                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
+                .clickable (
+                    onClick = {
+                        navController.navigate("NyamNyamNyom")
+                    }
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

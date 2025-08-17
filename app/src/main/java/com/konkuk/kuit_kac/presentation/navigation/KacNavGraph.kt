@@ -17,6 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.Loading
+import com.konkuk.kuit_kac.component.NyamNyamNyom
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
@@ -1182,6 +1184,12 @@ fun KacNavGraph(
         }
         composable(route = Route.LoginEmail.route) {
             LoginEmailScreen(navController = navController)
+        }
+        composable(route = "loading"){
+            Loading()
+        }
+        composable(route = "NyamNyamNyom"){
+            NyamNyamNyom()
         }
 
 
