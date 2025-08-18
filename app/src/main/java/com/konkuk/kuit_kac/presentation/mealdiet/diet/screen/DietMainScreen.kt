@@ -3,8 +3,6 @@ package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +44,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
@@ -167,7 +166,8 @@ fun DietMainScreen(
                             navController = navController,
                             modifier = Modifier.padding(top = 28f.bhp(), start = 24f.wp()),
                             dietList ?: emptyList(),
-                            pagerState = pagerState
+                            pagerState = pagerState,
+                            showDeleteButton = false
                         )
                         Spacer(
                             modifier = Modifier.size(
@@ -201,11 +201,11 @@ fun DietMainScreen(
                     Box(
                         modifier = Modifier
                             .size(114f.wp(), 44f.bhp())
-                            .offset(135.27f.wp(), 113f.bhp()),
+                            .offset(130.27f.wp(), 113f.bhp()),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "현재식단이 비어있어요!",
+                            text = "현재 식단이\n비어있어요!",
                             style = DungGeunMo17,
                             fontSize = 17f.isp(),
                             color = Color(0xFF000000),

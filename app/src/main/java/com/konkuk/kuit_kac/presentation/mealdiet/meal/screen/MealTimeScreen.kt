@@ -69,7 +69,7 @@ fun MealTimeScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    // 오전/오후 (2개만, 자동 중앙 맞춤)
+    // 오전/오후
     val amPmState = rememberLazyListState(initialFirstVisibleItemIndex = amPmList.indexOf(selectedAmPm))
     LaunchedEffect(amPmState.isScrollInProgress) {
         if (!amPmState.isScrollInProgress) {
@@ -82,20 +82,20 @@ fun MealTimeScreen(
         }
     }
 
-    // 시/분 (무한 스크롤)
+    // 시/분 무한 리스트
     val hourItems = List(1000) { hoursList[it % hoursList.size] }
     val minuteItems = List(1000) { minutesList[it % minutesList.size] }
     val hourState = rememberLazyListState(initialFirstVisibleItemIndex = 500 + hoursList.indexOf(selectedHour))
     val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = 500 + minutesList.indexOf(selectedMinute))
 
-    // 중앙 인덱스 계산 (offset 포함 보정)
+    // 중앙 index 계산
     fun LazyListState.centerIndex(itemSize: Int, itemHeight: Int): Int {
         val offset = firstVisibleItemScrollOffset
         val add = if (offset > itemHeight / 2) 1 else 0
         return (firstVisibleItemIndex + add).coerceIn(0, itemSize - 1)
     }
 
-    // 시: 스크롤 중에도 실시간 선택
+    // 시: 실시간 선택
     LaunchedEffect(hourState) {
         snapshotFlow { hourState.firstVisibleItemIndex to hourState.firstVisibleItemScrollOffset }
             .collect {
@@ -103,8 +103,18 @@ fun MealTimeScreen(
                 selectedHour = hourItems[center]
             }
     }
+    // 시: 스크롤 멈추면 정렬
+    LaunchedEffect(hourState.isScrollInProgress) {
+        if (!hourState.isScrollInProgress) {
+            val center = hourState.centerIndex(hourItems.size, itemHeightPx)
+            coroutineScope.launch {
+                hourState.animateScrollToItem(center)
+            }
+            selectedHour = hourItems[center]
+        }
+    }
 
-    // 분: 스크롤 중에도 실시간 선택
+    // 분: 실시간 선택
     LaunchedEffect(minuteState) {
         snapshotFlow { minuteState.firstVisibleItemIndex to minuteState.firstVisibleItemScrollOffset }
             .collect {
@@ -112,7 +122,18 @@ fun MealTimeScreen(
                 selectedMinute = minuteItems[center]
             }
     }
+    // 분: 스크롤 멈추면 정렬
+    LaunchedEffect(minuteState.isScrollInProgress) {
+        if (!minuteState.isScrollInProgress) {
+            val center = minuteState.centerIndex(minuteItems.size, itemHeightPx)
+            coroutineScope.launch {
+                minuteState.animateScrollToItem(center)
+            }
+            selectedMinute = minuteItems[center]
+        }
+    }
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
