@@ -86,7 +86,7 @@ fun OnboardingActivityLevelScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(42f.bhp()))
+            Spacer(modifier = Modifier.height(28f.bhp()))
 
             // 커스텀 슬라이더
             CustomImageSlider(
