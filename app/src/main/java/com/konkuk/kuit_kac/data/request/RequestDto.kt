@@ -50,6 +50,49 @@ data class RoutineRequestDto(
 )
 
 @Serializable
+data class RecordRequestDto(
+    @SerialName("userId")
+    val userId: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("routineType")
+    val routineType: String,
+    @SerialName("routineExerciseProfiles")
+    val routineExerciseProfiles: List<ExerciseRequestDto>
+)
+@Serializable
+data class ExerciseRequestDto(
+    @SerialName("exerciseId")
+    val exerciseId: Int,
+    @SerialName("routineDetail")
+    val routineDetail: RoutineDetailDto,
+    @SerialName("routineSets")
+    val routineSets: List<RoutineSetsDto>
+)
+@Serializable
+data class RoutineDetailDto(
+    @SerialName("time")
+    val time:Int,
+    @SerialName("intensity")
+    val intensity:String
+)
+@Serializable
+data class RoutineSetsDto(
+    @SerialName("count")
+    val count: Int,
+    @SerialName("weightKg")
+    val weightKg: Int,
+    @SerialName("weightNum")
+    val weightNum: Int,
+    @SerialName("distance")
+    val distance: Int,
+    @SerialName("time")
+    val time:Double,
+    @SerialName("setOrder")
+    val setOrder: Int,
+)
+
+@Serializable
 data class FitnessRequestDto(
     @SerialName("exerciseId")
     val exerciseId: Int

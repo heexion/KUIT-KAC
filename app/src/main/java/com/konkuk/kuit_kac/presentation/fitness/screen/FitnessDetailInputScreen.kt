@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,6 +43,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.request.RoutineSetsDto
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.DetailRecordCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
@@ -175,8 +177,7 @@ fun FitnessDetailInputScreen(
 
             DetailRecordCard(
                 title = "상세 기록",
-                value = record.detail,
-                onValueChange = { routineViewModel.updateDetail(item.id, it) }
+                lines = listOf("")
             )
         }
 
@@ -275,4 +276,16 @@ fun PreviewFitnessDetailInputScreen() {
             onDeleteClick = {}
         )
     )
+}
+
+private fun buildDetailLines(sets: List<RoutineSetsDto>): List<String> {
+    return sets.mapIndexedNotNull { idx, s ->
+        val prefix = "세트 ${idx + 1} "
+        when {
+            s.distance > 0 -> "$prefix${s.distance}km"
+            s.weightKg > 0 && s.weightNum > 0 -> "$prefix${s.weightKg}kg x ${s.weightNum}회"
+            s.count > 0 -> "$prefix${s.count}회"
+            else -> null
+        }
+    }
 }

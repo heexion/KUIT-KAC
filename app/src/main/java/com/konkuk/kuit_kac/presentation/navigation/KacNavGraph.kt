@@ -45,6 +45,7 @@ import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordMainScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordResultScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRecordScreen
+import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineDetailInputScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineEditScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessRoutineSearchScreen
 import com.konkuk.kuit_kac.presentation.fitness.screen.FitnessSearchScreen
@@ -324,6 +325,22 @@ fun KacNavGraph(
                 )
             }
             composable(
+                route = "FitnessRoutineDetailInput/{name}",
+                arguments = listOf(navArgument("name") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("FitnessAddGraph")
+                }
+                val routineViewModel = hiltViewModel<RoutineViewModel>(parentEntry)
+                val nameArg = backStackEntry.arguments?.getString("name") ?: ""
+
+                FitnessRoutineDetailInputScreen(
+                    routineViewModel = routineViewModel,
+                    navController = navController,
+                    name = nameArg
+                )
+            }
+            composable(
                 route = "FitnessAddRecordEdit"
             ) { backStackEntry ->
                 val parenEntry = remember(backStackEntry) {
@@ -335,6 +352,7 @@ fun KacNavGraph(
                     navController = navController,
                 )
             }
+
         }
         navigation(
             route = "RecordEditGraph",

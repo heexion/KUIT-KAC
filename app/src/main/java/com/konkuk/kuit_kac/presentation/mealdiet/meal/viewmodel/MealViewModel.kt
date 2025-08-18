@@ -194,7 +194,6 @@ class MealViewModel @Inject constructor(
         }
     }
     private fun postMealFromPlan(dto: MealResponseDto) {
-        // map plan foods into request payload
         val foods = dto.dietFoods.map { foodItem ->
             FoodRequestDto(
                 foodId   = foodItem.food.id,
