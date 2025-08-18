@@ -587,6 +587,27 @@ class MealViewModel @Inject constructor(
             registeredHour = registeredHour
         )
     }
+    fun parseToPlanMealCardData(dto: PlanResponseDto): MealCardData {
+        val foodList = dto.dietFoods.map { foodItem ->
+            Triple(
+                foodItem.food.foodType.toDrawable(),
+                foodItem.food.name,
+                "${foodItem.quantity}g"
+            )
+        }
+
+        val registeredHour = dto.dietFoods.firstOrNull()?.dietTime
+            ?.split(":")?.getOrNull(0)
+            ?.toIntOrNull()
+
+        return MealCardData(
+            dietId = dto.id,
+            mealType = dto.dietType,
+            totalKcal = "${dto.totalKcal}kcal",
+            foodList = foodList,
+            registeredHour = registeredHour
+        )
+    }
 
     val totalCarb: Double
         get() = selectedFoods.sumOf { it.food.carb * it.quantity }

@@ -43,6 +43,8 @@ import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFitness
 import com.konkuk.kuit_kac.local.parse.loadFood
+import com.konkuk.kuit_kac.notification.NotificationHelper
+import com.konkuk.kuit_kac.notification.ReminderScheduler
 import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
@@ -115,6 +117,17 @@ class MainActivity : ComponentActivity() {
             isAppearanceLightNavigationBars = true
             window.navigationBarColor = android.graphics.Color.TRANSPARENT
         }
+        NotificationHelper.ensureChannels(this)
+        ReminderScheduler.ensureAllReminders(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val am = getSystemService(ALARM_SERVICE) as android.app.AlarmManager
+            if (!am.canScheduleExactAlarms()) {
+                runCatching {
+                    startActivity(Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                }
+            }
+        }
+
 
         setContent {
             KUITKACTheme {

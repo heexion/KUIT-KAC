@@ -424,7 +424,7 @@ fun MealMainScreen(
                                     missingDtos.forEach { dto ->
                                         val idx = mealTypeList.indexOf(dto.dietType)
                                         if (idx != -1) {
-                                            val card = mealViewModel.parseToMealCardData(dto)
+                                            val card = mealViewModel.parseToPlanMealCardData(dto)
                                             mealStates[idx] =
                                                 mealStates[idx].copy(mealCardData = card)
                                         }

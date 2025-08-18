@@ -1203,6 +1203,7 @@ fun KacNavGraph(
         composable(route = Route.LoginEmail.route) {
             LoginEmailScreen(navController = navController)
         }
+        //로딩
         composable(route = "loading"){
             Loading()
         }
