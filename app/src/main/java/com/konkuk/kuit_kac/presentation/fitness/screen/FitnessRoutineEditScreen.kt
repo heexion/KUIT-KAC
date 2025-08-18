@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,8 +76,15 @@ fun FitnessRoutineEditScreen(
     val pagerState = rememberPagerState { routines.size.coerceAtLeast(1) }
     val rotateDegree = 10f
 
+    val scrollState = rememberScrollState()
+
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+            // 상단 헤더
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,56 +143,8 @@ fun FitnessRoutineEditScreen(
                     )
                 }
             }
-            //                Column(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Row(verticalAlignment = Alignment.CenterVertically) {
-//                        Image(
-//                            painter = painterResource(id = R.drawable.ic_fitness),
-//                            contentDescription = "운동 아이콘",
-//                            modifier = Modifier.size(20f.wp())
-//                        )
-//                        Spacer(modifier = Modifier.width(4f.wp()))
-//                        Text(
-//                            text = "운동",
-//                            style = DungGeunMo20,
-//                            fontSize = 20f.isp(),
-//                            color = Color(0xFF713E3A)
-//                        )
-//                    }
-//
-//                    Spacer(modifier = Modifier.height(17.5f.bhp()))
-//
-//                    Row(modifier = Modifier.fillMaxWidth()) {
-//                        SelectButton(
-//                            modifier = Modifier.weight(1f),
-//                            value = "운동 기록",
-//                            isSelected = selectedTab == "기록",
-//                            buttonHeight = 49,
-//                            onClick = { onTabClick("기록") }
-//                        )
-//                        Spacer(modifier = Modifier.width(16f.wp()))
-//                        SelectButton(
-//                            modifier = Modifier.weight(1f),
-//                            value = "나만의 운동 루틴",
-//                            isSelected = selectedTab == "나만의",
-//                            buttonHeight = 49,
-//                            onClick = {
-//                                navController.navigate(route = Route.Fitness.route)
-//                                onTabClick("나만의")
-//                            }
-//                        )
-//                    }
-//                }
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(1.dp)
-//                    .background(Color(0xFF000000))
-//            )
 
-
+            // 본문
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -212,10 +175,12 @@ fun FitnessRoutineEditScreen(
                     ellipseLength = 137.5,
                     mascotLength = 116.0
                 )
+
+                // 루틴 카드 Pager
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300f.bhp())
+                        .width(364f.wp())
+                        .height(458f.bhp())
                         .padding(horizontal = 4f.wp())
                 ) {
                     HorizontalPager(
@@ -244,7 +209,20 @@ fun FitnessRoutineEditScreen(
                                     .graphicsLayer { rotationZ = -rotateDegree * offset }
                             )
                         } else {
-                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Box(
+                                modifier = Modifier
+                                    .width(364f.wp())
+                                    .height(458f.bhp())
+                                    .clip(RoundedCornerShape(20f.bhp()))
+                                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.img_meal_bg),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.matchParentSize()
+                                )
                                 Text("루틴이 없습니다", textAlign = TextAlign.Center)
                             }
                         }
@@ -282,8 +260,9 @@ fun FitnessRoutineEditScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(4f.bhp()))
+                Spacer(modifier = Modifier.height(16f.bhp()))
 
+                // 버튼
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -308,7 +287,7 @@ fun FitnessRoutineEditScreen(
                                     )
                                 }
                                 routineViewModel.setSelectedRoutines(fitnessItems)
-                                routineViewModel.setName(current.name) //  first() 대신 current -> 루틴이 없을때 앱 크래시 안나도록 수정함
+                                routineViewModel.setName(current.name)
                             }
                             navController.navigate("FitnessDetailInput")
                         },
@@ -322,8 +301,7 @@ fun FitnessRoutineEditScreen(
                         color = Color(0xFF000000)
                     )
                 }
-
-
+                Spacer(modifier = Modifier.height(120f.bhp()))
             }
         }
     }

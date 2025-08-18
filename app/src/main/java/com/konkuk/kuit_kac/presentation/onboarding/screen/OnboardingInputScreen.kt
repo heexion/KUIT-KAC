@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -25,10 +28,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +57,8 @@ import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
 import com.konkuk.kuit_kac.presentation.onboarding.component.SubButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingInputScreen(
@@ -157,6 +164,7 @@ fun OnboardingInputScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
+            .imePadding()
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFFFFF3C1), Color(0xFFFFFCEE), Color(0xFFFFF3C1))
@@ -209,7 +217,7 @@ fun OnboardingInputScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 12f.wp())
-                        .offset(y = (-12f).bhp())
+                        .offset(y = (-10f).bhp())
                 )
             }
         }
@@ -329,9 +337,12 @@ fun OnboardingInputScreen(
                     color = Color(0xFF000000)
                 )
 
+                Spacer(modifier = Modifier.width(10f.wp()))
+
                 HeightInputBox(
                     height = height,
                     onHeightChange = { height = it }
+
                 )
             }
         }
@@ -488,6 +499,9 @@ fun HeightInputBox(
     height: String,
     onHeightChange: (String) -> Unit
 ) {
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
+
     Box(
         modifier = Modifier
             .padding(start = 112f.wp())
@@ -520,7 +534,17 @@ fun HeightInputBox(
                     color = Color(0xFF000000)
                 ),
                 singleLine = true,
-                modifier = Modifier.width(60f.wp()),
+                modifier = Modifier
+                    .width(60f.wp())
+                    .bringIntoViewRequester(bringIntoViewRequester)
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            coroutineScope.launch {
+                                delay(200) // 키보드 올라올 시간
+                                bringIntoViewRequester.bringIntoView()
+                            }
+                        }
+                    },
                 decorationBox = { innerTextField ->
                     if (height.isEmpty()) {
                         Text(
@@ -551,6 +575,9 @@ fun WeightInputBox(
     value: String,
     onValueChange: (String) -> Unit
 ) {
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
+
     Box(
         modifier = Modifier
             .width(160f.wp())
@@ -589,7 +616,17 @@ fun WeightInputBox(
                     color = Color(0xFF000000)
                 ),
                 singleLine = true,
-                modifier = Modifier.width(50f.wp()),
+                modifier = Modifier
+                    .width(50f.wp())
+                    .bringIntoViewRequester(bringIntoViewRequester)
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            coroutineScope.launch {
+                                delay(200)
+                                bringIntoViewRequester.bringIntoView()
+                            }
+                        }
+                    },
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
                         Text(
@@ -613,6 +650,7 @@ fun WeightInputBox(
         }
     }
 }
+
 
 @Composable
 fun PlanConfirmButtonCustom(

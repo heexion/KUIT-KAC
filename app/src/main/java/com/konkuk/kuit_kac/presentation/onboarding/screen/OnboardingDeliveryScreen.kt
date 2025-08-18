@@ -77,7 +77,7 @@ fun OnboardingDeliveryScreen(
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 22f.bhp())
+                .padding(top = 80f.bhp())
         ) {
             Image(
                 painter = painterResource(id = R.drawable.bg_onboarding_text),
@@ -109,7 +109,7 @@ fun OnboardingDeliveryScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = (22f + 144.8f + 8f).bhp())
+                .padding(top = (80f + 144.8f + 8f).bhp())
         )
 
 

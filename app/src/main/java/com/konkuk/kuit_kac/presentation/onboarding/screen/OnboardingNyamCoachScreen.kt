@@ -135,7 +135,7 @@ fun OnboardingNyamCoachScreen(
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = (325 + 171.4 * 0.5f + 195).toFloat().bhp())
+                .padding(top = (325 + 171.4 * 0.5f + 170).toFloat().bhp())
                 .size(width = 146f.wp(), height = 26f.bhp())
         )
 
