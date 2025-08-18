@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -118,102 +119,111 @@ fun OnboardingInputResultScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 12f.wp())
-                        .offset(y = (-12f).bhp())
+                        .offset(y = (-10f).bhp())
                 )
             }
         }
-
-        // 냠코치 + 그림자
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(260f.bhp()),
-            contentAlignment = Alignment.BottomCenter
+        Column(
+            modifier = Modifier.offset(y = (-20f).bhp()) // 위로 올림
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                colorFilter = ColorFilter.tint(shadow),
+            // 냠코치 + 그림자
+            Box(
                 modifier = Modifier
-                    .alpha(0.55f)
-                    .size(width = 167f.wp(), height = 47f.bhp())
-                    .align(Alignment.BottomCenter)
-                    .offset(y = 8f.bhp())
-            )
+                    .fillMaxWidth()
+                    .height(260f.bhp()),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    colorFilter = ColorFilter.tint(shadow),
+                    modifier = Modifier
+                        .alpha(0.55f)
+                        .size(width = 167f.wp(), height = 47f.bhp())
+                        .align(Alignment.BottomCenter)
+                        .offset(y = 8f.bhp())
+                )
 
-            NyamCoach(
-                modifier = Modifier
-                    .width(247f.wp())
-                    .height(305f.bhp())
-                    .align(Alignment.Center)
-            )
+                NyamCoach(
+                    modifier = Modifier
+                        .width(247f.wp())
+                        .height(305f.bhp())
+                        .align(Alignment.Center)
+                )
 
 //            NyameeGif(
 //                num = 1,
 //                sizePercent = 1.5f
 //            )
 
-        }
+            }
 
-        // 하단 말풍선
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 22.5f.wp()),
-            contentAlignment = Alignment.CenterEnd
-        ) {
+            // 하단 말풍선
             Box(
                 modifier = Modifier
-                    .size(width = 202.473f.wp(), height = 92.017f.bhp()),
+                    .fillMaxWidth()
+                    .padding(end = 22.5f.wp()),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 202.473f.wp(), height = 92.017f.bhp()),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Text(
+                        text = bottomBubbleText,
+                        style = DungGeunMo17.copy(fontSize = 17f.isp()),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(horizontal = 24f.wp())
+                            .offset(y = (-6f).bhp())
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8f.bhp()))
+
+            // 기초대사량 카드
+            InputResultCard(
+                label = "현재 기초 대사량",
+                value = "1800 kcal",
+                modifier = Modifier.padding(horizontal = 24f.wp())
+            )
+
+            Spacer(modifier = Modifier.height(20f.bhp()))
+
+            // 감량 칼로리 카드
+            InputResultCard(
+                label = "일일 감량 칼로리",
+                value = "200 kcal",
+                modifier = Modifier.padding(horizontal = 24f.wp())
+            )
+
+            Spacer(modifier = Modifier.height(16f.bhp()))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32f.bhp())
+                    .navigationBarsPadding(), //갤럭시 하단탭에 가리는 문제 해결
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Text(
-                    text = bottomBubbleText,
-                    style = DungGeunMo17.copy(fontSize = 17f.isp()),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(horizontal = 24f.wp())
-                        .offset(y = (-6f).bhp())
+                RecordButton(
+                    value = "오~ 그렇구나!",
+                    onClick = { navController.navigate(OnboardingIntroduce.route) },
+                    modifier = Modifier.height(65f.bhp())
                 )
             }
+
         }
-
-        Spacer(modifier = Modifier.height(8f.bhp()))
-
-        // 기초대사량 카드
-        InputResultCard(
-            label = "현재 기초 대사량",
-            value = "1800 kcal",
-            modifier = Modifier.padding(horizontal = 24f.wp())
-        )
-
-        Spacer(modifier = Modifier.height(20f.bhp()))
-
-        // 감량 칼로리 카드
-        InputResultCard(
-            label = "일일 감량 칼로리",
-            value = "200 kcal",
-            modifier = Modifier.padding(horizontal = 24f.wp())
-        )
-
-        Spacer(modifier = Modifier.height(16f.bhp()))
-
-        RecordButton(
-            value = "오~ 그렇구나!",
-            onClick = {
-                navController.navigate(OnboardingIntroduce.route)
-            },
-            modifier = Modifier
-                .height(65f.bhp())
-        )
     }
 }
 
@@ -273,6 +283,7 @@ fun InputResultCard(
             }
         }
     }
+
 }
 
 
