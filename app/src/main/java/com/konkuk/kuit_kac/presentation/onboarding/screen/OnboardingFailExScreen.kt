@@ -1,8 +1,6 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +39,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -50,7 +49,7 @@ fun OnboardingFailExScreen(
     navController: NavHostController,
     onNextClick: (List<String>) -> Unit = {}
 ) {
-    val options = listOf("야식", "스트레스성\n   폭식", "식단 기록\n  귀찮음", "의지 부족")
+    val options = listOf("야식", "스트레스성\n 폭식", "식단 기록\n 귀찮음", "의지 부족")
     val selectedOptions = remember { mutableStateListOf<String>() }
 
     var isDirectInputMode by remember { mutableStateOf(false) }
@@ -155,7 +154,6 @@ fun OnboardingFailExScreen(
     }
 }
 
-//선택 됐을때 이미지 받으면 수정해야함
 @Composable
 fun DietSelectButton(
     modifier: Modifier = Modifier,
@@ -164,6 +162,12 @@ fun DietSelectButton(
     value: String,
     buttonHeight: Int,
 ) {
+    val backgroundRes = if (isSelected) {
+        R.drawable.img_dietfail_selected_button
+    } else {
+        R.drawable.img_dietfail_button
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -171,9 +175,9 @@ fun DietSelectButton(
             .clip(RoundedCornerShape(20f.bhp())) // 둥근 모서리 적용
             .noRippleClickable { onClick() }
     ) {
-        // 배경 이미지는 항상 같은 거 사용
+        // 배경 이미지
         Image(
-            painter = painterResource(R.drawable.img_dietfail_button),
+            painter = painterResource(backgroundRes),
             contentDescription = "select button",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.matchParentSize()
@@ -185,11 +189,13 @@ fun DietSelectButton(
             style = DungGeunMo20,
             fontSize = 20f.isp(),
             lineHeight = 28f.isp(),
-            color =  Color(0xFF000000),
-            modifier = Modifier.align(Alignment.Center)
+            color = Color(0xFF000000),
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center
         )
     }
 }
+
 
 @Composable
 fun ConfirmButton(

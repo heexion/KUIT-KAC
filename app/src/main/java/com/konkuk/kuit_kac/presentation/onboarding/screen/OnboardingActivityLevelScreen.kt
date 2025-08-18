@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -57,7 +58,8 @@ fun OnboardingActivityLevelScreen(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 16.4f.bhp()),
+                .padding(bottom = 16.4f.bhp())
+                .offset(y = -(60f.bhp())),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // 말풍선

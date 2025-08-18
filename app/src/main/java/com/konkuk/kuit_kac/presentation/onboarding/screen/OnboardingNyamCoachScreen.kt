@@ -143,7 +143,7 @@ fun OnboardingNyamCoachScreen(
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = 674f.bhp())
+                .offset(y = 649f.bhp())
                 .size(width = 364f.wp(), height = 103f.bhp()),
             contentAlignment = Alignment.TopStart
         ) {
@@ -205,7 +205,7 @@ fun OnboardingNyamCoachScreen(
             },
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = 797f.bhp())
+                .offset(y = 772f.bhp())
                 .height(65f.bhp())
         )
     }

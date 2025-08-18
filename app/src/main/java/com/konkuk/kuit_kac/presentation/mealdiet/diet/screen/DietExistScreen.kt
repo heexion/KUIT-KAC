@@ -4,8 +4,6 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +54,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.offsetForPage
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.data.response.MealResponseDto
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietMultipleNutritionBar
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
@@ -205,7 +204,8 @@ fun DietSwipeCardPager(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     dietList: List<MealResponseDto>,
-    pagerState: PagerState
+    pagerState: PagerState,
+    showDeleteButton: Boolean = true
 ) {
     val rotateDegree = 10f
     val coroutineScope = rememberCoroutineScope()
@@ -320,7 +320,8 @@ fun DietSwipeCardPager(
                                 foodAmount = dietFood.quantity.toFloat(),
                                 foodKcal = (dietFood.food.calorie * dietFood.quantity).toInt(),
                                 onDeleteClick = {},
-                                navController = navController
+                                navController = navController,
+                                showDeleteButton = showDeleteButton
                             )
                         }
                     }
