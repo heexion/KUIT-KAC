@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -41,6 +42,7 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -50,9 +52,11 @@ import java.time.LocalDate
 @Composable
 fun PlanAIRecomScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    val taggedDates = remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
+    val taggedDates = mealViewModel.aiDate.value
+    val postSuccess = mealViewModel.postAiSuccessState.value
 
 
     Box(
@@ -148,11 +152,18 @@ fun PlanAIRecomScreen(
             ) {
                 PlanCalendar(
                     modifier = Modifier.padding(18f.wp()),
-                    taggedDATES = taggedDates.value,
+                    taggedDATES = taggedDates,
                     onNavigateToDetail = {
+                        mealViewModel.postAi()
                         navController.navigate("plan_ai_loading")
                     },
-                    isTagButton = true
+                    isTagButton = true,
+                    onTagChange = { date: LocalDate, tags: Set<PlanTagType> ->
+                        mealViewModel.setTagsFor(date, tags)
+                    },
+                    onClearDate = { date: LocalDate ->
+                        mealViewModel.clearTagsFor(date)
+                    }
                 )
                 Spacer(
                     modifier = Modifier.size(
@@ -171,12 +182,3 @@ fun PlanAIRecomScreen(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-private fun PlanAIRecomScreenPreview() {
-    val navController = rememberNavController()
-    PlanAIRecomScreen(
-        navController = navController
-    )
-}

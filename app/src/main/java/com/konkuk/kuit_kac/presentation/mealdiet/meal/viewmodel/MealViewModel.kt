@@ -9,6 +9,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.kuit_kac.core.util.context.toDrawable
+import com.konkuk.kuit_kac.data.request.AiDto
+import com.konkuk.kuit_kac.data.request.AiRequestDto
 import com.konkuk.kuit_kac.data.request.FoodRequestDto
 import com.konkuk.kuit_kac.data.request.MealRequestDto
 import com.konkuk.kuit_kac.data.request.PlanRequestDto
@@ -16,12 +18,15 @@ import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackFoodRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
 import com.konkuk.kuit_kac.data.response.MealResponseDto
+import com.konkuk.kuit_kac.data.response.PlanResponseDto
 import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -125,10 +130,10 @@ class MealViewModel @Inject constructor(
                     _createSimpleSuccessState.value = true
                     Log.e("createSimple", "success")
                     val now = System.currentTimeMillis()
-                    prefs.edit().putLong("fasting_started_at", now).apply()
+                    prefs.edit().putLong(FASTING_START_KEY, now).apply()
                 }
                 .onFailure {
-                    _createSimpleSuccessState.value = true
+                    _createSimpleSuccessState.value = false
                     Log.e("createSimple", it.message?: "Unknown error")
                 }
         }
@@ -145,7 +150,8 @@ class MealViewModel @Inject constructor(
         val request = PlanRequestDto(
             userId = 1,
             dietType = selectType.value?:",",
-            foods = foods
+            foods = foods,
+            date = planDate.value?:"2025-01-01"
         )
         viewModelScope.launch {
             runCatching {
@@ -165,8 +171,8 @@ class MealViewModel @Inject constructor(
     private val _getPlanSuccessState = mutableStateOf<Boolean?>(null)
     val getPlanSuccessState: State<Boolean?> get() = _getPlanSuccessState
 
-    private val _getPlanState = mutableStateOf<List<MealResponseDto>?>(null)
-    val getPlanState: State<List<MealResponseDto>?> get() = _getPlanState
+    private val _getPlanState = mutableStateOf<List<PlanResponseDto>?>(null)
+    val getPlanState: State<List<PlanResponseDto>?> get() = _getPlanState
     fun getPlan(userId: Int) {
         viewModelScope.launch {
             runCatching { mealRepository.getPlan(userId) }
@@ -183,6 +189,71 @@ class MealViewModel @Inject constructor(
                 .onFailure { _getPlanSuccessState.value = false }
         }
     }
+    private val _monthTags =
+        mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap())
+    val monthTags: State<Map<LocalDate, Set<PlanTagType>>> get() = _monthTags
+
+    private fun toPlanTag(entryType: String): PlanTagType = when (entryType.trim()) {
+        "술자리" -> PlanTagType.DRINKING
+        "외식"   -> PlanTagType.EATING_OUT
+        "기록", "AI추천" -> PlanTagType.AI_RECOMMEND
+        else -> PlanTagType.NONE
+    }
+    private fun toLocalDate(ts: String?): LocalDate? =
+        ts?.take(10)?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+    private fun extractPlanDate(dto: PlanResponseDto): LocalDate? {
+        val d = dto.dietDate
+        if (d.isNotBlank()) return runCatching { LocalDate.parse(d) }.getOrNull()
+        return toLocalDateKST(dto.createdAt)
+    }
+
+    private fun computeMonthTags(items: List<PlanResponseDto>): Map<LocalDate, Set<PlanTagType>> =
+        items.groupBy { extractPlanDate(it) }
+            .filterKeys { it != null }
+            .mapKeys { it.key!! }
+            .mapValues { (_, dayItems) ->
+                chooseTopTag(dayItems.map { toPlanTag(it.dietEntryType) })
+                    ?.let { setOf(it) } ?: emptySet()
+            }
+
+    private fun chooseTopTag(tags: List<PlanTagType>): PlanTagType? {
+        val priority = listOf(
+            PlanTagType.DRINKING,
+            PlanTagType.EATING_OUT,
+            PlanTagType.AI_RECOMMEND
+        )
+        return tags
+            .filter { it != PlanTagType.NONE }
+            .minByOrNull { t -> priority.indexOf(t).takeIf { it >= 0 } ?: Int.MAX_VALUE }
+    }
+    fun setPlanDate(date: LocalDate) {
+        _planDate.value = date.toString()
+    }
+    private fun toLocalDateKST(ts: String?): LocalDate? = runCatching {
+        java.time.OffsetDateTime.parse(ts).atZoneSameInstant(java.time.ZoneId.of("Asia/Seoul")).toLocalDate()
+    }.getOrNull()
+
+    private val _getMonthPlanSuccessState = mutableStateOf<Boolean?>(null)
+    val getMonthPlanSuccessState: State<Boolean?> get() = _getMonthPlanSuccessState
+
+    private val _getMonthPlanState = mutableStateOf<List<PlanResponseDto>?>(null)
+    val getMonthPlanState: State<List<PlanResponseDto>?> get() = _getMonthPlanState
+    fun getMonthPlan(userId: Int) {
+        viewModelScope.launch {
+            runCatching { mealRepository.getMonthPlan(userId) }
+                .onSuccess { response ->
+                    if (response.isSuccessful) {
+                        val body = response.body().orEmpty()
+                        _getMonthPlanState.value = body
+                        _getMonthPlanSuccessState.value = true
+                        _monthTags.value = computeMonthTags(body)
+                    } else {
+                        _getMonthPlanSuccessState.value = false
+                    }
+                }
+                .onFailure { _getMonthPlanSuccessState.value = false }
+        }
+    }
     fun postAllUnrecordedPlans() {
         val plans   = _getPlanState.value.orEmpty()
         val records = _getRecordState.value.orEmpty().map { it.dietType }
@@ -193,7 +264,7 @@ class MealViewModel @Inject constructor(
             }
         }
     }
-    private fun postMealFromPlan(dto: MealResponseDto) {
+    private fun postMealFromPlan(dto: PlanResponseDto) {
         val foods = dto.dietFoods.map { foodItem ->
             FoodRequestDto(
                 foodId   = foodItem.food.id,
@@ -233,10 +304,11 @@ class MealViewModel @Inject constructor(
         val request = PlanRequestDto(
             userId = 1,
             dietType = selectType.value?:"",
-            foods = foods
+            foods = foods,
+            date = planDate.value?:"2025-01-01"
         )
         viewModelScope.launch {
-            kotlin.runCatching {
+            runCatching {
                 mealRepository.changePlan(dietId = dietId.value?:1, request)
             }.onSuccess {
                 Log.d("API", "Success")
@@ -534,8 +606,56 @@ class MealViewModel @Inject constructor(
         _selectedFoods.clear()
         _selectedFoods.addAll(foodList)
     }
+    private val _aiDate = mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap())
+    val aiDate: State<Map<LocalDate, Set<PlanTagType>>> get() = _aiDate
 
+    private val _postAiSuccessState = mutableStateOf<Boolean?>(null)
+    val postAiSuccessState: State<Boolean?> get() = _postAiSuccessState
 
+    fun setTagsFor(date: LocalDate, tags: Set<PlanTagType>) {
+        _aiDate.value = _aiDate.value.toMutableMap().apply { put(date, tags) }
+    }
+    fun clearTagsFor(date: LocalDate) {
+        _aiDate.value = _aiDate.value.toMutableMap().apply { remove(date) }
+    }
+    private fun PlanTagType.toApiLabel(): String = when (this) {
+        PlanTagType.NONE         -> "없음"
+        PlanTagType.EATING_OUT   -> "외식"
+        PlanTagType.DRINKING     -> "술자리"
+        PlanTagType.AI_RECOMMEND -> "AI추천"
+    }
+    private fun pickSingleTag(tags: Set<PlanTagType>): PlanTagType =
+        tags.firstOrNull { it != PlanTagType.NONE } ?: PlanTagType.NONE
+
+    fun postAi() {
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+        val dates: List<AiDto> = aiDate.value.map { (date, tags) ->
+            val chosen = pickSingleTag(tags)
+            AiDto(
+                dietDate = date.format(formatter),
+                dietEntryType = chosen.toApiLabel()
+            )
+        }
+
+        viewModelScope.launch {
+            runCatching {
+                mealRepository.postAi(
+                    AiRequestDto(
+                        userId = 1,
+                        dietActivities = dates
+                    )
+                )
+            }.onSuccess {
+                Log.d("API", "Success")
+                _postAiSuccessState.value = true
+                Log.e("editDiet", "success")
+            }.onFailure {
+                _postAiSuccessState.value = false
+                Log.e("postAi", it.message ?: "Unknown error")
+            }
+        }
+    }
 }
 
 data class FoodWithQuantity(

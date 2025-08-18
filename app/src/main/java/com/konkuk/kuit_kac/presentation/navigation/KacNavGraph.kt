@@ -563,7 +563,7 @@ fun KacNavGraph(
                     navController.getBackStackEntry("PlanIpGraph")
                 }
                 val args = backStackEntry.arguments
-                val date = args?.getString("name") ?: ""
+                val date = args?.getString("date") ?: ""
                 parentEntry.savedStateHandle["date"] = date
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
                 PlanIPAddScreen(
@@ -600,7 +600,7 @@ fun KacNavGraph(
                 route = "PlanIPTemp"
             ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry("PlanIpGraph")
+                    navController.getBackStackEntry("PlanIPGraph")
                 }
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
                 PlanIPTempScreen(

@@ -200,8 +200,8 @@ fun PlanIPAddScreen(
                 Spacer(modifier = Modifier.size(20f.bhp()))
                 PlanDietCard(
                     "저녁",
-                    listOf(if(isMealTypeExist("저녁")){ "식단 추가"}
-                        else{"저녁식단" }
+                    listOf(if(isMealTypeExist("저녁")){ "저녁 식단"}
+                        else{"식단 추가" }
                     ),
                     onClick = {
                         mealViewModel.setType("저녁")

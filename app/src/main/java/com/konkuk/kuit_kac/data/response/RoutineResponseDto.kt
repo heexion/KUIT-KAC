@@ -4,6 +4,7 @@ package com.konkuk.kuit_kac.data.response
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
 @Serializable
 data class RoutineResponseDto(
     @SerialName("createdAt")

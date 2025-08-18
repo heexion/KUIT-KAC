@@ -137,13 +137,31 @@ data class PlanRequestDto(
     @SerialName("dietType")
     val dietType:String,
     @SerialName("foods")
-    val foods: List<FoodRequestDto>
+    val foods: List<FoodRequestDto>,
+    @SerialName("date")
+    val date: String
 )
 
 @Serializable
 data class WeightRequestDto(
     @SerialName("userId") val userId: Int,
     @SerialName("weight") val weight: Float
+)
+
+@Serializable
+data class AiRequestDto(
+    @SerialName("userId")
+    val userId: Int,
+    @SerialName("dietActivities")
+    val dietActivities: List<AiDto>
+)
+
+@Serializable
+data class AiDto(
+    @SerialName("dietDate")
+    val dietDate: String,
+    @SerialName("dietEntryType")
+    val dietEntryType: String
 )
 
 

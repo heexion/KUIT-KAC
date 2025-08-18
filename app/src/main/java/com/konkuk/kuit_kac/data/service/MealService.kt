@@ -1,10 +1,12 @@
 package com.konkuk.kuit_kac.data.service
 
+import com.konkuk.kuit_kac.data.request.AiRequestDto
 import com.konkuk.kuit_kac.data.request.MealRequestDto
 import com.konkuk.kuit_kac.data.request.PlanRequestDto
 import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
 import com.konkuk.kuit_kac.data.response.MealResponseDto
+import com.konkuk.kuit_kac.data.response.PlanResponseDto
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
 import retrofit2.Response
 import retrofit2.http.Body
@@ -66,5 +68,15 @@ interface MealService {
     @GET("diets/plans/profiles")
     suspend fun getPlan(
         @Query("userId") userId: Int
-    ): Response<List<MealResponseDto>>
+    ): Response<List<PlanResponseDto>>
+
+    @POST("ai/diets")
+    suspend fun postAi(
+        @Body request: AiRequestDto
+    ): Response<Unit>
+
+    @GET("diets/plans/months/profiles")
+    suspend fun getMonthPlan(
+        @Query("userId") userId: Int
+    ): Response<List<PlanResponseDto>>
 }
