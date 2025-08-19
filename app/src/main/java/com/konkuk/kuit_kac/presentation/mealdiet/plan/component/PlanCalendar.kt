@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +54,10 @@ fun PlanCalendar(
     isTagDetailShow: Boolean = false,
     onDateSelected: (LocalDate?) -> Unit = {},
     onTagChange: (LocalDate, Set<PlanTagType>) -> Unit= {a,b->},
-    onClearDate: (LocalDate) -> Unit= {}
+    onClearDate: (LocalDate) -> Unit= {},
+    onSlotsChange: (LocalDate, Set<DietType>) -> Unit = { _, _ -> },
+    onClearSlots: (LocalDate) -> Unit = {},
+    onTagChangeForSlots: (LocalDate, Set<DietType>, PlanTagType) -> Unit = { _, _, _ -> },
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -67,9 +71,21 @@ fun PlanCalendar(
     var dinnerClicked = remember { mutableStateOf(false) }
 
     var isAddedOnce = remember { mutableStateOf(false) }
+    val hasTagChoice  = selectedDate != null && (blueClicked.value || pinkClicked.value)
+    val hasSlotChoice = breakfastClicked.value || lunchClicked.value || dinnerClicked.value
+    val onSecondStep  = (blueClicked.value || pinkClicked.value) // slot 선택 화면 노출 상태
+
+    val isConfirmEnabled = if (!onSecondStep) {
+        isAddedOnce.value || hasTagChoice
+    } else {
+        hasTagChoice && hasSlotChoice
+    }
+
+    val confirmLabel = if (onSecondStep) "이때 먹을 예정이야!" else "다 입력했어!"
 
     LaunchedEffect(taggedDATES) {
         tempDates = taggedDATES
+        isAddedOnce.value = taggedDATES.isNotEmpty()
     }
 
     Column(
@@ -96,7 +112,8 @@ fun PlanCalendar(
                     lunchClicked.value = false
                     dinnerClicked.value = false
                     onDateSelected(null)
-                    taggedDATES.keys.forEach { onClearDate(it) }
+                    taggedDATES.keys.forEach {date-> onClearDate(date)
+                    onClearSlots(date)}
                 }
             ) {
                 Image(
@@ -232,9 +249,9 @@ fun PlanCalendar(
                                         )
                                     } else {
                                         color = when {
-                                            PlanTagType.EATING_OUT in tags -> Color(0xFF67D1FF)
-                                            PlanTagType.DRINKING in tags -> Color(0xFFFF7FD0)
-                                            PlanTagType.AI_RECOMMEND in tags -> Color(0xFFFFE667)
+                                            PlanTagType.EATING_OUT in tags   -> PlanColors.EatingOut
+                                            PlanTagType.DRINKING in tags     -> PlanColors.Drinking
+                                            PlanTagType.AI_RECOMMEND in tags -> PlanColors.AiRecommend
                                             else -> Color.Transparent
                                         }
                                         Box(
@@ -385,26 +402,29 @@ fun PlanCalendar(
 
             PlanConfirmButton(
                 modifier = Modifier.padding(top = 24f.bhp()),
-                isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
+                isAvailable = isConfirmEnabled,
                 onClick = {
-                    if (confirmString == "다 입력했어!") {
-                        tempDates.forEach { (d, t) -> onTagChange(d, t) }
+                    if (!onSecondStep) {
                         onNavigateToDetail()
                         return@PlanConfirmButton
                     }
 
                     if (selectedDate != null) {
                         isAddedOnce.value = true
-                        val updated = tempDates.toMutableMap()
-                        val currentTags = updated[selectedDate!!]?.toMutableSet() ?: mutableSetOf()
 
-                        if (blueClicked.value) currentTags.add(PlanTagType.EATING_OUT)
-                        if (pinkClicked.value) currentTags.add(PlanTagType.DRINKING)
+                        val newTag = when {
+                            blueClicked.value -> PlanTagType.EATING_OUT
+                            pinkClicked.value -> PlanTagType.DRINKING
+                            else -> null
+                        }
+                        val slots = buildSet {
+                            if (breakfastClicked.value) add(DietType.BREAKFAST)
+                            if (lunchClicked.value)     add(DietType.LUNCH)
+                            if (dinnerClicked.value)    add(DietType.DINNER)
+                        }.ifEmpty { setOf(DietType.LUNCH) }
 
-                        updated[selectedDate!!] = currentTags
-                        tempDates = updated
-
-                        onTagChange(selectedDate!!, currentTags)
+                        if (newTag != null) onTagChangeForSlots(selectedDate!!, slots, newTag)
+                        onSlotsChange(selectedDate!!, slots)
                     }
 
                     pinkClicked.value = false
@@ -427,8 +447,8 @@ fun PlanCalendar(
 @Composable
 fun HalfColoredCircle(
     modifier: Modifier = Modifier,
-    leftColor: Color = Color.Blue,
-    rightColor: Color = Color.Magenta
+    leftColor: Color = PlanColors.EatingOut,
+    rightColor: Color = PlanColors.Drinking
 ) {
     Canvas(modifier = modifier) {
         val radius = size.minDimension / 2
@@ -455,3 +475,29 @@ fun HalfColoredCircle(
         )
     }
 }
+@Immutable
+object PlanColors {
+    val BackgroundTop         = Color(0xFFFFF3C1)
+    val BackgroundMid         = Color(0xFFFFFCEE)
+    val BackgroundBottom      = Color(0xFFFFF3C1)
+
+    val CardTop               = Color(0xFFFFFFFF)
+    val CardBottom            = Color(0xFFFFEDD0)
+
+    val Border                = Color(0xFF000000)
+    val Title                 = Color(0xFF713E3A)
+    val Text                  = Color(0xFF000000)
+    val Muted                 = Color(0xFFDFDFDF)
+
+    val EatingOut             = Color(0xFF67D1FF)
+    val Drinking              = Color(0xFFFF7FD0)
+    val AiRecommend           = Color(0xFFFFE667)
+}
+enum class DietType(val label: String) {
+    BREAKFAST("아침"),
+    LUNCH("점심"),
+    DINNER("저녁");
+
+    fun toApiLabel(): String = label
+}
+

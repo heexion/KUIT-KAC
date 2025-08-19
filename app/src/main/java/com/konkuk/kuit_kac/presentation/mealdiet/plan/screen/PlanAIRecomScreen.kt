@@ -158,11 +158,12 @@ fun PlanAIRecomScreen(
                         navController.navigate("plan_ai_loading")
                     },
                     isTagButton = true,
-                    onTagChange = { date: LocalDate, tags: Set<PlanTagType> ->
-                        mealViewModel.setTagsFor(date, tags)
-                    },
-                    onClearDate = { date: LocalDate ->
-                        mealViewModel.clearTagsFor(date)
+                    onTagChange = { _, _ -> },
+                    onClearDate = { date -> mealViewModel.clearAllFor(date) },
+                    onSlotsChange = { date, slots -> mealViewModel.setSlotsFor(date, slots) }, // optional
+                    onClearSlots = { date -> mealViewModel.clearAllFor(date) },
+                    onTagChangeForSlots = { date, slots, tag ->
+                        mealViewModel.setTagForSlots(date, slots, tag)
                     }
                 )
                 Spacer(
