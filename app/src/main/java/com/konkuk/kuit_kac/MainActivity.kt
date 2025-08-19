@@ -224,6 +224,15 @@ class MainActivity : ComponentActivity() {
                     Route.PlanInPerson.route,
                     Route.PlanCheck.route,
                     "plan_ai_detail",
+                    Route.PlanAIComplete.route,
+                    Route.PlanAILoading.route,
+                    Route.PlanAIRecom.route,
+                    Route.PlanInPersonAddComplete.route,
+                    Route.PlanIPAdd.route,
+                    Route.PlanIPItem.route,
+                    Route.PlanIPSearch.route,
+                    Route.PlanIPTemp.route,
+                    Route.PlanResult.route,
 
                     // 운동 관련
                     Route.Fitness.route,
