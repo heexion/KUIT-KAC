@@ -117,18 +117,30 @@ fun MealFastingResultScreen(
 //        )
 
 
+//        HamcoachGif(
+//            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+//            num = 1,
+//            ellipseLength = 222.0,
+//            mascotLength = 200.0
+//        )
+//        NyameeGif(
+//            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+//            num = 4,
+//            sizePercent = 1.35f
+//        )
+
         HamcoachGif(
-            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            modifier = Modifier.offset(x = (-10f).wp(), y = 255f.hp()),
             num = 1,
-            ellipseLength = 222.0,
+            ellipseLength = 200.0,
             mascotLength = 200.0
         )
+
         NyameeGif(
-            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+            modifier = Modifier.offset(x = 60f.wp(), y = 310f.bhp()),
             num = 4,
             sizePercent = 1.35f
         )
-
 
         // 말풍선
         Box(
