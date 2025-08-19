@@ -25,7 +25,9 @@ data class PlanResponseDto(
     @SerialName("totalKcal")
     val totalKcal: Double,
     @SerialName("dietFoods")
-    val dietFoods: List<FoodListResponseDto>
+    val dietFoods: List<FoodListResponseDto>,
+    @SerialName("dietAifoods")
+val dietAifoods: List<FoodListResponseDto>
 )
 @Serializable
 data class MealResponseDto(
@@ -46,7 +48,9 @@ data class MealResponseDto(
     @SerialName("totalKcal")
     val totalKcal: Double,
     @SerialName("dietFoods")
-    val dietFoods: List<FoodListResponseDto>
+    val dietFoods: List<FoodListResponseDto>,
+    @SerialName("dietAifoods")
+    val dietAifoods: List<FoodListResponseDto>
 )
 
 @Serializable
