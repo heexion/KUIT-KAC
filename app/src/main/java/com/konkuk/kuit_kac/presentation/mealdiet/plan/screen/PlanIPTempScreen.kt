@@ -266,7 +266,7 @@ fun PlanIPTempScreen(
                     else{
                         mealViewModel.createPlan()
                     }
-                    navController.navigate("PlanIPGraph/plan_in_person_add?date=${mealViewModel.planDate}")
+                    navController.navigate("PlanIPGraph/plan_in_person_add?date=${mealViewModel.planDate.value}")
                 },
             contentAlignment = Alignment.Center
         ) {

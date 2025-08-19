@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.component.DefaultButton
@@ -19,11 +20,13 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingWeek
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 
 @Composable
 fun OnboardingAppetiteScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         // 배경 및 캐릭터
@@ -51,6 +54,7 @@ fun OnboardingAppetiteScreen(
                 buttonHeight = 70f,
                 isOrange = false,
                 onClick = {
+                    onboardingViewModel.setAppetiteType("BIG")
                     navController.navigate(OnboardingWeek.route)
                 }
             )
@@ -59,6 +63,7 @@ fun OnboardingAppetiteScreen(
                 buttonHeight = 70f,
                 isOrange = false,
                 onClick = {
+                    onboardingViewModel.setAppetiteType("SMALL")
                     navController.navigate(OnboardingWeek.route)
                 }
             )

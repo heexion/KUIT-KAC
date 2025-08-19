@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.data.service
 
+import com.konkuk.kuit_kac.data.request.RecordRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineRequestDto
 import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import retrofit2.Response
@@ -15,6 +16,11 @@ interface RoutineService {
     @POST("routines")
     suspend fun createRoutine(
         @Body request: RoutineRequestDto
+    ): Response<Unit>
+
+    @POST("routines/records")
+    suspend fun createRoutineRecord(
+        @Body request: RecordRequestDto
     ): Response<Unit>
 
     @PUT("routines/{routineId}")

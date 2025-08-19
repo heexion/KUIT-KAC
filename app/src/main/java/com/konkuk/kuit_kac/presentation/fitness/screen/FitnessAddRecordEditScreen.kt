@@ -139,9 +139,8 @@ fun FitnessAddRecordEditScreen(modifier: Modifier = Modifier,
                         Text("선택된 운동이 없습니다.", style = DungGeunMo17)
                     } else {
                         selected.forEach { f ->
-                            val rec =
-                                routineViewModel.getRecord(f.id)
-                            val kcal = routineViewModel.kcalFor(f.id)
+                            val rec  = routineViewModel.rGetRecord(f.name)
+                            val kcal = routineViewModel.rKcalFor(f.name)
 
                             FitnessItemCard(
                                 image = R.drawable.ic_lowerbody,
@@ -226,7 +225,7 @@ fun FitnessAddRecordEditScreen(modifier: Modifier = Modifier,
                 .noRippleClickable {
                     routineViewModel.setName("오늘의 루틴")
                     routineViewModel.setType("기록")
-                    routineViewModel.createRoutine()
+                    routineViewModel.createRoutineRecord()
                     navController.navigate("meal_edit_result")},
             contentAlignment = Alignment.Center
         ){

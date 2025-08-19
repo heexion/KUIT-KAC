@@ -191,8 +191,7 @@ fun FitnessDetailRecordScreen(
 
         DetailRecordCard(
             title = "상세 기록",
-            value = detail,
-            onValueChange = { detail = it }
+            lines = listOf("")
         )
 
         Spacer(modifier = Modifier.height(97f.bhp()))

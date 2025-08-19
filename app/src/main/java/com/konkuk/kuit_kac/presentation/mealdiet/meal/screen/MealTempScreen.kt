@@ -86,13 +86,32 @@ fun MealTempScreen(
                 .padding(top = 12.51f.hp())
                 .fillMaxWidth()
         ) {
-            Image(
+            Box(
                 modifier = Modifier
                     .offset(x = 78f.wp())
                     .size(272f.wp(), 96f.bhp()),
-                painter = painterResource(R.drawable.img_diet_patchballoon),
-                contentDescription = "textballoon"
-            )
+                contentAlignment = Alignment.Center
+            ){
+                Image(
+                    modifier = Modifier
+                        .matchParentSize(),
+                    painter = painterResource(R.drawable.img_diet_patchballoon),
+                    contentDescription = "textballoon"
+                )
+                Box(
+                    modifier = Modifier.size(150f.wp(),50f.bhp())
+                        .offset(y = -10f.bhp())
+                        .background(Color(0xFFFFFFFF)),
+                    contentAlignment = Alignment.Center,
+                ){
+                    Text(
+                        text = "지금 총 " + cal + "kcal이야",
+                        fontSize = 20f.isp(),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
 //            EllipseNyam(
 //                modifier = Modifier
 //                    .offset(y = 72f.bhp(), x = 117f.wp()),

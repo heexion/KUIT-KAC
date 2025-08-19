@@ -51,14 +51,15 @@ fun PlanCalendar(
     onNavigateToDetail: () -> Unit = {},
     isTagButton: Boolean = false,
     isTagDetailShow: Boolean = false,
-    onDateSelected: (LocalDate?) -> Unit = {}
+    onDateSelected: (LocalDate?) -> Unit = {},
+    onTagChange: (LocalDate, Set<PlanTagType>) -> Unit= {a,b->},
+    onClearDate: (LocalDate) -> Unit= {}
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }
-    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
     var tempDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
 
     var breakfastClicked = remember { mutableStateOf(false) }
@@ -68,7 +69,6 @@ fun PlanCalendar(
     var isAddedOnce = remember { mutableStateOf(false) }
 
     LaunchedEffect(taggedDATES) {
-        taggedDates = taggedDATES
         tempDates = taggedDATES
     }
 
@@ -88,7 +88,7 @@ fun PlanCalendar(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.noRippleClickable {
-                    tempDates = taggedDATES
+                    tempDates = emptyMap()
                     selectedDate = null
                     pinkClicked.value = false
                     blueClicked.value = false
@@ -96,6 +96,7 @@ fun PlanCalendar(
                     lunchClicked.value = false
                     dinnerClicked.value = false
                     onDateSelected(null)
+                    taggedDATES.keys.forEach { onClearDate(it) }
                 }
             ) {
                 Image(
@@ -207,7 +208,7 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tags = tempDates[thisDate].orEmpty()
+                                val tags = taggedDATES[thisDate].orEmpty()
 
                                 var color = Color(0xFFFFFFFF)
 
@@ -387,9 +388,11 @@ fun PlanCalendar(
                 isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
                 onClick = {
                     if (confirmString == "다 입력했어!") {
-                        taggedDates = tempDates
+                        tempDates.forEach { (d, t) -> onTagChange(d, t) }
                         onNavigateToDetail()
+                        return@PlanConfirmButton
                     }
+
                     if (selectedDate != null) {
                         isAddedOnce.value = true
                         val updated = tempDates.toMutableMap()
@@ -400,7 +403,10 @@ fun PlanCalendar(
 
                         updated[selectedDate!!] = currentTags
                         tempDates = updated
+
+                        onTagChange(selectedDate!!, currentTags)
                     }
+
                     pinkClicked.value = false
                     blueClicked.value = false
                     breakfastClicked.value = false
@@ -415,14 +421,6 @@ fun PlanCalendar(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-private fun PlanCalendarPreview() {
-    val taggedDates = remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
-    PlanCalendar(
-        taggedDATES = taggedDates.value, isTagButton = true,
-    )
-}
 
 
 // 반반 색깔 다른 원

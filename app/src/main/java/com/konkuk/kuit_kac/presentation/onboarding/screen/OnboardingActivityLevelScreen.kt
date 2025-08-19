@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -29,6 +30,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInput
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.presentation.onboarding.component.CustomImageSlider
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
@@ -36,7 +38,8 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 fun OnboardingActivityLevelScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    selectedMode: String // 이전 화면에서 받은 모드
+    selectedMode: String, // 이전 화면에서 받은 모드
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     var activityLevel by remember { mutableStateOf(0) }
 

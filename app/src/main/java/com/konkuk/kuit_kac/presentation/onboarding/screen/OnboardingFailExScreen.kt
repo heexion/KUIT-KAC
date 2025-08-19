@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -41,13 +42,15 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun OnboardingFailExScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onNextClick: (List<String>) -> Unit = {}
+    onNextClick: (List<String>) -> Unit = {},
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val options = listOf("야식", "스트레스성\n 폭식", "식단 기록\n 귀찮음", "의지 부족")
     val selectedOptions = remember { mutableStateListOf<String>() }
@@ -135,19 +138,21 @@ fun OnboardingFailExScreen(
                 height = 65f,
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
-                    when {
-                        // 이미 입력 끝났으면 다음 화면 이동
-                        directInputText.isNotBlank() || selectedOptions.isNotEmpty() -> {
-                            onNextClick(
-                                (selectedOptions + directInputText).filter { it.isNotBlank() }
+                    val items = (selectedOptions +
+                            if (directInputText.isNotBlank()) listOf(directInputText) else emptyList()
                             )
-                            navController.navigate(OnboardingAppetite.route)
-                        }
-                        // 처음 "직접 입력할래" 눌렀을 때 입력 모드 전환
-                        else -> {
-                            isDirectInputMode = true
-                        }
+                        .map { it.replace("\n", " ").trim() } // clean line breaks/spaces
+                        .filter { it.isNotBlank() }
+                        .distinct()
+
+                    if (items.isEmpty()) {
+                        isDirectInputMode = true
+                        return@ConfirmButton
                     }
+                    val reason = items.joinToString(", ")
+                    onboardingViewModel.setDietFailReason(reason)
+                    onNextClick(items)
+                    navController.navigate(OnboardingAppetite.route)
                 }
             )
         }
