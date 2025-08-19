@@ -40,7 +40,7 @@ fun OnboardingEoDrinkScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_eo_drink3),
+            painter = painterResource(id = R.drawable.bg_onboarding_eo_drink4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

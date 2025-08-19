@@ -34,7 +34,7 @@ fun OnboardingMealScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_meal3),
+            painter = painterResource(id = R.drawable.bg_onboarding_meal4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

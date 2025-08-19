@@ -34,7 +34,7 @@ fun OnboardingAiMealScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_aimeal3),
+            painter = painterResource(id = R.drawable.bg_onboarding_aimeal4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()
