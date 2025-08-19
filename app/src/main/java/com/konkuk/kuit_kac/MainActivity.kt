@@ -235,7 +235,6 @@ class MainActivity : ComponentActivity() {
                     Route.PlanResult.route,
 
                     // 운동 관련
-                    Route.Fitness.route,
                     Route.FitnessExist.route,
                     Route.FitnessCreate.route,
                     Route.FitnessSearch.route,
