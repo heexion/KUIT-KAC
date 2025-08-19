@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -54,6 +55,7 @@ import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.presentation.onboarding.component.SubButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -66,6 +68,7 @@ fun OnboardingInputScreen(
     navController: NavHostController,
     selectedMode: String, // 추가: 선택한 모드 받기
     onNextClick: (List<String>) -> Unit = {},
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
     val bubbleText = "이제 기본적인\n정보 입력이 필요해!"
@@ -415,12 +418,16 @@ fun OnboardingInputScreen(
                         "냠냠모드" -> 12
                         "코치모드" -> 8
                         "올인모드" -> 5
-                        else -> Int.MAX_VALUE
+                               else -> Int.MAX_VALUE
                     }
 
                     if (lossAmount >= limit) {
                         showDialog = true
                     } else {
+                        onboardingViewModel.setAge(age.toInt())
+                        onboardingViewModel.setGender(if(selectedGender== "남자"){"MALE"}else{"FEMALE"})
+                        onboardingViewModel.setHeight(height.toInt())
+                        onboardingViewModel.setTargetWeight(weightTarget.toDouble())
                         proceedNext()
                     }
                 }

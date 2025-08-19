@@ -8,6 +8,7 @@ import com.konkuk.kuit_kac.data.service.MealService
 import com.konkuk.kuit_kac.data.service.RoutineService
 import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.data.service.NutritionService
+import com.konkuk.kuit_kac.data.service.OnboardingService
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.service.FoodService
 import com.konkuk.kuit_kac.presentation.fitness.RoutineRepository
@@ -26,6 +27,8 @@ import com.konkuk.kuit_kac.presentation.mealdiet.diet.repository.DietRepositoryI
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepositoryImpl
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingRepository
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,5 +87,9 @@ object RepositoryModule {
     fun provideHomeWeightRepository(
         api: HomeWeightService
     ): HomeWeightRepository = HomeWeightRepositoryImpl(api)
-
+    @Provides
+    @Singleton
+    fun provideOnboardingRepository(
+        api: OnboardingService
+    ): OnboardingRepository = OnboardingRepositoryImpl(api)
 }

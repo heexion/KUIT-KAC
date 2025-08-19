@@ -164,6 +164,42 @@ data class AiDto(
     val dietEntryType: String
 )
 
+@Serializable
+data class OnboardingRequestDto(
+    @SerialName("age")
+    val age: Int,
+    @SerialName("agreements")
+    val agreements: List<Agreement>,
+    @SerialName("appetiteType")
+    val appetiteType: String,
+    @SerialName("dietFailReason")
+    val dietFailReason: String,
+    @SerialName("dietVelocity")
+    val dietVelocity: String,
+    @SerialName("eatingOutType")
+    val eatingOutType: String,
+    @SerialName("gender")
+    val gender: String,
+    @SerialName("hasDietExperience")
+    val hasDietExperience: Boolean,
+    @SerialName("height")
+    val height: Int,
+    @SerialName("nickname")
+    val nickname: String,
+    @SerialName("targetWeight")
+    val targetWeight: Double,
+    @SerialName("weeklyEatingOutCount")
+    val weeklyEatingOutCount: String
+)
+@Serializable
+data class Agreement(
+    @SerialName("agreed")
+    val agreed: Boolean,
+    @SerialName("code")
+    val code: String,
+    @SerialName("version")
+    val version: String
+)
 
 
 

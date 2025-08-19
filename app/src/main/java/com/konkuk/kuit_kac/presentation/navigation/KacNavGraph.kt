@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.navigation
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -111,6 +112,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingPreferType
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingStart
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingWeek
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingYellow
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingActivityLevelScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAiIntroScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingAiMealScreen
@@ -150,16 +152,269 @@ fun KacNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = if (isFirstLaunch) OnboardingStart.route else Route.Home.route
+        startDestination = if (isFirstLaunch) "OnboardingGraph" else Route.Home.route
     ) {
         // 온보딩 스타트
-        composable(route = OnboardingStart.route) {
+        /*composable(route = OnboardingStart.route) {
             OnboardingStartScreen(
                 navController = navController,
                 onFinish = {
                     navController.navigate(OnboardingDiet.route)
                 }
             )
+        }*/
+        navigation(
+            route = "OnboardingGraph",
+            startDestination = Route.LoginMain.route
+        ){
+            composable(Route.LoginMain.route){
+                    backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                LoginMainScreen(
+                    modifier = modifier,
+                    navController = navController,
+                    onboardingViewModel = onboardingViewModel
+                )
+            }
+            composable(route = Route.LoginEmail.route) {
+                    backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                LoginEmailScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel)
+            }
+            composable(route = OnboardingStart.route) {
+                    backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingStartScreen(
+                    navController = navController,
+                    onFinish = {
+                        navController.navigate(OnboardingDiet.route)
+                    }
+                )
+            }
+            composable(OnboardingDiet.route) {
+                    backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingDietScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel)
+            }
+            composable(OnboardingFailEx.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingFailExScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel)
+            }
+            composable(OnboardingAppetite.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingAppetiteScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel)
+            }
+            composable(OnboardingWeek.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingWeekScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel)
+            }
+            composable(OnboardingPreferType.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingPreferTypeScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel)
+            }
+
+            composable(route = OnboardingDietSpeed.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingDietSpeedScreen(
+                    navController = navController,
+                    onboardingViewModel = onboardingViewModel,
+                    onNavigate = { selectedMode ->
+                        navController.navigate("${OnboardingActivityLevel.route}/$selectedMode")
+                    }
+                )
+            }
+
+            composable(
+                route = "${OnboardingActivityLevel.route}/{mode}",
+                arguments = listOf(navArgument("mode") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
+                // TODO 이거 받는 api 없음
+                OnboardingActivityLevelScreen(
+                    navController = navController,
+                    selectedMode = selectedMode,
+                    onboardingViewModel = onboardingViewModel
+                )
+            }
+
+            composable(
+                route = "${OnboardingInput.route}/{mode}",
+                arguments = listOf(navArgument("mode") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
+                //TODO CurrentWeight 없어
+                OnboardingInputScreen(
+                    navController = navController,
+                    selectedMode = selectedMode,
+                    onboardingViewModel = onboardingViewModel
+                )
+            }
+
+
+            composable(route = OnboardingInputResult.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingInputResultScreen(navController = navController)
+            }
+            composable(route = OnboardingIntroduce.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingIntroduceScreen(navController = navController)
+            }
+            composable(route = OnboardingHamCoach.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingHamCoachScreen(navController = navController)
+            }
+            composable(route = OnboardingNyamCoach.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingNyamCoachScreen(navController = navController)
+            }
+            composable(route = OnboardingDelivery.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingDeliveryScreen(navController = navController)
+            }
+            composable(route = OnboardingMainHomeHam.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingMainHomeHamScreen(navController = navController)
+            }
+            composable(route = OnboardingMainHomeNyam.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingMainHomeNyamScreen(navController = navController)
+            }
+            composable(route = OnboardingMainHomeScale.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingMainHomeScaleScreen(navController = navController)
+            }
+
+            composable(OnboardingAiMeal.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingAiMealScreen(navController = navController)
+            }
+            composable(OnboardingMeal.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingMealScreen(navController = navController)
+            }
+            composable(OnboardingAiIntro.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingAiIntroScreen(navController = navController)
+            }
+            composable(OnboardingGray.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingGrayScreen(navController = navController)
+            }
+            composable(OnboardingYellow.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingYellowScreen(navController = navController)
+            }
+            composable(OnboardingEoDrink.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingEoDrinkScreen(navController = navController)
+            }
+            composable(OnboardingCheck.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingCheckScreen(navController = navController)
+            }
+            composable(OnboardingFinal.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingFinalScreen(navController = navController,
+                    onboardingViewModel = onboardingViewModel, onFinish = {
+                    prefs.edit { putBoolean("isFirstLaunch", false) }
+                })
+            }
+            composable(OnboardingFloatingButton.route) {backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingFloatingButtonScreen(navController = navController)
+            }
         }
 
         composable(Route.Home.route) {
@@ -805,6 +1060,8 @@ fun KacNavGraph(
             }
         }
 
+
+
         navigation(
             route = "MealGraph/{mealType}",
             startDestination = Route.MealRecord.route,
@@ -1093,7 +1350,7 @@ fun KacNavGraph(
 
 
 //온보딩
-        composable(OnboardingDiet.route) {
+        /*composable(OnboardingDiet.route) {
             OnboardingDietScreen(navController = navController) // 필요 시 navController 넘기세요
         }
         composable(OnboardingFailEx.route) {
@@ -1194,15 +1451,15 @@ fun KacNavGraph(
         }
         composable(OnboardingFloatingButton.route) {
             OnboardingFloatingButtonScreen(navController = navController)
-        }
+        } */
 
         // 로그인
-        composable(route = Route.LoginMain.route) {
+        /* composable(route = Route.LoginMain.route) {
             LoginMainScreen(navController = navController)
         }
         composable(route = Route.LoginEmail.route) {
             LoginEmailScreen(navController = navController)
-        }
+        } */
         //로딩
         composable(route = "loading"){
             Loading()
@@ -1210,6 +1467,7 @@ fun KacNavGraph(
         composable(route = "NyamNyamNyom"){
             NyamNyamNyom()
         }
+
 
 
     }
