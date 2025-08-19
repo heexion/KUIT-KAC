@@ -114,7 +114,7 @@ fun HomeScaleScreen(
         NyameeGif(
             num = randNum,
             sizePercent = 1.1f,
-            modifier = Modifier.offset(x=10f.wp(), y = 50f.bhp())
+            modifier = Modifier.offset(x = 10f.wp(), y = 50f.bhp())
         )
 
         Box(
@@ -151,7 +151,7 @@ fun HomeScaleScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        top = 458f.hp()
+                        top = 440f.hp()
                     )
                     .clip(RoundedCornerShape(topStart = 60f.bhp(), topEnd = 60f.bhp()))
                     .background(
