@@ -32,9 +32,9 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDelivery
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -87,7 +87,9 @@ fun OnboardingNyamCoachScreen(
             )
             Text(
                 text = bubbleText,
-                style = DungGeunMo20.copy(fontSize = bubbleFontSize),
+                style = DungGeunMo20.copy(
+                    fontSize = bubbleFontSize,
+                    lineHeight = bubbleFontSize * 1.3),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -198,7 +200,7 @@ fun OnboardingNyamCoachScreen(
         }
 
         // 다음 버튼
-        RecordButton(
+        OnboardingButton(
             value = "잘 알겠어!",
             onClick = {
                 navController.navigate(OnboardingDelivery.route)

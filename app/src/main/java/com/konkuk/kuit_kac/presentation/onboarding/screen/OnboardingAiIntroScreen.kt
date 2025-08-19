@@ -34,7 +34,7 @@ fun OnboardingAiIntroScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_ai_introduce3),
+            painter = painterResource(id = R.drawable.bg_onboarding_ai_introduce4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

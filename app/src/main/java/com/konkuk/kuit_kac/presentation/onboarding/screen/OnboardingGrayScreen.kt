@@ -40,7 +40,7 @@ fun OnboardingGrayScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_gray3),
+            painter = painterResource(id = R.drawable.bg_onboarding_gray4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

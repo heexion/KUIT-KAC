@@ -40,7 +40,7 @@ fun OnboardingCheckScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_check3),
+            painter = painterResource(id = R.drawable.bg_onboarding_check4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

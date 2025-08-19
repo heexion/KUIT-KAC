@@ -58,7 +58,7 @@ fun OnboardingFinalScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_final3),
+            painter = painterResource(id = R.drawable.bg_onboarding_final4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

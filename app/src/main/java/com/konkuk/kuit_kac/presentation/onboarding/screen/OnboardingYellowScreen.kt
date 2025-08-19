@@ -40,7 +40,7 @@ fun OnboardingYellowScreen(
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_onboarding_yellow3),
+            painter = painterResource(id = R.drawable.bg_onboarding_yellow4),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()

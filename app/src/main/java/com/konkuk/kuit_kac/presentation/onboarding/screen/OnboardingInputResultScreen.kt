@@ -37,10 +37,10 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingIntroduce
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
@@ -216,7 +216,7 @@ fun OnboardingInputResultScreen(
                     .navigationBarsPadding(), //갤럭시 하단탭에 가리는 문제 해결
                 contentAlignment = Alignment.Center
             ) {
-                RecordButton(
+                OnboardingButton(
                     value = "오~ 그렇구나!",
                     onClick = { navController.navigate(OnboardingIntroduce.route) },
                     modifier = Modifier.height(65f.bhp())

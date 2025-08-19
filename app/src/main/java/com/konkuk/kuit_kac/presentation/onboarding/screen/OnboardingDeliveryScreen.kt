@@ -33,8 +33,8 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeHam
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
@@ -120,7 +120,7 @@ fun OnboardingDeliveryScreen(
                 .width(333f.wp())
                 .height(604f.bhp())
         ) { page ->
-            val imageRes = if (page == 0) R.drawable.bg_phone_1 else R.drawable.bg_phone
+            val imageRes = if (page == 0) R.drawable.img_onboarding_phone1 else R.drawable.img_onboarding_phone2
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = "배달 알림 예시",
@@ -129,7 +129,7 @@ fun OnboardingDeliveryScreen(
         }
 
         // RecordButton
-        RecordButton(
+        OnboardingButton(
             value = "잘 알겠어!",
             onClick = {
                 navController.navigate(OnboardingMainHomeHam.route)

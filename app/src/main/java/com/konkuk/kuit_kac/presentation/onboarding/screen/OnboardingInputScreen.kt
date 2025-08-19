@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,11 +17,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,8 +37,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,14 +57,15 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingConfirmButton
 import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.presentation.onboarding.component.SubButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 fun OnboardingInputScreen(
@@ -344,7 +349,8 @@ fun OnboardingInputScreen(
 
                 HeightInputBox(
                     height = height,
-                    onHeightChange = { height = it }
+                    onHeightChange = { height = it },
+                    scrollState = scrollState
 
                 )
             }
@@ -384,11 +390,13 @@ fun OnboardingInputScreen(
                     WeightInputBox(
                         label = "현재",
                         value = weightCurrent,
-                        onValueChange = { weightCurrent = it })
+                        onValueChange = { weightCurrent = it },
+                        scrollState = scrollState)
                     WeightInputBox(
                         label = "목표",
                         value = weightTarget,
-                        onValueChange = { weightTarget = it })
+                        onValueChange = { weightTarget = it },
+                        scrollState = scrollState)
                 }
             }
         }
@@ -402,13 +410,13 @@ fun OnboardingInputScreen(
                 .padding(bottom = 32f.bhp()),
             contentAlignment = Alignment.Center
         ) {
-            PlanConfirmButton(
+            OnboardingConfirmButton(
                 isAvailable = isAvailable,
                 value = "다음 단계로",
                 height = 65f,
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
-                    if (!isAvailable) return@PlanConfirmButton
+                    if (!isAvailable) return@OnboardingConfirmButton
 
                     val lossAmount =
                         (weightCurrent.toFloatOrNull() ?: 0f) -
@@ -504,16 +512,21 @@ fun AgeInputBox(
 @Composable
 fun HeightInputBox(
     height: String,
-    onHeightChange: (String) -> Unit
+    onHeightChange: (String) -> Unit,
+    scrollState: ScrollState // 부모 Column 의 scrollState 전달받음
 ) {
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
+    var componentY by remember { mutableStateOf(0) }
+    val density = LocalDensity.current
 
     Box(
         modifier = Modifier
             .padding(start = 112f.wp())
             .width(160f.wp())
             .height(59f.bhp())
+            .onGloballyPositioned { coordinates ->
+                componentY = coordinates.positionInParent().y.roundToInt()
+            }
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_input_button),
@@ -541,14 +554,15 @@ fun HeightInputBox(
                     color = Color(0xFF000000)
                 ),
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .width(60f.wp())
-                    .bringIntoViewRequester(bringIntoViewRequester)
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             coroutineScope.launch {
-                                delay(200) // 키보드 올라올 시간
-                                bringIntoViewRequester.bringIntoView()
+                                delay(300)
+                                val target = componentY - (scrollState.maxValue / 2)
+                                scrollState.animateScrollTo(target.coerceAtLeast(0))
                             }
                         }
                     },
@@ -576,19 +590,24 @@ fun HeightInputBox(
     }
 }
 
+
 @Composable
 fun WeightInputBox(
     label: String,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    scrollState: ScrollState
 ) {
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
+    var componentY by remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier
             .width(160f.wp())
             .height(60f.bhp())
+            .onGloballyPositioned { coordinates ->
+                componentY = coordinates.positionInParent().y.roundToInt()
+            }
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_input_button),
@@ -623,14 +642,15 @@ fun WeightInputBox(
                     color = Color(0xFF000000)
                 ),
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .width(50f.wp())
-                    .bringIntoViewRequester(bringIntoViewRequester)
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             coroutineScope.launch {
-                                delay(200)
-                                bringIntoViewRequester.bringIntoView()
+                                delay(300)
+                                val target = componentY - (scrollState.maxValue / 2)
+                                scrollState.animateScrollTo(target.coerceAtLeast(0))
                             }
                         }
                     },
@@ -657,6 +677,44 @@ fun WeightInputBox(
         }
     }
 }
+
+@Composable
+fun PlanConfirmButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    isAvailable: Boolean = false,
+    value: String,
+    height: Float = 60f
+) {
+
+    val image = if (isAvailable) R.drawable.bg_plan_confirm_button_selected
+    else R.drawable.bg_plan_confirm_button_default
+
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height.bhp())
+            .noRippleClickable { if (isAvailable) onClick() }
+    ) {
+        Image(
+            modifier = Modifier
+                .matchParentSize(),
+            painter = painterResource(image),
+            contentDescription = "select button",
+            contentScale = ContentScale.FillBounds
+        )
+
+        Text(
+            text = value,
+            style = DungGeunMo20,
+            fontSize = 20f.isp(),
+            color = Color(0xFF000000),
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
 
 
 @Composable
