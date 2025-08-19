@@ -15,6 +15,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -45,6 +47,7 @@ import com.konkuk.kuit_kac.local.parse.loadFitness
 import com.konkuk.kuit_kac.local.parse.loadFood
 import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
+//import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
@@ -59,8 +62,12 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var fitnessDao: FitnessDao
+
+//    private val loginViewModel: LoginViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        handleDeepLink(intent)
 
         enableEdgeToEdge()
         val requestPostNoti = registerForActivityResult(
@@ -205,7 +212,16 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                 ) {
-
+//                    // 로그인 완료 시 자동으로 이동
+//                    LaunchedEffect(loginViewModel.loginState) {
+//                        if (loginViewModel.loginState != null) {
+//                            navController.navigate(Route.Home.route) {
+//                                popUpTo(navController.graph.startDestinationId) {
+//                                    inclusive = true
+//                                }
+//                            }
+//                        }
+//                    }
                     Scaffold(
                         bottomBar = {
                             // 특정 화면들에서 bottomBar 보이지 않게 설정
@@ -272,7 +288,23 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+//    override fun onNewIntent(intent: Intent) {
+//        super.onNewIntent(intent)
+//        handleDeepLink(intent)
+//    }
+//
+//    private fun handleDeepLink(intent: Intent) {
+//        val data: Uri? = intent.data
+//        if (data?.scheme == "myapp" && data.host == "auth" && data.path == "/kakao") {
+//            val code = data.getQueryParameter("code")
+//            if (!code.isNullOrEmpty()) {
+//                loginViewModel.handleKakaoCode(code) // 서버로 code 전달
+//            }
+//        }
+//    }
 }
+
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

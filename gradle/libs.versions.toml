@@ -1,6 +1,7 @@
 [versions]
 accompanistPager = "0.34.0"
 agp = "8.9.1"
+datastorePreferences = "1.1.1"
 kotlin = "1.9.22"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -24,10 +25,12 @@ ksp = "1.9.22-1.0.17"
 roomCompiler = "2.7.2"
 okio = "3.9.0"
 material3 = "1.2.1"
+browser = "1.9.0"
 
 [libraries]
 # Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -79,6 +82,7 @@ accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pa
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

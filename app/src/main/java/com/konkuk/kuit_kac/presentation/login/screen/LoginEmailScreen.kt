@@ -48,6 +48,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -59,7 +60,7 @@ fun LoginEmailScreen(
     navController: NavHostController
 ) {
     val email: String = "user_id@naver.com"
-    var showSheet by remember { mutableStateOf(true) }
+    var showSheet by remember { mutableStateOf(false) }
     var agreeAll by remember { mutableStateOf(false) }
     var agreeService by remember { mutableStateOf(false) }
     var agreePrivacy by remember { mutableStateOf(false) }
@@ -157,7 +158,10 @@ fun LoginEmailScreen(
         }
 
         DefaultButton(
-            onClick = { showSheet = true },
+            onClick = {
+//                showSheet = true
+                navController.navigate(Route.OnboardingStart.route)
+            },
             value = "다음으로",
             buttonHeight = 70f,
             isOrange = true,

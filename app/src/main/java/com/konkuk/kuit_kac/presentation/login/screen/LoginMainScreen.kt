@@ -1,5 +1,7 @@
 package com.konkuk.kuit_kac.presentation.login.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,10 +24,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.kuit_kac.BuildConfig
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
@@ -40,6 +44,8 @@ fun LoginMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -114,7 +120,12 @@ fun LoginMainScreen(
                         .calculateBottomPadding()
                 )
                 .size(346.6669f.wp(), 52f.bhp())
-                .clickable { navController.navigate(Route.LoginEmail.route) },
+                .clickable {
+                    navController.navigate(Route.LoginEmail.route)
+//                    val kakaoLoginUrl = "${BuildConfig.BASE_URL}/api/auth/kakao"
+//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(kakaoLoginUrl))
+//                    context.startActivity(intent)
+                },
             painter = painterResource(id = R.drawable.ic_kakao_login_wide),
             contentDescription = null,
         )
