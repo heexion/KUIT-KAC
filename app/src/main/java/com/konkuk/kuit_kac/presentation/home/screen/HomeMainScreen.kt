@@ -65,14 +65,15 @@ fun HomeMainScreen(
     val isLate = true
     var hamcoachNum by remember { mutableIntStateOf(1) }
     Log.d("HomeMainScreen", summary?.dailyKcalorieGoal.toString())
-    /*LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {
         viewModel.getSummary(userId)
         if (!isLate) randNum = Random.nextInt(3) + 1
         else {
             randNum = 4
             hamcoachNum = 3
         }
-    */
+        }
+
 
     // 로딩 상태 처리
     /*if (summary == null) {

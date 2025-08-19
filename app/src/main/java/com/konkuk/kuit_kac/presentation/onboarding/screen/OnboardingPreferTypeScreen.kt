@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -34,11 +35,13 @@ import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDietSpeed
 import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingConfirmButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 
 @Composable
 fun OnboardingPreferTypeScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 
 ) {
     val options = listOf("패스트푸드", "한식", "중식", "양식", "아시안", "튀김류")
@@ -47,6 +50,14 @@ fun OnboardingPreferTypeScreen(
     val onNextClick: (List<String>) -> Unit = {
         navController.navigate(OnboardingDietSpeed.route)
     }
+    val eatingOutMap = mapOf(
+        "패스트푸드" to "FAST_FOOD",
+        "한식"     to "KOREAN",
+        "중식"     to "CHINESE",
+        "양식"     to "WESTERN",
+        "아시안"   to "ASIAN",
+        "튀김류"    to "FRIED"
+    )
 
 
     fun toggle(option: String) {
@@ -126,7 +137,6 @@ fun OnboardingPreferTypeScreen(
                     modifier = Modifier.width(174f.wp())
                 )
             }
-
             // 다음 버튼
             OnboardingConfirmButton(
                 isAvailable = selectedOptions.isNotEmpty(),
@@ -135,6 +145,12 @@ fun OnboardingPreferTypeScreen(
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
                     if (selectedOptions.isNotEmpty()) {
+                        val codes = selectedOptions
+                            .mapNotNull { eatingOutMap[it] }
+                            .distinct()
+                            .joinToString(", ")
+
+                        onboardingViewModel.setEatingOutType(codes)
                         onNextClick(selectedOptions.toList())
                     }
                 }

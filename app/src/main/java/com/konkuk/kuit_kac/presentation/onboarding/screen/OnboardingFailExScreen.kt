@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -50,6 +51,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -58,7 +60,8 @@ import kotlinx.coroutines.launch
 fun OnboardingFailExScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onNextClick: (List<String>) -> Unit = {}
+    onNextClick: (List<String>) -> Unit = {},
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val options = listOf("야식", "스트레스성\n 폭식", "식단 기록\n 귀찮음", "의지 부족")
     val selectedOptions = remember { mutableStateListOf<String>() }
@@ -165,6 +168,7 @@ fun OnboardingFailExScreen(
                     .width(364f.wp())
                     .bringIntoViewRequester(bringIntoViewRequester),
                 onClick = {
+
                     when {
                         // 직접 입력 모드이고 글자가 있으면 → 다음 화면 이동
                         isDirectInputMode && directInputText.isNotBlank() -> {
@@ -186,7 +190,12 @@ fun OnboardingFailExScreen(
                                 bringIntoViewRequester.bringIntoView()
                             }
                         }
+
                     }
+                    val reason = items.joinToString(", ")
+                    onboardingViewModel.setDietFailReason(reason)
+                    onNextClick(items)
+                    navController.navigate(OnboardingAppetite.route)
                 }
             )
 

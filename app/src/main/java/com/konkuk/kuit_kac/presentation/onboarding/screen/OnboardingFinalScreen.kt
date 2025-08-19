@@ -8,22 +8,26 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.Home
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingStart
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 
 @Composable
 fun OnboardingFinalScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onFinish: () -> Unit={}
+    onFinish: () -> Unit={},
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
 
@@ -31,6 +35,17 @@ fun OnboardingFinalScreen(
     LaunchedEffect(Unit) {
         scrollState.scrollTo(100)
     }
+    val postState by onboardingViewModel.onboardingPostSuccessState
+    LaunchedEffect(postState) {
+        if (postState == true) {
+            onFinish()
+            navController.navigate(Home.route) {
+                popUpTo(OnboardingStart.route) { inclusive = true }
+                launchSingleTop = true
+            }
+        }
+    }
+
 
     Column(
         modifier = modifier
@@ -38,10 +53,8 @@ fun OnboardingFinalScreen(
             .verticalScroll(scrollState) // 스크롤 가능
             .noRippleClickable {
                 // 다음 화면으로 이동
-                onFinish()
-                navController.navigate(Home.route) {
-                    popUpTo(OnboardingStart.route) { inclusive = true }
-                }
+                onboardingViewModel.postOnboarding()
+
             }
     ) {
         Image(

@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.fitness
 
+import com.konkuk.kuit_kac.data.request.RecordRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineRequestDto
 import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import com.konkuk.kuit_kac.data.service.RoutineService
@@ -8,6 +9,7 @@ import javax.inject.Inject
 
 interface RoutineRepository {
     suspend fun createRoutine(request: RoutineRequestDto): Response<Unit>
+    suspend fun createRoutineRecord(request: RecordRequestDto): Response<Unit>
     suspend fun changeRoutine(dietId: Int, request: RoutineRequestDto): Response<Unit>
     suspend fun getRoutineRecord(userId: Int): Response<List<RoutineResponseDto>>
     suspend fun getRoutineTemplate(userId: Int): Response<List<RoutineResponseDto>>
@@ -19,6 +21,10 @@ class RoutineRepositoryImpl @Inject constructor(
 ): RoutineRepository {
     override suspend fun createRoutine(request: RoutineRequestDto): Response<Unit> {
         return api.createRoutine(request)
+    }
+
+    override suspend fun createRoutineRecord(request: RecordRequestDto): Response<Unit> {
+        return api.createRoutineRecord(request)
     }
 
     override suspend fun changeRoutine(dietId: Int, request: RoutineRequestDto): Response<Unit> {

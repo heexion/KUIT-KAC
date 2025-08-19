@@ -8,6 +8,7 @@ import com.konkuk.kuit_kac.data.service.HomeWeightService
 import com.konkuk.kuit_kac.data.service.MealService
 import com.konkuk.kuit_kac.data.service.RoutineService
 import com.konkuk.kuit_kac.data.service.NutritionService
+import com.konkuk.kuit_kac.data.service.OnboardingService
 import com.konkuk.kuit_kac.local.service.FoodService
 import dagger.Module
 import dagger.Provides
@@ -64,7 +65,10 @@ object ApiModule {
     fun provideHomeWeightService(retrofit: Retrofit): HomeWeightService =
         retrofit.create(HomeWeightService::class.java)
 
-
+    @Provides
+    @Singleton
+    fun provideOnboardingService(retrofit: Retrofit): OnboardingService =
+        retrofit.create(OnboardingService::class.java)
 
 }
 @Module

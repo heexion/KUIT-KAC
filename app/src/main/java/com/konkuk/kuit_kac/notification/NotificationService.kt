@@ -1,10 +1,14 @@
 package com.konkuk.kuit_kac.notification
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.service.notification.NotificationListenerService
@@ -14,8 +18,19 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
+import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.konkuk.kuit_kac.MainActivity
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.local.dao.FoodDao
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import java.time.LocalDate
+import java.util.Calendar
 
 class MyNotificationListenerService : NotificationListenerService() {
     private var lastAlertTime = 0L
@@ -98,5 +113,232 @@ class MyNotificationListenerService : NotificationListenerService() {
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         Log.d("NotifListener", "Notification removed: ${sbn.packageName}")
+    }
+}
+
+object ReminderScheduler {
+
+    const val ACTION_MORNING = "com.konkuk.kuit_kac.action.MORNING"
+    const val ACTION_LUNCH = "com.konkuk.kuit_kac.action.LUNCH"
+    const val ACTION_DINNER = "com.konkuk.kuit_kac.action.DINNER"
+    const val ACTION_LATE_SNACK_WARN = "com.konkuk.kuit_kac.action.LATE_SNACK_WARN"
+    const val ACTION_CHECK_MISSING = "com.konkuk.kuit_kac.action.CHECK_MISSING"
+
+    fun ensureAllReminders(context: Context) {
+        // one-shot exact alarms; we re-schedule each day when they fire
+        scheduleExactDaily(context, 9, 0,  1001, ACTION_MORNING)
+        scheduleExactDaily(context, 12, 0, 1002, ACTION_LUNCH)
+        scheduleExactDaily(context, 18, 0, 1003, ACTION_DINNER)
+        scheduleExactDaily(context, 22, 0, 1004, ACTION_LATE_SNACK_WARN)
+        scheduleExactDaily(context, 21, 0, 1005, ACTION_CHECK_MISSING)
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    fun scheduleExactDaily(
+        context: Context,
+        hour: Int,
+        minute: Int,
+        requestCode: Int,
+        action: String
+    ) {
+        val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, ReminderReceiver::class.java).apply {
+            this.action = action
+        }
+        val pi = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val cal = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
+        }
+        am.cancel(pi)
+        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.timeInMillis, pi)
+    }
+
+    fun scheduleTomorrowSameTime(context: Context, requestCode: Int, action: String) {
+        val (h, m) = when (action) {
+            ACTION_MORNING -> 9 to 0
+            ACTION_LUNCH -> 12 to 0
+            ACTION_DINNER -> 18 to 0
+            ACTION_LATE_SNACK_WARN -> 22 to 0
+            ACTION_CHECK_MISSING -> 21 to 0
+            else -> 9 to 0
+        }
+        scheduleExactDaily(context, h, m, requestCode, action)
+    }
+}
+
+class ReminderReceiver : BroadcastReceiver() {
+
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    override fun onReceive(context: Context, intent: Intent?) {
+        val action = intent?.action ?: return
+
+        // Always create channels before posting (idempotent)
+        NotificationHelper.ensureChannels(context)
+
+        when (action) {
+            ReminderScheduler.ACTION_MORNING -> {
+                NotificationHelper.showReminder(
+                    context,
+                    id = 3001,
+                    title = "냠코치",
+                    text = "아침 식사 기록할 시간이에요."
+                )
+                ReminderScheduler.scheduleTomorrowSameTime(context, 1001, action)
+            }
+
+            ReminderScheduler.ACTION_LUNCH -> {
+                NotificationHelper.showReminder(
+                    context,
+                    id = 3002,
+                    title = "냠코치",
+                    text = "점심 식사 기록 잊지 말기!"
+                )
+                ReminderScheduler.scheduleTomorrowSameTime(context, 1002, action)
+            }
+
+            ReminderScheduler.ACTION_DINNER -> {
+                NotificationHelper.showReminder(
+                    context,
+                    id = 3003,
+                    title = "냠코치",
+                    text = "저녁 식사 기록해볼까요?"
+                )
+                ReminderScheduler.scheduleTomorrowSameTime(context, 1003, action)
+            }
+
+            ReminderScheduler.ACTION_LATE_SNACK_WARN -> {
+                NotificationHelper.showReminder(
+                    context,
+                    id = 3004,
+                    title = "냠코치",
+                    text = "야식은 내일의 나에게 영향을 줘요. 조심!"
+                )
+                ReminderScheduler.scheduleTomorrowSameTime(context, 1004, action)
+            }
+
+            ReminderScheduler.ACTION_CHECK_MISSING -> {
+                val req = OneTimeWorkRequestBuilder<TodayMissingMealsWorker>().build()
+                WorkManager.getInstance(context).enqueueUniqueWork(
+                    "today_missing_meals",
+                    ExistingWorkPolicy.REPLACE,
+                    req
+                )
+
+                ReminderScheduler.scheduleTomorrowSameTime(context, 1005, action)
+            }
+        }
+    }
+}
+object NotificationHelper {
+    const val REMINDER_CHANNEL_ID = "reminder_channel"
+
+    fun ensureChannels(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val nm = NotificationManagerCompat.from(context)
+            val reminder = NotificationChannel(
+                REMINDER_CHANNEL_ID,
+                "Reminders",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Daily meal record reminders"
+            }
+            nm.createNotificationChannel(reminder)
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    fun showReminder(
+        context: Context,
+        id: Int,
+        title: String,
+        text: String
+    ) {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            putExtra("from_alert", true)
+            putExtra("deeplink", "meal_record") // handle this in MainActivity nav if desired
+        }
+        val pendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(
+                id,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        val builder = NotificationCompat.Builder(context, REMINDER_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_jam)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+
+        NotificationManagerCompat.from(context).notify(id, builder.build())
+    }
+}
+
+@HiltWorker
+class TodayMissingMealsWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted params: WorkerParameters,
+    private val foodDao: FoodDao
+) : CoroutineWorker(appContext, params) {
+
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    override suspend fun doWork(): Result {
+        return try {
+            val today = LocalDate.now() // device TZ (Asia/Seoul)
+            // TODO: Replace these calls with your actual DAO queries.
+            /*val hasBreakfast = foodDao.hasMealOnDate(mealType = "BREAKFAST", date = today)
+            val hasLunch     = foodDao.hasMealOnDate(mealType = "LUNCH",     date = today)
+            val hasDinner    = foodDao.hasMealOnDate(mealType = "DINNER",    date = today)*/
+            val hasBreakfast = false
+            val hasLunch = false
+            val hasDinner = false
+            //TODO: I have to change this logic by GET with server LATER
+
+            val missing = mutableListOf<String>()
+            if (!hasBreakfast) missing += "아침"
+            if (!hasLunch)     missing += "점심"
+            if (!hasDinner)    missing += "저녁"
+
+            if (missing.isNotEmpty()) {
+                NotificationHelper.ensureChannels(applicationContext)
+                val text = "아직 오늘 기록이 비었어요: ${missing.joinToString(", ")}"
+                NotificationHelper.showReminder(
+                    applicationContext,
+                    id = 3100,
+                    title = "냠코치",
+                    text = text
+                )
+            }
+            Result.success()
+        } catch (t: Throwable) {
+            Result.retry()
+        }
+    }
+}
+
+class BootReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent?) {
+        when (intent?.action) {
+            Intent.ACTION_BOOT_COMPLETED,
+            Intent.ACTION_MY_PACKAGE_REPLACED -> {
+                ReminderScheduler.ensureAllReminders(context)
+            }
+        }
     }
 }
