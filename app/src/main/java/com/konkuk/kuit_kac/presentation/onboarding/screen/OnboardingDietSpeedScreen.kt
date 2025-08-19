@@ -52,7 +52,7 @@ fun OnboardingDietSpeedScreen(
         ) {
             ModeSelectButton(
                 iconRes = R.drawable.ic_mode_nyam,
-                iconSize = 51f.bhp(),
+                iconSize = 50f.bhp(),
                 title = "냠냠모드",
                 description = "가볍고 꾸준하게! (12주)",
                 isSelected = selectedTitle == "냠냠모드",
@@ -65,7 +65,7 @@ fun OnboardingDietSpeedScreen(
 
             ModeSelectButton(
                 iconRes = R.drawable.ic_mode_coach,
-                iconSize = 64f.bhp(),
+                iconSize = 50f.bhp(),
                 title = "코치모드",
                 description = "이번 기회에 확실하게! (8주)",
                 isSelected = selectedTitle == "코치모드",
