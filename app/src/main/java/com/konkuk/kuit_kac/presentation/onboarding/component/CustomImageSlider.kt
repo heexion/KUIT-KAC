@@ -35,7 +35,7 @@ fun CustomImageSlider(
     val totalSteps = 5
     val sliderWidth = 280f.wp()
     val knobSize = 32f.bhp()
-    val extraTouchArea = 6f.bhp() //  손잡이 눌림 영역 확장
+    val extraTouchArea = 12f.bhp() //  손잡이 눌림 영역 확장
 
     var dragOffset by remember { mutableStateOf(0f) }
 
