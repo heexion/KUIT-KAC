@@ -24,6 +24,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -60,6 +64,8 @@ fun PlanIPAddScreen(
     navController: NavController,
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
     LaunchedEffect(Unit) {
         mealViewModel.getPlan(userId = 1)
     }
@@ -161,7 +167,11 @@ fun PlanIPAddScreen(
                     val cleanedString = dateString.replace("{", "").replace("}", "")
 
 
-                    WeeklyCalendar(LocalDate.parse(cleanedString) ?: LocalDate.now())
+                    WeeklyCalendar(
+                        LocalDate.parse(cleanedString) ?: LocalDate.now(),
+                        onDateClick = { clickedDate ->
+                            selectedDate = clickedDate
+                        })
 
 //                    Text(
 //                        text = mealViewModel.planDate.value ?: "2025-12-12",
