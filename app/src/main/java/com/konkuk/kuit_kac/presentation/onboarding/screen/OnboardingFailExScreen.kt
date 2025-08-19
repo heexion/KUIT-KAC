@@ -251,7 +251,7 @@ fun ConfirmButton(
     val focusManager = LocalFocusManager.current
 
     val image = if (isAvailable || isEditingFinished) {
-        R.drawable.bg_plan_confirm_button_selected
+        R.drawable.img_onboarding_defalut_button
     } else {
         R.drawable.img_diet_confirm_button
     }

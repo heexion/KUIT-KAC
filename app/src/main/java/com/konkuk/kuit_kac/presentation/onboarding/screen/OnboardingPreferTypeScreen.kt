@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.onboarding.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,23 +8,32 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingDietSpeed
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingConfirmButton
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun OnboardingPreferTypeScreen(
@@ -118,7 +128,7 @@ fun OnboardingPreferTypeScreen(
             }
 
             // 다음 버튼
-            PlanConfirmButton(
+            OnboardingConfirmButton(
                 isAvailable = selectedOptions.isNotEmpty(),
                 value = "다음 단계로",
                 height = 65f,

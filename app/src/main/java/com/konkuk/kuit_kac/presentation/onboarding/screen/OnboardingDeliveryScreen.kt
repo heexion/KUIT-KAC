@@ -33,8 +33,8 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeHam
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
@@ -129,7 +129,7 @@ fun OnboardingDeliveryScreen(
         }
 
         // RecordButton
-        RecordButton(
+        OnboardingButton(
             value = "잘 알겠어!",
             onClick = {
                 navController.navigate(OnboardingMainHomeHam.route)

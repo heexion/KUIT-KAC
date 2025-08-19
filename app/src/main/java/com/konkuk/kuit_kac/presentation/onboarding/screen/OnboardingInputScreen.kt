@@ -56,8 +56,8 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInputResult
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingConfirmButton
 import com.konkuk.kuit_kac.presentation.onboarding.component.SubButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -407,13 +407,13 @@ fun OnboardingInputScreen(
                 .padding(bottom = 32f.bhp()),
             contentAlignment = Alignment.Center
         ) {
-            PlanConfirmButton(
+            OnboardingConfirmButton(
                 isAvailable = isAvailable,
                 value = "다음 단계로",
                 height = 65f,
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
-                    if (!isAvailable) return@PlanConfirmButton
+                    if (!isAvailable) return@OnboardingConfirmButton
 
                     val lossAmount =
                         (weightCurrent.toFloatOrNull() ?: 0f) -
@@ -589,7 +589,7 @@ fun WeightInputBox(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    scrollState: ScrollState // ✅ 부모 Column 의 scrollState 전달받음
+    scrollState: ScrollState
 ) {
     val coroutineScope = rememberCoroutineScope()
     var componentY by remember { mutableStateOf(0) }
@@ -641,7 +641,7 @@ fun WeightInputBox(
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             coroutineScope.launch {
-                                delay(300) // 키보드 올라올 시간 고려
+                                delay(300)
                                 val target = componentY - (scrollState.maxValue / 2)
                                 scrollState.animateScrollTo(target.coerceAtLeast(0))
                             }
@@ -668,6 +668,43 @@ fun WeightInputBox(
                 color = Color(0xFF000000)
             )
         }
+    }
+}
+
+@Composable
+fun PlanConfirmButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    isAvailable: Boolean = false,
+    value: String,
+    height: Float = 60f
+) {
+
+    val image = if (isAvailable) R.drawable.bg_plan_confirm_button_selected
+    else R.drawable.bg_plan_confirm_button_default
+
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height.bhp())
+            .noRippleClickable { if (isAvailable) onClick() }
+    ) {
+        Image(
+            modifier = Modifier
+                .matchParentSize(),
+            painter = painterResource(image),
+            contentDescription = "select button",
+            contentScale = ContentScale.FillBounds
+        )
+
+        Text(
+            text = value,
+            style = DungGeunMo20,
+            fontSize = 20f.isp(),
+            color = Color(0xFF000000),
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }
 

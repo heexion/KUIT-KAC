@@ -27,9 +27,9 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInput
 import com.konkuk.kuit_kac.presentation.onboarding.component.CustomImageSlider
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
 @Composable
@@ -97,7 +97,7 @@ fun OnboardingActivityLevelScreen(
             Spacer(modifier = Modifier.height(20f.bhp()))
 
             // 다음 버튼
-            RecordButton(
+            OnboardingButton(
                 value = "다음으로",
                 onClick = {
                     navController.navigate("${OnboardingInput.route}/$selectedMode")

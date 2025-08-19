@@ -18,8 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingHamCoach
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 
 @Composable
 fun OnboardingIntroduceScreen(
@@ -47,7 +47,7 @@ fun OnboardingIntroduceScreen(
                     )
             ) {
                 // 하단 버튼
-                RecordButton(
+                OnboardingButton(
                     value = "너희 정체가 궁금해!",
                     onClick = {  navController.navigate(OnboardingHamCoach.route) },
                     modifier = Modifier
