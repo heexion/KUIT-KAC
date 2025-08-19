@@ -40,6 +40,7 @@ sealed class Route(val route: String) {
     data object PlanAI : Route(route = "PlanAI") // 식단 AI 추천
     data object PlanInPerson : Route(route = "PlanInPerson") // 식단 직접 입력
     data object PlanCheck : Route(route = "PlanCheck") // 저장된 식단 확인
+    data object PlanResult : Route(route = "plan_result") // 저장된 식단 확인
 
 
     data object Home : Route(route = "home")       // 홈

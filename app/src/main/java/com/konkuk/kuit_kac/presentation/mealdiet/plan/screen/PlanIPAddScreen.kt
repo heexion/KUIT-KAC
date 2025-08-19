@@ -266,14 +266,14 @@ fun PlanIPAddScreen(
                         .height(65f.bhp())
                         .noRippleClickable {
                             if (isMealTypeExist("아침") && isMealTypeExist("점심") && isMealTypeExist("저녁")) {
-                                navController.navigate(Route.MealFastingResult.route)
+                                navController.navigate(Route.PlanResult.route)
                             }
                         }
                 ) {
                     Image(
                         modifier = Modifier
                             .height(65f.bhp()),
-                        painter = painterResource(R.drawable.bg_button_gray),
+                        painter = painterResource(R.drawable.bg_orange_button_default),
                         contentDescription = "default button",
                         contentScale = ContentScale.FillBounds
                     )
