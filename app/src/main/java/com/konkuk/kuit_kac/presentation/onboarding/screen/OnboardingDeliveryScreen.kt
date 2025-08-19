@@ -120,7 +120,7 @@ fun OnboardingDeliveryScreen(
                 .width(333f.wp())
                 .height(604f.bhp())
         ) { page ->
-            val imageRes = if (page == 0) R.drawable.bg_phone_1 else R.drawable.bg_phone
+            val imageRes = if (page == 0) R.drawable.img_onboarding_phone1 else R.drawable.img_onboarding_phone2
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = "배달 알림 예시",
