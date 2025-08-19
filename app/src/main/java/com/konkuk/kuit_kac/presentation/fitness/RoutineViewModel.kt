@@ -65,7 +65,7 @@ class RoutineViewModel @Inject constructor(
                         val f = Fitness(
                             id = profile.exercise.id,
                             name = profile.exercise.name,
-                            targetMuscleGroup = profile.exercise.targetMuscleGroup,
+                            targetMuscleGroup = profile.exercise.targetMuscleGroup ?: "가슴",
                             metValue = profile.exercise.metValue.toDouble(),
                             type = 0
                         )

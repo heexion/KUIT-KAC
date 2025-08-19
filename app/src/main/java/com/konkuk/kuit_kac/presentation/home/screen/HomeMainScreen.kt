@@ -59,12 +59,9 @@ fun HomeMainScreen(
     userId: Int,
     viewModel: HomeSummaryViewModel = hiltViewModel()
 ) {
-    val summary by viewModel.summary
-    val error by viewModel.error
     var randNum by remember { mutableIntStateOf(1) }
     val isLate = true
     var hamcoachNum by remember { mutableIntStateOf(1) }
-    Log.d("HomeMainScreen", summary?.dailyKcalorieGoal.toString())
     LaunchedEffect(Unit) {
         viewModel.getSummary(userId)
         if (!isLate) randNum = Random.nextInt(3) + 1
@@ -72,7 +69,10 @@ fun HomeMainScreen(
             randNum = 4
             hamcoachNum = 3
         }
-        }
+    }
+    val summary by viewModel.summary
+
+    Log.d("HomeMainScreen", summary?.dailyKCalorieGoal.toString())
 
 
     // 로딩 상태 처리
@@ -82,9 +82,9 @@ fun HomeMainScreen(
     }*/
 
     // API 응답에서 값 추출
-    val goal = summary?.dailyKcalorieGoal ?: 0
+    val goal = summary?.dailyKCalorieGoal ?: 0
     val current = summary?.weight ?: 0
-    val left = summary?.remainingKcalorie ?: 0
+    val left = summary?.remainingKCalorie ?: 0
 
     HomeBackgroundComponent()
     Box(
@@ -173,7 +173,7 @@ fun HomeMainScreen(
             )
             Text(
                 modifier = Modifier.padding(top = 7.61f.bhp()),
-                text = "${left}kcal",
+                text = "${left.toInt()}kcal",
                 style = DungGeunMo35,
                 fontSize = 35f.isp(),
                 color = Color(0xFFFFA100)
@@ -183,7 +183,7 @@ fun HomeMainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(19.86f.wp())
             ) {
-                HomeNutritionCircleGraph(goal = goal, left = left)
+                HomeNutritionCircleGraph(goal = goal.toInt(), left = left.toInt())
                 Column {
                     HomeSummaryBox(
                         title = "목표 일일 칼로리",
