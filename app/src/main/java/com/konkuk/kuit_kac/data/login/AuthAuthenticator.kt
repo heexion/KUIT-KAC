@@ -12,7 +12,7 @@ import okhttp3.Route
 import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
-    private val tokenRefreshService: Lazy<RefreshTokenApiService>
+    private val tokenRefreshService: Lazy<RefreshTokenApiService>,
     private val dataStoreRepository: DataStoreRepository,
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
