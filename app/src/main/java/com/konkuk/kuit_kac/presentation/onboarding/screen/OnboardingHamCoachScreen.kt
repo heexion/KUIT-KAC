@@ -87,7 +87,9 @@ fun OnboardingHamCoachScreen(
             )
             Text(
                 text = bubbleText,
-                style = DungGeunMo20.copy(fontSize = bubbleFontSize),
+                style = DungGeunMo20.copy(
+                    fontSize = bubbleFontSize,
+                    lineHeight = bubbleFontSize * 1.3),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
