@@ -114,8 +114,6 @@ data class SnackRequestDto(
     val userId:Int,
     @SerialName("name")
     val name:String,
-    @SerialName("dietEntryType")
-    val dietEntryType:String = "기록",
     @SerialName("foods")
     val foods: List<SnackFoodRequestDto>
 )
