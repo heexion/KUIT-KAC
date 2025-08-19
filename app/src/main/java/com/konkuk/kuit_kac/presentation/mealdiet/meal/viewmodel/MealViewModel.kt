@@ -550,7 +550,12 @@ class MealViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     val body = response.body()
                     _getRecordState.value = body
-                    _mealCardData.value = body?.map { parseToMealCardData(it) } ?: emptyList()
+                    _mealCardData.value = body
+                        ?.filterNotNull()       // null 포인터 익셉션 방지
+                        ?.map { parseToMealCardData(it) }
+                        ?: emptyList()
+
+//                    _mealCardData.value = body?.map { parseToMealCardData(it) } ?: emptyList()
                     _getRecordSuccessState.value = true
                 } else {
                     _getRecordSuccessState.value = false
