@@ -23,6 +23,7 @@ import com.konkuk.kuit_kac.local.Food
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.DietType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -627,6 +628,44 @@ class MealViewModel @Inject constructor(
         _selectedFoods.clear()
         _selectedFoods.addAll(foodList)
     }
+    private val _aiDateSlotTags =
+        mutableStateOf<Map<LocalDate, Map<DietType, PlanTagType>>>(emptyMap())
+    val aiDateSlotTags: State<Map<LocalDate, Map<DietType, PlanTagType>>> get() = _aiDateSlotTags
+
+
+    private fun recomputeAggregatesFromSlotTags() {
+        val aggregatedTags: Map<LocalDate, Set<PlanTagType>> =
+            _aiDateSlotTags.value.mapValues { (_, slotMap) -> slotMap.values.toSet() }
+        _aiDate.value = aggregatedTags
+
+        val aggregatedSlots: Map<LocalDate, Set<DietType>> =
+            _aiDateSlotTags.value.mapValues { (_, slotMap) -> slotMap.keys.toSet() }
+        _aiDietSlots.value = aggregatedSlots
+    }
+    fun setTagForSlots(date: LocalDate, slots: Set<DietType>, tag: PlanTagType) {
+        val current = _aiDateSlotTags.value.toMutableMap()
+        val perSlot = current[date]?.toMutableMap() ?: mutableMapOf()
+        slots.forEach { slot -> perSlot[slot] = tag }
+        current[date] = perSlot.toMap()
+        _aiDateSlotTags.value = current.toMap()
+        recomputeAggregatesFromSlotTags()
+    }
+
+    fun clearAllFor(date: LocalDate) {
+        val current = _aiDateSlotTags.value.toMutableMap()
+        current.remove(date)
+        _aiDateSlotTags.value = current.toMap()
+        recomputeAggregatesFromSlotTags()
+    }
+    private val _aiDietSlots = mutableStateOf<Map<LocalDate, Set<DietType>>>(emptyMap())
+    val aiDietSlots: State<Map<LocalDate, Set<DietType>>> get() = _aiDietSlots
+
+    fun setSlotsFor(date: LocalDate, slots: Set<DietType>) {
+        _aiDietSlots.value = _aiDietSlots.value.toMutableMap().apply { put(date, slots) }
+    }
+    fun clearSlotsFor(date: LocalDate) {
+        _aiDietSlots.value = _aiDietSlots.value.toMutableMap().apply { remove(date) }
+    }
     private val _aiDate = mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap())
     val aiDate: State<Map<LocalDate, Set<PlanTagType>>> get() = _aiDate
 
@@ -648,29 +687,34 @@ class MealViewModel @Inject constructor(
     private fun pickSingleTag(tags: Set<PlanTagType>): PlanTagType =
         tags.firstOrNull { it != PlanTagType.NONE } ?: PlanTagType.NONE
 
+    private val _planDietType = mutableStateOf<String?>(null)
+    val planDietType: State<String?> get() = _planDietType
+
     fun postAi() {
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-
-        val dates: List<AiDto> = aiDate.value.map { (date, tags) ->
-            val chosen = pickSingleTag(tags)
-            AiDto(
-                dietDate = date.format(formatter),
-                dietEntryType = chosen.toApiLabel()
-            )
+        val activities: List<AiDto> = _aiDateSlotTags.value.flatMap { (date, perSlot) ->
+            perSlot.map { (slot, tag) ->
+                AiDto(
+                    dietDate = date.format(formatter),
+                    dietEntryType = when (tag) {
+                        PlanTagType.NONE         -> "없음"
+                        PlanTagType.EATING_OUT   -> "외식"
+                        PlanTagType.DRINKING     -> "술자리"
+                        PlanTagType.AI_RECOMMEND -> "AI추천"
+                    },
+                    dietType = slot.toApiLabel()
+                )
+            }
         }
 
         viewModelScope.launch {
             runCatching {
                 mealRepository.postAi(
-                    AiRequestDto(
-                        userId = 1,
-                        dietActivities = dates
-                    )
+                    AiRequestDto(userId = 1, dietActivities = activities)
                 )
             }.onSuccess {
                 Log.d("API", "Success")
                 _postAiSuccessState.value = true
-                Log.e("editDiet", "success")
             }.onFailure {
                 _postAiSuccessState.value = false
                 Log.e("postAi", it.message ?: "Unknown error")

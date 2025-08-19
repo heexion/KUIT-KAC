@@ -158,6 +158,8 @@ data class AiRequestDto(
 data class AiDto(
     @SerialName("dietDate")
     val dietDate: String,
+    @SerialName("dietType")
+    val dietType: String,
     @SerialName("dietEntryType")
     val dietEntryType: String
 )

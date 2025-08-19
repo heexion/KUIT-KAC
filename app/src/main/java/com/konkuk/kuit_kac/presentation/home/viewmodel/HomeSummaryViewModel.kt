@@ -36,6 +36,7 @@ class HomeSummaryViewModel @Inject constructor(
             runCatching {
                 repository.getSummary(userId)
             }.onSuccess { response ->
+                Log.d("getSummary", response.body()?.remainingKCalorie.toString())
                 if(response.isSuccessful){
                     val body = response.body()
                     _summary.value = body

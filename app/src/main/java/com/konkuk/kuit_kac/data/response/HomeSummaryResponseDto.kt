@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeSummaryResponseDto(
-    @SerialName("dailyKcalorieGoal")
-    val dailyKcalorieGoal: Int,
-    @SerialName("totalIntakeKcalorie")
-    val totalIntakeKcalorie: Int,
+    @SerialName("dailyKCalorieGoal")
+    val dailyKCalorieGoal: Double,
+    @SerialName("totalIntakeKCalorie")
+    val totalIntakeKCalorie: Double,
     @SerialName("weight")
-    val weight: Int,
-    @SerialName("remainingKcalorie")
-    val remainingKcalorie: Int
+    val weight: Double,
+    @SerialName("remainingKCalorie")
+    val remainingKCalorie: Double
 )
