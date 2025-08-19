@@ -41,6 +41,23 @@ sealed class Route(val route: String) {
     data object PlanInPerson : Route(route = "PlanInPerson") // 식단 직접 입력
     data object PlanCheck : Route(route = "PlanCheck") // 저장된 식단 확인
 
+    // Plan AI 관련
+    data object PlanAIComplete : Route(route = "PlanAIComplete")
+    data object PlanAIDetail : Route(route = "PlanAIDetail")
+    data object PlanAILoading : Route(route = "PlanAILoading")
+    data object PlanAIRecom : Route(route = "PlanAIRecom")
+
+    // Plan InPerson (직접 입력) 관련
+    data object PlanInPersonAddComplete : Route(route = "PlanInPersonAddComplete")
+    data object PlanIPAdd : Route(route = "PlanIPAdd")
+    data object PlanIPItem : Route(route = "PlanIPItem")
+    data object PlanIPSearch : Route(route = "PlanIPSearch")
+    data object PlanIPTemp : Route(route = "PlanIPTemp")
+
+    // 결과 화면
+    data object PlanResult : Route(route = "PlanResult")
+
+
 
     data object Home : Route(route = "home")       // 홈
     data object HomeObservation : Route(route = "homeObservation") // 홈-관찰 일지
