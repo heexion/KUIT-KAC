@@ -27,7 +27,10 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 @Composable
-fun WeeklyCalendar(date: LocalDate = LocalDate.now()) {
+fun WeeklyCalendar(
+    date: LocalDate = LocalDate.now(),
+    onDateClick: (LocalDate) -> Unit = {} // 클릭된 날짜를 반환
+) {
     var selectedDate by remember { mutableStateOf(date) }
 
     val monday = date.with(DayOfWeek.MONDAY)
@@ -46,8 +49,9 @@ fun WeeklyCalendar(date: LocalDate = LocalDate.now()) {
             DayItem(
                 date = day,
                 isSelected = day == selectedDate,
-                onClick = {
-                    selectedDate = it
+                onClick = { clickedDate ->
+                    selectedDate = clickedDate
+                    onDateClick(clickedDate)
                 }
             )
 
