@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 data class Food(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val foodType: String?,
+    val foodType: String,
     val calorie: Double,
     val protein: Double,
     val fat: Double,
