@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.wp
@@ -26,7 +27,7 @@ fun HamcoachGif(
     ) {
         Image(
             modifier = Modifier
-                .size(ellipseLength.toFloat().wp(), ellipseLength.toFloat().bhp()),
+                .size(ellipseLength.toFloat().bhp(), ellipseLength.toFloat().bhp()),
             painter = painterResource(R.drawable.img_component_ellipse),
             contentDescription = "Nyam Ellipse"
         )
@@ -34,8 +35,8 @@ fun HamcoachGif(
         when (num) {
             1 -> GifImage(
                 modifier = Modifier
-                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
-                    .offset(x = 5f.wp()),
+                    .size(mascotLength.toFloat().bhp(), mascotLength.toFloat().bhp()),
+//                    .offset(x = 5.dp),
                 drawableId = R.drawable.gif_hamcoach_default,
                 onClick = { onClick() },
                 actualWidth = 88.43783f.wp(),
@@ -44,8 +45,8 @@ fun HamcoachGif(
 
             2 -> GifImage(
                 modifier = Modifier
-                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
-                    .offset(x = 10f.wp()),
+                    .size(mascotLength.toFloat().bhp(), mascotLength.toFloat().bhp()),
+//                    .offset(x = 10.dp),
                 drawableId = R.drawable.gif_hamcoach_thumbsup,
                 onClick = { onClick() },
                 actualWidth = 88.43783f.wp(),
@@ -54,8 +55,8 @@ fun HamcoachGif(
 
             3 -> GifImage(
                 modifier = Modifier
-                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
-                    .offset(x = 10f.wp()),
+                    .size(mascotLength.toFloat().bhp(), mascotLength.toFloat().bhp()),
+//                    .offset(x = 10f.dp),
                 drawableId = R.drawable.gif_hamcoach_angry,
                 onClick = { onClick() },
                 actualWidth = 88.43783f.wp(),
@@ -64,8 +65,8 @@ fun HamcoachGif(
 
             4->  GifImage(
                 modifier = Modifier
-                    .size(mascotLength.toFloat().wp(), mascotLength.toFloat().bhp())
-                    .offset(x = 10f.wp(), y = -10f.bhp()),
+                    .size(mascotLength.toFloat().bhp(), mascotLength.toFloat().bhp()),
+//                    .offset(x = 10.dp, y = (-10).dp),
                 drawableId = R.drawable.gif_hamcoach_thinking_loading,
                 onClick = { onClick() },
                 actualWidth = 88.43783f.wp(),
