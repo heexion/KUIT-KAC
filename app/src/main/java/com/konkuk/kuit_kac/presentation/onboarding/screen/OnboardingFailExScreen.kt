@@ -10,18 +10,26 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +51,8 @@ import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAppetite
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingFailExScreen(
@@ -63,7 +74,25 @@ fun OnboardingFailExScreen(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+
+    val scrollState = rememberScrollState()
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val scope = rememberCoroutineScope()
+    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+
+
+    LaunchedEffect(isDirectInputMode, isKeyboardVisible) {
+        if (isDirectInputMode && isKeyboardVisible) {
+            delay(100)
+            bringIntoViewRequester.bringIntoView()
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .imePadding()
+    ) {
         OnboardingBackScreen(
             bubbleText = "실패한 경험이 있다면,\n그 이유가 뭐라고 생각해?",
             bubbleFontSize = 24f.isp(),
@@ -76,13 +105,14 @@ fun OnboardingFailExScreen(
                 .padding(
                     start = 24f.wp(),
                     end = 24f.wp(),
-                    bottom = 50f.bhp() + WindowInsets.navigationBars.asPaddingValues()
+                    bottom = 50f.bhp() + WindowInsets.navigationBars
+                        .asPaddingValues()
                         .calculateBottomPadding()
-                ),
+                )
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(20f.bhp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 위에 선택 버튼들 항상 표시
             Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
                 DietSelectButton(
                     value = options[0],
@@ -124,32 +154,42 @@ fun OnboardingFailExScreen(
                 )
             }
 
-            // ConfirmButton
+
             ConfirmButton(
                 isDirectInputMode = isDirectInputMode,
                 value = directInputText,
-                onValueChange = {
-                    directInputText = it
-                },
+                onValueChange = { directInputText = it },
                 isAvailable = selectedOptions.isNotEmpty() || directInputText.isNotBlank(),
                 height = 65f,
-                modifier = Modifier.width(364f.wp()),
+                modifier = Modifier
+                    .width(364f.wp())
+                    .bringIntoViewRequester(bringIntoViewRequester),
                 onClick = {
                     when {
-                        // 이미 입력 끝났으면 다음 화면 이동
-                        directInputText.isNotBlank() || selectedOptions.isNotEmpty() -> {
+                        // 직접 입력 모드이고 글자가 있으면 → 다음 화면 이동
+                        isDirectInputMode && directInputText.isNotBlank() -> {
                             onNextClick(
                                 (selectedOptions + directInputText).filter { it.isNotBlank() }
                             )
                             navController.navigate(OnboardingAppetite.route)
                         }
-                        // 처음 "직접 입력할래" 눌렀을 때 입력 모드 전환
-                        else -> {
+                        // 옵션 선택만 했어도 바로 이동
+                        selectedOptions.isNotEmpty() -> {
+                            onNextClick(selectedOptions)
+                            navController.navigate(OnboardingAppetite.route)
+                        }
+                        // 직접 입력 모드 진입 (처음 누른 경우)
+                        !isDirectInputMode -> {
                             isDirectInputMode = true
+                            scope.launch {
+                                delay(50)
+                                bringIntoViewRequester.bringIntoView()
+                            }
                         }
                     }
                 }
             )
+
         }
     }
 }
