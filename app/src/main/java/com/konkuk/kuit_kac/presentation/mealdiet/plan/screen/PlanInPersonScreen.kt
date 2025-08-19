@@ -163,7 +163,7 @@ fun PlanInPersonScreen(
                         }
                     )
                     PlanConfirmButton(
-                        modifier = Modifier.padding(top = 36f.bhp()),
+                        modifier = Modifier.padding(top = 30f.bhp()),
                         isAvailable = if (selectedDate != null) true
                         else false,
                         onClick = {
@@ -176,7 +176,7 @@ fun PlanInPersonScreen(
                     )
                     Spacer(
                         modifier = Modifier.size(
-                            140f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                            150f.bhp() - WindowInsets.navigationBars.asPaddingValues()
                                 .calculateBottomPadding()
                         ),
                     )
