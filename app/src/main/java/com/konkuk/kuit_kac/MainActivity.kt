@@ -242,7 +242,7 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingPreferType.route,
                     Route.OnboardingDietSpeed.route,
                     "${Route.OnboardingActivityLevel.route}/{mode}",
-                    Route.OnboardingInput.route,
+                    "${Route.OnboardingInput.route}/{mode}",
                     Route.OnboardingInputResult.route,
                     Route.OnboardingIntroduce.route,
                     Route.OnboardingHamCoach.route,
