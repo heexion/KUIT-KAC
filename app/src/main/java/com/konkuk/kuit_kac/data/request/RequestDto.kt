@@ -188,6 +188,10 @@ data class OnboardingRequestDto(
     val nickname: String,
     @SerialName("targetWeight")
     val targetWeight: Double,
+    @SerialName("currentWeight")
+    val currentWeight: Double,
+    @SerialName("activity")
+    val activity: String,
     @SerialName("weeklyEatingOutCount")
     val weeklyEatingOutCount: String
 )

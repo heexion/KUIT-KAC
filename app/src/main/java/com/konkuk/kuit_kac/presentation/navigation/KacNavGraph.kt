@@ -274,7 +274,7 @@ fun KacNavGraph(
                 }
                 val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
                 val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
-                // TODO 이거 받는 api 없음
+
                 OnboardingActivityLevelScreen(
                     navController = navController,
                     selectedMode = selectedMode,

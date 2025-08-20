@@ -25,11 +25,13 @@ class OnboardingViewModel @Inject constructor(
     fun setHeight(height: Int) { _draft.value = _draft.value.copy(height = height) }
     fun setNickname(nickname: String) { _draft.value = _draft.value.copy(nickname = nickname) }
     fun setTargetWeight(w: Double) { _draft.value = _draft.value.copy(targetWeight = w) }
+    fun setCurrentWeight(w: Double) {_draft.value = _draft.value.copy(currentWeight = w)}
     fun setWeeklyEatingOutCount(v: String) { _draft.value = _draft.value.copy(weeklyEatingOutCount = v) }
     fun setAppetiteType(v: String) { _draft.value = _draft.value.copy(appetiteType = v) }
     fun setDietFailReason(v: String) { _draft.value = _draft.value.copy(dietFailReason = v) }
     fun setDietVelocity(v: String) { _draft.value = _draft.value.copy(dietVelocity = v) }
     fun setEatingOutType(v: String) { _draft.value = _draft.value.copy(eatingOutType = v) }
+    fun setActivity(v: String) {_draft.value = _draft.value.copy(activity = v)}
     fun setHasDietExperience(b: Boolean) { _draft.value = _draft.value.copy(hasDietExperience = b) }
 
 
@@ -73,9 +75,11 @@ class OnboardingViewModel @Inject constructor(
             gender = d.gender!!,
             hasDietExperience = d.hasDietExperience!!,
             height = d.height!!,
-            nickname = d.nickname!!,
+            nickname = d.nickname,
             targetWeight = d.targetWeight!!,
-            weeklyEatingOutCount = d.weeklyEatingOutCount!!
+            weeklyEatingOutCount = d.weeklyEatingOutCount!!,
+            currentWeight = d.currentWeight!!,
+            activity = d.activity!!
         )
     }
 
@@ -108,7 +112,6 @@ class OnboardingViewModel @Inject constructor(
             if (d.age == null) add("age")
             if (d.gender == null) add("gender")
             if (d.height == null) add("height")
-            if (d.nickname == null) add("nickname")
             if (d.targetWeight == null) add("targetWeight")
             if (d.weeklyEatingOutCount == null) add("weeklyEatingOutCount")
             if (d.appetiteType == null) add("appetiteType")
@@ -128,7 +131,9 @@ data class OnboardingDraft(
     val gender: String? = null,
     val hasDietExperience: Boolean? = null,
     val height: Int? = null,
-    val nickname: String? = null,
+    val nickname: String = "",
     val targetWeight: Double? = null,
+    val currentWeight: Double? = null,
+    val activity: String? = null,
     val weeklyEatingOutCount: String? = null
 )
