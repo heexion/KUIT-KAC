@@ -71,7 +71,7 @@ fun DietEditTempScreen(
     var name by remember(originalName) { mutableStateOf(originalName ?: "") }
     val dietId = dietViewModel.dietId.value
     val selectedFoods = dietViewModel.selectedFoods
-    if (dietId == null || selectedFoods.isEmpty()) {
+    if (dietId == null) {
         Log.d("MealEditTempScreen", "Waiting for data... dietId=$dietId, foods=$selectedFoods")
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text("Loading...")
@@ -219,22 +219,26 @@ fun DietEditTempScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16f.bhp())
                     ) {
-                        selectedFoods.forEach { foodWithQuantity ->
-                            val food = foodWithQuantity.food
-                            val quantity = foodWithQuantity.quantity
-                            MealItemCard(
-                                foodNum = 1,
-                                image = food.food_type.toDrawable(),
-                                foodName = food.name,
-                                foodAmount = quantity,
-                                foodKcal = (quantity * food.calorie).toInt(),
-                                onDeleteClick = {
-                                    dietViewModel.removeFood(foodWithQuantity)
-                                },
-                                navController = navController
-                            )
-                            Log.d("DietTemp", "foodType: ${food.food_type}")
-                            Log.d("DietTemp", "foodType: ${food.food_type.toDrawable()}")
+                        if (selectedFoods.isEmpty()) {
+                            Text("선택된 음식이 없습니다.", style = DungGeunMo17)
+                        } else {
+                            selectedFoods.forEach { foodWithQuantity ->
+                                val food = foodWithQuantity.food
+                                val quantity = foodWithQuantity.quantity
+                                MealItemCard(
+                                    foodNum = 1,
+                                    image = food.food_type.toDrawable(),
+                                    foodName = food.name,
+                                    foodAmount = quantity,
+                                    foodKcal = (quantity * food.calorie).toInt(),
+                                    onDeleteClick = {
+                                        dietViewModel.removeFood(foodWithQuantity)
+                                    },
+                                    navController = navController
+                                )
+                                Log.d("DietTemp", "foodType: ${food.food_type}")
+                                Log.d("DietTemp", "foodType: ${food.food_type.toDrawable()}")
+                            }
                         }
                     }
                     Row(
@@ -356,7 +360,7 @@ fun DietEditTempScreen(
                         navController.popBackStack()
                     else
                         dietViewModel.editDiet()
-                    navController.navigate(Route.MealFastingResult.route)
+                    navController.navigate("meal_edit_result")
                 },
             contentAlignment = Alignment.Center
         ) {
