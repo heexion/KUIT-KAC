@@ -55,8 +55,6 @@ sealed class Route(val route: String) {
     data object PlanIPSearch : Route(route = "PlanIPSearch")
     data object PlanIPTemp : Route(route = "PlanIPTemp")
 
-    // 결과 화면
-    data object PlanResult : Route(route = "PlanResult")
 
 
 
@@ -117,6 +115,8 @@ sealed class Route(val route: String) {
     data object OnboardingCheck : Route(route = "onboarding_check")
     data object OnboardingFinal : Route(route = "onboarding_final")
     data object OnboardingFloatingButton : Route(route = "onboarding_floating_button")
+    data object OnboardingPermission : Route("onboarding_permission")
+
 
 
 

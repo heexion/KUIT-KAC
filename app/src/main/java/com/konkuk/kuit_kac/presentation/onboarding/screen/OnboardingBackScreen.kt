@@ -41,7 +41,8 @@ fun OnboardingBackScreen(
     modifier: Modifier = Modifier,
     bubbleText: String = "반가워!\n냠코치를 찾아와줘서 고마워!\n간단하게 몇 가지만 물어볼게",
     bubbleFontSize: TextUnit = 18f.isp(),
-    nyamAlpha: Float = 1f
+    nyamAlpha: Float = 1f,
+    bubbleLineHeight: TextUnit = bubbleFontSize * 1.3f
 ) {
     val shadow = Color(0xFFDDD7BC)
 
@@ -85,7 +86,9 @@ fun OnboardingBackScreen(
             )
             Text(
                 text = bubbleText,
-                style = DungGeunMo20.copy(fontSize = bubbleFontSize),
+                style = DungGeunMo20.copy(
+                    fontSize = bubbleFontSize,
+                    lineHeight = bubbleLineHeight ),
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
