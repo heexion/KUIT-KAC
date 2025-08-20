@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.konkuk.kuit_kac.core.util.context.bhp
@@ -40,17 +39,20 @@ fun HomeNutritionCircleGraph(
     left: Int
 ) {
     val angle = (left.toFloat() / goal) * 360
-    val bigRadius = 95.0703; val smallRadius = 41
-    val hypotenuse = bigRadius/2 + smallRadius/2
-    val rad = Math.toRadians((angle/2).toDouble())
+    val bigRadius = 95.0703;
+    val smallRadius = 41
+    val hypotenuse = bigRadius / 2 + smallRadius / 2
+    val rad = Math.toRadians((angle / 2).toDouble())
     val x = -hypotenuse * sin(rad)
     val y = -hypotenuse * cos(rad)
+
+    val kcalText = if (goal == 0 || left == 0) "" else "$left\nkcal"
 
     Box(
         modifier = modifier
             .size(190.1416f.bhp())
             .padding(2.dp)
-            .clip(RoundedCornerShape(190.1416f.bhp()/2))
+            .clip(RoundedCornerShape(190.1416f.bhp() / 2))
             .background(
                 brush = Brush.linearGradient(
                     listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
@@ -128,19 +130,19 @@ fun HomeNutritionCircleGraph(
             modifier = Modifier
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Box(
                 modifier = Modifier
                     .size(0.256 * 190.1416f.wp())
                     .offset(
                         x = x.toFloat().wp(),
-                        y =  y.toFloat().bhp()
+                        y = y.toFloat().bhp()
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     modifier = Modifier,
-                    text = left.toString() + "\nkcal",
+                    text =  kcalText,
                     style = DungGeunMo17,
                     fontSize = 17f.isp(),
                     color = Color(0xFF000000),

@@ -63,18 +63,21 @@ fun FitnessItemCard(
             Text(
                 text = FitnessName,
                 style = DungGeunMo17,
+                fontSize = 17f.isp(),
                 lineHeight = 22f.isp(),
                 color = Color(0xFF713E3A),
             )
             Text(
                 text = "운동 시간: ${FitnessAmount}분",
                 style = DungGeunMo15,
+                fontSize = 15f.isp(),
                 lineHeight = 20f.isp(),
                 color = Color(0xFF000000)
             )
             Text(
                 text = "소모 칼로리: ${FitnessKcal}kcal",
                 style = DungGeunMo15,
+                fontSize = 15f.isp(),
                 lineHeight = 20f.isp(),
                 color = Color(0xFF000000)
             )

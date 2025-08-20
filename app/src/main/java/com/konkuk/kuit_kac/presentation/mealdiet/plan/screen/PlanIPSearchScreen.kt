@@ -89,8 +89,7 @@ fun PlanIPSearchScreen(
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 72f.bhp())
-                            .background(color = Color(0xffFFFFFF), RoundedCornerShape(30f.bhp())),
+                            .heightIn(min = 72f.bhp()),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color(0xFF000000),
                             unfocusedBorderColor = Color(0xFF000000),

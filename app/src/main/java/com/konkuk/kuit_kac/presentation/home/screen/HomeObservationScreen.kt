@@ -98,7 +98,7 @@ fun HomeObservationScreen(
             contentAlignment = Alignment.TopEnd
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_speech_bubble),
+                painter = painterResource(id = R.drawable.img_homegraphscreen_maintextballoon),
                 contentDescription = null,
                 modifier = Modifier
                     .size(height = 93f.bhp(), width = 248f.wp())

@@ -91,7 +91,7 @@ fun MealPatchScreen(
     val pageCount = dietList?.size ?: 1
     val pagerState = rememberPagerState(pageCount = { pageCount })
     val currentPage = pagerState.currentPage
-    val currentDiet = dietList?.get(currentPage)
+//    val currentDiet = dietList?.get(currentPage)
 
     LaunchedEffect(currentPage, dietList) {
         if (!dietList.isNullOrEmpty() && currentPage in dietList.indices) {
@@ -333,24 +333,24 @@ fun MealPatchScreen(
                                 num = 1,
                                 ellipseLength = 182.0,
                                 mascotLength = 160.0,
-                                onClick = {
-                                    navController.navigate(Route.DietExist.route)
-                                }
-                            )
-                        }
-
-                        EllipseNyam(
-                            modifier = Modifier
-                            .offset(x = 87f.wp(), y = 174f.bhp())
-//                            .noRippleClickable(
 //                                onClick = {
 //                                    navController.navigate(Route.DietExist.route)
 //                                }
-//                            )
-                        ,
-                            ellipseLength = 182.0,
-                            mascotLength = 109.0
-                        )
+                            )
+                        }
+
+//                        EllipseNyam(
+//                            modifier = Modifier
+//                            .offset(x = 87f.wp(), y = 174f.bhp())
+////                            .noRippleClickable(
+////                                onClick = {
+////                                    navController.navigate(Route.DietExist.route)
+////                                }
+////                            )
+//                        ,
+//                            ellipseLength = 182.0,
+//                            mascotLength = 109.0
+//                        )
                     }
                 }
             }

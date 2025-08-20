@@ -67,25 +67,30 @@ fun Loading(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(top = 280f.bhp())
                 .height(220f.bhp())
-        ){
-            Image(
-                painter = painterResource(R.drawable.img_diet_maintextballoon),
-                contentDescription = "text balloon",
-                modifier = Modifier
-                    .offset(126f.wp(), 5.3f.bhp())
-                    .size(232f.wp(), 90f.bhp())
-            )
-            Text(
-                modifier = Modifier
-                    .offset(133.2f.wp(), 27.6f.bhp()),
-                text = "잠시만!\n계속 안되면 wifi 확인해줘",
-                textAlign = TextAlign.Center,
-                style = DungGeunMo17,
-                fontSize = 17f.isp(),
-                color = Color(0xFF000000)
-            )
+        ) {
             Box(
-                modifier = Modifier.size(150f.wp(), 150f.bhp())
+                modifier = Modifier
+                    .offset(126f.wp(), 5.3f.bhp()),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.img_diet_maintextballoon),
+                    contentDescription = "text balloon",
+                    modifier = Modifier
+                        .size(232f.wp(), 90f.bhp())
+                )
+                Text(
+                    modifier = Modifier.padding(bottom = 20f.bhp()),
+                    text = "잠시만!\n계속 안되면 wifi 확인해줘",
+                    textAlign = TextAlign.Center,
+                    style = DungGeunMo17,
+                    fontSize = 16.5f.isp(),
+                    color = Color(0xFF000000)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(150f.wp(), 150f.bhp())
                     .offset(x = 131f.wp(), y = 70f.bhp()),
                 contentAlignment = Alignment.Center
             ) {
@@ -94,17 +99,17 @@ fun Loading(modifier: Modifier = Modifier) {
         }
         Box(
             modifier = Modifier
-                .size(100f.wp(),100f.bhp())
+                .size(100f.wp(), 100f.bhp())
                 .padding(top = 120f.bhp())
-        ){
+        ) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .matchParentSize()
             )
         }
 
-        }
     }
+}
 
 @Preview(showBackground = true)
 @Composable
