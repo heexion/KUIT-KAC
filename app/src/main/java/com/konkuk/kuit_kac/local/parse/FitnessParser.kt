@@ -3,29 +3,82 @@ package com.konkuk.kuit_kac.local.parse
 import android.content.Context
 import android.util.Log
 import com.konkuk.kuit_kac.local.Fitness
-import com.konkuk.kuit_kac.local.Food
-import java.io.BufferedReader
+import com.opencsv.CSVReaderBuilder
+import com.opencsv.RFC4180ParserBuilder
 import java.io.InputStreamReader
+import kotlin.math.abs
 
-fun loadFitness(context: Context): List<Fitness>{
-    val inputStream = context.assets.open("fitness.csv")
-    val reader = BufferedReader(InputStreamReader(inputStream))
-    val fitnesses = mutableListOf<Fitness>()
-    reader.readLine()
-    reader.forEachLine { line->
-        val tokens = line.split(",")
+suspend fun loadFitness(context: Context): List<Fitness> {
+    val out = mutableListOf<Fitness>()
+    val seenIds = HashSet<Int>()
+    val seenNames = HashSet<String>()
 
-        try {
-            val fitness = Fitness(
-                name = tokens[0],
-                targetMuscleGroup = tokens[1],
-                metValue = tokens[2].toDoubleOrNull()?: 0.0,
-                type = tokens[3].toInt()
-            )
-            fitnesses.add(fitness)
-        } catch (e: Exception){
-            Log.e("CSV", "파싱 에러: $line")
+    context.assets.open("fitness.csv").use { input ->
+        val reader = CSVReaderBuilder(InputStreamReader(input, Charsets.UTF_8))
+            .withCSVParser(RFC4180ParserBuilder().build())
+            .build()
+
+        var rowNum = 0
+        while (true) {
+            val row = reader.readNext() ?: break
+            rowNum++
+            if (row.isEmpty()) continue
+            if (rowNum == 1 && row[0].startsWith("\uFEFF")) row[0] = row[0].removePrefix("\uFEFF")
+
+            // Trim all fields
+            val c = Array(row.size) { i -> row[i].trim() }
+
+            // Skip a header if present
+            if (rowNum == 1 && (c[0].equals("id", true) || c[0].equals("name", true))) continue
+
+            // Case A: first col looks like an ID and we have at least 4 cols -> use first 4
+            val idFromFirst = c[0].toIntOrNull()
+            if (idFromFirst != null && c.size >= 4) {
+                val name = c[1]
+                val target = c[2]
+                val met = parseDouble(c[3])
+
+                if (name.isEmpty() || target.isEmpty() || met == null) {
+                    Log.w("CSV", "fitness parse fail (line $rowNum): ${c.toList()}"); continue
+                }
+                if (!seenIds.add(idFromFirst) || !seenNames.add(name)) continue
+
+                out += Fitness(id = idFromFirst, name = name, targetMuscleGroup = target, metValue = met)
+                continue
+            }
+
+            // Case B: old/other format: name, target, metValue, [extras...]
+            if (c.size >= 3) {
+                val name = c[0]
+                val target = c[1]
+                // Find the first parsable double from col 2 onwards (works if you have 6 cols)
+                var met: Double? = null
+                var j = 2
+                while (j < c.size && met == null) {
+                    met = parseDouble(c[j]); j++
+                }
+
+                if (name.isEmpty() || target.isEmpty() || met == null) {
+                    Log.w("CSV", "fitness parse fail (line $rowNum): ${c.toList()}"); continue
+                }
+                if (!seenNames.add(name)) continue
+
+                // Generate deterministic id from name (avoid collisions within this batch)
+                var genId = abs(name.hashCode())
+                while (!seenIds.add(genId)) genId = (genId + 1) and 0x7FFFFFFF
+
+                out += Fitness(id = genId, name = name, targetMuscleGroup = target, metValue = met)
+                continue
+            }
+
+            Log.w("CSV", "unexpected column count (line $rowNum, size=${c.size}): ${c.toList()}")
         }
     }
-    return fitnesses
+    return out
+}
+
+private fun parseDouble(s: String): Double? {
+    val t = s.trim()
+    if (t.isEmpty()) return null
+    return t.replace(',', '.').toDoubleOrNull()
 }

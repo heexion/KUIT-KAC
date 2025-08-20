@@ -147,7 +147,7 @@ fun FitnessEditScreen(
                             FitnessName = item?.name ?: "",
                             isEditable = true,
                             onDeleteClick = {
-                                routineViewModel.removeRoutine(item ?: Fitness(0, "", "", 1.0, 0))
+                                routineViewModel.removeRoutine(item ?: Fitness(0, "", "", 1.0))
                             }
                         )
                     }

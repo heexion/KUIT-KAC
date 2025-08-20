@@ -71,8 +71,7 @@ class RoutineViewModel @Inject constructor(
                 id = p.exercise.id,
                 name = p.exercise.name,
                 targetMuscleGroup = p.exercise.targetMuscleType,
-                metValue = p.exercise.metValue.toDouble(),
-                type = 0
+                metValue = p.exercise.metValue.toDouble()
             )
             ensureExercise(f)
 
@@ -104,16 +103,14 @@ class RoutineViewModel @Inject constructor(
             id = exercise.id,
             name = exercise.name,
             targetMuscleGroup = exercise.targetMuscleGroup,
-            metValue = exercise.metValue,
-            type = 0
+            metValue = exercise.metValue
         )
     private fun RecordResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
         Fitness(
             id = exercise.id,
             name = exercise.name,
             targetMuscleGroup = exercise.targetMuscleType,
-            metValue = exercise.metValue.toDouble(),
-            type = 0
+            metValue = exercise.metValue.toDouble()
         )
 
     init {

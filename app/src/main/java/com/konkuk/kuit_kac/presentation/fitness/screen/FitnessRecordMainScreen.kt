@@ -68,8 +68,7 @@ fun FitnessRecordMainScreen(
             id = p.exercise.id,
             name = p.exercise.name,
             targetMuscleGroup = p.exercise.targetMuscleType, // record DTO
-            metValue = p.exercise.metValue.toDouble(),
-            type = 0
+            metValue = p.exercise.metValue.toDouble()
         )
     }
 

@@ -28,7 +28,6 @@ interface FoodDao {
 
     @Query("SELECT * FROM food WHERE name = :name")
     suspend fun getFood(name: String): Food?
-
 }
 
 object HangulSearch {
