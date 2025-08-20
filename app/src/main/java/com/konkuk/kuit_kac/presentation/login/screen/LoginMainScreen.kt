@@ -101,7 +101,7 @@ fun LoginMainScreen(
                 .padding(top = 119f.hp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Access Token: ${accessToken?.take(20)}...")
+//            Text("Access Token: ${accessToken?.take(20)}...")
 //            Log.d("응답: ", "$accessToken")
 
 /*            Button(onClick = {
