@@ -323,7 +323,7 @@ fun FitnessRecordMainScreen(
             }
         }
 
-        // 플로팅 버튼 (캘린더)
+/*        // 플로팅 버튼 (캘린더)
         Box(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -340,7 +340,7 @@ fun FitnessRecordMainScreen(
                 )
                 .border(1.dp, Color(0xFF000000), CircleShape)
                 .alpha(0.85f)
-                .noRippleClickable { /* onCalendarClick() */ },
+                .noRippleClickable { *//* onCalendarClick() *//* },
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -348,7 +348,7 @@ fun FitnessRecordMainScreen(
                 contentDescription = "캘린더",
                 modifier = Modifier.size(42f.wp())
             )
-        }
+        }*/
     }
 }
 

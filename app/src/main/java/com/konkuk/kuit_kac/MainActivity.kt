@@ -144,6 +144,17 @@ class MainActivity : ComponentActivity() {
                     Route.LoginMain.route,
                     Route.LoginEmail.route,
 
+                    Route.DietSearch.route,
+                    Route.DietSearchItemDetail.route,
+                    Route.MealSearch.route,
+                    Route.MealEditSearchItem.route,
+                    Route.MealSearchItemDetail.route,
+                    Route.PlanIPSearch.route,
+                    Route.FitnessSearch.route,
+                    Route.FitnessRoutineSearch.route,
+                    Route.FitnessRecordMain.route,
+
+
                     // 온보딩 화면들
                     Route.OnboardingStart.route,
                     Route.OnboardingDiet.route,
