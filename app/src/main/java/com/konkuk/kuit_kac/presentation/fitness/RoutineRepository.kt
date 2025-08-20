@@ -15,6 +15,7 @@ interface RoutineRepository {
     suspend fun getRoutineRecord(userId: Int): Response<List<RecordResponseDto>>
     suspend fun getRoutineTemplate(userId: Int): Response<List<RoutineResponseDto>>
     suspend fun deleteRoutine(dietId: Int)
+    suspend fun changeRecordRoutine(routineId: Int, request: RecordRequestDto): Response<Unit>
 }
 
 class RoutineRepositoryImpl @Inject constructor(
@@ -41,5 +42,12 @@ class RoutineRepositoryImpl @Inject constructor(
     }
     override suspend fun deleteRoutine(dietId: Int) {
         return api.deleteRoutine(dietId)
+    }
+
+    override suspend fun changeRecordRoutine(
+        routineId: Int,
+        request: RecordRequestDto
+    ): Response<Unit> {
+        return api.changeRecordRoutine(routineId,request)
     }
 }

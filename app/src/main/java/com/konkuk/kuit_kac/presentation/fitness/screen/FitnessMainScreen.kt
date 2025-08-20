@@ -63,9 +63,9 @@ fun FitnessMainScreen(
     onFastedClick: () -> Unit,
     routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(Unit) {
         routineViewModel.getRoutineTemplate(userId = 1)
-    }
+    }*/
 
     // Fetch template routines
     val routines = routineViewModel.getRoutineTemplateState.value.orEmpty()

@@ -228,7 +228,7 @@ fun FitnessEditScreen(
                 .noRippleClickable {
                     routineViewModel.setType("기록")
                     if (routineViewModel.routineId.value != null) {
-                        routineViewModel.changeRoutine()
+                        routineViewModel.changeRecordRoutine()
                     } else {
                         routineViewModel.createRoutine()
                     }

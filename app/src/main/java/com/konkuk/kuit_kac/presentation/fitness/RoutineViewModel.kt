@@ -47,6 +47,56 @@ class RoutineViewModel @Inject constructor(
     val initialName: State<String?> get() = _initialName
     private val _exerciseRecords = androidx.compose.runtime.mutableStateMapOf<Int, ExerciseRecord>()
     val exerciseRecords: Map<Int, ExerciseRecord> get() = _exerciseRecords
+    private fun intensityIndexFromString(s: String) = when (s) {
+        "느슨함" -> 0
+        "보통"   -> 1
+        "힘듦", "힘듬" -> 2
+        else -> 1
+    }
+    private fun intensityStringFromIndex(i: Int) = when (i) {
+        0 -> "느슨함"
+        1 -> "보통"
+        2 -> "힘듦"
+        else -> "보통"
+    }
+
+    fun seedFromRecord(record: RecordResponseDto) {
+        _routineName.value = record.name
+        _routineType.value = record.routineType
+
+        _selectedRoutines.clear()
+        record.routineExerciseProfiles.forEach { p ->
+            val f = Fitness(
+                id = p.exercise.id,
+                name = p.exercise.name,
+                targetMuscleGroup = p.exercise.targetMuscleType,
+                metValue = p.exercise.metValue.toDouble(),
+                type = 0
+            )
+            ensureExercise(f)
+
+            _exerciseRecords[f.id] = ExerciseRecord(
+                minutes = p.routineDetail.time,
+                intensity = intensityIndexFromString(p.routineDetail.intensity),
+                detail = ""
+            )
+
+            val mappedSets = p.routineSets.map { s ->
+                RoutineSetsDto(
+                    count = s.count,
+                    distance = s.distance,
+                    time = s.time,
+                    weightKg = s.weightKg,
+                    weightNum = s.weightNum,
+                    setOrder = s.setOrder
+                )
+            }.toMutableList()
+            _setsByExerciseName[f.name] = mappedSets
+        }
+        val validNames = _selectedRoutines.filterNotNull().map { it.name }.toSet()
+        _setsByExerciseName.keys.filter { it !in validNames }.toList().forEach { _setsByExerciseName.remove(it) }
+    }
+
 
     private fun RoutineResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
         Fitness(
@@ -87,6 +137,28 @@ class RoutineViewModel @Inject constructor(
                 }
             }
         }
+    }
+    private fun buildExerciseRequests(): List<ExerciseRequestDto> {
+        return _selectedRoutines.filterNotNull().map { f ->
+            val rec = getRecord(f.id)
+            val sets = setsByExerciseName[f.name].orEmpty()
+            ExerciseRequestDto(
+                exerciseId = f.id,
+                routineDetail = RoutineDetailDto(
+                    time = rec.minutes,
+                    intensity = intensityStringFromIndex(rec.intensity)
+                ),
+                routineSets = sets
+            )
+        }
+    }
+    private fun buildRecordRequest(): RecordRequestDto {
+        return RecordRequestDto(
+            name = _routineName.value.orEmpty(),
+            routineType = _routineType.value ?: "기록",
+            userId = 1,
+            routineExercises = buildExerciseRequests()
+        )
     }
 
     fun createRoutine(
@@ -168,6 +240,34 @@ class RoutineViewModel @Inject constructor(
                         Log.e("changeRoutineRecord", it.message ?: "Unknown error")
                     }
             }
+        }
+    }
+
+    private val _updateRoutineRecordSuccessState = mutableStateOf<Boolean?>(null)
+    val updateRoutineRecordSuccessState: State<Boolean?> get() = _updateRoutineRecordSuccessState
+
+    fun changeRecordRoutine() {
+        val id = _routineId.value ?: run {
+            Log.e("changeRecordRoutine", "No routineId set")
+            _updateRoutineRecordSuccessState.value = false
+            return
+        }
+        val body = buildRecordRequest()
+        viewModelScope.launch {
+            runCatching { routineRepository.changeRecordRoutine(id, body) }
+                .onSuccess { resp ->
+                    if (resp.isSuccessful) {
+                        _updateRoutineRecordSuccessState.value = true
+                        Log.d("changeRecordRoutine", "success")
+                    } else {
+                        _updateRoutineRecordSuccessState.value = false
+                        Log.e("changeRecordRoutine", "HTTP ${resp.code()}")
+                    }
+                }
+                .onFailure {
+                    _updateRoutineRecordSuccessState.value = false
+                    Log.e("changeRecordRoutine", it.message ?: "Unknown error")
+                }
         }
     }
 
@@ -299,26 +399,7 @@ class RoutineViewModel @Inject constructor(
             _createRoutineSuccessState.value = false
             return
         }
-
-        val exercises: List<ExerciseRequestDto> =
-            selected.map { f ->
-                val rec = getRecord(f.id)
-                val sets = setsByExerciseName[f.name].orEmpty()
-
-                ExerciseRequestDto(
-                    exerciseId = f.id,
-                    routineDetail = RoutineDetailDto(
-                        time = rec.minutes,
-                        intensity = when (rec.intensity) {
-                            0 -> "느슨함"
-                            1 -> "보통"
-                            2 -> "힘듬"
-                            else -> "보통"
-                        }
-                    ),
-                    routineSets = sets
-                )
-            }
+        val body = buildRecordRequest()
 
         val routineName = _routineName.value.orEmpty()
         val routineType = _routineType.value ?: "기록"
@@ -326,12 +407,7 @@ class RoutineViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 routineRepository.createRoutineRecord(
-                    request = RecordRequestDto(
-                        name = routineName,
-                        routineType = routineType,
-                        userId = 1,
-                        routineExercises = exercises
-                    )
+                    body
                 )
             }.onSuccess { resp ->
                 if (resp.isSuccessful) {

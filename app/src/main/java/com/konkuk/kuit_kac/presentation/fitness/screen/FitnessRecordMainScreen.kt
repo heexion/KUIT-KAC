@@ -309,10 +309,11 @@ fun FitnessRecordMainScreen(
                         title = "오늘의 운동!",
                         items = cardItems,
                         onEditClick = {
-                            // keep your existing edit flow
-                            routineViewModel.setSelectedRoutines(routineFitnessItems)
+                            latestRoutine?.let { routineViewModel.seedFromRecord(it) }
                             routineViewModel.setName(latestRoutine?.name ?: "")
                             routineViewModel.setRoutineId(latestRoutine?.id)
+                            routineViewModel.setSelectedRoutines(routineFitnessItems)
+
                             navController.navigate(Route.FitnessRecordEdit.route)
                         },
                         navController = navController,

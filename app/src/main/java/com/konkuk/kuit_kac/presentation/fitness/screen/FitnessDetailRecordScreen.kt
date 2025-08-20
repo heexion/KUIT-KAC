@@ -71,6 +71,16 @@ fun FitnessDetailRecordScreen(
         navController.popBackStack()
         return
     }
+    val setLines = routineViewModel.setsByExerciseName[name].orEmpty()
+        .sortedBy { it.setOrder }
+        .mapIndexed { idx, s ->
+            val parts = mutableListOf<String>()
+            if (s.weightKg > 0 && s.count > 0) parts += "${s.weightKg}kg x ${s.count}회"
+            if (s.time > 0.0)               parts += "${s.time.toInt()}s"
+            if (s.distance > 0)             parts += "${s.distance}m"
+            if (s.weightNum > 0)            parts += "×${s.weightNum}"
+            if (parts.isEmpty()) "${idx + 1}세트" else "${idx + 1}세트  " + parts.joinToString("  ·  ")
+        }
 
     val particle = getObjectParticle(name)
     val message = "'$name'$particle 했구나!\n고생했어!"
@@ -191,7 +201,7 @@ fun FitnessDetailRecordScreen(
 
         DetailRecordCard(
             title = "상세 기록",
-            lines = listOf("")
+            lines = setLines
         )
 
         Spacer(modifier = Modifier.height(97f.bhp()))

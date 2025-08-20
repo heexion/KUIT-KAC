@@ -24,6 +24,11 @@ interface RoutineService {
         @Body request: RecordRequestDto
     ): Response<Unit>
 
+    @PUT("routines/records/{routineId}")
+    suspend fun changeRecordRoutine(
+        @Path("routineId") routineId: Int,
+        @Body request: RecordRequestDto
+    ): Response<Unit>
     @PUT("routines/{routineId}")
     suspend fun changeRoutine(
         @Path("routineId") routineId: Int,
