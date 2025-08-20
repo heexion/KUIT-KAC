@@ -15,21 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,9 +47,6 @@ fun OnboardingFailExScreen(
 ) {
     val options = listOf("야식", "스트레스성\n 폭식", "식단 기록\n 귀찮음", "의지 부족")
     val selectedOptions = remember { mutableStateListOf<String>() }
-
-    var isDirectInputMode by remember { mutableStateOf(false) }
-    var directInputText by remember { mutableStateOf("") }
 
     fun toggle(option: String) {
         if (selectedOptions.contains(option)) {
@@ -85,25 +75,21 @@ fun OnboardingFailExScreen(
             verticalArrangement = Arrangement.spacedBy(20f.bhp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 위에 선택 버튼들 항상 표시
+            // 선택 버튼들
             Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
                 DietSelectButton(
                     value = options[0],
                     isSelected = selectedOptions.contains(options[0]),
                     buttonHeight = 70,
                     onClick = { toggle(options[0]) },
-                    modifier = Modifier
-                        .width(174f.wp())
-                        .clip(RoundedCornerShape(20f.bhp()))
+                    modifier = Modifier.width(174f.wp())
                 )
                 DietSelectButton(
                     value = options[1],
                     isSelected = selectedOptions.contains(options[1]),
                     buttonHeight = 70,
                     onClick = { toggle(options[1]) },
-                    modifier = Modifier
-                        .width(174f.wp())
-                        .clip(RoundedCornerShape(20f.bhp()))
+                    modifier = Modifier.width(174f.wp())
                 )
             }
             Row(horizontalArrangement = Arrangement.spacedBy(16f.wp())) {
@@ -112,47 +98,33 @@ fun OnboardingFailExScreen(
                     isSelected = selectedOptions.contains(options[2]),
                     buttonHeight = 70,
                     onClick = { toggle(options[2]) },
-                    modifier = Modifier
-                        .width(174f.wp())
-                        .clip(RoundedCornerShape(20f.bhp()))
+                    modifier = Modifier.width(174f.wp())
                 )
                 DietSelectButton(
                     value = options[3],
                     isSelected = selectedOptions.contains(options[3]),
                     buttonHeight = 70,
                     onClick = { toggle(options[3]) },
-                    modifier = Modifier
-                        .width(174f.wp())
-                        .clip(RoundedCornerShape(20f.bhp()))
+                    modifier = Modifier.width(174f.wp())
                 )
             }
 
             // ConfirmButton
             ConfirmButton(
-                isDirectInputMode = isDirectInputMode,
-                value = directInputText,
-                onValueChange = {
-                    directInputText = it
-                },
-                isAvailable = selectedOptions.isNotEmpty() || directInputText.isNotBlank(),
+                isAvailable = selectedOptions.isNotEmpty(),
                 height = 65f,
                 modifier = Modifier.width(364f.wp()),
                 onClick = {
-                    val items = (selectedOptions +
-                            if (directInputText.isNotBlank()) listOf(directInputText) else emptyList()
-                            )
-                        .map { it.replace("\n", " ").trim() } // clean line breaks/spaces
-                        .filter { it.isNotBlank() }
-                        .distinct()
+                    if (selectedOptions.isNotEmpty()) {
+                        val items = selectedOptions
+                            .map { it.replace("\n", " ").trim() }
+                            .distinct()
 
-                    if (items.isEmpty()) {
-                        isDirectInputMode = true
-                        return@ConfirmButton
+                        val reason = items.joinToString(", ")
+                        onboardingViewModel.setDietFailReason(reason)
+                        onNextClick(items)
+                        navController.navigate(OnboardingAppetite.route)
                     }
-                    val reason = items.joinToString(", ")
-                    onboardingViewModel.setDietFailReason(reason)
-                    onNextClick(items)
-                    navController.navigate(OnboardingAppetite.route)
                 }
             )
         }
@@ -205,17 +177,11 @@ fun DietSelectButton(
 @Composable
 fun ConfirmButton(
     modifier: Modifier = Modifier,
-    value: String,
-    onValueChange: (String) -> Unit = {},
     isAvailable: Boolean = false,
-    isDirectInputMode: Boolean = false,
     height: Float = 60f,
     onClick: () -> Unit = {}
 ) {
-    var isEditingFinished by remember { mutableStateOf(false) }  // 입력 완료 상태
-    val focusManager = LocalFocusManager.current
-
-    val image = if (isAvailable || isEditingFinished) {
+    val image = if (isAvailable) {
         R.drawable.bg_plan_confirm_button_selected
     } else {
         R.drawable.img_diet_confirm_button
@@ -226,12 +192,10 @@ fun ConfirmButton(
             .fillMaxWidth()
             .height(height.bhp())
             .noRippleClickable {
-                if (!isDirectInputMode || isEditingFinished || isAvailable) {
+                if (isAvailable) {
                     onClick()
                 }
             }
-
-
     ) {
         // 버튼 배경
         Image(
@@ -241,87 +205,16 @@ fun ConfirmButton(
             contentScale = ContentScale.FillBounds
         )
 
-        when {
-            // 직접 입력 모드 + 아직 입력 완료 안 됨 → 입력창
-            isDirectInputMode && !isEditingFinished -> {
-                TextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    placeholder = {
-                        Text(
-                            text = "이유를 입력해주세요",
-                            style = DungGeunMo20,
-                            fontSize = 20f.isp(),
-                            color = Color(0xFF888888),
-                            textAlign = TextAlign.Center
-                        )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        errorContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent,
-                        cursorColor = Color.Black
-                    ),
-                    textStyle = DungGeunMo20.copy(
-                        fontSize = 20f.isp(),
-                        color = Color.Black,
-                        textAlign = TextAlign.Center
-                    ),
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
-                        .onFocusChanged { focusState ->
-                            if (!focusState.hasFocus && value.isNotBlank()) {
-                                // 포커스 해제 + 값 있음 → 입력 완료 처리
-                                isEditingFinished = true
-                            }
-                        }
-                )
-            }
-
-            // 입력 완료 → 사용자가 입력한 문구 표시
-            isEditingFinished -> {
-                Text(
-                    text = value,
-                    style = DungGeunMo20,
-                    fontSize = 20f.isp(),
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            // 옵션 선택 → "다음 단계로"
-            isAvailable -> {
-                Text(
-                    text = "다음 단계로",
-                    style = DungGeunMo20,
-                    fontSize = 20f.isp(),
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            // 아무 것도 안 했을 때 → "직접 입력할래"
-            else -> {
-                Text(
-                    text = "직접 입력할래",
-                    style = DungGeunMo20,
-                    fontSize = 20f.isp(),
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
+        Text(
+            text = if (isAvailable) "다음 단계로" else "이유를 선택해주세요",
+            style = DungGeunMo20,
+            fontSize = 20f.isp(),
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center
+        )
     }
 }
-
 
 
 
