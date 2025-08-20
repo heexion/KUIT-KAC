@@ -341,12 +341,13 @@ fun MealPatchScreen(
 
                         EllipseNyam(
                             modifier = Modifier
-                                .offset(x = 87f.wp(), y = 174f.bhp())
-                                .noRippleClickable(
-                                    onClick = {
-                                        navController.navigate(Route.DietExist.route)
-                                    }
-                                ),
+                            .offset(x = 87f.wp(), y = 174f.bhp())
+//                            .noRippleClickable(
+//                                onClick = {
+//                                    navController.navigate(Route.DietExist.route)
+//                                }
+//                            )
+                        ,
                             ellipseLength = 182.0,
                             mascotLength = 109.0
                         )
