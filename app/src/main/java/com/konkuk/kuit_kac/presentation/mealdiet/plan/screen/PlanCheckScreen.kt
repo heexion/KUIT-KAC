@@ -1,5 +1,3 @@
-package com.konkuk.kuit_kac.presentation.diet.screen
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -24,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,36 +31,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.diet.component.PlanColorType
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import java.time.LocalDate
 
-// 저장된 식단 계획 확인 화면
 @Composable
 fun PlanCheckScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
+    // Tags for the *currently loaded* month from your VM
+    val taggedDates by mealViewModel.monthTags
 
-    var navigateValue = "plan_result"
-    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    // Selected date in the calendar
+    var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(null) }
+
+    // Keep track of which month the calendar is showing, as a String "yyyy-MM" (safe for rememberSaveable)
+    var yearMonthKey by rememberSaveable { mutableStateOf(java.time.YearMonth.now().toString()) }
+    val displayedMonth = remember(yearMonthKey) { java.time.YearMonth.parse(yearMonthKey) }
+
+    // Fetch tags whenever the displayed month changes (e.g., 2025-08 -> 2025-09)
+    LaunchedEffect(yearMonthKey) {
+        mealViewModel.getMonthPlan(userId = 1, yearMonth = yearMonthKey)
+    }
+
+    // Decide where to navigate based on selection (kept from your original logic)
+    val navigateValue = if (selectedDate == null) "plan_result" else "plan_in_person_add_complete"
 
     Box(
         modifier = Modifier
@@ -83,7 +92,6 @@ fun PlanCheckScreen(
                 .padding(top = 20f.hp())
                 .align(Alignment.TopCenter)
         )
-
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -108,7 +116,7 @@ fun PlanCheckScreen(
                 painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
                 modifier = Modifier.size(330f.wp(), 167f.bhp()),
                 contentScale = ContentScale.FillBounds,
-                contentDescription = null,
+                contentDescription = null
             )
             Text(
                 text = "저장된 식단 계획이야!\n수정할 부분이 있으면 수정해줘!",
@@ -122,8 +130,7 @@ fun PlanCheckScreen(
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomEnd
         ) {
             Column(
@@ -147,26 +154,28 @@ fun PlanCheckScreen(
                     modifier = Modifier.padding(horizontal = 17.5f.wp(), vertical = 22.98f.bhp())
                 ) {
                     PlanCalendar(
-                        modifier = Modifier.padding(),
+                        // show tags for the month currently loaded from VM
                         taggedDATES = taggedDates,
                         isTagDetailShow = true,
+                        // tell parent which date was tapped
                         onDateSelected = { date ->
                             selectedDate = date
+                            date?.let { mealViewModel.setPlanDate(it) }
+                        },
+                        // NEW: notify when user navigates months (prev/next)
+                        currentMonth = displayedMonth,
+                        onMonthChanged = { newMonth ->
+                            selectedDate = null
+                            yearMonthKey = newMonth.toString()
                         }
                     )
                 }
+
                 Column {
                     PlanConfirmButton(
-                        modifier = Modifier.padding(
-                            start = 14.5f.wp(),
-                            end = 14.5f.wp()
-                        ),
+                        modifier = Modifier.padding(start = 14.5f.wp(), end = 14.5f.wp()),
                         isAvailable = true,
-                        onClick = {
-                            navigateValue = if (selectedDate == null) "plan_result"
-                            else "plan_in_person_add_complete"
-                            navController.navigate(navigateValue)
-                        },
+                        onClick = { navController.navigate(navigateValue) },
                         value = "확인하기",
                         height = 65f
                     )
@@ -174,19 +183,10 @@ fun PlanCheckScreen(
                         modifier = Modifier.size(
                             150f.bhp() - WindowInsets.navigationBars.asPaddingValues()
                                 .calculateBottomPadding()
-                        ),
+                        )
                     )
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlanCheckScreenPreview() {
-    val navController = rememberNavController()
-    PlanCheckScreen(
-        navController = navController
-    )
 }

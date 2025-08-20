@@ -239,9 +239,9 @@ class MealViewModel @Inject constructor(
 
     private val _getMonthPlanState = mutableStateOf<List<PlanResponseDto>?>(null)
     val getMonthPlanState: State<List<PlanResponseDto>?> get() = _getMonthPlanState
-    fun getMonthPlan(userId: Int) {
+    fun getMonthPlan(userId: Int, yearMonth: String) {
         viewModelScope.launch {
-            runCatching { mealRepository.getMonthPlan(userId) }
+            runCatching { mealRepository.getMonthPlan(userId, yearMonth) }
                 .onSuccess { response ->
                     if (response.isSuccessful) {
                         val body = response.body().orEmpty()

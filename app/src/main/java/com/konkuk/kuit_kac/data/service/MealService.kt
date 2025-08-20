@@ -75,8 +75,9 @@ interface MealService {
         @Body request: AiRequestDto
     ): Response<Unit>
 
-    @GET("diets/plans/months/profiles")
+    @GET("diets/activities/months")
     suspend fun getMonthPlan(
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("yearMonth") yearMonth: String
     ): Response<List<PlanResponseDto>>
 }

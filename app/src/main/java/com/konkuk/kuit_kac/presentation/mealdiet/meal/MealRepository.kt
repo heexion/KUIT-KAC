@@ -24,7 +24,7 @@ interface MealRepository {
     suspend fun changePlan(dietId: Int, request: PlanRequestDto): Response<Unit>
     suspend fun getPlan(userId: Int): Response<List<PlanResponseDto>>
     suspend fun postAi(request: AiRequestDto): Response<Unit>
-    suspend fun getMonthPlan(userId: Int): Response<List<PlanResponseDto>>
+    suspend fun getMonthPlan(userId: Int, yearMonth: String): Response<List<PlanResponseDto>>
 }
 
 class MealRepositoryImpl @Inject constructor(
@@ -73,7 +73,7 @@ class MealRepositoryImpl @Inject constructor(
         return api.postAi(request)
     }
 
-    override suspend fun getMonthPlan(userId: Int): Response<List<PlanResponseDto>> {
-        return api.getMonthPlan(userId)
+    override suspend fun getMonthPlan(userId: Int, yearMonth: String): Response<List<PlanResponseDto>> {
+        return api.getMonthPlan(userId, yearMonth)
     }
 }

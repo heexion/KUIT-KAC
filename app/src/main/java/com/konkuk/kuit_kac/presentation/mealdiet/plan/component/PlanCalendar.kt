@@ -58,8 +58,12 @@ fun PlanCalendar(
     onSlotsChange: (LocalDate, Set<DietType>) -> Unit = { _, _ -> },
     onClearSlots: (LocalDate) -> Unit = {},
     onTagChangeForSlots: (LocalDate, Set<DietType>, PlanTagType) -> Unit = { _, _, _ -> },
+    currentMonth: java.time.YearMonth = java.time.YearMonth.now(),
+    onMonthChanged: (java.time.YearMonth) -> Unit = {}
 ) {
-    var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
+    val firstDayOfMonth = remember(currentMonth) { currentMonth.atDay(1) }
+    val lastDayOfMonth  = remember(currentMonth) { currentMonth.atEndOfMonth() }
+    val startDayOfWeek  = firstDayOfMonth.dayOfWeek.value % 7
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
     var blueClicked = remember { mutableStateOf(false) }
@@ -148,7 +152,7 @@ fun PlanCalendar(
             horizontalArrangement = Arrangement.spacedBy(40f.wp(), Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }) {
+            IconButton(onClick = { onMonthChanged(currentMonth.minusMonths(1)) }) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_back_arrow),
                     modifier = Modifier.size(17f.wp(), 24f.bhp()),
@@ -163,7 +167,7 @@ fun PlanCalendar(
                 color = Color(0xFF000000),
             )
 
-            IconButton(onClick = { currentMonth = currentMonth.plusMonths(1) }) {
+            IconButton(onClick = { onMonthChanged(currentMonth.plusMonths(1)) }) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_right_arrow),
                     modifier = Modifier.size(17f.wp(), 24f.bhp()),
@@ -192,10 +196,6 @@ fun PlanCalendar(
         }
         Spacer(modifier = Modifier.padding(7.dp))
 
-        // 날짜 그리드
-        val firstDayOfMonth = currentMonth
-        val lastDayOfMonth = currentMonth.withDayOfMonth(currentMonth.lengthOfMonth())
-        val startDayOfWeek = firstDayOfMonth.dayOfWeek.value % 7 // 일요일이 0
 
         val totalDays = startDayOfWeek + lastDayOfMonth.dayOfMonth
         val weeks = (totalDays / 7) + if (totalDays % 7 != 0) 1 else 0
@@ -206,19 +206,20 @@ fun PlanCalendar(
                         val dayNumber = (week * 7 + dayOfWeek) - startDayOfWeek + 1
                         val isValid = dayNumber in 1..lastDayOfMonth.dayOfMonth
 
+
                         Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1.2f)
                                 .clickable(enabled = isValid) {
-                                    val selected = currentMonth.withDayOfMonth(dayNumber)
+                                    val selected = currentMonth.atDay(dayNumber)
                                     selectedDate = selected
                                     onDateSelected(selectedDate)
                                 },
                             contentAlignment = Alignment.Center
                         ) {
                             if (isValid) {
-                                val thisDate = currentMonth.withDayOfMonth(dayNumber)
+                                val thisDate   = currentMonth.atDay(dayNumber)
                                 val isSelected = thisDate == selectedDate
                                 val dayColor = when {
                                     dayOfWeek == 0 -> 0xFF713E3A

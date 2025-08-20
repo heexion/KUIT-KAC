@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
 
+import PlanCheckScreen
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -25,7 +26,6 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIRecomScreen
-import com.konkuk.kuit_kac.presentation.diet.screen.PlanCheckScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanDietMainScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddCompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
