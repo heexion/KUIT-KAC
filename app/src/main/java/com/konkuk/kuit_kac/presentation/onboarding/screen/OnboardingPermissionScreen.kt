@@ -25,7 +25,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,8 +39,6 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeHam
 import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 fun isNotificationServiceEnabled(context: Context): Boolean {
     val pkgName = context.packageName
@@ -85,7 +83,6 @@ fun OnboardingPermissionScreen(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     val requestPostNoti = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -93,6 +90,55 @@ fun OnboardingPermissionScreen(
         if (!granted) {
             Toast.makeText(context, "알림 권한이 필요해요.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun requestNextPermission() {
+        when {
+            !hasPostNotificationPermission(context) &&
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                requestPostNoti.launch(Manifest.permission.POST_NOTIFICATIONS)
+                return
+            }
+
+            !isBatteryOptimizationIgnored(context) &&
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                context.startActivity(
+                    Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                        data = Uri.parse("package:${context.packageName}")
+                    }
+                )
+                return
+            }
+
+            !areAppNotificationsEnabled(context) -> {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                }
+                context.startActivity(intent)
+                return
+            }
+
+            !canScheduleExactAlarms(context) &&
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                return
+            }
+
+            !isNotificationServiceEnabled(context) -> {
+                context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                return
+            }
+
+            else -> {
+                // 모든 권한 허용 완료
+                navController.navigate(OnboardingMainHomeHam.route)
+            }
+        }
+    }
+
+    // 화면이 다시 보여질 때마다 자동으로 권한 재확인
+    LaunchedEffect(Unit) {
+        requestNextPermission()
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -107,59 +153,14 @@ fun OnboardingPermissionScreen(
                 .padding(
                     start = 24f.wp(),
                     end = 24f.wp(),
-                    bottom = 25f.bhp() + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                    bottom = 25f.bhp() +
+                            WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
                 ),
             verticalArrangement = Arrangement.spacedBy(20f.bhp())
         ) {
             OnboardingButton(
                 value = "권한 설정하러 가기",
-                onClick = {
-                    // 권한 요청 → 다 끝날 때까지 대기
-                    scope.launch {
-                        while (
-                            !hasPostNotificationPermission(context) ||
-                            !isBatteryOptimizationIgnored(context) ||
-                            !areAppNotificationsEnabled(context) ||
-                            !canScheduleExactAlarms(context) ||
-                            !isNotificationServiceEnabled(context)
-                        ) {
-                            // 권한 하나라도 빠져 있으면 설정창 열어줌
-                            if (!hasPostNotificationPermission(context) &&
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                            ) {
-                                requestPostNoti.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            }
-                            if (!isBatteryOptimizationIgnored(context) &&
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                            ) {
-                                context.startActivity(
-                                    Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                                        data = Uri.parse("package:${context.packageName}")
-                                    }
-                                )
-                            }
-                            if (!areAppNotificationsEnabled(context)) {
-                                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                                }
-                                context.startActivity(intent)
-                            }
-                            if (!canScheduleExactAlarms(context) &&
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-                            ) {
-                                context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-                            }
-                            if (!isNotificationServiceEnabled(context)) {
-                                context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                            }
-
-                            delay(1000) // 1초마다 다시 체크
-                        }
-
-                        // 모든 권한 허용 완료 시
-                        navController.navigate(OnboardingMainHomeHam.route)
-                    }
-                },
+                onClick = { requestNextPermission() },
                 modifier = Modifier
                     .width(364f.wp())
                     .height(65f.bhp())
@@ -167,6 +168,7 @@ fun OnboardingPermissionScreen(
         }
     }
 }
+
 
 
 
