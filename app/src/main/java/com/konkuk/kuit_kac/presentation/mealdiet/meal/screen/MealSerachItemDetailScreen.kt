@@ -79,7 +79,7 @@ fun MealSearchItemDetailScreen(
                     navController.navigate(Route.MealSearch.route)}
             )
 
-            Spacer(modifier = Modifier.height(82f.bhp()))
+            Spacer(modifier = Modifier.height(50f.bhp()))
 
             // 음식 상세 카드
             MealDetailCard(
@@ -121,6 +121,7 @@ fun MealSearchItemDetailScreen(
                 buttonHeight = 70f,
                 isOrange = true
             )
+            Spacer(modifier = Modifier.height(150f.bhp()))
 
         }
         }
