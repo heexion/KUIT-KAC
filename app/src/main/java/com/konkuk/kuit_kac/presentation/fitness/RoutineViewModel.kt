@@ -13,12 +13,14 @@ import com.konkuk.kuit_kac.data.request.RecordRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineDetailDto
 import com.konkuk.kuit_kac.data.request.RoutineRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineSetsDto
+import com.konkuk.kuit_kac.data.response.RecordResponseDto
 import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineRepository
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +37,8 @@ class RoutineViewModel @Inject constructor(
     val routineName: State<String?> get() = _routineName
     private val _routineType = mutableStateOf<String?>(null)
     val routineType: State<String?> get() = _routineType
-    private val _getRoutineRecordState = mutableStateOf<List<RoutineResponseDto>?>(null)
-    val getRoutineRecordState: State<List<RoutineResponseDto>?> get() = _getRoutineRecordState
+    private val _getRoutineRecordState = mutableStateOf<List<RecordResponseDto>?>(null)
+    val getRoutineRecordState: State<List<RecordResponseDto>?> get() = _getRoutineRecordState
     private val _getRoutineRecordSuccessState = mutableStateOf<Boolean?>(null)
     val getRoutineRecordSuccessState: State<Boolean?> get() = _getRoutineRecordSuccessState
     private val _routineId = mutableStateOf<Int?>(null)
@@ -46,6 +48,73 @@ class RoutineViewModel @Inject constructor(
     val initialName: State<String?> get() = _initialName
     private val _exerciseRecords = androidx.compose.runtime.mutableStateMapOf<Int, ExerciseRecord>()
     val exerciseRecords: Map<Int, ExerciseRecord> get() = _exerciseRecords
+    private fun intensityIndexFromString(s: String) = when (s) {
+        "느슨함" -> 0
+        "보통"   -> 1
+        "강함" -> 2
+        else -> 1
+    }
+    private fun intensityStringFromIndex(i: Int) = when (i) {
+        0 -> "느슨함"
+        1 -> "보통"
+        2 -> "강함"
+        else -> "보통"
+    }
+
+    fun seedFromRecord(record: RecordResponseDto) {
+        _routineName.value = record.name
+        _routineType.value = record.routineType
+
+        _selectedRoutines.clear()
+        record.routineExerciseProfiles.forEach { p ->
+            val f = Fitness(
+                id = p.exercise.id,
+                name = p.exercise.name,
+                targetMuscleGroup = p.exercise.targetMuscleType,
+                metValue = p.exercise.metValue.toDouble(),
+                type = 0
+            )
+            ensureExercise(f)
+
+            _exerciseRecords[f.id] = ExerciseRecord(
+                minutes = p.routineDetail.time,
+                intensity = intensityIndexFromString(p.routineDetail.intensity),
+                detail = ""
+            )
+
+            val mappedSets = p.routineSets.map { s ->
+                RoutineSetsDto(
+                    count = s.count,
+                    distance = s.distance,
+                    time = s.time,
+                    weightKg = s.weightKg,
+                    weightNum = s.weightNum,
+                    setOrder = s.setOrder
+                )
+            }.toMutableList()
+            _setsByExerciseName[f.name] = mappedSets
+        }
+        val validNames = _selectedRoutines.filterNotNull().map { it.name }.toSet()
+        _setsByExerciseName.keys.filter { it !in validNames }.toList().forEach { _setsByExerciseName.remove(it) }
+    }
+
+
+    private fun RoutineResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
+        Fitness(
+            id = exercise.id,
+            name = exercise.name,
+            targetMuscleGroup = exercise.targetMuscleGroup,
+            metValue = exercise.metValue,
+            type = 0
+        )
+    private fun RecordResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
+        Fitness(
+            id = exercise.id,
+            name = exercise.name,
+            targetMuscleGroup = exercise.targetMuscleType,
+            metValue = exercise.metValue.toDouble(),
+            type = 0
+        )
 
     init {
         val idArg = savedStateHandle.get<Int>("routineId") ?: -1
@@ -53,23 +122,15 @@ class RoutineViewModel @Inject constructor(
         _routineId.value = if (idArg >= 0) idArg else null
         _initialName.value = if (nameArg.isNotBlank()) nameArg else null
         _routineName.value = _initialName.value
+
         _routineId.value?.let { id ->
             viewModelScope.launch {
                 runCatching {
-                    // Option A: fetch all templates then pick by id
                     val resp = routineRepository.getRoutineTemplate(userId = 1)
-                    resp.body()?.firstOrNull { it.id == id }
-                        ?: error("No template $id")
+                    resp.body()?.firstOrNull { it.id == id } ?: error("No template $id")
                 }.onSuccess { template ->
                     template.routineExerciseProfiles.forEach { profile ->
-                        val f = Fitness(
-                            id = profile.exercise.id,
-                            name = profile.exercise.name,
-                            targetMuscleGroup = profile.exercise.targetMuscleGroup ?: "가슴",
-                            metValue = profile.exercise.metValue.toDouble(),
-                            type = 0
-                        )
-                        _selectedRoutines.add(f)
+                        _selectedRoutines.add(profile.toFitness())
                     }
                     _routineType.value = template.routineType
                 }.onFailure {
@@ -77,6 +138,29 @@ class RoutineViewModel @Inject constructor(
                 }
             }
         }
+    }
+    private fun buildExerciseRequests(): List<ExerciseRequestDto> {
+        return _selectedRoutines.filterNotNull().map { f ->
+            val rec = getRecord(f.id)
+            val sets = setsByExerciseName[f.name].orEmpty()
+            Log.d("BuildRequest", "Exercise: ${f.name}, Sets: $sets")
+            ExerciseRequestDto(
+                exerciseId = f.id,
+                routineDetail = RoutineDetailDto(
+                    time = rec.minutes,
+                    intensity = intensityStringFromIndex(rec.intensity)
+                ),
+                routineSets = sets
+            )
+        }
+    }
+    private fun buildRecordRequest(): RecordRequestDto {
+        return RecordRequestDto(
+            name = _routineName.value.orEmpty(),
+            routineType = _routineType.value ?: "기록",
+            userId = 1,
+            routineExercises = buildExerciseRequests()
+        )
     }
 
     fun createRoutine(
@@ -158,6 +242,34 @@ class RoutineViewModel @Inject constructor(
                         Log.e("changeRoutineRecord", it.message ?: "Unknown error")
                     }
             }
+        }
+    }
+
+    private val _updateRoutineRecordSuccessState = mutableStateOf<Boolean?>(null)
+    val updateRoutineRecordSuccessState: State<Boolean?> get() = _updateRoutineRecordSuccessState
+
+    fun changeRecordRoutine() {
+        val id = _routineId.value ?: run {
+            Log.e("changeRecordRoutine", "No routineId set")
+            _updateRoutineRecordSuccessState.value = false
+            return
+        }
+        val body = buildRecordRequest()
+        viewModelScope.launch {
+            runCatching { routineRepository.changeRecordRoutine(id, body) }
+                .onSuccess { resp ->
+                    if (resp.isSuccessful) {
+                        _updateRoutineRecordSuccessState.value = true
+                        Log.d("changeRecordRoutine", "success")
+                    } else {
+                        _updateRoutineRecordSuccessState.value = false
+                        Log.e("changeRecordRoutine", "HTTP ${resp.code()}")
+                    }
+                }
+                .onFailure {
+                    _updateRoutineRecordSuccessState.value = false
+                    Log.e("changeRecordRoutine", it.message ?: "Unknown error")
+                }
         }
     }
 
@@ -289,26 +401,7 @@ class RoutineViewModel @Inject constructor(
             _createRoutineSuccessState.value = false
             return
         }
-
-        val exercises: List<ExerciseRequestDto> =
-            selected.map { f ->
-                val rec = getRecord(f.id)
-                val sets = setsByExerciseName[f.name].orEmpty()
-
-                ExerciseRequestDto(
-                    exerciseId = f.id,
-                    routineDetail = RoutineDetailDto(
-                        time = rec.minutes,
-                        intensity = when (rec.intensity) {
-                            0 -> "느슨함"
-                            1 -> "보통"
-                            2 -> "힘듬"
-                            else -> "보통"
-                        }
-                    ),
-                    routineSets = sets
-                )
-            }
+        val body = buildRecordRequest()
 
         val routineName = _routineName.value.orEmpty()
         val routineType = _routineType.value ?: "기록"
@@ -316,12 +409,7 @@ class RoutineViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 routineRepository.createRoutineRecord(
-                    request = RecordRequestDto(
-                        name = routineName,
-                        routineType = routineType,
-                        userId = 1,
-                        routineExerciseProfiles = exercises
-                    )
+                    body
                 )
             }.onSuccess { resp ->
                 if (resp.isSuccessful) {

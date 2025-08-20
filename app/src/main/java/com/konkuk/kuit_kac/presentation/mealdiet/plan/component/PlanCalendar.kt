@@ -227,41 +227,39 @@ fun PlanCalendar(
 
                                 val tags = taggedDATES[thisDate].orEmpty()
 
-                                var color = Color(0xFFFFFFFF)
 
-                                if (thisDate.isBefore(LocalDate.now()) && tags.isNotEmpty()) {
-                                    color = Color(0xFFDFDFDF)
+                                val hasEatingOut = PlanTagType.EATING_OUT in tags
+                                val hasDrinking  = PlanTagType.DRINKING  in tags
+                                val hasAi        = PlanTagType.AI_RECOMMEND in tags
+
+                                if (thisDate.isBefore(LocalDate.now()) && tags.size == 1) {
                                     Box(
                                         modifier = Modifier
                                             .size(39f.wp(), 39f.bhp())
-                                            .background(
-                                                color = color,
-                                                shape = CircleShape
-                                            )
+                                            .background(Color(0xFFDFDFDF), CircleShape)
                                     )
                                 } else {
-
-                                    if (tags.size > 1) {
-                                        HalfColoredCircle(
-                                            modifier = Modifier.size(39f.wp(), 39f.bhp()),
-                                            leftColor = Color(0xFF67D1FF),
-                                            rightColor = Color(0xFFFF7FD0)
-                                        )
-                                    } else {
-                                        color = when {
-                                            PlanTagType.EATING_OUT in tags   -> PlanColors.EatingOut
-                                            PlanTagType.DRINKING in tags     -> PlanColors.Drinking
-                                            PlanTagType.AI_RECOMMEND in tags -> PlanColors.AiRecommend
-                                            else -> Color.Transparent
+                                    when {
+                                        hasEatingOut && hasDrinking -> {
+                                            HalfColoredCircle(
+                                                modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                                leftColor = PlanColors.EatingOut,
+                                                rightColor = PlanColors.Drinking
+                                            )
                                         }
-                                        Box(
-                                            modifier = Modifier
-                                                .size(39f.wp(), 39f.bhp())
-                                                .background(
-                                                    color = color,
-                                                    shape = CircleShape
-                                                )
+                                        hasEatingOut -> Box(
+                                            modifier = Modifier.size(39f.wp(), 39f.bhp())
+                                                .background(PlanColors.EatingOut, CircleShape)
                                         )
+                                        hasDrinking -> Box(
+                                            modifier = Modifier.size(39f.wp(), 39f.bhp())
+                                                .background(PlanColors.Drinking, CircleShape)
+                                        )
+                                        hasAi -> Box(
+                                            modifier = Modifier.size(39f.wp(), 39f.bhp())
+                                                .background(PlanColors.AiRecommend, CircleShape)
+                                        )
+                                        else -> Box(modifier = Modifier.size(39f.wp(), 39f.bhp())) // transparent
                                     }
                                 }
 
@@ -421,7 +419,7 @@ fun PlanCalendar(
                             if (breakfastClicked.value) add(DietType.BREAKFAST)
                             if (lunchClicked.value)     add(DietType.LUNCH)
                             if (dinnerClicked.value)    add(DietType.DINNER)
-                        }.ifEmpty { setOf(DietType.LUNCH) }
+                        }
 
                         if (newTag != null) onTagChangeForSlots(selectedDate!!, slots, newTag)
                         onSlotsChange(selectedDate!!, slots)
@@ -433,7 +431,7 @@ fun PlanCalendar(
                     lunchClicked.value = false
                     dinnerClicked.value = false
                 },
-                value = confirmString,
+                value = confirmLabel,
                 height = 65f
             )
         }

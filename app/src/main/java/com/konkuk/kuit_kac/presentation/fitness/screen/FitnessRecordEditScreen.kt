@@ -62,6 +62,16 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
     val selected = routineViewModel.selectedRoutines.filterNotNull()
+    fun muscleIcon(type: String): Int = when (type) {
+        "하체", "lower"    -> R.drawable.ic_lowerbody
+        "상체", "upper"    -> R.drawable.ic_shoulders
+        "전신", "full"     -> R.drawable.ic_core
+        "등", "back"       -> R.drawable.ic_back
+        "가슴", "chest"    -> R.drawable.ic_chest
+        "어깨", "shoulder" -> R.drawable.ic_shoulders
+        "팔", "arm"        -> R.drawable.ic_arms
+        else               -> R.drawable.ic_lowerbody
+    }
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
@@ -143,7 +153,7 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
                             val kcal = routineViewModel.kcalFor(f.id)
 
                             FitnessItemCard(
-                                image = R.drawable.ic_lowerbody,
+                                image = muscleIcon(f.targetMuscleGroup),
                                 FitnessName = f.name,
                                 FitnessAmount = rec.minutes,
                                 FitnessKcal = kcal,
@@ -176,7 +186,7 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
                         }
                         .noRippleClickable(
                             onClick = {
-                                navController.navigate(route = Route.FitnessSearch.route)
+                                navController.navigate(route = "RecordEditGraph/FitnessSearch")
                             }
                         ),
                     horizontalArrangement = Arrangement.Center,
@@ -223,7 +233,7 @@ fun FitnessRecordEditScreen(modifier: Modifier = Modifier,
                 )
                 .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.wp()))
                 .noRippleClickable {
-                    routineViewModel.changeRoutine()
+                    routineViewModel.changeRecordRoutine()
                     navController.navigate("meal_edit_result")},
             contentAlignment = Alignment.Center
         ){

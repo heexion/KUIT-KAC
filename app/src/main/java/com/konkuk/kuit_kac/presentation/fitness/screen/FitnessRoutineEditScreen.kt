@@ -289,7 +289,7 @@ fun FitnessRoutineEditScreen(
                                 routineViewModel.setSelectedRoutines(fitnessItems)
                                 routineViewModel.setName(current.name)
                             }
-                            navController.navigate("FitnessDetailInput")
+                            navController.navigate("FitnessRecordAddRoutine")
                         },
                     contentAlignment = Alignment.Center
                 ) {

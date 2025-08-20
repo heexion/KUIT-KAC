@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -63,7 +65,7 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 @Composable
 fun FitnessSearchScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     fitnessViewModel: FitnessViewModel = hiltViewModel(),
     routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
@@ -72,6 +74,7 @@ fun FitnessSearchScreen(
     var selectedItem by remember { mutableStateOf<Fitness?>(null) }
     var showDialog by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current // 포커스 매니저
+    val hostGraph = resolveFitnessHostGraph(navController)
 
     Column(
         modifier = modifier
@@ -222,36 +225,27 @@ fun FitnessSearchScreen(
                             .height(48f.bhp())
                             .clip(RoundedCornerShape(30f.bhp()))
                             .background(
-                                Brush.verticalGradient(
-                                    listOf(Color(0xFFFFF6C3), Color(0xFFFFA837))
-                                )
+                                Brush.verticalGradient(listOf(Color(0xFFFFF6C3), Color(0xFFFFA837)))
                             )
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
                             .noRippleClickable {
-                                // TODO: 추가 로직
-                                if (routineViewModel.exerciseRecords.isNotEmpty()) {
-                                    val f = selectedItem
-                                    if (f != null) {
-                                        routineViewModel.ensureExercise(f)
-                                        val encoded = Uri.encode(f.name)
-                                        navController.navigate("FitnessDetailRecord/$encoded")
+                                val f = selectedItem
+                                if (f != null) {
+                                    routineViewModel.ensureExercise(f)
+                                    val encoded = Uri.encode(f.name)
+                                    val detail = when (hostGraph) {
+                                        "FitnessAddGraph" -> "FitnessAddDetailRecord/$encoded"
+                                        "RecordEditGraph" -> "FitnessDetailRecord/$encoded"
+                                        else              -> "fitness/detail/$encoded"
                                     }
-                                } else {
-                                    routineViewModel.addRoutine(
-                                        selectedItem ?: Fitness(0, "", "", 1.0, 0)
-                                    )
-                                    navController.navigate(route = Route.FitnessEdit.route)
+                                    Log.d("fitnessSeach", detail)
+                                    navController.navigate(detail)
                                 }
                                 showDialog = false
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "추가하기",
-                            style = DungGeunMo17,
-                            fontSize = 17f.isp(),
-                            color = Color(0xFF000000)
-                        )
+                        Text(text = "추가하기", style = DungGeunMo17, fontSize = 17f.isp(), color = Color(0xFF000000))
                     }
                 }
             }
@@ -323,5 +317,23 @@ fun OutlinedTextFieldBackground(
                 )
         )
         content()
+    }
+}
+
+
+@Composable
+private fun resolveFitnessHostGraph(navController: NavHostController): String? {
+    val routes = navController.currentBackStackEntry
+        ?.destination
+        ?.hierarchy
+        ?.mapNotNull { it.route }
+        ?.toSet() ?: emptySet()
+
+    return when {
+        "FitnessAddGraph" in routes   -> "FitnessAddGraph"
+        "RecordEditGraph" in routes   -> "RecordEditGraph"
+        "RoutineEditGraph" in routes  -> "RoutineEditGraph"
+        "RoutineGraph" in routes      -> "RoutineGraph"
+        else                          -> null // 루트로 간주
     }
 }
