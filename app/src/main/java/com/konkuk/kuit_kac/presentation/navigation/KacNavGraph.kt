@@ -1215,7 +1215,7 @@ fun KacNavGraph(
             )
         }
 
-        composable(route = "plan_result") {
+        composable(Route.PlanResult.route) {
             PlanResultScreen(
                 modifier = modifier,
                 navController = navController
