@@ -84,10 +84,12 @@ fun FitnessAddDetailRecordScreen(
     }
     var intensity by remember(name) { mutableStateOf(initial.intensity) }
     var detail by remember(name) { mutableStateOf(initial.detail) }
-    val vmSets = routineViewModel.setsByExerciseName[name].orEmpty()
-    val detailLines = buildDetailLines(vmSets)
-
-    val isAllFilled = time.toIntOrNull()?.let { it > 0 } == true && intensity >= 0
+    val detailLines = buildDetailLines(routineViewModel.setsByExerciseName[name].orEmpty())
+    val hasDetail = detailLines.isNotEmpty() || detail.isNotBlank()
+    val isAllFilled =
+        time.toIntOrNull()?.let { it > 0 } == true &&
+                intensity >= 0 &&
+                hasDetail
 
     Column(
         modifier = modifier

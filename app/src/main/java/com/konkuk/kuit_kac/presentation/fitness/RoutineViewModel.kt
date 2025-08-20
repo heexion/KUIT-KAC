@@ -20,6 +20,7 @@ import com.konkuk.kuit_kac.presentation.fitness.RoutineRepository
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,13 +51,13 @@ class RoutineViewModel @Inject constructor(
     private fun intensityIndexFromString(s: String) = when (s) {
         "느슨함" -> 0
         "보통"   -> 1
-        "힘듦", "힘듬" -> 2
+        "강함" -> 2
         else -> 1
     }
     private fun intensityStringFromIndex(i: Int) = when (i) {
         0 -> "느슨함"
         1 -> "보통"
-        2 -> "힘듦"
+        2 -> "강함"
         else -> "보통"
     }
 
@@ -142,6 +143,7 @@ class RoutineViewModel @Inject constructor(
         return _selectedRoutines.filterNotNull().map { f ->
             val rec = getRecord(f.id)
             val sets = setsByExerciseName[f.name].orEmpty()
+            Log.d("BuildRequest", "Exercise: ${f.name}, Sets: $sets")
             ExerciseRequestDto(
                 exerciseId = f.id,
                 routineDetail = RoutineDetailDto(
