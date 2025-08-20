@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac
 
+//import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,7 +16,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -49,7 +48,6 @@ import com.konkuk.kuit_kac.notification.NotificationHelper
 import com.konkuk.kuit_kac.notification.ReminderScheduler
 import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
-//import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
@@ -180,7 +178,8 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingEoDrink.route,
                     Route.OnboardingCheck.route,
                     Route.OnboardingFinal.route,
-                    Route.OnboardingFloatingButton.route
+                    Route.OnboardingFloatingButton.route,
+                    Route.OnboardingPermission.route
                 )
 
                 val shouldHideBottomBar =
@@ -287,6 +286,7 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingCheck.route,
                     Route.OnboardingFinal.route,
                     Route.OnboardingFloatingButton.route,
+                    Route.OnboardingPermission.route,
 
                     // 로그인 관련
                     Route.LoginEmail.route
