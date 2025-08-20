@@ -38,6 +38,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -103,13 +104,34 @@ fun DietEditTempScreen(
                 .padding(top = 12.51f.hp())
                 .fillMaxWidth()
         ) {
-            Image(
+//            Image(
+//                modifier = Modifier
+//                    .offset(x = 78f.wp())
+//                    .size(272f.wp(), 96f.bhp()),
+//                painter = painterResource(R.drawable.img_diet_patchballoon),
+//                contentDescription = "textballoon"
+//            )
+            Box(
                 modifier = Modifier
-                    .offset(x = 78f.wp())
-                    .size(272f.wp(), 96f.bhp()),
-                painter = painterResource(R.drawable.img_diet_patchballoon),
-                contentDescription = "textballoon"
-            )
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_speech_bubble_white_right),
+                    modifier = Modifier.size(272f.wp(), 96f.bhp()),
+                    contentDescription = null
+                )
+                Text(
+                    text = "지금 총 ${cal}kcal이야",
+                    style = DungGeunMo17,
+                    fontSize = 17f.isp(),
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 40f.bhp())
+                )
+            }
+
 //            EllipseNyam(
 //                modifier = Modifier
 //                    .offset(y = 72f.bhp(), x = 117f.wp()),
@@ -153,22 +175,26 @@ fun DietEditTempScreen(
                         TextField(
                             modifier = Modifier
                                 .width(176f.wp())
-                                .heightIn(min=56f.bhp()),
+                                .heightIn(min = 56f.bhp()),
                             value = name,
                             onValueChange = {
                                 name = it
                             },
-                            placeholder = { Box(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ){Text(
-                                text = "제목 입력",
-                                textAlign = TextAlign.Center,
-                                style = DungGeunMo17,
-                                fontSize = 17f.isp(),
-                                color = Color(0xFF999999)
-                            )} },
+                            placeholder = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "제목 입력",
+                                        textAlign = TextAlign.Center,
+                                        style = DungGeunMo17,
+                                        fontSize = 17f.isp(),
+                                        color = Color(0xFF999999)
+                                    )
+                                }
+                            },
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color.Transparent,
                                 unfocusedContainerColor = Color.Transparent,
@@ -201,7 +227,7 @@ fun DietEditTempScreen(
                                 image = food.food_type.toDrawable(),
                                 foodName = food.name,
                                 foodAmount = quantity,
-                                foodKcal = food.calorie.toInt(),
+                                foodKcal = (quantity * food.calorie).toInt(),
                                 onDeleteClick = {
                                     dietViewModel.removeFood(foodWithQuantity)
                                 },
@@ -225,12 +251,13 @@ fun DietEditTempScreen(
                             )
                             .drawBehind {
                                 val strokeWidth = 3.dp.toPx()
-                                val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
-                                    floatArrayOf(
-                                        4.dp.toPx(),
-                                        4.dp.toPx()
-                                    ), 0f
-                                )
+                                val pathEffect =
+                                    androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                                        floatArrayOf(
+                                            4.dp.toPx(),
+                                            4.dp.toPx()
+                                        ), 0f
+                                    )
                                 val rect = Rect(0f, 0f, size.width, size.height)
 
                                 drawRoundRect(
@@ -302,7 +329,8 @@ fun DietEditTempScreen(
         DietMultipleNutritionBar(
             modifier = Modifier
                 .padding(start = 41f.wp(), end = 39f.wp(), top = 13.29f.bhp()),
-            carb = dietViewModel.totalCarb.toFloat(), protein = dietViewModel.totalProtein.toFloat(),
+            carb = dietViewModel.totalCarb.toFloat(),
+            protein = dietViewModel.totalProtein.toFloat(),
             fat = dietViewModel.totalFat.toFloat()
         )
         Box(
@@ -328,7 +356,7 @@ fun DietEditTempScreen(
                         navController.popBackStack()
                     else
                         dietViewModel.editDiet()
-                        navController.navigate(Route.MealFastingResult.route)
+                    navController.navigate(Route.MealFastingResult.route)
                 },
             contentAlignment = Alignment.Center
         ) {
