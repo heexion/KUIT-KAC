@@ -70,9 +70,14 @@ fun PlanIPAddScreen(
         mealViewModel.getPlan(userId = 1)
     }
     val meal = mealViewModel.getPlanState.value
-    fun isMealTypeExist(type: String): Boolean {
-        return meal?.any { it.dietType == type } ?: false
+    val currentDate = mealViewModel.planDate.value ?: selectedDate.toString()
+    val dayMeals = meal.orEmpty().filter { dto ->
+        (dto.dietDate == currentDate) ||
+                (dto.createdAt?.startsWith(currentDate) == true)
     }
+
+    fun isMealTypeExist(type: String) = dayMeals.any { it.dietType == type }
+
 
     val scrollState = rememberScrollState()
     Column(
@@ -163,15 +168,17 @@ fun PlanIPAddScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val dateString = mealViewModel.planDate.value ?: "{${LocalDate.now()}}"
-                    val cleanedString = dateString.replace("{", "").replace("}", "")
+                    val dateString = mealViewModel.planDate.value ?: LocalDate.now().toString()
+                    val baseDate = runCatching { LocalDate.parse(dateString) }.getOrElse { LocalDate.now() }
 
 
                     WeeklyCalendar(
-                        LocalDate.parse(cleanedString) ?: LocalDate.now(),
+                        baseDate,
                         onDateClick = { clickedDate ->
                             selectedDate = clickedDate
-                        })
+                            mealViewModel.setPlanDate(clickedDate)
+                        }
+                    )
 
 //                    Text(
 //                        text = mealViewModel.planDate.value ?: "2025-12-12",

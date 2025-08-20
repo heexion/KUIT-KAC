@@ -139,6 +139,6 @@ dependencies {
 
     //datastore
     implementation(libs.androidx.datastore.preferences)
-
+    implementation("com.opencsv:opencsv:5.9")
 
 }

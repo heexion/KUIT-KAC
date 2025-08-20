@@ -187,7 +187,7 @@ fun HomeMainScreen(
                 Column {
                     HomeSummaryBox(
                         title = "목표 일일 칼로리",
-                        value = "${goal}kcal",
+                        value = "${goal.toInt()}kcal",
                         width = 154f.wp(),
                         height = 70f.bhp()
                     )

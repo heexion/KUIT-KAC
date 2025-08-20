@@ -137,7 +137,7 @@ class DietViewModel @Inject constructor(
         get() = selectedFoods.sumOf { (it.food.calorie * it.quantity).toInt() }
 
     val totalCarb: Double
-        get() = selectedFoods.sumOf { it.food.carb * it.quantity }
+        get() = selectedFoods.sumOf { it.food.carbohydrate * it.quantity }
 
     val totalProtein: Double
         get() = selectedFoods.sumOf { it.food.protein * it.quantity }

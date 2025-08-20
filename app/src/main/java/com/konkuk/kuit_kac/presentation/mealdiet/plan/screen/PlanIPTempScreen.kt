@@ -51,6 +51,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 @Composable
 fun PlanIPTempScreen(
@@ -142,7 +143,7 @@ fun PlanIPTempScreen(
                             val quantity = foodWithQuantity.quantity
                             MealItemCard(
                                 foodNum = 1,
-                                image = food.foodType.toDrawable(),
+                                image = food.food_type.toDrawable(),
                                 foodName = food.name,
                                 foodAmount = quantity,
                                 foodKcal = food.calorie.toInt(),
@@ -151,8 +152,8 @@ fun PlanIPTempScreen(
                                 },
                                 navController = navController
                             )
-                            Log.d("MealTemp", "foodType: ${food.foodType}")
-                            Log.d("MealTemp", "foodType: ${food.foodType.toDrawable()}")
+                            Log.d("MealTemp", "foodType: ${food.food_type}")
+                            Log.d("MealTemp", "foodType: ${food.food_type.toDrawable()}")
                         }
                     }
                     Row(
@@ -266,7 +267,10 @@ fun PlanIPTempScreen(
                     else{
                         mealViewModel.createPlan()
                     }
-                    navController.navigate("PlanIPGraph/plan_in_person_add?date=${mealViewModel.planDate.value}")
+                    val date = mealViewModel.planDate.value ?: LocalDate.now().toString()
+                    navController.navigate("PlanIPGraph/day/$date") {
+                        popUpTo("PlanIPGraph") { inclusive = false }
+                    }
                 },
             contentAlignment = Alignment.Center
         ) {

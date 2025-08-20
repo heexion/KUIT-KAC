@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.navigation
 
 
+import PlanCheckScreen
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -25,7 +26,6 @@ import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIRecomScreen
-import com.konkuk.kuit_kac.presentation.diet.screen.PlanCheckScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanDietMainScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddCompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanIPAddScreen
@@ -88,6 +88,7 @@ import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPSearchScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanIPTempScreen
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanItemScreen
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.screen.PlanMonthScreen
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingActivityLevel
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAiIntro
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingAiMeal
@@ -143,6 +144,8 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeSc
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingStartScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingYellowScreen
+import java.time.LocalDate
+import java.time.YearMonth
 
 
 @Composable
@@ -274,7 +277,7 @@ fun KacNavGraph(
                 }
                 val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
                 val selectedMode = backStackEntry.arguments?.getString("mode") ?: ""
-                // TODO 이거 받는 api 없음
+
                 OnboardingActivityLevelScreen(
                     navController = navController,
                     selectedMode = selectedMode,
@@ -824,43 +827,66 @@ fun KacNavGraph(
 
         navigation(
             route = "PlanIPGraph",
-            startDestination = "PlanIPGraph/plan_in_person_add?date={date}"
+            startDestination = "PlanIPGraph/month/{yearMonth}"
         ) {
             composable(
-                route = "PlanIPGraph/plan_in_person_add?date={date}",
+                route = "PlanIPGraph/month/{yearMonth}",
                 arguments = listOf(
-                    navArgument("date") {
+                    navArgument("yearMonth") {
                         type = NavType.StringType
-                        defaultValue = ""
+                        defaultValue = YearMonth.now().toString()
                     }
                 )
             ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIPGraph")
                 }
-                val args = backStackEntry.arguments
-                val date = args?.getString("date") ?: ""
-                parentEntry.savedStateHandle["date"] = date
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
-                PlanIPAddScreen(
+
+                val yearMonthArg = backStackEntry.arguments?.getString("yearMonth")
+                    ?: YearMonth.now().toString()
+
+                // Fetch monthly plans/tags whenever the month changes
+                LaunchedEffect(yearMonthArg) {
+                    mealViewModel.getMonthPlan(userId = 1, yearMonth = yearMonthArg)
+                }
+
+                PlanMonthScreen(
+                    navController = navController,
                     mealViewModel = mealViewModel,
-                    navController = navController
+                    yearMonthStr = yearMonthArg
                 )
             }
+
             composable(
-                route = "PlanIPSearch"
+                route = "PlanIPGraph/day/{date}",
+                arguments = listOf(
+                    navArgument("date") { type = NavType.StringType }
+                )
             ) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIPGraph")
                 }
                 val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
-                PlanIPSearchScreen(
+                val date = backStackEntry.arguments?.getString("date") ?: LocalDate.now().toString()
+
+                parentEntry.savedStateHandle["date"] = date
+
+                PlanIPAddScreen(
+                    mealViewModel = mealViewModel,
                     navController = navController
                 )
             }
-            composable(
-                route = "plan_search_detail/{foodName}"
-            ) { backStackEntry ->
+
+            composable("PlanIPSearch") { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("PlanIPGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+                PlanIPSearchScreen(navController = navController)
+            }
+
+            composable("plan_search_detail/{foodName}") { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIPGraph")
                 }
@@ -872,9 +898,8 @@ fun KacNavGraph(
                     foodName = foodName
                 )
             }
-            composable(
-                route = "PlanIPTemp"
-            ) { backStackEntry ->
+
+            composable("PlanIPTemp") { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("PlanIPGraph")
                 }
@@ -882,6 +907,22 @@ fun KacNavGraph(
                 PlanIPTempScreen(
                     mealViewModel = mealViewModel,
                     navController = navController
+                )
+            }
+        }
+        navigation(
+            route = "PlanCheckGraph",
+            startDestination = "PlanCheck"
+        ) {
+            composable("PlanCheck") { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("PlanCheckGraph")
+                }
+                val mealViewModel = hiltViewModel<MealViewModel>(parentEntry)
+
+                PlanCheckScreen(
+                    navController = navController,
+                    mealViewModel = mealViewModel
                 )
             }
         }
@@ -1241,12 +1282,6 @@ fun KacNavGraph(
             )
         }
 
-        composable(Route.PlanCheck.route) {
-            PlanCheckScreen(
-                modifier = modifier,
-                navController = navController
-            )
-        }
 
         composable(Route.FitnessCreate.route) {
             FitnessCreateScreen(navController = navController)

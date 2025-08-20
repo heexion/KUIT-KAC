@@ -80,9 +80,9 @@ fun PlanItemScreen(
             // 음식 상세 카드
             MealDetailCard(
                 modifier = Modifier.padding(horizontal = 24f.wp()),
-                image = foodInfo.foodType.toDrawable(),
+                image = foodInfo.food_type.toDrawable(),
                 foodName = foodInfo.name,
-                carbohydrate = foodInfo.carb.toFloat(),
+                carbohydrate = foodInfo.carbohydrate.toFloat(),
                 protein = foodInfo.protein.toFloat(),
                 fat = foodInfo.fat.toFloat(),
                 baseCalories = foodInfo.calorie.toInt(),

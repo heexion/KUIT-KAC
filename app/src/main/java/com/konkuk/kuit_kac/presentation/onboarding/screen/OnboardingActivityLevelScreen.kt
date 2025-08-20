@@ -41,15 +41,8 @@ fun OnboardingActivityLevelScreen(
     selectedMode: String, // 이전 화면에서 받은 모드
     onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
-    var activityLevel by remember { mutableStateOf(0) }
-
-    val activityMent = listOf(
-        "매우 낮아!",
-        "가벼운 활동 정도야!\n(주 1~2회 운동)",
-        "보통 정도야!\n(주 3~4회 운동)",
-        "활동량이 높아!\n(주 5회 이상 운동)",
-        "활동량이 매우 높아!\n(매일 운동)"
-    )
+    var activityLevelIndex by remember { mutableStateOf(ActivityLevel.VERY_LOW.index) }
+    val level = ActivityLevel.fromIndex(activityLevelIndex)
 
     Box(modifier = modifier.fillMaxSize()) {
         OnboardingBackScreen(
@@ -78,7 +71,7 @@ fun OnboardingActivityLevelScreen(
                 )
 
                 Text(
-                    text = activityMent[activityLevel],
+                    text = level.ment,
                     style = DungGeunMo15,
                     fontSize = 16f.isp(),
                     color = Color(0xFF000000),
@@ -93,8 +86,8 @@ fun OnboardingActivityLevelScreen(
 
             // 커스텀 슬라이더
             CustomImageSlider(
-                currentValue = activityLevel,
-                onValueChange = { activityLevel = it }
+                currentValue = activityLevelIndex,
+                onValueChange = { activityLevelIndex = it }
             )
 
             Spacer(modifier = Modifier.height(20f.bhp()))
@@ -103,6 +96,7 @@ fun OnboardingActivityLevelScreen(
             OnboardingButton(
                 value = "다음으로",
                 onClick = {
+                    onboardingViewModel.setActivity(level.name)
                     navController.navigate("${OnboardingInput.route}/$selectedMode")
                 },
                 modifier = Modifier.height(65f.bhp())
@@ -121,4 +115,19 @@ private fun OnboardingActivityLevelScreenPreview() {
         navController = navController,
         selectedMode = "코치모드"
     )
+}
+enum class ActivityLevel(
+    val index: Int,
+    val ment: String
+) {
+    VERY_LOW(0, "매우 낮아!"),
+    LOW(1, "가벼운 활동 정도야!\n(주 1~2회 운동)"),
+    NORMAL(2, "보통 정도야!\n(주 3~4회 운동)"),
+    HIGH(3, "활동량이 높아!\n(주 5회 이상 운동)"),
+    VERY_HIGH(4, "활동량이 매우 높아!\n(매일 운동)");
+
+    companion object {
+        fun fromIndex(index: Int): ActivityLevel =
+            entries.getOrNull(index.coerceIn(0, entries.last().index)) ?: VERY_LOW
+    }
 }

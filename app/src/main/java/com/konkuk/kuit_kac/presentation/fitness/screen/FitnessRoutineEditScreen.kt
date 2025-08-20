@@ -195,8 +195,7 @@ fun FitnessRoutineEditScreen(
                                     id = profile.exercise.id,
                                     name = profile.exercise.name,
                                     targetMuscleGroup = profile.exercise.targetMuscleGroup,
-                                    metValue = profile.exercise.metValue.toDouble(),
-                                    type = 0
+                                    metValue = profile.exercise.metValue.toDouble()
                                 )
                             }
                             val offset =
@@ -282,8 +281,7 @@ fun FitnessRoutineEditScreen(
                                         id = p.exercise.id,
                                         name = p.exercise.name,
                                         targetMuscleGroup = p.exercise.targetMuscleGroup,
-                                        metValue = p.exercise.metValue.toDouble(),
-                                        type = 0
+                                        metValue = p.exercise.metValue.toDouble()
                                     )
                                 }
                                 routineViewModel.setSelectedRoutines(fitnessItems)

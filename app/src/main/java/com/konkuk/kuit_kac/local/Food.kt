@@ -9,11 +9,15 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["name"], unique = true)]
 )
 data class Food(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: Int,
     val name: String,
-    val foodType: String,
+    val unit_type: String = "개",
+    val unit_num: Int,
+    val food_type: String,
+    val is_processed_food: Int,
     val calorie: Double,
+    val carbohydrate: Double,
     val protein: Double,
     val fat: Double,
-    val carb: Double
+    val sugar: Double = 0.0
 )

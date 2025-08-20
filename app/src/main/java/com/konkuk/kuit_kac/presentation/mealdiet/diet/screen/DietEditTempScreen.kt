@@ -198,7 +198,7 @@ fun DietEditTempScreen(
                             val quantity = foodWithQuantity.quantity
                             MealItemCard(
                                 foodNum = 1,
-                                image = food.foodType.toDrawable(),
+                                image = food.food_type.toDrawable(),
                                 foodName = food.name,
                                 foodAmount = quantity,
                                 foodKcal = food.calorie.toInt(),
@@ -207,8 +207,8 @@ fun DietEditTempScreen(
                                 },
                                 navController = navController
                             )
-                            Log.d("DietTemp", "foodType: ${food.foodType}")
-                            Log.d("DietTemp", "foodType: ${food.foodType.toDrawable()}")
+                            Log.d("DietTemp", "foodType: ${food.food_type}")
+                            Log.d("DietTemp", "foodType: ${food.food_type.toDrawable()}")
                         }
                     }
                     Row(

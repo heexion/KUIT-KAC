@@ -168,8 +168,9 @@ fun PlanInPersonScreen(
                         else false,
                         onClick = {
                             Log.d("plan", "${selectedDate}")
-                            if (selectedDate != null)
-                                navController.navigate("PlanIPGraph/plan_in_person_add?date={$selectedDate}")
+                            selectedDate?.let { date ->
+                                navController.navigate("PlanIPGraph/day/$date")
+                            }
                         },
                         value = "계획하기",
                         height = 65f

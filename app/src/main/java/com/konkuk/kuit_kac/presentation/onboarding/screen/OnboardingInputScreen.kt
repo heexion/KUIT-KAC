@@ -436,6 +436,7 @@ fun OnboardingInputScreen(
                         onboardingViewModel.setGender(if(selectedGender== "남자"){"MALE"}else{"FEMALE"})
                         onboardingViewModel.setHeight(height.toInt())
                         onboardingViewModel.setTargetWeight(weightTarget.toDouble())
+                        onboardingViewModel.setCurrentWeight(weightCurrent.toDouble())
                         proceedNext()
                     }
                 }

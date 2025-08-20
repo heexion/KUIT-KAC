@@ -148,8 +148,6 @@ data class WeightRequestDto(
 
 @Serializable
 data class AiRequestDto(
-    @SerialName("userId")
-    val userId: Int,
     @SerialName("dietActivities")
     val dietActivities: List<AiDto>
 )
@@ -188,6 +186,10 @@ data class OnboardingRequestDto(
     val nickname: String,
     @SerialName("targetWeight")
     val targetWeight: Double,
+    @SerialName("currentWeight")
+    val currentWeight: Double,
+    @SerialName("activity")
+    val activity: String,
     @SerialName("weeklyEatingOutCount")
     val weeklyEatingOutCount: String
 )

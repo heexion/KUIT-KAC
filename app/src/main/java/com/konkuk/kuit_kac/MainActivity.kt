@@ -36,7 +36,6 @@ import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFitness
-import com.konkuk.kuit_kac.local.parse.loadFood
 import com.konkuk.kuit_kac.notification.NotificationHelper
 import com.konkuk.kuit_kac.notification.ReminderScheduler
 import com.konkuk.kuit_kac.presentation.component.BottomBar
@@ -45,6 +44,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import loadFoods
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -367,7 +367,7 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             if (!foodDao.hasAnyFood()) {
-                val foods = loadFood(applicationContext)
+                val foods = loadFoods(applicationContext)
                 foodDao.insertAll(foods)
             }
         }

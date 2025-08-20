@@ -14,7 +14,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RoutineService {
-    @POST("routines")
+    @POST("routines/templates")
     suspend fun createRoutine(
         @Body request: RoutineRequestDto
     ): Response<Unit>
@@ -29,7 +29,7 @@ interface RoutineService {
         @Path("routineId") routineId: Int,
         @Body request: RecordRequestDto
     ): Response<Unit>
-    @PUT("routines/{routineId}")
+    @PUT("routines/templates/{routineId}")
     suspend fun changeRoutine(
         @Path("routineId") routineId: Int,
         @Body request: RoutineRequestDto

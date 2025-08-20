@@ -184,7 +184,7 @@ fun DietPatchScreen(
                             val quantity = foodWithQuantity.quantity
                             MealItemCard(
                                 foodNum = 1,
-                                image = food.foodType.toDrawable(),
+                                image = food.food_type.toDrawable(),
                                 foodName = food.name,
                                 foodAmount = quantity,
                                 foodKcal = food.calorie.toInt(),
@@ -193,8 +193,8 @@ fun DietPatchScreen(
                                 },
                                 navController = navController
                             )
-                            Log.d("MealTemp", "foodType: ${food.foodType}")
-                            Log.d("MealTemp", "foodType: ${food.foodType.toDrawable()}")
+                            Log.d("MealTemp", "foodType: ${food.food_type}")
+                            Log.d("MealTemp", "foodType: ${food.food_type.toDrawable()}")
                         }
                     }
                     Row(

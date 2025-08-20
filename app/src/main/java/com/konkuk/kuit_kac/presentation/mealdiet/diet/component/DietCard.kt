@@ -65,7 +65,7 @@ fun DietCard(
                 kcal += kcalPerUnit * qty
 
                 // Pull macros from local DB (adjust field names if needed)
-                val carbPerUnit = (localFood?.carb ?: 0.0)
+                val carbPerUnit = (localFood?.carbohydrate ?: 0.0)
                 val proteinPerUnit = (localFood?.protein ?: 0.0)
                 val fatPerUnit = (localFood?.fat ?: 0.0)
 

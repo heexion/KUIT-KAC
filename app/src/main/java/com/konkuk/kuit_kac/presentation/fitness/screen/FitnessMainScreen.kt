@@ -263,8 +263,7 @@ fun FitnessMainScreen(
                                     id = profile.exercise.id,
                                     name = profile.exercise.name,
                                     targetMuscleGroup = profile.exercise.targetMuscleGroup,
-                                    metValue = profile.exercise.metValue.toDouble(),
-                                    type = 0
+                                    metValue = profile.exercise.metValue.toDouble()
                                 )
                             }
                             val pageOffset =
