@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,17 +39,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.SelectButton
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import com.konkuk.kuit_kac.ui.theme.deepYellow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -79,64 +79,93 @@ fun FitnessMainScreen(
     val initialPage = infinitePageCount / 2 - ((infinitePageCount / 2) % actualPageCount)
 
     val pageState = rememberPagerState(
-        initialPage = initialPage-1,
+        initialPage = initialPage - 1,
         pageCount = { infinitePageCount }
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // Top header with tabs
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = Color(0xFFFFF1AB))
-                    .padding(start = 20f.wp(), end = 20f.wp(), top = 16f.hp(), bottom = 11f.bhp())
+                    .height(165f.bhp())
+                    .background(color = deepYellow)
+                    .border(1.dp, Color(0xFF000000))
             ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16f.hp())
+                        .height(28.8584f.bhp()),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_fitness),
-                            contentDescription = "운동 아이콘",
-                            modifier = Modifier.size(20f.wp())
-                        )
-                        Spacer(Modifier.width(4f.wp()))
-                        Text(
-                            text = "운동",
-                            style = DungGeunMo20,
-                            fontSize = 20f.isp(),
-                            color = Color(0xFF713E3A)
-                        )
-                    }
-                    Spacer(Modifier.height(17.5f.bhp()))
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        SelectButton(
-                            modifier = Modifier.weight(1f),
-                            value = "운동 기록",
-                            isSelected = selectedTab == "기록",
-                            buttonHeight = 49,
-                            onClick = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_fitness),
+                        contentDescription = "운동 아이콘",
+                        modifier = Modifier.size(20f.wp()),
+                    )
+                    Spacer(modifier = Modifier.size(5f.wp()))
+                    Text(
+                        text = "운동",
+                        style = DungGeunMo20,
+                        fontSize = 20f.isp(),
+                        color = Color(0xFF000000)
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 17f.bhp(),
+                            start = 24f.wp(), end = 24f.wp()
+                        ),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    SelectButton2(
+                        modifier = Modifier
+                            .size(174f.wp(), 49f.bhp())
+                            .noRippleClickable {
                                 navController.navigate("RecordEditGraph")
                                 onTabClick("기록")
-                            }
-                        )
-                        Spacer(Modifier.width(16f.wp()))
-                        SelectButton(
-                            modifier = Modifier.weight(1f),
-                            value = "나만의 운동 루틴",
-                            isSelected = selectedTab == "나만의",
-                            buttonHeight = 49,
-                            onClick = {
+                            },
+                        isSelected = selectedTab == "기록",
+                        value = "운동 기록",
+                    )
+                    SelectButton2(
+                        modifier = Modifier
+                            .size(174f.wp(), 49f.bhp())
+                            .noRippleClickable {
                                 navController.navigate(Route.Fitness.route)
                                 onTabClick("나만의")
-                            }
-                        )
-                    }
+                            },
+                        value = "나만의 운동 루틴",
+                        isSelected = true,
+                    )
+
+//                    SelectButton(
+//                        modifier = Modifier.weight(1f),
+//                        value = "운동 기록",
+//                        isSelected = selectedTab == "기록",
+//                        buttonHeight = 49,
+//                        onClick = {
+//                            navController.navigate("RecordEditGraph")
+//                            onTabClick("기록")
+//                        }
+//                    )
+//                    Spacer(Modifier.width(16f.wp()))
+//                    SelectButton(
+//                        modifier = Modifier.weight(1f),
+//                        value = "나만의 운동 루틴",
+//                        isSelected = selectedTab == "나만의",
+//                        buttonHeight = 49,
+//                        onClick = {
+//                            navController.navigate(Route.Fitness.route)
+//                            onTabClick("나만의")
+//                        }
+//                    )
                 }
             }
-            Divider(color = Color.Black, thickness = 1.dp)
 
             // Content area
             Column(
@@ -156,20 +185,22 @@ fun FitnessMainScreen(
                         .width(364f.wp())
                         .height(49f.bhp())
                         .border(1.dp, Color.Black, RoundedCornerShape(35f.wp()))
-                        .clickable { navController.navigate("RoutineGraph") }
+                        .noRippleClickable { navController.navigate("RoutineGraph") }
                         .padding(horizontal = 16f.wp()),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_plus),
+                        painter = painterResource(id = R.drawable.img_diet_cross),
                         contentDescription = "아이콘",
-                        modifier = Modifier.size(27f.wp())
+                        modifier = Modifier.size(14.2f.wp(), 14.2f.bhp())
                     )
                     Spacer(Modifier.width(8f.wp()))
                     Text(
                         text = if (selectedTab == "기록") "운동 기록하기" else "나만의 운동 루틴 생성하기",
-                        style = DungGeunMo20.copy(fontSize = 17f.isp())
+                        style = DungGeunMo20.copy(fontSize = 17f.isp()),
+                        color = Color(0xFF000000)
+
                     )
                 }
 
@@ -182,7 +213,7 @@ fun FitnessMainScreen(
                             .width(364f.wp())
                             .height(458f.bhp())
                             .clip(RoundedCornerShape(20f.bhp()))
-                            .border(1.dp, Color.Black, RoundedCornerShape(20f.bhp()))
+                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.img_meal_bg),
@@ -206,7 +237,7 @@ fun FitnessMainScreen(
                                 num = 1,
                                 ellipseLength = 182.0,
                                 mascotLength = 156.0,
-                                onClick = { navController.navigate(Route.FitnessExist.route) }
+//                                onClick = { navController.navigate(Route.FitnessExist.route) }    // 안 쓰이는 화면
                             )
                         }
                     }
@@ -265,7 +296,7 @@ fun FitnessMainScreen(
                                         colors = listOf(Color.White, Color(0xFFFFB638))
                                     )
                                 )
-                                .clickable {
+                                .noRippleClickable {
                                     coroutineScope.launch {
                                         val nextPage = (pageState.currentPage - 1)
                                         pageState.animateScrollToPage(nextPage)
@@ -296,7 +327,7 @@ fun FitnessMainScreen(
                                         colors = listOf(Color.White, Color(0xFFFFB638))
                                     )
                                 )
-                                .clickable {
+                                .noRippleClickable {
                                     coroutineScope.launch {
                                         val nextPage = (pageState.currentPage + 1)
                                         pageState.animateScrollToPage(nextPage)

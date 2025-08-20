@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -34,7 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -69,6 +73,7 @@ fun FitnessRoutineSearchScreen(
     val suggestions = fitnessViewModel.suggestions
     var selectedItem by remember { mutableStateOf<Fitness?>(null) }
     var showDialog by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = modifier
@@ -106,31 +111,36 @@ fun FitnessRoutineSearchScreen(
                 }
 
                 Spacer(modifier = Modifier.height(23f.bhp()))
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 72f.bhp()),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF000000),
-                        unfocusedBorderColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF000000)
-                    ),
-                    shape = RoundedCornerShape(30f.bhp()),
-                    singleLine = true,
-                    value = query,
-                    onValueChange = { fitnessViewModel.onQueryChange(it) },
-                    label = { Text(
-                        text = "무슨 음식을 먹었어?",
-                        style = DungGeunMo15,
-                        fontSize = 15f.isp(),
-                        color = Color(0xFFB5B5B5),
-                        modifier = Modifier.padding(horizontal = 20f.wp())
-                    ) },
-                    textStyle = DungGeunMo15.copy(
-                        fontSize = 15f.isp(),
-                        color = Color(0xFF000000)
+                OutlinedTextFieldBackground(color = Color(0xFFFFFFFF)) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 72f.bhp())
+                            .background(color = Color(0xffFFFFFF), RoundedCornerShape(30f.bhp())),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF000000),
+                            unfocusedBorderColor = Color(0xFF000000),
+                            cursorColor = Color(0xFF000000)
+                        ),
+                        shape = RoundedCornerShape(30f.bhp()),
+                        singleLine = true,
+                        value = query,
+                        onValueChange = { fitnessViewModel.onQueryChange(it) },
+                        label = {
+                            Text(
+                                text = "무슨 운동을 했어?",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xFF0F0E0E),
+                                modifier = Modifier.padding(horizontal = 20f.wp())
+                            )
+                        },
+                        textStyle = DungGeunMo15.copy(
+                            fontSize = 15f.isp(),
+                            color = Color(0xFF000000)
+                        )
                     )
-                )
+                }
             }
         }
 
@@ -142,8 +152,8 @@ fun FitnessRoutineSearchScreen(
                 SearchBarItem(
                     modifier = Modifier.padding(horizontal = 24f.wp()),
                     value = fitness.name,
-                    //isLastItem = index == searchHistory.lastIndex,
                     onClick = {
+                        focusManager.clearFocus()
                         selectedItem = fitness
                         showDialog = true
                     }
@@ -170,7 +180,7 @@ fun FitnessRoutineSearchScreen(
                         .align(Alignment.TopEnd)
                         // .padding(top = 4.dp, end = 4.dp)
                         .size(20.dp)
-                        .clickable { showDialog = false }
+                        .noRippleClickable { showDialog = false }
                 )
 
                 Column(
@@ -181,7 +191,8 @@ fun FitnessRoutineSearchScreen(
                         text = "‘${selectedItem?.name}’",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
-                        color = Color(0xFF000000)
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -203,7 +214,7 @@ fun FitnessRoutineSearchScreen(
                                 )
                             )
                             .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                            .clickable {
+                            .noRippleClickable {
                                 // TODO: 추가 로직
                                     val f = selectedItem
                                     if (f != null) {

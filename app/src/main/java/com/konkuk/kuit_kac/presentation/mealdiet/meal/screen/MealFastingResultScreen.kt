@@ -5,6 +5,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -116,18 +117,30 @@ fun MealFastingResultScreen(
 //        )
 
 
+//        HamcoachGif(
+//            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+//            num = 1,
+//            ellipseLength = 222.0,
+//            mascotLength = 200.0
+//        )
+//        NyameeGif(
+//            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+//            num = 4,
+//            sizePercent = 1.35f
+//        )
+
         HamcoachGif(
-            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            modifier = Modifier.offset(x = (-10f).wp(), y = 255f.hp()),
             num = 1,
-            ellipseLength = 222.0,
+            ellipseLength = 200.0,
             mascotLength = 200.0
         )
+
         NyameeGif(
-            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+            modifier = Modifier.offset(x = 60f.wp(), y = 310f.bhp()),
             num = 4,
             sizePercent = 1.35f
         )
-
 
         // 말풍선
         Box(
@@ -169,14 +182,14 @@ fun MealFastingResultScreen(
                     )
                 )
                 .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp()))
-                .clickable(
+                .noRippleClickable(
                     onClick = {
-                        navController.navigate(Route.Home.route)
+                        navController.popBackStack()
                     }
                 ),
         ) {
             Text(
-                text = "홈으로 돌아가기",
+                text = "식단 기록으로 돌아가기",
                 style = DungGeunMo20,
                 fontSize = 20f.isp(),
                 color = Color(0xFF000000),

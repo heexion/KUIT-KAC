@@ -3,7 +3,6 @@ package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -28,9 +26,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,41 +44,53 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.DietCard
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
-import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.deepYellow
-import kotlinx.coroutines.launch
 
 @Composable
 fun DietMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     dietViewModel: DietViewModel = hiltViewModel()
-    ) {
+) {
     LaunchedEffect(Unit) {
         dietViewModel.getDiet(userId = 1)
     }
     val dietList = dietViewModel.getDietState.value
     val state = !dietList.isNullOrEmpty()
-    val pageCount = dietList?.size?:1
-    val pagerState = rememberPagerState(pageCount = {pageCount})
+    val pageCount = dietList?.size ?: 1
+    val pagerState = rememberPagerState(pageCount = { pageCount })
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                )
+            )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(165f.bhp())
                 .background(color = deepYellow)
-                .border(1.dp, Color(0xFF000000))
-        ) {
+                .drawBehind {
+                    val strokeWidth = 1.dp.toPx()
+                    drawLine(
+                        color = Color(0xFF000000),
+                        start = Offset(0f, size.height - strokeWidth / 2),
+                        end = Offset(size.width, size.height - strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
+        )
+        {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,8 +100,8 @@ fun DietMainScreen(
             ) {
                 Image(
                     modifier = Modifier
-                        .size(28.8584f.wp(),28.8584f.bhp()),
-                    painter = painterResource(R.drawable.ic_alcohol),
+                        .size(28.8584f.wp(), 28.8584f.bhp()),
+                    painter = painterResource(R.drawable.ic_diet),
                     contentDescription = "utensils"
                 )
                 Text(
@@ -103,47 +114,47 @@ fun DietMainScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 17f.bhp(),
-                        start = 24f.wp(), end = 24f.wp()),
+                    .padding(
+                        top = 17f.bhp(),
+                        start = 24f.wp(), end = 24f.wp()
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp())
-                        .clickable {
+                        .noRippleClickable {
                             navController.navigate(Route.Meal.route)
                         },
-                    value = "식단기록"
+                    value = "식단 기록"
                 )
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp()),
-                    value = "나만의 식단"
+                    value = "나만의 식단",
+                    isSelected = true
                 )
             }
         }
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush =
-                    Brush.radialGradient(
-                        colors = listOf(Color(0xFFFFFFFF),Color(0xFFFFF4C1)),
-                        radius = 2000f
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
                     )
-                ),
+                )
         )
         {
-            if(state) {
+            if (state) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            brush =
-                                Brush.radialGradient(
-                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                                    radius = 2000f
-                                )
-                        ),
+                            brush = Brush.verticalGradient(
+                                listOf(Color(0xFFFFF3C1), Color.White, Color(0xFFFFF3C1))
+                            )
+                        )
                 ) {
                     Column(
                         modifier = Modifier
@@ -151,23 +162,25 @@ fun DietMainScreen(
                             .padding(top = 60f.bhp()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                    DietSwipeCardPager(
-                        navController = navController,
-                        modifier = Modifier.padding(top = 28f.bhp(), start = 24f.wp()),
-                        dietList?: emptyList(),
-                        pagerState = pagerState
-                    )
-                    Spacer(
-                        modifier = Modifier.size(
-                            170f.bhp() - WindowInsets.navigationBars.asPaddingValues()
-                                .calculateBottomPadding()
-                        ),
-                    )
-            }}}
-            else{
+                        DietSwipeCardPager(
+                            navController = navController,
+                            modifier = Modifier.padding(top = 28f.bhp(), start = 24f.wp()),
+                            dietList ?: emptyList(),
+                            pagerState = pagerState,
+                            showDeleteButton = false
+                        )
+                        Spacer(
+                            modifier = Modifier.size(
+                                170f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                                    .calculateBottomPadding()
+                            ),
+                        )
+                    }
+                }
+            } else {
                 Box(
                     modifier = Modifier
-                        .size(364f.wp(),458f.bhp())
+                        .size(364f.wp(), 458f.bhp())
                         .offset(y = 105f.bhp(), x = 24f.wp())
                         .clip(RoundedCornerShape(20f.wp()))
                         .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
@@ -182,17 +195,17 @@ fun DietMainScreen(
                         painter = painterResource(R.drawable.img_diet_maintextballoon),
                         contentDescription = "text balloon",
                         modifier = Modifier
-                            .size(219f.wp(),83f.bhp())
+                            .size(219f.wp(), 83f.bhp())
                             .offset(x = 73f.wp(), y = 101f.bhp())
                     )
                     Box(
                         modifier = Modifier
-                            .size(114f.wp(),44f.bhp())
-                            .offset(135.27f.wp(),113f.bhp()),
+                            .size(114f.wp(), 44f.bhp())
+                            .offset(130.27f.wp(), 113f.bhp()),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         Text(
-                            text = "현재식단이 비어있어요!",
+                            text = "현재 식단이\n비어있어요!",
                             style = DungGeunMo17,
                             fontSize = 17f.isp(),
                             color = Color(0xFF000000),
@@ -203,7 +216,7 @@ fun DietMainScreen(
 //                EllipseNyam(
 //                    modifier = Modifier
 //                        .offset(x = 87f.wp(), y = 174f.bhp())
-//                        .clickable(
+//                        .noRippleClickable(
 //                            onClick = {
 //                                navController.navigate(Route.DietExist.route)
 //                            }
@@ -212,31 +225,31 @@ fun DietMainScreen(
 //                    mascotLength = 109.0
 //                )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    HamcoachGif(
-                        modifier = Modifier.offset(y = 174f.bhp()),
-                        num = 1,
-                        ellipseLength = 182.0,
-                        mascotLength = 160.0,
-                        onClick = {
-                                navController.navigate(Route.DietExist.route)
-                            }
-                    )
-                }
-                    EllipseNyam(
-                        modifier = Modifier
-                            .offset(x = 87f.wp(), y = 174f.bhp())
-                            .clickable(
-                                onClick = {
-                                    navController.navigate(Route.DietExist.route)
-                                }
-                            ),
-                        ellipseLength = 182.0,
-                        mascotLength = 109.0
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        HamcoachGif(
+                            modifier = Modifier.offset(y = 174f.bhp()),
+                            num = 1,
+                            ellipseLength = 182.0,
+                            mascotLength = 160.0,
+//                            onClick = {
+//                                navController.navigate(Route.DietExist.route)
+//                            }
+                        )
+                    }
+//                    EllipseNyam(
+//                        modifier = Modifier
+//                            .offset(x = 87f.wp(), y = 174f.bhp())
+//                            .noRippleClickable(
+//                                onClick = {
+//                                    navController.navigate(Route.DietExist.route)
+//                                }
+//                            ),
+//                        ellipseLength = 182.0,
+//                        mascotLength = 109.0
+//                    )
                 }
             }
             Box(
@@ -247,7 +260,7 @@ fun DietMainScreen(
                     .size(364f.wp(), 49f.bhp())
                     .clip(RoundedCornerShape(24f.bhp()))
                     .border(1.dp, Color.Black, RoundedCornerShape(24f.bhp()))
-                    .clickable { navController.navigate(Route.DietCreate.route) },
+                    .noRippleClickable { navController.navigate(Route.DietCreate.route) },
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -264,7 +277,7 @@ fun DietMainScreen(
                         text = "나만의 식단 생성하기",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
-                        color = Color.Black
+                        color = Color(0xFF000000)
                     )
                 }
             }

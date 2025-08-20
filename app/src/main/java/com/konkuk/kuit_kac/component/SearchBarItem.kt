@@ -1,7 +1,7 @@
 package com.konkuk.kuit_kac.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,22 +23,23 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
 fun SearchBarItem(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { },
+    onClick: () -> Unit= {},
     value: String,
     isLastItem: Boolean = false,
-    isCloseIconExist: Boolean = true
+    isCloseIconExist: Boolean = false
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-                .clickable { onClick() }
+                .noRippleClickable { onClick() }
                 .fillMaxWidth()
                 .padding(horizontal = 16f.wp(), vertical = 16f.bhp()),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -76,7 +77,4 @@ fun SearchBarItem(
 @Preview(showBackground = true)
 @Composable
 private fun SearchBarItemPreview() {
-    SearchBarItem(
-        value = "마라탕"
-    )
 }

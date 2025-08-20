@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -48,7 +50,9 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.request.Agreement
 import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -57,8 +61,11 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo24
 @Composable
 fun LoginEmailScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
+    onboardingViewModel.setNickname("닉네임")
+    //TODO: nickname 여기서 받으면 여기서 수정해주세요
     val email: String = "user_id@naver.com"
     var showSheet by remember { mutableStateOf(false) }
     var agreeAll by remember { mutableStateOf(false) }
@@ -179,7 +186,7 @@ fun LoginEmailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color(0x90000000))
-                    .clickable {
+                    .noRippleClickable {
                         if (showPolicy) {
                             showPolicy = false
                         } else
@@ -287,7 +294,7 @@ fun LoginEmailScreen(
                                 modifier = Modifier
                                     .size(7f.wp(), 14f.bhp())
                                     .align(Alignment.CenterEnd)
-                                    .clickable {
+                                    .noRippleClickable {
                                         policyText = policyService
                                         showPolicy = true
                                     },
@@ -324,7 +331,7 @@ fun LoginEmailScreen(
                                 modifier = Modifier
                                     .size(7f.wp(), 14f.bhp())
                                     .align(Alignment.CenterEnd)
-                                    .clickable {
+                                    .noRippleClickable {
                                         policyText = policyPrivacy
                                         showPolicy = true
                                     },
@@ -361,7 +368,7 @@ fun LoginEmailScreen(
                                 modifier = Modifier
                                     .size(7f.wp(), 14f.bhp())
                                     .align(Alignment.CenterEnd)
-                                    .clickable {
+                                    .noRippleClickable {
                                         policyText = policyOptional
                                         showPolicy = true
                                     },
@@ -371,7 +378,7 @@ fun LoginEmailScreen(
                         }
                         Spacer(modifier = Modifier.size(28f.bhp()))
                         DefaultButton(
-                            onClick = {},
+                            onClick = {navController.navigate(route = Route.OnboardingStart.route)},
                             value = "확인했어",
                             buttonHeight = 70f,
                             isOrange = true,
@@ -467,7 +474,7 @@ fun CheckBoxLogin(
         painter = painterResource(id = checkbox),
         modifier = Modifier
             .size(27f.wp(), 27f.bhp())
-            .clickable {
+            .noRippleClickable {
                 onCheckedChanged(!chekced)
             },
         contentScale = ContentScale.FillBounds,

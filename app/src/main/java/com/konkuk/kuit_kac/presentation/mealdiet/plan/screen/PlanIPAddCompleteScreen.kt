@@ -42,10 +42,12 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanDietCard
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.WeeklyCalendar
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo12
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 // 추천된 식단 화면
 @Composable
@@ -54,6 +56,7 @@ fun PlanIPAddCompleteScreen(
     navController: NavHostController,
     currentCal: Float = 1700f,
     maxCal: Float = 2500f,
+    selectedDate: LocalDate = LocalDate.now()
 ) {
     val scrollState = rememberScrollState()
 
@@ -142,7 +145,7 @@ fun PlanIPAddCompleteScreen(
                             color = Color(0xFFFFF1AB), shape = RoundedCornerShape(size = 42f.bhp())
                         )
                 ) {
-                    //Todo: 달력 구현 후 추가
+                    WeeklyCalendar(selectedDate ?: LocalDate.now())
                 }
                 Spacer(modifier = Modifier.size(22.5f.bhp()))
                 PlanDietCard(

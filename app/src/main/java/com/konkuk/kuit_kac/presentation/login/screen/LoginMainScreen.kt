@@ -5,7 +5,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -49,15 +48,21 @@ import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.data.login.viewmodel.LoginViewModel
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
 fun LoginMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+      onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
+      onboardingViewModel.setNickname("닉네임")
+    //TODO: 이거 필요한 데다 둔 다음수정해주시면 됩니다
+  
     val context = LocalContext.current
     val accessToken by viewModel.accessToken.collectAsState()
     val userInfo by viewModel.userInfo.collectAsState()
@@ -184,7 +189,7 @@ fun LoginMainScreen(
                         .calculateBottomPadding()
                 )
                 .size(346.6669f.wp(), 52f.bhp())
-                .clickable {
+                .noRippleClickable {
                     navController.navigate(Route.LoginEmail.route)
                     val kakaoLoginUrl = "${BuildConfig.BASE_URL}oauth2/authorization/kakao"
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(kakaoLoginUrl))

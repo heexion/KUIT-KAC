@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,7 @@ import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.navigation.Route.Home
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingFloatingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
@@ -35,8 +36,8 @@ fun OnboardingMainHomeScaleScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .clickable {
-                navController.navigate(Home.route)
+            .noRippleClickable {
+                navController.navigate(OnboardingFloatingButton.route)
             }
     ) {
         // 1. 배경 이미지

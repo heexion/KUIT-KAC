@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.onboarding.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +36,7 @@ fun OnboardingMainHomeHamScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .clickable {
+            .noRippleClickable {
                 navController.navigate(OnboardingMainHomeNyam.route)
             }
     ) {

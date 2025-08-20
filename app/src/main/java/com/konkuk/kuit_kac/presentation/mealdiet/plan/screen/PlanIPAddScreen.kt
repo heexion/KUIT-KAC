@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -46,9 +51,11 @@ import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanDietCard
+import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.WeeklyCalendar
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 // 날짜별 식단 추가 화면
 @Composable
@@ -57,13 +64,16 @@ fun PlanIPAddScreen(
     navController: NavController,
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit){
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
+    LaunchedEffect(Unit) {
         mealViewModel.getPlan(userId = 1)
     }
     val meal = mealViewModel.getPlanState.value
     fun isMealTypeExist(type: String): Boolean {
-        return meal?.any { it.dietType == type }?:false
+        return meal?.any { it.dietType == type } ?: false
     }
+
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -153,41 +163,65 @@ fun PlanIPAddScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = mealViewModel.planDate.value?:"2025-12-12",
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp()
-                    )
-                    //Todo: 달력 구현 후 추가
+                    val dateString = mealViewModel.planDate.value ?: "{${LocalDate.now()}}"
+                    val cleanedString = dateString.replace("{", "").replace("}", "")
+
+
+                    WeeklyCalendar(
+                        LocalDate.parse(cleanedString) ?: LocalDate.now(),
+                        onDateClick = { clickedDate ->
+                            selectedDate = clickedDate
+                        })
+
+//                    Text(
+//                        text = mealViewModel.planDate.value ?: "2025-12-12",
+//                        style = DungGeunMo17,
+//                        fontSize = 17f.isp()
+//                    )
                 }
                 Spacer(modifier = Modifier.size(22.5f.bhp()))
                 PlanDietCard(
                     "아침",
-                    listOf(if(isMealTypeExist("아침")){ "아침 식단"}
-                    else{"식단 추가" }
+                    listOf(
+                        if (isMealTypeExist("아침")) {
+                            "아침 식단"
+                        } else {
+                            "식단 추가"
+                        }
                     ),
                     onClick = {
                         mealViewModel.setType("아침")
-                        navController.navigate("PlanIPSearch") },
-                    editOnClick = {mealViewModel.resolveFoodsFromPlanType("아침") {
-                        Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
-                        navController.navigate("PlanIPTemp")
-                    }},
+                        navController.navigate("PlanIPSearch")
+                    },
+                    editOnClick = {
+                        mealViewModel.resolveFoodsFromPlanType("아침") {
+                            Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
+                            navController.navigate("PlanIPTemp")
+                        }
+                    },
                     isEdit = isMealTypeExist("아침")
                 )
                 Spacer(modifier = Modifier.size(20f.bhp()))
                 PlanDietCard(
                     "점심",
-                    listOf(if(isMealTypeExist("점심")){ "점심 식단"}
-                    else{"식단 추가" }
+                    listOf(
+                        if (isMealTypeExist("점심")) {
+                            "점심 식단"
+                        } else {
+                            "식단 추가"
+                        }
                     ),
                     onClick = {
                         mealViewModel.setType("점심")
-                        navController.navigate("PlanIPSearch") },
+                        navController.navigate("PlanIPSearch")
+                    },
                     editOnClick = {
                         if (mealViewModel.getPlanState.value != null) {
                             mealViewModel.resolveFoodsFromPlanType("점심") {
-                                Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
+                                Log.d(
+                                    "PlanIPAddName",
+                                    mealViewModel.selectedFoods.first().food.name
+                                )
                                 navController.navigate("PlanIPTemp")
                             }
                         } else {
@@ -199,16 +233,24 @@ fun PlanIPAddScreen(
                 Spacer(modifier = Modifier.size(20f.bhp()))
                 PlanDietCard(
                     "저녁",
-                    listOf(if(isMealTypeExist("저녁")){ "식단 추가"}
-                        else{"저녁식단" }
+                    listOf(
+                        if (isMealTypeExist("저녁")) {
+                            "저녁 식단"
+                        } else {
+                            "식단 추가"
+                        }
                     ),
                     onClick = {
                         mealViewModel.setType("저녁")
-                        navController.navigate("PlanIPSearch") },
+                        navController.navigate("PlanIPSearch")
+                    },
                     editOnClick = {
                         if (mealViewModel.getPlanState.value != null) {
                             mealViewModel.resolveFoodsFromPlanType("저녁") {
-                                Log.d("PlanIPAddName", mealViewModel.selectedFoods.first().food.name)
+                                Log.d(
+                                    "PlanIPAddName",
+                                    mealViewModel.selectedFoods.first().food.name
+                                )
                                 navController.navigate("PlanIPTemp")
                             }
                         } else {
@@ -222,16 +264,16 @@ fun PlanIPAddScreen(
                     modifier = modifier
                         .fillMaxWidth()
                         .height(65f.bhp())
-                        .clickable {
-                            if(isMealTypeExist("아침")&&isMealTypeExist("점심")&&isMealTypeExist("저녁")){
-                                navController.navigate(Route.MealFastingResult.route)
+                        .noRippleClickable {
+                            if (isMealTypeExist("아침") && isMealTypeExist("점심") && isMealTypeExist("저녁")) {
+                                navController.navigate(Route.PlanResult.route)
                             }
                         }
                 ) {
                     Image(
                         modifier = Modifier
                             .height(65f.bhp()),
-                        painter = painterResource(R.drawable.bg_button_gray),
+                        painter = painterResource(R.drawable.bg_orange_button_default),
                         contentDescription = "default button",
                         contentScale = ContentScale.FillBounds
                     )

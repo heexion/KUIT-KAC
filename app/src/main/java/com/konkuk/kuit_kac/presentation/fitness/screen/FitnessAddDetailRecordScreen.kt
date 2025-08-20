@@ -1,5 +1,6 @@
 package com.konkuk.kuit_kac.presentation.fitness.screen
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,6 +44,7 @@ import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.request.RoutineSetsDto
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.DetailRecordCard
 import com.konkuk.kuit_kac.presentation.fitness.component.EditFieldCard
@@ -59,25 +61,31 @@ fun FitnessAddDetailRecordScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     name: String,
-    routineViewModel: RoutineViewModel= hiltViewModel()
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
+
     val exercise = routineViewModel.selectedRoutines
         .filterNotNull()
         .firstOrNull { it.name == name }
-
     if (exercise == null) {
-
         navController.popBackStack()
         return
     }
 
     val particle = getObjectParticle(name)
-    val message = "'$name'$particle 했구나!\n고생했어!"
-    val initial = routineViewModel.getRecord(exercise.id)
-    var time by remember { mutableStateOf(initial.minutes.toString()) }
-    var intensity by remember { mutableStateOf(initial.intensity) }
-    var detail by remember { mutableStateOf(initial.detail) }
+    val message = "'$name'$particle 했구나! 고생했어!"
+
+    val initial = routineViewModel.rGetRecord(name)
+    var time by remember(name) {
+        mutableStateOf(
+            initial.minutes.takeIf { it > 0 }?.toString() ?: ""
+        )
+    }
+    var intensity by remember(name) { mutableStateOf(initial.intensity) }
+    var detail by remember(name) { mutableStateOf(initial.detail) }
+    val vmSets = routineViewModel.setsByExerciseName[name].orEmpty()
+    val detailLines = buildDetailLines(vmSets)
 
     val isAllFilled = time.toIntOrNull()?.let { it > 0 } == true && intensity >= 0
 
@@ -129,12 +137,12 @@ fun FitnessAddDetailRecordScreen(
                 )
                 Text(
                     text = message,
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    lineHeight = 22f.isp(),
+                    style = DungGeunMo15,
+                    fontSize = 15f.isp(),
+                    lineHeight = 20f.isp(),
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 28f.bhp())
+                    modifier = Modifier.padding(bottom = 24f.bhp(), start = 50f.wp(), end = 50f.wp())
                 )
             }
 
@@ -170,7 +178,9 @@ fun FitnessAddDetailRecordScreen(
             Text(
                 text = name,
                 style = DungGeunMo15,
-                color = Color(0xFF000000)
+                fontSize = 10f.isp(),
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
             )
         }
 
@@ -179,19 +189,21 @@ fun FitnessAddDetailRecordScreen(
         EditFieldCard(
             title = "운동 시간",
             value = time,
-            onValueChange = { time = it },
+            onValueChange = { time = it
+                routineViewModel.rUpdateMinutes(name, it)},
             unitLabel = "분"
         )
 
         EditIntensityCard(
             selectedIndex = intensity,
-            onSelect = { intensity = it }
+            onSelect = { intensity = it
+                routineViewModel.rUpdateIntensity(name, it)}
         )
 
         DetailRecordCard(
             title = "상세 기록",
-            value = detail,
-            onValueChange = { detail = it }
+            lines =detailLines,
+            onClick = {navController.navigate("FitnessRoutineDetailInput/${Uri.encode(name)}")}
         )
 
         Spacer(modifier = Modifier.height(97f.bhp()))
@@ -199,9 +211,9 @@ fun FitnessAddDetailRecordScreen(
         PlanConfirmButton(
             modifier = Modifier.padding(horizontal = 24f.wp()),
             onClick = {
-                routineViewModel.updateMinutes(exercise.id, time)
-                routineViewModel.updateIntensity(exercise.id, intensity)
-                routineViewModel.updateDetail(exercise.id, detail)
+                routineViewModel.rUpdateMinutes(name, time)
+                routineViewModel.rUpdateIntensity(name, intensity)
+                routineViewModel.rUpdateDetail(name, detail)
                 navController.navigate("FitnessAddRecordEdit")
             },
             isAvailable = isAllFilled,
@@ -210,3 +222,15 @@ fun FitnessAddDetailRecordScreen(
     }
 }
 
+
+private fun buildDetailLines(sets: List<RoutineSetsDto>): List<String> {
+    return sets.mapIndexedNotNull { idx, s ->
+        val prefix = "세트 ${idx + 1} "
+        when {
+            s.distance > 0 -> "$prefix${s.distance}km"
+            s.weightKg > 0 && s.weightNum > 0 -> "$prefix${s.weightKg}kg x ${s.weightNum}회"
+            s.count > 0 -> "$prefix${s.count}회"
+            else -> null
+        }
+    }
+}

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -20,22 +21,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
-import com.konkuk.kuit_kac.presentation.fitness.screen.RecordButton
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingInput
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.presentation.onboarding.component.CustomImageSlider
+import com.konkuk.kuit_kac.presentation.onboarding.component.OnboardingButton
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 
 @Composable
 fun OnboardingActivityLevelScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    selectedMode: String // 이전 화면에서 받은 모드
+    selectedMode: String, // 이전 화면에서 받은 모드
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     var activityLevel by remember { mutableStateOf(0) }
 
@@ -57,7 +61,8 @@ fun OnboardingActivityLevelScreen(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 16.4f.bhp()),
+                .padding(bottom = 16.4f.bhp())
+                .offset(y = -(60f.bhp())),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // 말풍선
@@ -84,7 +89,7 @@ fun OnboardingActivityLevelScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(42f.bhp()))
+            Spacer(modifier = Modifier.height(28f.bhp()))
 
             // 커스텀 슬라이더
             CustomImageSlider(
@@ -92,10 +97,10 @@ fun OnboardingActivityLevelScreen(
                 onValueChange = { activityLevel = it }
             )
 
-            Spacer(modifier = Modifier.height(55.5f.bhp()))
+            Spacer(modifier = Modifier.height(20f.bhp()))
 
             // 다음 버튼
-            RecordButton(
+            OnboardingButton(
                 value = "다음으로",
                 onClick = {
                     navController.navigate("${OnboardingInput.route}/$selectedMode")

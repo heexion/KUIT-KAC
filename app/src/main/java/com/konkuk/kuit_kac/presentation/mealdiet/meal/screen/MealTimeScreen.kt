@@ -4,6 +4,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,13 +27,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -56,13 +61,18 @@ fun MealTimeScreen(
     val hoursList = (1..12).map { it.toString().padStart(2, '0') }
     val minutesList = (0..59).map { it.toString().padStart(2, '0') }
 
+    val density = LocalDensity.current
+    val itemHeightPx = with(density) { 40f.bhp().toPx().toInt() }
+
     var selectedAmPm by remember { mutableStateOf("오전") }
     var selectedHour by remember { mutableStateOf("09") }
     var selectedMinute by remember { mutableStateOf("00") }
 
     val coroutineScope = rememberCoroutineScope()
 
-    // 오전/오후 (2개만, 자동 중앙 맞춤)
+
+
+    // 오전/오후
     val amPmState = rememberLazyListState(initialFirstVisibleItemIndex = amPmList.indexOf(selectedAmPm))
     LaunchedEffect(amPmState.isScrollInProgress) {
         if (!amPmState.isScrollInProgress) {
@@ -75,28 +85,60 @@ fun MealTimeScreen(
         }
     }
 
-    // 시/분 (무한 스크롤)
+    val flingBehavior = rememberSnapFlingBehavior(lazyListState = amPmState)
+
+    // 시/분 무한 리스트
     val hourItems = List(1000) { hoursList[it % hoursList.size] }
     val minuteItems = List(1000) { minutesList[it % minutesList.size] }
     val hourState = rememberLazyListState(initialFirstVisibleItemIndex = 500 + hoursList.indexOf(selectedHour))
     val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = 500 + minutesList.indexOf(selectedMinute))
 
-    fun LazyListState.centerIndex(itemSize: Int): Int {
-        return (firstVisibleItemIndex + 1).coerceIn(0, itemSize - 1)
+    // 중앙 index 계산
+    fun LazyListState.centerIndex(itemSize: Int, itemHeight: Int): Int {
+        val offset = firstVisibleItemScrollOffset
+        val add = if (offset > itemHeight / 2) 1 else 0
+        return (firstVisibleItemIndex + add).coerceIn(0, itemSize - 1)
     }
 
+    // 시: 실시간 선택
+    LaunchedEffect(hourState) {
+        snapshotFlow { hourState.firstVisibleItemIndex to hourState.firstVisibleItemScrollOffset }
+            .collect {
+                val center = hourState.centerIndex(hourItems.size, itemHeightPx)
+                selectedHour = hourItems[center]
+            }
+    }
+    // 시: 스크롤 멈추면 정렬
     LaunchedEffect(hourState.isScrollInProgress) {
         if (!hourState.isScrollInProgress) {
-            selectedHour = hourItems[hourState.centerIndex(hourItems.size)]
+            val center = hourState.centerIndex(hourItems.size, itemHeightPx)
+            coroutineScope.launch {
+                hourState.animateScrollToItem(center)
+            }
+            selectedHour = hourItems[center]
         }
     }
 
+    // 분: 실시간 선택
+    LaunchedEffect(minuteState) {
+        snapshotFlow { minuteState.firstVisibleItemIndex to minuteState.firstVisibleItemScrollOffset }
+            .collect {
+                val center = minuteState.centerIndex(minuteItems.size, itemHeightPx)
+                selectedMinute = minuteItems[center]
+            }
+    }
+    // 분: 스크롤 멈추면 정렬
     LaunchedEffect(minuteState.isScrollInProgress) {
         if (!minuteState.isScrollInProgress) {
-            selectedMinute = minuteItems[minuteState.centerIndex(minuteItems.size)]
+            val center = minuteState.centerIndex(minuteItems.size, itemHeightPx)
+            coroutineScope.launch {
+                minuteState.animateScrollToItem(center)
+            }
+            selectedMinute = minuteItems[center]
         }
     }
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -123,7 +165,10 @@ fun MealTimeScreen(
                     fontSize = 17f.isp(),
                     lineHeight = 28f.isp(),
                     color = Color(0xFF000000),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .offset(y = (-8).dp)
                 )
             }
 
@@ -156,6 +201,7 @@ fun MealTimeScreen(
                     // 오전/오후
                     LazyColumn(
                         state = amPmState,
+                        flingBehavior = flingBehavior,
                         modifier = Modifier
                             .height(120f.bhp())
                             .weight(1f),
@@ -176,7 +222,7 @@ fun MealTimeScreen(
                                 )
                             }
                         }
-                        item { Spacer(modifier = Modifier.height(40f.bhp())) }
+                        item { Spacer(modifier = Modifier.height(50f.bhp())) }
                     }
 
                     Spacer(modifier = Modifier.width(8f.wp()))
@@ -264,7 +310,7 @@ fun MealTimeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(40f.bhp()))
+            Spacer(modifier = Modifier.height(20f.bhp()))
 
             DefaultButton(
                 modifier = Modifier
@@ -286,7 +332,6 @@ fun MealTimeScreen(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

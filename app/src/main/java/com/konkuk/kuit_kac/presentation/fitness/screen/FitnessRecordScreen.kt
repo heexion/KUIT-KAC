@@ -3,7 +3,6 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
@@ -96,7 +94,7 @@ fun FitnessRecordScreen(
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(162f.hp()))
+            Spacer(modifier = Modifier.height(120f.hp()))
 
             // 말풍선
             Box(
@@ -151,7 +149,7 @@ fun FitnessRecordScreen(
                             listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
-                    .clickable(
+                    .noRippleClickable(
                         onClick = {
                             navController.navigate("RoutineRecordGraph")
                         }
@@ -180,7 +178,7 @@ fun FitnessRecordScreen(
                             listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
-                    .clickable(
+                    .noRippleClickable(
                         onClick = { navController.navigate("FitnessAddGraph") }
                     )
                 ,
@@ -208,7 +206,7 @@ fun FitnessRecordScreen(
                             listOf(Color(0xFFFFFFFF), Color(0xFFFFE667))
                         )
                     )
-                    .clickable(
+                    .noRippleClickable(
                         onClick = { navController.navigate(Route.FitnessFastInput.route) }
 
             ),

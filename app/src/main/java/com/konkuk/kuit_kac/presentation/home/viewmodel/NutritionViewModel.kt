@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NutritionViewModel @Inject constructor(
     private val repository: NutritionRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _nutrition = mutableStateOf<NutritionResponseDto?>(null)
     val nutrition: State<NutritionResponseDto?> get() = _nutrition
@@ -23,14 +23,9 @@ class NutritionViewModel @Inject constructor(
 
     fun loadNutrition(userId: Int) {
         viewModelScope.launch {
-            val result = repository.getNutrition(userId)
-            result
-                .onSuccess { response ->
-                    _nutrition.value = response
-                }
-                .onFailure { throwable ->
-                    _error.value = "영양 정보 불러오기 실패: ${throwable.message}"
-                }
+            repository.getNutrition(userId)
+                .onSuccess { _nutrition.value = it }
+                .onFailure { _error.value = it.message ?: "영양 정보 불러오기 실패" }
         }
     }
 }

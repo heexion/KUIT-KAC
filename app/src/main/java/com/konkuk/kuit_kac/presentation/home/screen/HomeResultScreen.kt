@@ -131,15 +131,28 @@ fun HomeResultScreen(
 //            contentDescription = null,
 //        )
 
+//        HamcoachGif(
+//            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+//            num = hamCoachImg,
+//            ellipseLength = 222.0,
+//            mascotLength = 200.0
+//        )
+//
+//        NyameeGif(
+//            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+//            num = nyameeImg,
+//            sizePercent = 1.35f
+//        )
+
         HamcoachGif(
-            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            modifier = Modifier.offset(x = (-10f).wp(), y = 255f.hp()),
             num = hamCoachImg,
-            ellipseLength = 222.0,
+            ellipseLength = 200.0,
             mascotLength = 200.0
         )
 
         NyameeGif(
-            modifier = Modifier.offset(x = 50f.wp(), y = 300f.bhp()),
+            modifier = Modifier.offset(x = 60f.wp(), y = 310f.bhp()),
             num = nyameeImg,
             sizePercent = 1.35f
         )

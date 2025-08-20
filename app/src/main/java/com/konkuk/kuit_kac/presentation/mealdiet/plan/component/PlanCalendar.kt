@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.plan.component
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,23 +52,40 @@ fun PlanCalendar(
     onNavigateToDetail: () -> Unit = {},
     isTagButton: Boolean = false,
     isTagDetailShow: Boolean = false,
-    onDateSelected: (LocalDate?) -> Unit = {}
+    onDateSelected: (LocalDate?) -> Unit = {},
+    onTagChange: (LocalDate, Set<PlanTagType>) -> Unit= {a,b->},
+    onClearDate: (LocalDate) -> Unit= {},
+    onSlotsChange: (LocalDate, Set<DietType>) -> Unit = { _, _ -> },
+    onClearSlots: (LocalDate) -> Unit = {},
+    onTagChangeForSlots: (LocalDate, Set<DietType>, PlanTagType) -> Unit = { _, _, _ -> },
 ) {
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }
-    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
+    var tempDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
 
     var breakfastClicked = remember { mutableStateOf(false) }
     var lunchClicked = remember { mutableStateOf(false) }
     var dinnerClicked = remember { mutableStateOf(false) }
 
     var isAddedOnce = remember { mutableStateOf(false) }
+    val hasTagChoice  = selectedDate != null && (blueClicked.value || pinkClicked.value)
+    val hasSlotChoice = breakfastClicked.value || lunchClicked.value || dinnerClicked.value
+    val onSecondStep  = (blueClicked.value || pinkClicked.value) // slot 선택 화면 노출 상태
+
+    val isConfirmEnabled = if (!onSecondStep) {
+        isAddedOnce.value || hasTagChoice
+    } else {
+        hasTagChoice && hasSlotChoice
+    }
+
+    val confirmLabel = if (onSecondStep) "이때 먹을 예정이야!" else "다 입력했어!"
 
     LaunchedEffect(taggedDATES) {
-        taggedDates = taggedDATES
+        tempDates = taggedDATES
+        isAddedOnce.value = taggedDATES.isNotEmpty()
     }
 
     Column(
@@ -84,7 +103,8 @@ fun PlanCalendar(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
+                modifier = Modifier.noRippleClickable {
+                    tempDates = emptyMap()
                     selectedDate = null
                     pinkClicked.value = false
                     blueClicked.value = false
@@ -92,6 +112,8 @@ fun PlanCalendar(
                     lunchClicked.value = false
                     dinnerClicked.value = false
                     onDateSelected(null)
+                    taggedDATES.keys.forEach {date-> onClearDate(date)
+                    onClearSlots(date)}
                 }
             ) {
                 Image(
@@ -203,7 +225,7 @@ fun PlanCalendar(
                                     else -> 0xFF000000
                                 }
 
-                                val tags = taggedDates[thisDate].orEmpty()
+                                val tags = taggedDATES[thisDate].orEmpty()
 
                                 var color = Color(0xFFFFFFFF)
 
@@ -227,9 +249,9 @@ fun PlanCalendar(
                                         )
                                     } else {
                                         color = when {
-                                            PlanTagType.EATING_OUT in tags -> Color(0xFF67D1FF)
-                                            PlanTagType.DRINKING in tags -> Color(0xFFFF7FD0)
-                                            PlanTagType.AI_RECOMMEND in tags -> Color(0xFFFFE667)
+                                            PlanTagType.EATING_OUT in tags   -> PlanColors.EatingOut
+                                            PlanTagType.DRINKING in tags     -> PlanColors.Drinking
+                                            PlanTagType.AI_RECOMMEND in tags -> PlanColors.AiRecommend
                                             else -> Color.Transparent
                                         }
                                         Box(
@@ -263,12 +285,20 @@ fun PlanCalendar(
                                                 )
                                         )
                                     else {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
-                                            modifier = Modifier.size(39f.wp(), 39f.bhp()),
-                                            contentScale = ContentScale.FillBounds,
-                                            contentDescription = null,
-                                        )
+                                        if (tags.isNotEmpty()) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.ic_plan_date_default_selected_tag),
+                                                modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                                contentScale = ContentScale.FillBounds,
+                                                contentDescription = null,
+                                            )
+                                        } else
+                                            Image(
+                                                painter = painterResource(id = R.drawable.ic_plan_date_default_selected),
+                                                modifier = Modifier.size(39f.wp(), 39f.bhp()),
+                                                contentScale = ContentScale.FillBounds,
+                                                contentDescription = null,
+                                            )
                                     }
                                 }
                                 Text(
@@ -331,8 +361,8 @@ fun PlanCalendar(
                         modifier = Modifier.weight(0.5f),
                         onClick = {
                             breakfastClicked.value = !breakfastClicked.value
-                            lunchClicked.value = false
-                            dinnerClicked.value = false
+//                            lunchClicked.value = false
+//                            dinnerClicked.value = false
                         },
                         isSelected = breakfastClicked.value,
                         isBlue = blueClicked.value,
@@ -345,8 +375,8 @@ fun PlanCalendar(
                         modifier = Modifier.weight(0.5f),
                         onClick = {
                             lunchClicked.value = !lunchClicked.value
-                            breakfastClicked.value = false
-                            dinnerClicked.value = false
+//                            breakfastClicked.value = false
+//                            dinnerClicked.value = false
                         },
                         isSelected = lunchClicked.value,
                         isBlue = blueClicked.value,
@@ -359,8 +389,8 @@ fun PlanCalendar(
                         modifier = Modifier.weight(0.5f),
                         onClick = {
                             dinnerClicked.value = !dinnerClicked.value
-                            lunchClicked.value = false
-                            breakfastClicked.value = false
+//                            lunchClicked.value = false
+//                            breakfastClicked.value = false
                         },
                         isSelected = dinnerClicked.value,
                         isBlue = blueClicked.value,
@@ -372,22 +402,31 @@ fun PlanCalendar(
 
             PlanConfirmButton(
                 modifier = Modifier.padding(top = 24f.bhp()),
-                isAvailable = isAddedOnce.value || (selectedDate != null && (blueClicked.value || pinkClicked.value)),
+                isAvailable = isConfirmEnabled,
                 onClick = {
-                    if (confirmString == "다 입력했어!") {
+                    if (!onSecondStep) {
                         onNavigateToDetail()
+                        return@PlanConfirmButton
                     }
+
                     if (selectedDate != null) {
                         isAddedOnce.value = true
-                        val updated = taggedDates.toMutableMap()
-                        val currentTags = updated[selectedDate!!]?.toMutableSet() ?: mutableSetOf()
 
-                        if (blueClicked.value) currentTags.add(PlanTagType.EATING_OUT)
-                        if (pinkClicked.value) currentTags.add(PlanTagType.DRINKING)
+                        val newTag = when {
+                            blueClicked.value -> PlanTagType.EATING_OUT
+                            pinkClicked.value -> PlanTagType.DRINKING
+                            else -> null
+                        }
+                        val slots = buildSet {
+                            if (breakfastClicked.value) add(DietType.BREAKFAST)
+                            if (lunchClicked.value)     add(DietType.LUNCH)
+                            if (dinnerClicked.value)    add(DietType.DINNER)
+                        }.ifEmpty { setOf(DietType.LUNCH) }
 
-                        updated[selectedDate!!] = currentTags
-                        taggedDates = updated
+                        if (newTag != null) onTagChangeForSlots(selectedDate!!, slots, newTag)
+                        onSlotsChange(selectedDate!!, slots)
                     }
+
                     pinkClicked.value = false
                     blueClicked.value = false
                     breakfastClicked.value = false
@@ -402,23 +441,14 @@ fun PlanCalendar(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-private fun PlanCalendarPreview() {
-    val taggedDates = remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
-    PlanCalendar(
-        taggedDATES = taggedDates.value,
-        isTagButton = true
-    )
-}
 
 
 // 반반 색깔 다른 원
 @Composable
 fun HalfColoredCircle(
     modifier: Modifier = Modifier,
-    leftColor: Color = Color.Blue,
-    rightColor: Color = Color.Magenta
+    leftColor: Color = PlanColors.EatingOut,
+    rightColor: Color = PlanColors.Drinking
 ) {
     Canvas(modifier = modifier) {
         val radius = size.minDimension / 2
@@ -445,3 +475,29 @@ fun HalfColoredCircle(
         )
     }
 }
+@Immutable
+object PlanColors {
+    val BackgroundTop         = Color(0xFFFFF3C1)
+    val BackgroundMid         = Color(0xFFFFFCEE)
+    val BackgroundBottom      = Color(0xFFFFF3C1)
+
+    val CardTop               = Color(0xFFFFFFFF)
+    val CardBottom            = Color(0xFFFFEDD0)
+
+    val Border                = Color(0xFF000000)
+    val Title                 = Color(0xFF713E3A)
+    val Text                  = Color(0xFF000000)
+    val Muted                 = Color(0xFFDFDFDF)
+
+    val EatingOut             = Color(0xFF67D1FF)
+    val Drinking              = Color(0xFFFF7FD0)
+    val AiRecommend           = Color(0xFFFFE667)
+}
+enum class DietType(val label: String) {
+    BREAKFAST("아침"),
+    LUNCH("점심"),
+    DINNER("저녁");
+
+    fun toApiLabel(): String = label
+}
+

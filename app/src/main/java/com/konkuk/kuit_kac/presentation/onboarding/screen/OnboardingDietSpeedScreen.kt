@@ -16,19 +16,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.presentation.onboarding.component.ModeSelectButton
 
 @Composable
 fun OnboardingDietSpeedScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onNavigate: (String) -> Unit // 선택한 모드를 넘김
+    onNavigate: (String) -> Unit, // 선택한 모드를 넘김
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
 ) {
     var selectedTitle by remember { mutableStateOf<String?>(null) }
 
@@ -52,12 +55,13 @@ fun OnboardingDietSpeedScreen(
         ) {
             ModeSelectButton(
                 iconRes = R.drawable.ic_mode_nyam,
-                iconSize = 51f.bhp(),
+                iconSize = 50f.bhp(),
                 title = "냠냠모드",
                 description = "가볍고 꾸준하게! (12주)",
                 isSelected = selectedTitle == "냠냠모드",
                 showBadge = false,
                 onClick = {
+                    onboardingViewModel.setDietVelocity("YUMYUM")
                     selectedTitle = "냠냠모드"
                     onNavigate("냠냠모드")
                 }
@@ -65,12 +69,13 @@ fun OnboardingDietSpeedScreen(
 
             ModeSelectButton(
                 iconRes = R.drawable.ic_mode_coach,
-                iconSize = 64f.bhp(),
+                iconSize = 50f.bhp(),
                 title = "코치모드",
                 description = "이번 기회에 확실하게! (8주)",
                 isSelected = selectedTitle == "코치모드",
                 showBadge = true,
                 onClick = {
+                    onboardingViewModel.setDietVelocity("COACH")
                     selectedTitle = "코치모드"
                     onNavigate("코치모드")
                 }
@@ -84,6 +89,7 @@ fun OnboardingDietSpeedScreen(
                 isSelected = selectedTitle == "올인모드",
                 showBadge = false,
                 onClick = {
+                    onboardingViewModel.setDietVelocity("ALL_IN")
                     selectedTitle = "올인모드"
                     onNavigate("올인모드")
                 }

@@ -55,16 +55,14 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
 
         HomeBackgroundComponent()
         HomeSubBackgroundComponent(
-            modifier = Modifier
-                .offset(y = 477.73f.hp())
+            modifier = Modifier.offset(y = 400.73f.hp())
         )
 
-        Box() {
-            NyameeGif(
-                modifier = Modifier.offset(x = 10f.wp(), y = 50f.bhp()),
-                num = randNum
-            )
-        }
+        NyameeGif(
+            modifier = Modifier.offset(x = 10f.wp(), y = 50f.bhp()),
+            num = randNum
+        )
+
         Column(
             modifier = Modifier
                 .padding(top = 30f.hp())
@@ -78,35 +76,23 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
                     painter = painterResource(R.drawable.img_homegrpahscreen_analysistextballoon),
                     contentDescription = "현재까지 내 뱃속 정보야"
                 )
-//                Image(
-//                    modifier = Modifier
-//                        .size(187.67596f.wp(), 244f.bhp())
-//                        .offset(y = 86f.bhp())
-//                        .align(Alignment.BottomCenter),
-//                    painter = painterResource(R.drawable.img_main_person),
-//                    contentDescription = "person"
-//                )
                 Spacer(modifier = Modifier.size(187.67596f.wp(), 244f.bhp()))
             }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 103f.bhp())
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 75f.wp(),
-                            topEnd = 75f.wp()
-                        )
-                    )
+                    .clip(RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                         )
                     )
                     .border(
-                        1.dp, color = Color(0xFF000000), RoundedCornerShape(
-                            topStart = 75f.wp(), topEnd = 75f.wp()
-                        )
+                        1.dp,
+                        color = Color(0xFF000000),
+                        RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp())
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -116,42 +102,51 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
                         .padding(top = 29.87f.bhp(), start = 40f.wp(), end = 40f.wp()),
                     verticalArrangement = Arrangement.spacedBy(16f.bhp())
                 ) {
-                    if (nutrition != null) {
-                        HomeSingleNutritionBar(
-                            type = "탄수화물",
-                            base = nutrition.carbGoal,
-                            quantity = nutrition.carbTaken
-                        )
-                        HomeSingleNutritionBar(
-                            type = "단백질",
-                            base = nutrition.proteinGoal,
-                            quantity = nutrition.proteinTaken
-                        )
-                        HomeSingleNutritionBar(
-                            type = "당류",
-                            base = nutrition.sugarGoal,
-                            quantity = nutrition.sugarTaken
-                        )
-                        HomeSingleNutritionBar(
-                            type = "지방",
-                            base = nutrition.fatGoal,
-                            quantity = nutrition.fatTaken
-                        )
-
-                    } else if (error != null) {
-                        Box(
-                            modifier = Modifier
-                        )
-                    } else {
-                        CircularProgressIndicator()
+                    when {
+                        nutrition != null -> {
+                            HomeSingleNutritionBar(
+                                type = "탄수화물",
+                                base = nutrition.carbGoal ?: 0,
+                                quantity = nutrition.carbTaken ?: 0
+                            )
+                            HomeSingleNutritionBar(
+                                type = "단백질",
+                                base = nutrition.proteinGoal ?: 0,
+                                quantity = nutrition.proteinTaken ?: 0
+                            )
+                            HomeSingleNutritionBar(
+                                type = "당류",
+                                base = nutrition.sugarGoal ?: 0,
+                                quantity = nutrition.sugarTaken ?: 0
+                            )
+                            HomeSingleNutritionBar(
+                                type = "지방",
+                                base = nutrition.fatGoal ?: 0,
+                                quantity = nutrition.fatTaken ?: 0
+                            )
+                        }
+                        error != null -> {
+                            Text(
+                                text = error,
+                                color = Color.Red,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                        }
+                        else -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
                     }
-
                 }
-
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

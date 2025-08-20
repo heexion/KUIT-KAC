@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.diet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.R
@@ -46,6 +49,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.diet.component.PlanColorType
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
@@ -57,18 +61,17 @@ import java.time.LocalDate
 @Composable
 fun PlanAICompleteScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    var buttonValue = "저장하기"
-    var navigateValue = "plan_result"
-    var taggedDates by remember { mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap()) }
+    val taggedDates by mealViewModel.monthTags
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
-    if (selectedDate != null) {
-        buttonValue = "확인해볼래!"
-        navigateValue = "plan_ai_detail"
+    var buttonValue = if (selectedDate != null) "확인해볼래!" else "저장하기"
+    var navigateValue = if (selectedDate != null) "plan_ai_detail" else "plan_result"
+    LaunchedEffect(Unit) {
+        mealViewModel.getMonthPlan(userId = 1)
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()

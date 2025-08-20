@@ -170,7 +170,8 @@ fun FitnessDetailRecordScreen(
             Text(
                 text = name,
                 style = DungGeunMo15,
-                color = Color(0xFF000000)
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
             )
         }
 
@@ -190,8 +191,7 @@ fun FitnessDetailRecordScreen(
 
         DetailRecordCard(
             title = "상세 기록",
-            value = detail,
-            onValueChange = { detail = it }
+            lines = listOf("")
         )
 
         Spacer(modifier = Modifier.height(97f.bhp()))

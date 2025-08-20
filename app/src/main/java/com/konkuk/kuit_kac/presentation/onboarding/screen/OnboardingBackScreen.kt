@@ -13,11 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,16 +28,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.component.EllipseNyam
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
-import com.konkuk.kuit_kac.presentation.home.component.NyameeGif
 import com.konkuk.kuit_kac.presentation.onboarding.component.NyamCoach
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
-import kotlin.random.Random
 
 @Composable
 fun OnboardingBackScreen(
@@ -121,10 +113,10 @@ fun OnboardingBackScreen(
             modifier = Modifier
                 .alpha(0.5f)
                 .padding(top = 648f.hp(), start = 39.68f.wp())
-                .size(width = 67.6f.wp(), height = 33f.hp())
+                .size(width = 93.08f.wp(), height = 23.55f.hp())
                 .align(Alignment.TopStart),
             contentScale = ContentScale.FillBounds,
-            painter = painterResource(id = R.drawable.ic_hamcoach_backlight),
+            painter = painterResource(id = R.drawable.ic_hamcoach_backlight2),
             colorFilter = ColorFilter.tint(shadow),
             contentDescription = null,
         )
@@ -137,27 +129,27 @@ fun OnboardingBackScreen(
 //        )
 //
 //        // 냠코치 (오른쪽)
-//        NyamCoach(
-//            modifier = Modifier
-//                .padding(top = 342.12f.hp(), start = 126f.wp())
-//                .size(width = 338f.wp(), height = 338f.bhp()),
-//            alpha = nyamAlpha
-//        )
+        NyamCoach(
+            modifier = Modifier
+                .padding(top = 342.12f.hp(), start = 126f.wp())
+                .size(width = 338f.wp(), height = 338f.bhp()),
+            alpha = nyamAlpha
+        )
 
         HamcoachGif(
-            modifier = Modifier.offset(x = (-30f).wp(), y = 255f.hp()),
+            modifier = Modifier.offset(x = (-15f).wp(), y = 255f.hp()),
             num = 1,
             ellipseLength = 222.0,
             mascotLength = 200.0
         )
 
-        NyameeGif(
-            modifier = Modifier
-                .offset(x = 60f.wp(), y = 300f.bhp())
-                .alpha(nyamAlpha),
-            num = 1,
-            sizePercent = 1.35f
-        )
+//        NyameeGif(
+//            modifier = Modifier
+//                .offset(x = 60f.wp(), y = 300f.bhp())
+//                .alpha(nyamAlpha),
+//            num = 1,
+//            sizePercent = 1.35f
+//        )
 
     }
 }

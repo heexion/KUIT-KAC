@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.fitness.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessData
@@ -55,9 +57,10 @@ import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 
 @Composable
-fun FitnessEditScreen(modifier: Modifier = Modifier,
-                      navController: NavHostController,
-                      routineViewModel: RoutineViewModel = hiltViewModel()
+fun FitnessEditScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
     val selectedRoutines = routineViewModel.selectedRoutines
@@ -78,11 +81,11 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
             modifier = Modifier
                 .padding(top = 4f.hp())
                 .fillMaxWidth()
-        ){
+        ) {
             Image(
                 modifier = Modifier
                     .offset(x = 70.31f.wp())
-                    .size(272f.wp(),96f.bhp()),
+                    .size(272f.wp(), 96f.bhp()),
                 painter = painterResource(R.drawable.img_fitnessedit_textballoon),
                 contentDescription = "textballoon"
             )
@@ -112,7 +115,7 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                     .clip(RoundedCornerShape(20f.bhp()))
                     .background(color = Color(0xFFFFF1AB))
                     .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.bhp())),
-            ){
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -121,10 +124,10 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                         .clip(RoundedCornerShape(7f.wp()))
                         .background(color = Color(0xFFFFFCEE)),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     Text(
                         modifier = Modifier,
-                        text = routineViewModel.routineName.value?:"운동 루틴",
+                        text = routineViewModel.routineName.value ?: "운동 루틴",
                         style = DungGeunMo17,
                         fontSize = 17f.isp(),
                         color = Color(0xFF000000),
@@ -139,12 +142,12 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                 ) {
                     selectedRoutines.forEach { item ->
                         FitnessItem(
-                            FitnessNum = item?.id?:1,
+                            FitnessNum = item?.id ?: 1,
                             image = R.drawable.ic_lowerbody,
-                            FitnessName = item?.name?:"",
+                            FitnessName = item?.name ?: "",
                             isEditable = true,
                             onDeleteClick = {
-                                routineViewModel.removeRoutine(item?: Fitness(0,"","",1.0,0))
+                                routineViewModel.removeRoutine(item ?: Fitness(0, "", "", 1.0, 0))
                             }
                         )
                     }
@@ -159,7 +162,12 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                         .background(Color(0xFFFFFFFF))
                         .drawBehind {
                             val strokeWidth = 3.dp.toPx()
-                            val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 4.dp.toPx()), 0f)
+                            val pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(
+                                floatArrayOf(
+                                    4.dp.toPx(),
+                                    4.dp.toPx()
+                                ), 0f
+                            )
                             val rect = Rect(0f, 0f, size.width, size.height)
 
                             drawRoundRect(
@@ -169,7 +177,7 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                                 cornerRadius = CornerRadius(15.dp.toPx())
                             )
                         }
-                        .clickable(
+                        .noRippleClickable(
                             onClick = {
                                 navController.navigate(route = Route.FitnessSearch.route)
                             }
@@ -213,21 +221,21 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
                 .clip(RoundedCornerShape(20f.wp()))
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFFFFFFFF),Color(0xFFFFB638))
+                        colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFB638))
                     )
                 )
-                .border(2.dp, Color(0xFF000000),RoundedCornerShape(20f.wp()))
-                .clickable {
+                .border(2.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
+                .noRippleClickable {
                     routineViewModel.setType("기록")
-                    if(routineViewModel.routineId.value != null){
+                    if (routineViewModel.routineId.value != null) {
                         routineViewModel.changeRoutine()
-                    }
-                    else{
+                    } else {
                         routineViewModel.createRoutine()
                     }
-                    navController.navigate(Route.FitnessEditResult.route)},
+                    navController.navigate(Route.FitnessEditResult.route)
+                },
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Text(
                 text = "저장하기",
                 style = DungGeunMo20,
@@ -251,11 +259,13 @@ fun FitnessEditScreen(modifier: Modifier = Modifier,
 @Composable
 fun FitnessEditScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    val sampleList =remember { mutableStateListOf(
-        FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, {}),
-        FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, {}),
-        FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, {})
-    )}
+    val sampleList = remember {
+        mutableStateListOf(
+            FitnessData(1, "레그 컬", R.drawable.ic_lowerbody, {}),
+            FitnessData(2, "레그 프레스", R.drawable.ic_lowerbody, {}),
+            FitnessData(3, "레그 익스텐션", R.drawable.ic_lowerbody, {})
+        )
+    }
 
     FitnessEditScreen(
         navController = navController

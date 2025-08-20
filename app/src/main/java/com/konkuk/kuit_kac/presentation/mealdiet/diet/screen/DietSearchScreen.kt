@@ -1,6 +1,7 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.diet.screen
 
 import androidx.compose.foundation.background
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.presentation.fitness.screen.OutlinedTextFieldBackground
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.viewmodel.DietViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.local.FoodViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
@@ -97,39 +99,41 @@ fun DietSearchScreen(
                 Spacer(modifier = Modifier.height(23f.bhp()))
 
                 // 검색 바
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 72f.bhp()),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF000000),
-                        unfocusedBorderColor = Color(0xFF000000),
-                        cursorColor = Color(0xFF000000)
-                    ),
-                    shape = RoundedCornerShape(30f.bhp()),
-                    singleLine = true,
-                    value = query,
-                    onValueChange = { foodViewModel.onQueryChange(it) },
-                    label = {
-                        Text(
-                            text = "무슨 음식을 먹었어?",
-                            style = DungGeunMo15,
+                OutlinedTextFieldBackground(color = Color(0xFFFFFFFF)) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 72f.bhp()),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF000000),
+                            unfocusedBorderColor = Color(0xFF000000),
+                            cursorColor = Color(0xFF000000)
+                        ),
+                        shape = RoundedCornerShape(30f.bhp()),
+                        singleLine = true,
+                        value = query,
+                        onValueChange = { foodViewModel.onQueryChange(it) },
+                        label = {
+                            Text(
+                                text = "무슨 음식을 먹었어?",
+                                style = DungGeunMo15,
+                                fontSize = 15f.isp(),
+                                color = Color(0xFF0F0E0E),
+                                modifier = Modifier.padding(horizontal = 20f.wp())
+                            )
+                        },
+                        textStyle = DungGeunMo15.copy(
                             fontSize = 15f.isp(),
-                            color = Color(0xFFB5B5B5),
-                            modifier = Modifier.padding(horizontal = 20f.wp())
+                            color = Color(0xFF000000)
+                        ),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() } // Done 입력 시 포커스 해제
                         )
-                    },
-                    textStyle = DungGeunMo15.copy(
-                        fontSize = 15f.isp(),
-                        color = Color(0xFF000000)
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { focusManager.clearFocus() } // Done 입력 시 포커스 해제
                     )
-                )
+                }
             }
         }
 
@@ -141,10 +145,12 @@ fun DietSearchScreen(
                 SearchBarItem(
                     modifier = Modifier
                         .padding(horizontal = 24f.wp())
-                        .clickable {
-                            focusManager.clearFocus() // 클릭 시 포커스 해제
-                            navController.navigate("diet_search_detail/${food.name}")
+                        .noRippleClickable {
                         },
+                    onClick = {
+                        focusManager.clearFocus() // 클릭 시 포커스 해제
+                        navController.navigate("diet_search_detail/${food.name}")
+                    },
                     value = food.name
                 )
             }

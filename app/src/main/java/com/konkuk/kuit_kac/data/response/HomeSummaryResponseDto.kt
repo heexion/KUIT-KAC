@@ -1,8 +1,16 @@
 package com.konkuk.kuit_kac.data.response
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class HomeSummaryResponseDto(
-    val dailyKcalorieGoal: Int,
-    val totalIntakeKcalorie: Int,
-    val weight: Int,
-    val remainingKcalorie: Int
+    @SerialName("dailyKCalorieGoal")
+    val dailyKCalorieGoal: Double,
+    @SerialName("totalIntakeKCalorie")
+    val totalIntakeKCalorie: Double,
+    @SerialName("weight")
+    val weight: Double,
+    @SerialName("remainingKCalorie")
+    val remainingKCalorie: Double
 )

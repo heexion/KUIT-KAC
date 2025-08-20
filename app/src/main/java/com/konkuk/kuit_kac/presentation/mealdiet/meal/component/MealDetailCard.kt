@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -174,8 +175,9 @@ fun MealDetailCard(
                 QuantitySelector(
                     quantity = quantity,
                     onQuantityChange = {
+                        val snapped = snapQuantity(it)
                         quantity = it.coerceIn(0.1f,100f)
-                        onQuantityChange(it)
+                        onQuantityChange(snapped)
                     },
                     unitWeight = unitWeight
                 )
@@ -255,8 +257,8 @@ fun QuantitySelector(
             Image(
                 modifier = Modifier
                     .width(14.2f.wp())
-                    .clickable {
-                        onQuantityChange(quantity - 0.5f)
+                    .noRippleClickable {
+                        onQuantityChange(snapQuantity(quantity - 0.5f))
                     },
                 painter = painterResource(R.drawable.ic_minus),
                 contentDescription = "minus button",
@@ -270,8 +272,7 @@ fun QuantitySelector(
                     if (it.length <= 5 && it.matches(Regex("^\\d{0,3}(\\.\\d{0,1})?$"))) {
                         text = it
                         it.toFloatOrNull()?.let { newValue ->
-                            val clampedValue = newValue.coerceIn(0.1f, 100.0f)
-                            onQuantityChange(clampedValue)
+                            onQuantityChange(snapQuantity(newValue))
                         }
                     }
                 },
@@ -295,8 +296,8 @@ fun QuantitySelector(
             Image(
                 modifier = Modifier
                     .width(14.2f.wp())
-                    .clickable {
-                        onQuantityChange(quantity + 0.5f)
+                    .noRippleClickable {
+                        onQuantityChange(snapQuantity(quantity + 0.5f))
                     },
                 painter = painterResource(R.drawable.ic_plus),
                 contentDescription = "minus button",
@@ -332,6 +333,18 @@ fun SpeechBubble(text: String, modifier: Modifier) {
         )
     }
 }
+private fun snapQuantity(
+    v: Float,
+    min: Float = 0.1f,
+    max: Float = 100f,
+    step: Float = 0.5f
+): Float {
+    val clamped = v.coerceIn(min, max)
+    val snapped = if (clamped < step) min
+    else (kotlin.math.round(clamped / step) * step)
+    return (kotlin.math.round(snapped * 10f) / 10f)
+}
+
 
 
 @Preview

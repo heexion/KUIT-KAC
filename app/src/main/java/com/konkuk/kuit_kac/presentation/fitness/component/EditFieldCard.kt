@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +39,7 @@ fun EditFieldCard(
     onValueChange: (String) -> Unit,
     unitLabel: String = "분"
 ) {
+    val focusManager = LocalFocusManager.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -68,7 +71,7 @@ fun EditFieldCard(
                     value = value,
                     onValueChange = { input ->
                         val digitsOnly = input.filter { it.isDigit() }
-                        onValueChange(if (digitsOnly.isEmpty()) "0" else digitsOnly)
+                        onValueChange(digitsOnly)
                     },
                     textStyle = DungGeunMo15.copy(
                         color = Color(0xFF000000),
@@ -77,11 +80,30 @@ fun EditFieldCard(
                     ),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
                     modifier = Modifier
                         .width(40f.wp())
                         .padding(end = 4f.wp())
-                        .background(Color(0xFFFFFFFF))
+                        .background(Color(0xFFFFFFFF)),
+                    decorationBox = { innerTextField ->
+                        if (value.isEmpty()) {
+                            Text(
+                                text = "0",
+                                style = DungGeunMo15.copy(
+                                    color = Color.Gray,
+                                    textAlign = TextAlign.End,
+                                    fontSize = 15f.isp()
+                                ),
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.End
+                            )
+                        }
+                        innerTextField()
+                    }
                 )
+
 
                 Text(
                     text = unitLabel,
@@ -97,7 +119,7 @@ fun EditFieldCard(
 @Preview
 @Composable
 private fun EditFieldCardPreview() {
-    var anaerobicTimeText by remember { mutableStateOf("0") }
+    var anaerobicTimeText by remember { mutableStateOf("") }
 
     EditFieldCard(
         title = "운동 시간",

@@ -67,7 +67,7 @@ fun FitnessItemCard(
                 color = Color(0xFF713E3A),
             )
             Text(
-                text = "세트 수: ${FitnessAmount}회",
+                text = "운동 시간: ${FitnessAmount}분",
                 style = DungGeunMo15,
                 lineHeight = 20f.isp(),
                 color = Color(0xFF000000)

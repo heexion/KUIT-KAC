@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -162,7 +163,7 @@ fun PlanInPersonScreen(
                         }
                     )
                     PlanConfirmButton(
-                        modifier = Modifier.padding(top = 36f.bhp()),
+                        modifier = Modifier.padding(top = 30f.bhp()),
                         isAvailable = if (selectedDate != null) true
                         else false,
                         onClick = {
@@ -175,7 +176,7 @@ fun PlanInPersonScreen(
                     )
                     Spacer(
                         modifier = Modifier.size(
-                            140f.bhp() - WindowInsets.navigationBars.asPaddingValues()
+                            150f.bhp() - WindowInsets.navigationBars.asPaddingValues()
                                 .calculateBottomPadding()
                         ),
                     )

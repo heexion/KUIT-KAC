@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WeightResponseDto(
-    @SerialName("weight") val weight: Float,
-    @SerialName("createdAt") val createdAt: String
+    @SerialName("weight") val weight: Float? = 0f,
+    @SerialName("createdAt") val createdAt: String? = ""
 )

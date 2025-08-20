@@ -1,9 +1,11 @@
 package com.konkuk.kuit_kac.presentation.home.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.component.Loading
+import com.konkuk.kuit_kac.component.NyamNyamNyom
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
@@ -55,33 +59,32 @@ fun HomeMainScreen(
     userId: Int,
     viewModel: HomeSummaryViewModel = hiltViewModel()
 ) {
-    val summary by viewModel.summary
-    val error by viewModel.error
     var randNum by remember { mutableIntStateOf(1) }
     val isLate = true
     var hamcoachNum by remember { mutableIntStateOf(1) }
-    
-    LaunchedEffect(userId) {
-        viewModel.loadSummary(userId)
+    LaunchedEffect(Unit) {
+        viewModel.getSummary(userId)
         if (!isLate) randNum = Random.nextInt(3) + 1
         else {
             randNum = 4
             hamcoachNum = 3
         }
     }
+    val summary by viewModel.summary
+
+    Log.d("HomeMainScreen", summary?.dailyKCalorieGoal.toString())
+
 
     // 로딩 상태 처리
-    if (summary == null) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
+    /*if (summary == null) {
+        Loading()
         return
-    }
+    }*/
 
     // API 응답에서 값 추출
-    val goal = summary?.dailyKcalorieGoal ?: 0
+    val goal = summary?.dailyKCalorieGoal ?: 0
     val current = summary?.weight ?: 0
-    val left = summary?.remainingKcalorie ?: 0
+    val left = summary?.remainingKCalorie ?: 0
 
     HomeBackgroundComponent()
     Box(
@@ -134,7 +137,7 @@ fun HomeMainScreen(
                 modifier = Modifier
                     .size(94.13432f.wp(), 53f.bhp())
                     .offset(y = 311f.hp(), x = 68.38f.wp())
-                    .clickable {
+                    .noRippleClickable {
                         navController.navigate(Route.HomeScale.route)
                     },
                 painter = painterResource(R.drawable.img_home_weight),
@@ -153,7 +156,12 @@ fun HomeMainScreen(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                     )
                 )
-                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp())),
+                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
+                .clickable (
+                    onClick = {
+                        navController.navigate("NyamNyamNyom")
+                    }
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -165,7 +173,7 @@ fun HomeMainScreen(
             )
             Text(
                 modifier = Modifier.padding(top = 7.61f.bhp()),
-                text = "${left}kcal",
+                text = "${left.toInt()}kcal",
                 style = DungGeunMo35,
                 fontSize = 35f.isp(),
                 color = Color(0xFFFFA100)
@@ -175,7 +183,7 @@ fun HomeMainScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(19.86f.wp())
             ) {
-                HomeNutritionCircleGraph(goal = goal, left = left)
+                HomeNutritionCircleGraph(goal = goal.toInt(), left = left.toInt())
                 Column {
                     HomeSummaryBox(
                         title = "목표 일일 칼로리",

@@ -78,6 +78,13 @@ fun NyameeGif(
                 actualWidth = 187.6f.wp(),
                 actualHeight = 244f.bhp(), size = sizePercent * 0.69f
             )
+            7 -> GifImage(
+                modifier = Modifier.offset(x = -5f.wp(), y = -30f.bhp()),
+                drawableId = R.drawable.gif_eat,
+                onClick = { onClick() },
+                actualWidth = 187.6f.wp(),
+                actualHeight = 244f.bhp(), size = sizePercent * 0.69f
+            )
         }
     }
 }

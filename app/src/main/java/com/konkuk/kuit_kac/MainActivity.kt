@@ -17,7 +17,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -41,10 +40,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.local.dao.FitnessDao
 import com.konkuk.kuit_kac.local.dao.FoodDao
 import com.konkuk.kuit_kac.local.parse.loadFitness
 import com.konkuk.kuit_kac.local.parse.loadFood
+import com.konkuk.kuit_kac.notification.NotificationHelper
+import com.konkuk.kuit_kac.notification.ReminderScheduler
 import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 //import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
@@ -121,6 +123,17 @@ class MainActivity : ComponentActivity() {
             isAppearanceLightNavigationBars = true
             window.navigationBarColor = android.graphics.Color.TRANSPARENT
         }
+        NotificationHelper.ensureChannels(this)
+        ReminderScheduler.ensureAllReminders(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val am = getSystemService(ALARM_SERVICE) as android.app.AlarmManager
+            if (!am.canScheduleExactAlarms()) {
+                runCatching {
+                    startActivity(Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                }
+            }
+        }
+
 
         setContent {
             KUITKACTheme {
@@ -157,7 +170,17 @@ class MainActivity : ComponentActivity() {
                     Route.OnboardingDelivery.route,
                     Route.OnboardingMainHomeHam.route,
                     Route.OnboardingMainHomeNyam.route,
-                    Route.OnboardingMainHomeScale.route
+                    Route.OnboardingMainHomeScale.route,
+
+                    Route.OnboardingAiMeal.route,
+                    Route.OnboardingMeal.route,
+                    Route.OnboardingAiIntro.route,
+                    Route.OnboardingGray.route,
+                    Route.OnboardingYellow.route,
+                    Route.OnboardingEoDrink.route,
+                    Route.OnboardingCheck.route,
+                    Route.OnboardingFinal.route,
+                    Route.OnboardingFloatingButton.route
                 )
 
                 val shouldHideBottomBar =
@@ -166,23 +189,109 @@ class MainActivity : ComponentActivity() {
 
 
                 val backArrowRoutes = setOf(
-                    // 여기다가 뒤로가기 버튼 있으면 추가
+                    // 홈 관련
                     Route.HomeNutrition.route,
-//                    Route.HomeAnalysis.route,
                     Route.HomeObservation.route,
                     Route.HomeScale.route,
+                    Route.HomeScaleInput.route,
+                    Route.HomeResult.route,
+
+                    // 식단/식사 관련
                     Route.DietCreate.route,
-                    "plan_ai_detail",
-                    Route.PlanCheck.route,
-                    Route.MealSearch.route,
-                    Route.MealTime.route,
-                    Route.FitnessEdit.route,
-                    Route.FitnessSearch.route,
-                    Route.FitnessCreate.route,
-                    Route.MealPatch.route,
+                    Route.DietExist.route,
                     Route.DietPatch.route,
+                    Route.DietSearch.route,
+                    Route.MealTime.route,
+                    Route.MealRecord.route,
+                    Route.MealExist.route,
+                    Route.MealPatch.route,
+                    Route.MealFastingResult.route,
+                    Route.MealSearch.route,
+                    Route.MealTemp.route,
+                    Route.MealEditTemp.route,
+
+                    Route.MealEditResult.route,
+                    Route.MealEditSearchItem.route,
+                    Route.MealEditSearch.route,
+                    Route.MealEditTime.route,
+                    Route.MealMain.route,
+                    Route.MealSearchItemDetail.route,
+                    Route.TimeInputResult.route,
+
+                    Route.DietEditSearchItem.route,
+                    Route.DietEditSerch.route,
+                    Route.DietEditTemp.route,
+                    Route.DietMain.route,
+                    Route.DietSearchItemDetail.route,
+
+                    // 식단 계획 관련
+                    Route.PlanDiet.route,
+                    Route.PlanAI.route,
+                    Route.PlanInPerson.route,
+                    Route.PlanCheck.route,
+                    "plan_ai_detail",
+                    Route.PlanAIComplete.route,
+                    Route.PlanAILoading.route,
+                    Route.PlanAIRecom.route,
+                    Route.PlanInPersonAddComplete.route,
+                    Route.PlanIPAdd.route,
+                    Route.PlanIPItem.route,
+                    Route.PlanIPSearch.route,
+                    Route.PlanIPTemp.route,
+                    Route.PlanResult.route,
+
+                    // 운동 관련
+                    Route.FitnessExist.route,
+                    Route.FitnessCreate.route,
+                    Route.FitnessSearch.route,
+                    Route.FitnessEdit.route,
+                    Route.FitnessEditResult.route,
+                    Route.FitnessRecordEdit.route,
+                    Route.FitnessRoutineEdit.route,
+                    Route.FitnessRecordResult.route,
+                    Route.FitnessRoutineSearch.route,
+                    Route.FitnessFastInput.route,
+                    Route.FitnessDetailRecordAdd.route,
+                    Route.FitnessDetailInput.route,
+                    Route.FitnessRecordScreen.route,
+                    Route.FitnessDetailRecord("sample").route,
+                    Route.FitnessAddDetailRecord.route,
+                    Route.FitnessAddRecordEdit.route,
+                    Route.FitnessRecordMain.route,
+                    Route.FitnessRoutineDetailInput.route,
+
+
+                    // 온보딩 관련
+                    Route.OnboardingDiet.route,
+                    Route.OnboardingFailEx.route,
+                    Route.OnboardingAppetite.route,
+                    Route.OnboardingWeek.route,
+                    Route.OnboardingPreferType.route,
+                    Route.OnboardingDietSpeed.route,
+                    "${Route.OnboardingActivityLevel.route}/{mode}",
+                    "${Route.OnboardingInput.route}/{mode}",
+                    Route.OnboardingInputResult.route,
+                    Route.OnboardingIntroduce.route,
+                    Route.OnboardingHamCoach.route,
+                    Route.OnboardingNyamCoach.route,
+                    Route.OnboardingDelivery.route,
+                    Route.OnboardingMainHomeHam.route,
+                    Route.OnboardingMainHomeNyam.route,
+                    Route.OnboardingMainHomeScale.route,
+                    Route.OnboardingAiMeal.route,
+                    Route.OnboardingMeal.route,
+                    Route.OnboardingAiIntro.route,
+                    Route.OnboardingGray.route,
+                    Route.OnboardingYellow.route,
+                    Route.OnboardingEoDrink.route,
+                    Route.OnboardingCheck.route,
+                    Route.OnboardingFinal.route,
+                    Route.OnboardingFloatingButton.route,
+
+                    // 로그인 관련
                     Route.LoginEmail.route
                 )
+
                 val planButtonRoutes = setOf(
                     Route.Home.route,
                     Route.HomeNutrition.route,
@@ -233,7 +342,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(start = 24.dp, top = 58.dp)
                                 .size(24.dp)
                                 .align(Alignment.TopStart)
-                                .clickable { navController.popBackStack() },
+                                .noRippleClickable { navController.popBackStack() },
                             painter = painterResource(id = R.drawable.ic_back_arrow),
                             contentDescription = "",
                         )
@@ -245,7 +354,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(end = 25f.wp(), bottom = 93f.bhp())
                                 .size(61f.wp(), 61f.bhp())
                                 .align(Alignment.BottomEnd)
-                                .clickable {
+                                .noRippleClickable {
                                     navController.navigate(Route.PlanDiet.route) {
                                         popUpTo(navController.graph.startDestinationId) {
                                             inclusive = false

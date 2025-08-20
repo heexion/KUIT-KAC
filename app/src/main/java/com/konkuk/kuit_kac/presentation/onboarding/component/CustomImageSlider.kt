@@ -3,7 +3,6 @@ package com.konkuk.kuit_kac.presentation.onboarding.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -36,6 +35,7 @@ fun CustomImageSlider(
     val totalSteps = 5
     val sliderWidth = 280f.wp()
     val knobSize = 32f.bhp()
+    val extraTouchArea = 12f.bhp() //  손잡이 눌림 영역 확장
 
     var dragOffset by remember { mutableStateOf(0f) }
 
@@ -72,26 +72,26 @@ fun CustomImageSlider(
         // 움직일 썸(손잡이) 버튼
         Box(
             modifier = Modifier
-                .offset {
-                    IntOffset(x = dragOffset.roundToInt(), y = 0)
-                }
-                .size(knobSize)
+                .offset { IntOffset(x = dragOffset.roundToInt(), y = 0) }
+                .size(knobSize + extraTouchArea)
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
                         change.consume()
-                        dragOffset = (dragOffset + dragAmount.x).coerceIn(0f, stepWidthPx * (totalSteps - 1))
+                        dragOffset = (dragOffset + dragAmount.x)
+                            .coerceIn(0f, stepWidthPx * (totalSteps - 1))
                         val newStep = (dragOffset / stepWidthPx).roundToInt()
                         onValueChange(newStep)
                     }
-                }
+                },
+            contentAlignment = Alignment.Center
         ) {
-            // 손잡이 이미지 - 투명 처리
+            // 손잡이 이미지
             Image(
                 painter = painterResource(id = R.drawable.ic_input_slider_knob),
                 contentDescription = "Knob",
                 modifier = Modifier
-                    .fillMaxSize()
-                    .alpha(0f) // 투명도 설정
+                    .size(knobSize) // 실제 보이는 크기는 knobSize만 유지
+                    .alpha(0f)
             )
         }
     }

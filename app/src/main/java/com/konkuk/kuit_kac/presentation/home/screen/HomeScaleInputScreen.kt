@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -72,6 +73,11 @@ fun HomeScaleInputScreen(
     navController: NavHostController
 ) {
     val viewModel: WeightViewModel = hiltViewModel()
+    val weightInfo by viewModel.weightInfo
+
+    LaunchedEffect(Unit) {
+        viewModel.getWeight(userId = 1)
+    }
     val postSuccess by viewModel.postSuccess
 
     val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
@@ -103,6 +109,7 @@ fun HomeScaleInputScreen(
 
     WeightInputModal(
         modifier = Modifier,
+        cweight = weightInfo?.weight?.toDouble()?:0.0,
         initialWeight = "",
         onConfirm = { weight ->
             viewModel.postWeight(userId = 1, weight = weight.toFloatOrNull() ?: 0f)
@@ -132,10 +139,11 @@ private fun HomeScaleInputScreenPreview() {
 @Composable
 fun WeightInputModal(
     modifier: Modifier,
+    cweight: Double,
     initialWeight: String = "",
     onConfirm: (String) -> Unit,
     navController: NavHostController,
-    isKeyboardVisible: Boolean
+    isKeyboardVisible: Boolean,
 ) {
     var weight by remember { mutableStateOf(initialWeight) }
     val focusManager = LocalFocusManager.current
@@ -153,7 +161,7 @@ fun WeightInputModal(
                 if (isKeyboardVisible) Color(0x60000000)
                 else Color(0x80000000)
             )
-            .clickable {
+            .noRippleClickable {
                 focusManager.clearFocus()
             },
         verticalArrangement = Arrangement.Bottom,
@@ -178,7 +186,7 @@ fun WeightInputModal(
                     .padding(top = 55f.bhp())
             )
             Text(
-                text = "45kg",
+                text = cweight.toString(),
                 style = DungGeunMo35,
                 fontSize = 35f.isp(),
                 color = Color(0xFF713E3A),
