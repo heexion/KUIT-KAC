@@ -92,6 +92,64 @@ fun PlanAILoadingScreen(
                 .padding(top = 454.76f.hp()),
         )
     }
+    //the commented one will be the modal
+    /*
+    Column(
+            modifier = Modifier
+                .size(364f.wp(),202f.bhp())
+                .align(Alignment.Center)
+                .clip(RoundedCornerShape(20f.bhp()))
+                .background(Color(0xFFFFF3C1))
+                .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp())),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(top = 38f.bhp()),
+                text = "식단 추천 중 오류가 발생했어!\n" +
+                        "다시 해볼래?",
+                style = DungGeunMo20,
+                fontSize = 20f.isp(),
+                textAlign = TextAlign.Center
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 26f.bhp()),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(126f.wp(),56f.bhp())
+                        .clip(RoundedCornerShape(16f.bhp()))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp())),
+                    contentAlignment = Alignment.Center
+                ){
+                    Text(
+                        text = "재시도",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp()
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(126f.wp(),56f.bhp())
+                        .clip(RoundedCornerShape(16f.bhp()))
+                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
+                        .clickable{
+                            navController.navigate(Route.Home.route)
+                        },
+                    contentAlignment = Alignment.Center
+                ){
+                    Text(
+                        text = "그만두기",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp()
+                    )
+                }
+            }
+        }
+     */
 }
 
 @Preview(showBackground = true)
