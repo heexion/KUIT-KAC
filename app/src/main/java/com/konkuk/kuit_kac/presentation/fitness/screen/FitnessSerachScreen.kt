@@ -310,7 +310,7 @@ fun OutlinedTextFieldBackground(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .padding(top = 8.dp)
+                .padding(top = 8f.bhp())
                 .background(
                     color,
                     shape = RoundedCornerShape(30f.wp())
