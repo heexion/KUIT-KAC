@@ -210,9 +210,9 @@ fun DietSwipeCardPager(
     val rotateDegree = 10f
     val coroutineScope = rememberCoroutineScope()
 
+    val actualPageCount =  if (dietList.isEmpty()) 1 else dietList.size
     val infinitePageCount = Int.MAX_VALUE
-    val initialPage = infinitePageCount / 2 - ((infinitePageCount / 2) % dietList.size)
-    val actualPageCount = dietList.size
+    val initialPage = infinitePageCount / 2 - ((infinitePageCount / 2) % actualPageCount)
 
     val pageState = rememberPagerState(
         initialPage = initialPage,
@@ -294,7 +294,7 @@ fun DietSwipeCardPager(
 
                                     navController.navigate("DietEditGraph/DietEditTemp?dietId=${dietId}&fwqRaw=${encodedFwq}&name=${encodedName}")
                                 },
-                                    contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.img_diet_pen2),
