@@ -4,7 +4,6 @@ package com.konkuk.kuit_kac.presentation.navigation
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -19,9 +18,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.data.login.dataStore
 import com.konkuk.kuit_kac.component.Loading
 import com.konkuk.kuit_kac.component.NyamNyamNyom
+import com.konkuk.kuit_kac.data.login.dataStore
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
@@ -111,6 +110,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeNyam
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMainHomeScale
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingMeal
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingNyamCoach
+import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingPermission
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingPreferType
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingStart
 import com.konkuk.kuit_kac.presentation.navigation.Route.OnboardingWeek
@@ -138,6 +138,7 @@ import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeNyam
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMainHomeScaleScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingMealScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingNyamCoachScreen
+import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPermissionScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingPreferTypeScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingStartScreen
 import com.konkuk.kuit_kac.presentation.onboarding.screen.OnboardingWeekScreen
@@ -333,6 +334,16 @@ fun KacNavGraph(
                 }
                 val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
                 OnboardingDeliveryScreen(navController = navController)
+            }
+            composable(route = OnboardingPermission.route) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("OnboardingGraph")
+                }
+                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+                OnboardingPermissionScreen(
+                    navController = navController,
+
+                )
             }
             composable(route = OnboardingMainHomeHam.route) {backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
