@@ -1,13 +1,13 @@
 package com.konkuk.kuit_kac.data.login.repository
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -50,12 +50,18 @@ class DataStoreRepository @Inject constructor(
         }
     }
 
-
     suspend fun clearTokens() {
         dataStore.edit { prefs ->
             prefs.remove(ACCESS_TOKEN_KEY)
             prefs.remove(REFRESH_TOKEN_KEY)
         }
+    }
+
+    private val _incomingKid = MutableStateFlow<String?>(null)
+    val incomingKid: StateFlow<String?> = _incomingKid.asStateFlow()
+
+    fun setIncomingUid(uid: String?) {
+        _incomingKid.value = uid
     }
 
 }

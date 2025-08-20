@@ -21,8 +21,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -59,6 +63,24 @@ fun LoginMainScreen(
     val userInfo by viewModel.userInfo.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    val incomingUid by viewModel.incomingKid.collectAsState()
+
+    LaunchedEffect(incomingUid) {
+        incomingUid?.let { kid ->
+            Log.d("LoginScreen", "새로운 KID($kid) 감지! 토큰 발급을 요청합니다.")
+            viewModel.mintToken(kid)
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.navigationEvent.collect { event ->
+            navController.navigate(event.route) {
+                popUpTo(Route.LoginMain.route) { inclusive = true }
+                launchSingleTop = true
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -74,6 +96,35 @@ fun LoginMainScreen(
                 .padding(top = 119f.hp()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text("Access Token: ${accessToken?.take(20)}...")
+//            Log.d("응답: ", "$accessToken")
+
+/*            Button(onClick = {
+                viewModel.fetchUserInfo()
+                clicked = true
+            }, enabled = !isLoading) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("보호 API 호출 (/users/me)")
+                }
+            }
+
+            userInfo?.let { user ->
+                Text("API 응답:", style = MaterialTheme.typography.titleMedium)
+                Text("이름: ${user.userId ?: "정보 없음"}", modifier = Modifier.padding(8.dp))
+                Text("나이: ${user.age ?: "정보 없음"}", modifier = Modifier.padding(8.dp))
+                Text("성별: ${user.gender ?: "정보 없음"}", modifier = Modifier.padding(8.dp))
+                Text("키: ${user.height ?: "정보 없음"}", modifier = Modifier.padding(8.dp))
+                Text("목표체중: ${user.targetWeight ?: "정보 없음"}", modifier = Modifier.padding(8.dp))
+                Text(
+                    "온보딩필요여부: ${user.onboardingNeeded ?: "정보 없음"}",
+                    modifier = Modifier.padding(8.dp)
+                )
+            }*/
             Image(
                 painter = painterResource(id = R.drawable.ic_login_nyamcoach_title),
                 contentDescription = "냠코치 타이틀",
@@ -88,23 +139,6 @@ fun LoginMainScreen(
                 fontSize = 17f.isp(),
                 color = Color(0xFF713E3A),
             )
-            Text("Access Token: ${accessToken?.take(20)}...")
-            Log.d("응답: ", "$accessToken")
-
-            Button(onClick = { viewModel.fetchUserInfo() }, enabled = !isLoading) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                } else {
-                    Text("보호 API 호출 (/users/me)")
-                }
-            }
-            if (userInfo.isNotEmpty()) {
-                Text("API 응답:", style = MaterialTheme.typography.titleMedium)
-                Text(userInfo, modifier = Modifier.padding(8.dp))
-            }
         }
 
         Image(
@@ -151,7 +185,7 @@ fun LoginMainScreen(
                 )
                 .size(346.6669f.wp(), 52f.bhp())
                 .clickable {
-//                    navController.navigate(Route.LoginEmail.route)
+                    navController.navigate(Route.LoginEmail.route)
                     val kakaoLoginUrl = "${BuildConfig.BASE_URL}oauth2/authorization/kakao"
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(kakaoLoginUrl))
                     context.startActivity(intent)
@@ -159,7 +193,6 @@ fun LoginMainScreen(
             painter = painterResource(id = R.drawable.ic_kakao_login_wide),
             contentDescription = null,
         )
-
     }
 }
 

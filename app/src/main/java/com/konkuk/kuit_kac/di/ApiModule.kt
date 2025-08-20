@@ -49,6 +49,11 @@ object ApiModule {
 
     @Provides
     @Singleton
+    fun provideRefreshTokenApiService(retrofit: Retrofit): RefreshTokenApiService =
+        retrofit.create(RefreshTokenApiService::class.java)
+
+    @Provides
+    @Singleton
     fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)
     }
@@ -103,13 +108,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator
+    ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(logging)
+            .authenticator(authAuthenticator)
             .build()
     }
 

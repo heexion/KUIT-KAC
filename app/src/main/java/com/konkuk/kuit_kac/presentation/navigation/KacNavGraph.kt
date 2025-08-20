@@ -17,7 +17,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
 import com.konkuk.kuit_kac.data.login.dataStore
-import com.konkuk.kuit_kac.data.login.screen.LoginScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
@@ -134,11 +133,7 @@ fun KacNavGraph(
         startDestination = if (isFirstLaunch) Route.LoginMain.route else Route.LoginMain.route
     ) {
 
-//        composable("login") { TestLoginScreen(navController = navController, dataStore = dataStore) }
 //        composable("debug") { DebugScreen(navController, dataStore) }
-//        composable("verify") { VerifyTokenScreen() }
-        composable("loginTest") { LoginScreen() }
-
 
         // 온보딩 스타트
         composable(route = OnboardingStart.route) {

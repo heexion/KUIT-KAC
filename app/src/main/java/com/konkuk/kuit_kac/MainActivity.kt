@@ -67,7 +67,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        handleDeepLink(intent)
 
         enableEdgeToEdge()
         val requestPostNoti = registerForActivityResult(
@@ -212,16 +211,6 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                 ) {
-//                    // 로그인 완료 시 자동으로 이동
-//                    LaunchedEffect(loginViewModel.loginState) {
-//                        if (loginViewModel.loginState != null) {
-//                            navController.navigate(Route.Home.route) {
-//                                popUpTo(navController.graph.startDestinationId) {
-//                                    inclusive = true
-//                                }
-//                            }
-//                        }
-//                    }
                     Scaffold(
                         bottomBar = {
                             // 특정 화면들에서 bottomBar 보이지 않게 설정
@@ -288,22 +277,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-//    override fun onNewIntent(intent: Intent) {
-//        super.onNewIntent(intent)
-//        handleDeepLink(intent)
-//    }
-//
-//    private fun handleDeepLink(intent: Intent) {
-//        val data: Uri? = intent.data
-//        if (data?.scheme == "myapp" && data.host == "auth" && data.path == "/kakao") {
-//            val code = data.getQueryParameter("code")
-//            if (!code.isNullOrEmpty()) {
-//                loginViewModel.handleKakaoCode(code) // 서버로 code 전달
-//            }
-//        }
-//    }
 }
-
 
 
 @Composable
