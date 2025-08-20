@@ -125,10 +125,10 @@ fun DietEditTempScreen(
                 Text(
                     text = "지금 총 ${cal}kcal이야",
                     style = DungGeunMo17,
-                    fontSize = 17f.isp(),
+                    fontSize = 19f.isp(),
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 40f.bhp())
+                    modifier = Modifier.padding(bottom = 20f.bhp())
                 )
             }
 
