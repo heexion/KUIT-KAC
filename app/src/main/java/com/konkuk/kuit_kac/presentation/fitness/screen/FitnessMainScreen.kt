@@ -50,6 +50,7 @@ import com.konkuk.kuit_kac.presentation.fitness.component.FitnessCard
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
 import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import com.konkuk.kuit_kac.ui.theme.deepYellow
 import kotlinx.coroutines.launch
@@ -224,14 +225,27 @@ fun FitnessMainScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(top = 88f.bhp()),
+                                .padding(top = 87f.bhp()),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = if (selectedTab == "기록") "현재 운동 기록이 비어있어요!" else "현재 루틴이 비어있어요!",
-                                style = DungGeunMo20.copy(fontSize = 20f.isp()),
-                                textAlign = TextAlign.Center
-                            )
+                            Box(
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.img_diet_maintextballoon),
+                                    contentDescription = "text balloon",
+                                    modifier = Modifier.size(270f.wp(), 96f.bhp()),
+                                    contentScale = ContentScale.FillBounds
+                                    )
+
+                                Text(
+                                    text = if (selectedTab == "기록") "현재 운동 기록이 비어있어요!" else "현재 루틴이 비어있어요!",
+                                    style = DungGeunMo20.copy(fontSize = 20f.isp()),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(bottom = 20f.bhp())
+                                )
+                            }
+
                             Spacer(Modifier.height(16f.bhp()))
                             HamcoachGif(
                                 num = 1,
