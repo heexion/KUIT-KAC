@@ -2,8 +2,6 @@ package com.konkuk.kuit_kac.presentation.login.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -34,6 +32,7 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.core.util.modifier.noRippleClickable
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.presentation.onboarding.OnboardingViewModel
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17

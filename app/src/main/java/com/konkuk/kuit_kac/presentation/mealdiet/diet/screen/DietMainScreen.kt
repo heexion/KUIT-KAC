@@ -234,22 +234,22 @@ fun DietMainScreen(
                             num = 1,
                             ellipseLength = 182.0,
                             mascotLength = 160.0,
-                            onClick = {
-                                navController.navigate(Route.DietExist.route)
-                            }
+//                            onClick = {
+//                                navController.navigate(Route.DietExist.route)
+//                            }
                         )
                     }
-                    EllipseNyam(
-                        modifier = Modifier
-                            .offset(x = 87f.wp(), y = 174f.bhp())
-                            .noRippleClickable(
-                                onClick = {
-                                    navController.navigate(Route.DietExist.route)
-                                }
-                            ),
-                        ellipseLength = 182.0,
-                        mascotLength = 109.0
-                    )
+//                    EllipseNyam(
+//                        modifier = Modifier
+//                            .offset(x = 87f.wp(), y = 174f.bhp())
+//                            .noRippleClickable(
+//                                onClick = {
+//                                    navController.navigate(Route.DietExist.route)
+//                                }
+//                            ),
+//                        ellipseLength = 182.0,
+//                        mascotLength = 109.0
+//                    )
                 }
             }
             Box(

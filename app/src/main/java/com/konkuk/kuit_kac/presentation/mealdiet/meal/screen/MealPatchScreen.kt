@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -77,8 +79,12 @@ fun MealPatchScreen(
     LaunchedEffect(Unit) {
         dietViewModel.getDiet(userId = 1)
     }
+
     val dietList = dietViewModel.getDietState.value
     val state = !dietList.isNullOrEmpty()
+
+
+
     val cal = 677;
     val resolvedFoods = remember { mutableStateOf<List<FoodWithQuantity>>(emptyList()) }
     Log.d("MealPatch", "${dietList}")
@@ -150,13 +156,13 @@ fun MealPatchScreen(
                         .noRippleClickable {
                             navController.navigate(Route.DietCreate.route)
                         },
-                    value = "식단 기록"
+                    value = "식단 기록",
+                    isSelected = true
                 )
                 SelectButton2(
                     modifier = Modifier
                         .size(174f.wp(), 49f.bhp()),
-                    value = "나만의 식단",
-                    isSelected = true
+                    value = "나만의 식단"
                 )
             }
         }
@@ -171,61 +177,57 @@ fun MealPatchScreen(
                         )
                 ),
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-//                EllipseNyam(ellipseLength = 137.54, mascotLength = 82.37,
-//                    modifier = Modifier
-//                        .offset(134f.wp(),94f.bhp()))
-
-                Row(
+            if (state) {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .offset(y = 94f.bhp()),
-                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    HamcoachGif(
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .offset(y = 94f.bhp()),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        HamcoachGif(
+                            num = 1,
+                            ellipseLength = 137.54,
+                            mascotLength = 112.0,
+                        )
+                    }
 
-                        num = 1,
-                        ellipseLength = 137.54,
-                        mascotLength = 112.0,
+                    Image(
+                        painter = painterResource(R.drawable.img_diet_maintextballoon),
+                        contentDescription = "text balloon",
+                        modifier = Modifier
+                            .offset(66f.wp(), 25.3f.bhp())
+                            .size(282f.wp(), 110f.bhp())
+                    )
+                    Text(
+                        modifier = Modifier
+                            .offset(79.2f.wp(), 52.6f.bhp()),
+                        text = "너만의 식단들이야!\n어떤 식단을 진행했는지 골라줘!",
+                        textAlign = TextAlign.Center,
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp(),
+                        color = Color(0xFF000000)
                     )
                 }
-
-                Image(
-                    painter = painterResource(R.drawable.img_diet_maintextballoon),
-                    contentDescription = "text balloon",
-                    modifier = Modifier
-                        .offset(66f.wp(), 25.3f.bhp())
-                        .size(282f.wp(), 110f.bhp())
-                )
-                Text(
-                    modifier = Modifier
-                        .offset(79.2f.wp(), 52.6f.bhp()),
-                    text = "너만의 식단들이야!\n어떤 식단을 진행했는지 골라줘!",
-                    textAlign = TextAlign.Center,
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    color = Color(0xFF000000)
-                )
             }
+
             if (state) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 108f.bhp())
                         .background(
-                            brush =
-                                Brush.radialGradient(
-                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                                    radius = 2000f
-                                )
+                            brush = Brush.radialGradient(
+                                colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
+                                radius = 2000f
+                            )
                         ),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         DietSwipeCardPager(
@@ -236,16 +238,12 @@ fun MealPatchScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(38f.bhp()))
-// 하단 추가 버튼
                     DefaultButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 24f.wp()),
                         onClick = {
                             val selected = resolvedFoods.value
-                            val currentPage1 = pagerState.currentPage
-                            val selectedDiet = dietList?.get(currentPage1)
-
                             mealViewModel.addFoodsFromDiet(selected)
                             navController.navigate(Route.MealTemp.route)
                         },
@@ -255,52 +253,105 @@ fun MealPatchScreen(
                     )
                 }
             } else {
-                Box(
-                    modifier = Modifier
-                        .size(364f.wp(), 458f.bhp())
-                        .offset(y = 105f.bhp(), x = 24f.wp())
-                        .clip(RoundedCornerShape(20f.wp()))
-                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
-                        .background(
-                            brush = Brush.radialGradient(
-                                colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
-                                radius = 1200f
-                            )
-                        )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.img_diet_maintextballoon),
-                        contentDescription = "text balloon",
-                        modifier = Modifier
-                            .size(219f.wp(), 83f.bhp())
-                            .offset(x = 73f.wp(), y = 101f.bhp())
-                    )
+                    // "나만의 식단 생성하기" 버튼
                     Box(
                         modifier = Modifier
-                            .size(114f.wp(), 44f.bhp())
-                            .offset(135.27f.wp(), 113f.bhp()),
+                            .padding(top = 28f.bhp())
+                            .zIndex(1f)
+                            .size(364f.wp(), 49f.bhp())
+                            .clip(RoundedCornerShape(24f.bhp()))
+                            .border(1.dp, Color.Black, RoundedCornerShape(24f.bhp()))
+                            .noRippleClickable { navController.navigate(Route.DietCreate.route) },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "현재식단이 비어있어요!",
-                            style = DungGeunMo17,
-                            fontSize = 17f.isp(),
-                            color = Color(0xFF000000),
-                            textAlign = TextAlign.Center
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.img_diet_cross),
+                                contentDescription = "plus",
+                                modifier = Modifier.size(14.2f.wp(), 14.2f.bhp())
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = "나만의 식단 생성하기",
+                                style = DungGeunMo17,
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000)
+                            )
+                        }
                     }
 
-                    EllipseNyam(
+
+                    Box(
                         modifier = Modifier
-                            .offset(x = 87f.wp(), y = 174f.bhp())
-                            .noRippleClickable(
+                            .padding(top = 20f.bhp())
+                            .size(364f.wp(), 458f.bhp())
+                            .clip(RoundedCornerShape(20f.wp()))
+                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(20f.wp()))
+                            .background(
+                                brush = Brush.radialGradient(
+                                    colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFF4C1)),
+                                    radius = 1200f
+                                )
+                            )
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.img_diet_maintextballoon),
+                            contentDescription = "text balloon",
+                            modifier = Modifier
+                                .size(219f.wp(), 83f.bhp())
+                                .offset(x = 73f.wp(), y = 101f.bhp())
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(114f.wp(), 44f.bhp())
+                                .offset(130.27f.wp(), 113f.bhp()),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "현재 식단이\n비어있어요!",
+                                style = DungGeunMo17,
+                                fontSize = 17f.isp(),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                        // 마스코트/버튼
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            HamcoachGif(
+                                modifier = Modifier.offset(y = 174f.bhp()),
+                                num = 1,
+                                ellipseLength = 182.0,
+                                mascotLength = 160.0,
                                 onClick = {
                                     navController.navigate(Route.DietExist.route)
                                 }
-                            ),
-                        ellipseLength = 182.0,
-                        mascotLength = 109.0
-                    )
+                            )
+                        }
+
+                        EllipseNyam(
+                            modifier = Modifier
+                            .offset(x = 87f.wp(), y = 174f.bhp())
+//                            .noRippleClickable(
+//                                onClick = {
+//                                    navController.navigate(Route.DietExist.route)
+//                                }
+//                            )
+                        ,
+                            ellipseLength = 182.0,
+                            mascotLength = 109.0
+                        )
+                    }
                 }
             }
             Box(
@@ -312,6 +363,7 @@ fun MealPatchScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

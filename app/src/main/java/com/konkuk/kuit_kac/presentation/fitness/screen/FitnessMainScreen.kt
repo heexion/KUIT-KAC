@@ -237,7 +237,7 @@ fun FitnessMainScreen(
                                 num = 1,
                                 ellipseLength = 182.0,
                                 mascotLength = 156.0,
-                                onClick = { navController.navigate(Route.FitnessExist.route) }
+//                                onClick = { navController.navigate(Route.FitnessExist.route) }    // 안 쓰이는 화면
                             )
                         }
                     }

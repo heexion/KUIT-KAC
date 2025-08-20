@@ -4,6 +4,7 @@ package com.konkuk.kuit_kac.presentation.mealdiet.meal.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,6 +70,8 @@ fun MealTimeScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
+
+
     // 오전/오후
     val amPmState = rememberLazyListState(initialFirstVisibleItemIndex = amPmList.indexOf(selectedAmPm))
     LaunchedEffect(amPmState.isScrollInProgress) {
@@ -81,6 +84,8 @@ fun MealTimeScreen(
             selectedAmPm = amPmList[centerIndex]
         }
     }
+
+    val flingBehavior = rememberSnapFlingBehavior(lazyListState = amPmState)
 
     // 시/분 무한 리스트
     val hourItems = List(1000) { hoursList[it % hoursList.size] }
@@ -196,6 +201,7 @@ fun MealTimeScreen(
                     // 오전/오후
                     LazyColumn(
                         state = amPmState,
+                        flingBehavior = flingBehavior,
                         modifier = Modifier
                             .height(120f.bhp())
                             .weight(1f),
@@ -216,7 +222,7 @@ fun MealTimeScreen(
                                 )
                             }
                         }
-                        item { Spacer(modifier = Modifier.height(40f.bhp())) }
+                        item { Spacer(modifier = Modifier.height(50f.bhp())) }
                     }
 
                     Spacer(modifier = Modifier.width(8f.wp()))
@@ -304,7 +310,7 @@ fun MealTimeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(40f.bhp()))
+            Spacer(modifier = Modifier.height(20f.bhp()))
 
             DefaultButton(
                 modifier = Modifier
