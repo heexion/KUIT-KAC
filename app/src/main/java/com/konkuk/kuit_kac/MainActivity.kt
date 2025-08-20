@@ -46,7 +46,6 @@ import com.konkuk.kuit_kac.local.parse.loadFitness
 import com.konkuk.kuit_kac.local.parse.loadFood
 import com.konkuk.kuit_kac.notification.NotificationHelper
 import com.konkuk.kuit_kac.notification.ReminderScheduler
-import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
@@ -102,9 +101,9 @@ class MainActivity : ComponentActivity() {
             }
             startActivity(intent)
         }
-        if (!isNotificationServiceEnabled(this)) {
-            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-        }
+//        if (!isNotificationServiceEnabled(this)) {
+//            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+//        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
