@@ -67,7 +67,7 @@ fun LoginEmailScreen(
     onboardingViewModel.setNickname("닉네임")
     //TODO: nickname 여기서 받으면 여기서 수정해주세요
     val email: String = "user_id@naver.com"
-    var showSheet by remember { mutableStateOf(true) }
+    var showSheet by remember { mutableStateOf(false) }
     var agreeAll by remember { mutableStateOf(false) }
     var agreeService by remember { mutableStateOf(false) }
     var agreePrivacy by remember { mutableStateOf(false) }
@@ -165,7 +165,10 @@ fun LoginEmailScreen(
         }
 
         DefaultButton(
-            onClick = { showSheet = true },
+            onClick = {
+//                showSheet = true
+                navController.navigate(Route.OnboardingStart.route)
+            },
             value = "다음으로",
             buttonHeight = 70f,
             isOrange = true,

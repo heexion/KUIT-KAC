@@ -15,6 +15,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,6 +49,7 @@ import com.konkuk.kuit_kac.notification.NotificationHelper
 import com.konkuk.kuit_kac.notification.ReminderScheduler
 import com.konkuk.kuit_kac.notification.isNotificationServiceEnabled
 import com.konkuk.kuit_kac.presentation.component.BottomBar
+//import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
 import com.konkuk.kuit_kac.presentation.navigation.KacNavGraph
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.KUITKACTheme
@@ -61,6 +64,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var fitnessDao: FitnessDao
+
+//    private val loginViewModel: LoginViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -314,7 +320,6 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                 ) {
-
                     Scaffold(
                         bottomBar = {
                             // 특정 화면들에서 bottomBar 보이지 않게 설정
@@ -382,6 +387,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
