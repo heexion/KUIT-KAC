@@ -1,21 +1,14 @@
 package com.konkuk.kuit_kac
 
 //import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PowerManager
-import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -68,39 +61,39 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        val requestPostNoti = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { granted ->
-            if (!granted) {
-                Toast.makeText(this, "알림 권한이 필요해요.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPostNoti.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val pm = getSystemService(POWER_SERVICE) as PowerManager
-            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-                runCatching {
-                    startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                        data = Uri.parse("package:$packageName")
-                    })
-                }
-            }
-        }
-        val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
-        if (!notificationsEnabled) {
-            Toast.makeText(this, "앱 알림이 꺼져 있어요. 설정에서 켜주세요!", Toast.LENGTH_LONG).show()
-            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-            }
-            startActivity(intent)
-        }
+//        val requestPostNoti = registerForActivityResult(
+//            ActivityResultContracts.RequestPermission()
+//        ) { granted ->
+//            if (!granted) {
+//                Toast.makeText(this, "알림 권한이 필요해요.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+//                != PackageManager.PERMISSION_GRANTED
+//            ) {
+//                requestPostNoti.launch(Manifest.permission.POST_NOTIFICATIONS)
+//            }
+//        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            val pm = getSystemService(POWER_SERVICE) as PowerManager
+//            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+//                runCatching {
+//                    startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+//                        data = Uri.parse("package:$packageName")
+//                    })
+//                }
+//            }
+//        }
+//        val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
+//        if (!notificationsEnabled) {
+//            Toast.makeText(this, "앱 알림이 꺼져 있어요. 설정에서 켜주세요!", Toast.LENGTH_LONG).show()
+//            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+//                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+//            }
+//            startActivity(intent)
+//        }
 //        if (!isNotificationServiceEnabled(this)) {
 //            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
 //        }
