@@ -36,6 +36,7 @@ fun DietMultipleNutritionBar(
     fat: Float,
 ) {
     data class Seg(val key: String, val value: Float, val color: Color)
+
     val all = listOf(
         Seg("탄", carb, Color(0xFFFFD387)),
         Seg("단", protein, Color(0xFFCBF38E)),
@@ -65,7 +66,11 @@ fun DietMultipleNutritionBar(
                         .height(19.42188f.bhp())
                         .clip(RoundedCornerShape(9.71094f.bhp()))
                         .background(color = s.color)
-                        .border(width = 1.dp, color = Color(0xFF000000), RoundedCornerShape(9.71094f.bhp()))
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFF000000),
+                            RoundedCornerShape(9.71094f.bhp())
+                        )
                 )
                 Box(
                     modifier = Modifier
@@ -74,7 +79,7 @@ fun DietMultipleNutritionBar(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "${s.key} ${s.value}g",
+                        text = "${s.key} ${String.format("%.1f", s.value)}g",
                         textAlign = TextAlign.Center,
                         style = if (s.key == "탄") DungGeunMo12 else DungGeunMo15,
                         fontSize = 13f.isp(),
