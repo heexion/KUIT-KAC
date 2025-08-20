@@ -1,6 +1,11 @@
 package com.konkuk.kuit_kac.di
 
 import com.konkuk.kuit_kac.BuildConfig
+import com.konkuk.kuit_kac.data.login.AuthAuthenticator
+import com.konkuk.kuit_kac.data.login.AuthInterceptor
+import com.konkuk.kuit_kac.data.login.api.RefreshTokenApiService
+import com.konkuk.kuit_kac.data.login.api.UserApiService
+import com.konkuk.kuit_kac.data.login.repository.DataStoreRepository
 import com.konkuk.kuit_kac.data.service.CoachReportApiService
 import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.data.service.HomeSummaryApiService
@@ -14,6 +19,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,6 +29,35 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(dataStoreRepository: DataStoreRepository): Interceptor {
+        return AuthInterceptor(dataStoreRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthAuthenticator(
+        dataStoreRepository: DataStoreRepository,
+        refreshTokenService: dagger.Lazy<RefreshTokenApiService>
+    ): AuthAuthenticator {
+        return AuthAuthenticator(
+            dataStoreRepository = dataStoreRepository,
+            refreshTokenApiService = refreshTokenService
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRefreshTokenApiService(retrofit: Retrofit): RefreshTokenApiService =
+        retrofit.create(RefreshTokenApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService {
+        return retrofit.create(UserApiService::class.java)
+    }
 
     @Provides
     @Singleton
@@ -71,19 +106,25 @@ object ApiModule {
         retrofit.create(OnboardingService::class.java)
 
 }
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator
+    ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(logging)
+            .authenticator(authAuthenticator)
             .build()
     }
 

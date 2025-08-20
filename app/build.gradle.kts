@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.kotlinx.metadata.jvm)
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.hilt.common)
     implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
@@ -134,5 +136,9 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-gif:2.5.0")
+
+    //datastore
+    implementation(libs.androidx.datastore.preferences)
+
 
 }

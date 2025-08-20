@@ -1,5 +1,8 @@
 package com.konkuk.kuit_kac.di
 
+import android.content.Context
+import com.konkuk.kuit_kac.data.login.dataStore
+import com.konkuk.kuit_kac.data.login.repository.DataStoreRepository
 import com.konkuk.kuit_kac.data.service.CoachReportApiService
 import com.konkuk.kuit_kac.data.service.DietService
 import com.konkuk.kuit_kac.data.service.HomeSummaryApiService
@@ -32,6 +35,7 @@ import com.konkuk.kuit_kac.presentation.onboarding.OnboardingRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -87,6 +91,13 @@ object RepositoryModule {
     fun provideHomeWeightRepository(
         api: HomeWeightService
     ): HomeWeightRepository = HomeWeightRepositoryImpl(api)
+
+    @Provides
+    @Singleton
+    fun provideDataStoreRepository(@ApplicationContext context: Context): DataStoreRepository {
+        return DataStoreRepository(context.dataStore)
+    }
+
     @Provides
     @Singleton
     fun provideOnboardingRepository(

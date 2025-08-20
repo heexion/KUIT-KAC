@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
+import com.konkuk.kuit_kac.data.login.dataStore
 import com.konkuk.kuit_kac.component.Loading
 import com.konkuk.kuit_kac.component.NyamNyamNyom
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
@@ -149,11 +150,15 @@ fun KacNavGraph(
     val context = LocalContext.current
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
     val isFirstLaunch = prefs.getBoolean("isFirstLaunch", true)
+    val dataStore = context.dataStore
 
     NavHost(
         navController = navController,
         startDestination = if (isFirstLaunch) "OnboardingGraph" else Route.Home.route
     ) {
+
+//        composable("debug") { DebugScreen(navController, dataStore) }
+
         // 온보딩 스타트
         /*composable(route = OnboardingStart.route) {
             OnboardingStartScreen(
