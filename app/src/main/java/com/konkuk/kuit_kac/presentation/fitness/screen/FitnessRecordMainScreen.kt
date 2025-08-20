@@ -40,6 +40,7 @@ import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineViewModel
+import com.konkuk.kuit_kac.presentation.fitness.component.FitnessItemData
 import com.konkuk.kuit_kac.presentation.fitness.component.FitnessRecordCard
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.diet.component.SelectButton2
@@ -60,15 +61,46 @@ fun FitnessRecordMainScreen(
     }
     val routine = routineViewModel.getRoutineRecordState.value
     val latestRoutine = routine?.firstOrNull()
-    val routineFitnessItems = latestRoutine?.routineExerciseProfiles?.map { profile ->
+
+    val profiles = latestRoutine?.routineExerciseProfiles ?: emptyList()
+    val routineFitnessItems = profiles.map { p ->
         Fitness(
-            id = profile.exercise.id,
-            name = profile.exercise.name,
-            targetMuscleGroup = profile.exercise.targetMuscleGroup,
-            metValue = profile.exercise.metValue.toDouble(),
+            id = p.exercise.id,
+            name = p.exercise.name,
+            targetMuscleGroup = p.exercise.targetMuscleType, // record DTO
+            metValue = p.exercise.metValue.toDouble(),
             type = 0
         )
-    } ?: emptyList()
+    }
+
+    fun intensityFactor(i: String): Int = when (i) {
+        "느슨함" -> 3
+        "보통"   -> 5
+        "힘듦", "힘듬" -> 8
+        else -> 5
+    }
+    fun muscleIcon(type: String): Int = when (type) {
+        "하체", "lower"    -> R.drawable.ic_lowerbody
+        "상체", "upper"    -> R.drawable.ic_shoulders
+        "전신", "full"     -> R.drawable.ic_core
+        "등", "back"       -> R.drawable.ic_back
+        "가슴", "chest"    -> R.drawable.ic_chest
+        "어깨", "shoulder" -> R.drawable.ic_shoulders
+        "팔", "arm"        -> R.drawable.ic_arms
+        else               -> R.drawable.ic_lowerbody
+    }
+    val cardItems = profiles.map { p ->
+        val setCount = p.routineSets.size
+        val minutes = p.routineDetail.time
+        val kcal = minutes * intensityFactor(p.routineDetail.intensity)
+        FitnessItemData(
+            imageRes = muscleIcon(p.exercise.targetMuscleType),
+            name = p.exercise.name,
+            setCount = setCount,
+            kcal = kcal,
+            onDeleteClick = {}
+        )
+    }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             // 상단 배경
@@ -275,8 +307,9 @@ fun FitnessRecordMainScreen(
 
                     FitnessRecordCard(
                         title = "오늘의 운동!",
-                        fitnessItems = routineFitnessItems,
+                        items = cardItems,
                         onEditClick = {
+                            // keep your existing edit flow
                             routineViewModel.setSelectedRoutines(routineFitnessItems)
                             routineViewModel.setName(latestRoutine?.name ?: "")
                             routineViewModel.setRoutineId(latestRoutine?.id)

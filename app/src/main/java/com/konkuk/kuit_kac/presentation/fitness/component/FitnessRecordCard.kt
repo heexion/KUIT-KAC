@@ -48,7 +48,7 @@ data class FitnessItemData(
 @Composable
 fun FitnessRecordCard(
     title: String,
-    fitnessItems: List<Fitness>,
+    items: List<FitnessItemData>,
     onEditClick: () -> Unit,
     navController: NavHostController,
     isEditable: Boolean = false
@@ -113,36 +113,34 @@ fun FitnessRecordCard(
         }
 
         // 운동 항목 리스트 (배경 포함)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(id = R.drawable.bg_fitnessrecordcard),
                 contentDescription = "운동 리스트 배경",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .matchParentSize()
-                    .clip(RoundedCornerShape(
-                        bottomStart = 16f.bhp(),
-                        bottomEnd = 16f.bhp()
-                    ))
+                    .clip(
+                        RoundedCornerShape(
+                            bottomStart = 16f.bhp(),
+                            bottomEnd = 16f.bhp()
+                        )
+                    )
             )
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16f.wp()), // 이미지와 텍스트 간 여백
+                    .padding(16f.wp()),
                 verticalArrangement = Arrangement.spacedBy(16f.bhp())
             ) {
-                fitnessItems.forEachIndexed { index, item ->
+                items.forEachIndexed { index, item ->
                     FitnessItemCard(
                         FitnessNum = index,
-                        image = R.drawable.ic_lowerbody,
+                        image = item.imageRes,
                         FitnessName = item.name,
-                        FitnessAmount = 2,
-                        FitnessKcal = 110,
-                        onDeleteClick = {}
+                        FitnessAmount = item.setCount,
+                        FitnessKcal = item.kcal,
+                        onDeleteClick = item.onDeleteClick
                     )
                 }
             }

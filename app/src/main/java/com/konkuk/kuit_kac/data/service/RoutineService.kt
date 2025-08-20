@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.data.service
 
 import com.konkuk.kuit_kac.data.request.RecordRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineRequestDto
+import com.konkuk.kuit_kac.data.response.RecordResponseDto
 import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -31,7 +32,7 @@ interface RoutineService {
     @GET("routines/records/profiles")
     suspend fun getRoutineRecord(
         @Query("userId") userId: Int
-    ): Response<List<RoutineResponseDto>>
+    ): Response<List<RecordResponseDto>>
 
     @GET("routines/template/profiles")
     suspend fun getRoutineTemplate(

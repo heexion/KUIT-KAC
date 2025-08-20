@@ -57,8 +57,8 @@ data class RecordRequestDto(
     val name: String,
     @SerialName("routineType")
     val routineType: String,
-    @SerialName("routineExerciseProfiles")
-    val routineExerciseProfiles: List<ExerciseRequestDto>
+    @SerialName("routineExercises")
+    val routineExercises: List<ExerciseRequestDto>
 )
 @Serializable
 data class ExerciseRequestDto(

@@ -82,9 +82,9 @@ fun BottomBar(
                                 navController.navigate(Route.Home.route)
                             }
 
-                            else -> {
-                                selectedRoute.value = Route.Fitness.route
-                                navController.navigate(Route.Fitness.route)
+                            else -> { //TODO 다시 바꿔놔야 된다
+                                selectedRoute.value = "RecordEditGraph"
+                                navController.navigate("RecordEditGraph")
                             }
                         }
                     }

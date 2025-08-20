@@ -13,6 +13,7 @@ import com.konkuk.kuit_kac.data.request.RecordRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineDetailDto
 import com.konkuk.kuit_kac.data.request.RoutineRequestDto
 import com.konkuk.kuit_kac.data.request.RoutineSetsDto
+import com.konkuk.kuit_kac.data.response.RecordResponseDto
 import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import com.konkuk.kuit_kac.local.Fitness
 import com.konkuk.kuit_kac.presentation.fitness.RoutineRepository
@@ -35,8 +36,8 @@ class RoutineViewModel @Inject constructor(
     val routineName: State<String?> get() = _routineName
     private val _routineType = mutableStateOf<String?>(null)
     val routineType: State<String?> get() = _routineType
-    private val _getRoutineRecordState = mutableStateOf<List<RoutineResponseDto>?>(null)
-    val getRoutineRecordState: State<List<RoutineResponseDto>?> get() = _getRoutineRecordState
+    private val _getRoutineRecordState = mutableStateOf<List<RecordResponseDto>?>(null)
+    val getRoutineRecordState: State<List<RecordResponseDto>?> get() = _getRoutineRecordState
     private val _getRoutineRecordSuccessState = mutableStateOf<Boolean?>(null)
     val getRoutineRecordSuccessState: State<Boolean?> get() = _getRoutineRecordSuccessState
     private val _routineId = mutableStateOf<Int?>(null)
@@ -47,29 +48,38 @@ class RoutineViewModel @Inject constructor(
     private val _exerciseRecords = androidx.compose.runtime.mutableStateMapOf<Int, ExerciseRecord>()
     val exerciseRecords: Map<Int, ExerciseRecord> get() = _exerciseRecords
 
+    private fun RoutineResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
+        Fitness(
+            id = exercise.id,
+            name = exercise.name,
+            targetMuscleGroup = exercise.targetMuscleGroup,
+            metValue = exercise.metValue,
+            type = 0
+        )
+    private fun RecordResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
+        Fitness(
+            id = exercise.id,
+            name = exercise.name,
+            targetMuscleGroup = exercise.targetMuscleType,
+            metValue = exercise.metValue.toDouble(),
+            type = 0
+        )
+
     init {
         val idArg = savedStateHandle.get<Int>("routineId") ?: -1
         val nameArg = savedStateHandle.get<String>("name") ?: ""
         _routineId.value = if (idArg >= 0) idArg else null
         _initialName.value = if (nameArg.isNotBlank()) nameArg else null
         _routineName.value = _initialName.value
+
         _routineId.value?.let { id ->
             viewModelScope.launch {
                 runCatching {
-                    // Option A: fetch all templates then pick by id
                     val resp = routineRepository.getRoutineTemplate(userId = 1)
-                    resp.body()?.firstOrNull { it.id == id }
-                        ?: error("No template $id")
+                    resp.body()?.firstOrNull { it.id == id } ?: error("No template $id")
                 }.onSuccess { template ->
                     template.routineExerciseProfiles.forEach { profile ->
-                        val f = Fitness(
-                            id = profile.exercise.id,
-                            name = profile.exercise.name,
-                            targetMuscleGroup = profile.exercise.targetMuscleGroup ?: "가슴",
-                            metValue = profile.exercise.metValue.toDouble(),
-                            type = 0
-                        )
-                        _selectedRoutines.add(f)
+                        _selectedRoutines.add(profile.toFitness())
                     }
                     _routineType.value = template.routineType
                 }.onFailure {
@@ -320,7 +330,7 @@ class RoutineViewModel @Inject constructor(
                         name = routineName,
                         routineType = routineType,
                         userId = 1,
-                        routineExerciseProfiles = exercises
+                        routineExercises = exercises
                     )
                 )
             }.onSuccess { resp ->
