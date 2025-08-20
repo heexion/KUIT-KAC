@@ -152,7 +152,6 @@ class MainActivity : ComponentActivity() {
                     Route.PlanIPSearch.route,
                     Route.FitnessSearch.route,
                     Route.FitnessRoutineSearch.route,
-                    Route.FitnessRecordMain.route,
 
 
                     // 온보딩 화면들
@@ -305,7 +304,8 @@ class MainActivity : ComponentActivity() {
                     Route.DietCreate.route,
                     Route.Fitness.route,
                     Route.FitnessExist.route,
-                    Route.MealExist.route
+                    Route.FitnessRecordMain.route,
+                    Route.MealExist.route,
                 )
 
                 Box(
