@@ -64,7 +64,7 @@ fun PlanCalendar(
     val firstDayOfMonth = remember(currentMonth) { currentMonth.atDay(1) }
     val lastDayOfMonth  = remember(currentMonth) { currentMonth.atEndOfMonth() }
     val startDayOfWeek  = firstDayOfMonth.dayOfWeek.value % 7
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var selectedDate by remember(currentMonth) { mutableStateOf<LocalDate?>(null) }
     val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
     var blueClicked = remember { mutableStateOf(false) }
     var pinkClicked = remember { mutableStateOf(false) }

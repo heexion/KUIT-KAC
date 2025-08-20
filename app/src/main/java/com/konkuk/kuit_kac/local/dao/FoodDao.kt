@@ -28,7 +28,12 @@ interface FoodDao {
 
     @Query("SELECT * FROM food WHERE name = :name")
     suspend fun getFood(name: String): Food?
+
+    // NEW
+    @Query("SELECT MAX(id) FROM food")
+    suspend fun getMaxId(): Int?
 }
+
 
 object HangulSearch {
 

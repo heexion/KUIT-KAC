@@ -45,6 +45,7 @@ import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanCalendar
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.PlanConfirmButton
+import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
 import java.time.LocalDate
@@ -55,23 +56,14 @@ fun PlanCheckScreen(
     navController: NavHostController,
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    // Tags for the *currently loaded* month from your VM
     val taggedDates by mealViewModel.monthTags
-
-    // Selected date in the calendar
     var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(null) }
-
-    // Keep track of which month the calendar is showing, as a String "yyyy-MM" (safe for rememberSaveable)
     var yearMonthKey by rememberSaveable { mutableStateOf(java.time.YearMonth.now().toString()) }
     val displayedMonth = remember(yearMonthKey) { java.time.YearMonth.parse(yearMonthKey) }
 
-    // Fetch tags whenever the displayed month changes (e.g., 2025-08 -> 2025-09)
     LaunchedEffect(yearMonthKey) {
         mealViewModel.getMonthPlan(userId = 1, yearMonth = yearMonthKey)
     }
-
-    // Decide where to navigate based on selection (kept from your original logic)
-    val navigateValue = if (selectedDate == null) "plan_result" else "plan_in_person_add_complete"
 
     Box(
         modifier = Modifier
@@ -150,19 +142,15 @@ fun PlanCheckScreen(
                     ),
             ) {
                 Column(
-                    horizontalAlignment = Alignment.Start,
                     modifier = Modifier.padding(horizontal = 17.5f.wp(), vertical = 22.98f.bhp())
                 ) {
                     PlanCalendar(
-                        // show tags for the month currently loaded from VM
                         taggedDATES = taggedDates,
                         isTagDetailShow = true,
-                        // tell parent which date was tapped
                         onDateSelected = { date ->
                             selectedDate = date
                             date?.let { mealViewModel.setPlanDate(it) }
                         },
-                        // NEW: notify when user navigates months (prev/next)
                         currentMonth = displayedMonth,
                         onMonthChanged = { newMonth ->
                             selectedDate = null
@@ -172,10 +160,18 @@ fun PlanCheckScreen(
                 }
 
                 Column {
+
                     PlanConfirmButton(
                         modifier = Modifier.padding(start = 14.5f.wp(), end = 14.5f.wp()),
                         isAvailable = true,
-                        onClick = { navController.navigate(navigateValue) },
+                        onClick = {
+                            val date = selectedDate
+                            if (date != null) {
+                                navController.navigate("PlanIPGraph/day/$date")
+                            } else {
+                                navController.navigate(Route.PlanResult.route)
+                            }
+                        },
                         value = "확인하기",
                         height = 65f
                     )

@@ -1,10 +1,12 @@
 package com.konkuk.kuit_kac.data.service
 
+import com.konkuk.kuit_kac.data.AiGeneralDto
 import com.konkuk.kuit_kac.data.request.AiRequestDto
 import com.konkuk.kuit_kac.data.request.MealRequestDto
 import com.konkuk.kuit_kac.data.request.PlanRequestDto
 import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
+import com.konkuk.kuit_kac.data.response.AiFoodResponse
 import com.konkuk.kuit_kac.data.response.MealResponseDto
 import com.konkuk.kuit_kac.data.response.PlanResponseDto
 import com.konkuk.kuit_kac.presentation.mealdiet.meal.MealRepository
@@ -73,7 +75,16 @@ interface MealService {
     @POST("ai/diets")
     suspend fun postAi(
         @Body request: AiRequestDto
+    ): Response<AiGeneralDto>
+    @POST("ai/diets/create")
+    suspend fun createAi(
+        @Body request: AiGeneralDto
     ): Response<Unit>
+
+    @GET("foods")
+    suspend fun getNewAiFood(
+
+    ): Response<List<AiFoodResponse>>
 
     @GET("diets/activities/months")
     suspend fun getMonthPlan(

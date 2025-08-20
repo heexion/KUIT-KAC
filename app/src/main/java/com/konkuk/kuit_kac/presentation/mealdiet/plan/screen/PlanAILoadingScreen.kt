@@ -1,44 +1,51 @@
 package com.konkuk.kuit_kac.presentation.diet.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.kuit_kac.component.EllipseNyam
-import com.konkuk.kuit_kac.core.util.context.hp
-import com.konkuk.kuit_kac.core.util.context.isp
+import com.konkuk.kuit_kac.core.util.context.*
 import com.konkuk.kuit_kac.presentation.home.component.HamcoachGif
+import com.konkuk.kuit_kac.presentation.mealdiet.meal.viewmodel.MealViewModel
+import com.konkuk.kuit_kac.presentation.navigation.Route
+import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
-import kotlinx.coroutines.delay
 
-// 입력하기 후 분석 화면
 @Composable
 fun PlanAILoadingScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    mealViewModel: MealViewModel = hiltViewModel()
 ) {
-    var isCompleted: Boolean
-
-    LaunchedEffect(Unit) {
-        delay(4000L) // 임시로 4초 대기 후 넘어가도록 함. TODO: 서버에서 분석 완료되면 넘어가도록 해야 함
-        isCompleted = true
-        if (isCompleted)
-            navController.navigate("plan_ai_complete")
+    val pipelineState = mealViewModel.aiPipelineState.value
+    val isError = pipelineState is MealViewModel.AiPipelineState.Error
+    LaunchedEffect(pipelineState) {
+        when (pipelineState) {
+            is MealViewModel.AiPipelineState.Success -> {
+                navController.navigate("PlanCheckGraph") {
+                    popUpTo("plan_ai_loading") { inclusive = true }
+                }
+            }
+            else -> Unit
+        }
     }
 
     Box(
@@ -60,15 +67,6 @@ fun PlanAILoadingScreen(
                 .padding(top = 20f.hp())
                 .align(Alignment.TopCenter)
         )
-
-//        EllipseNyam(
-//            modifier = Modifier
-//                .align(Alignment.TopCenter)
-//                .padding(top = 212.5f.hp()),
-//            mascotLength = 158.55273,
-//            ellipseLength = 263.57922,
-//            isMascotAngry = true
-//        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -92,71 +90,84 @@ fun PlanAILoadingScreen(
                 .padding(top = 454.76f.hp()),
         )
     }
-    //the commented one will be the modal
-    /*
-    Column(
-            modifier = Modifier
-                .size(364f.wp(),202f.bhp())
-                .align(Alignment.Center)
-                .clip(RoundedCornerShape(20f.bhp()))
-                .background(Color(0xFFFFF3C1))
-                .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp())),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(top = 38f.bhp()),
-                text = "식단 추천 중 오류가 발생했어!\n" +
-                        "다시 해볼래?",
-                style = DungGeunMo20,
-                fontSize = 20f.isp(),
-                textAlign = TextAlign.Center
+
+    if (isError) {
+        Dialog(
+            onDismissRequest = { /* block outside dismiss; force a choice */ },
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
             )
-            Row(
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 26f.bhp()),
-                horizontalArrangement = Arrangement.SpaceAround
+                    .size(364f.wp(), 202f.bhp())
+                    .clip(RoundedCornerShape(20f.bhp()))
+                    .background(Color(0xFFFFF3C1))
+                    .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
+                Text(
                     modifier = Modifier
-                        .size(126f.wp(),56f.bhp())
-                        .clip(RoundedCornerShape(16f.bhp()))
-                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp())),
-                    contentAlignment = Alignment.Center
-                ){
-                    Text(
-                        text = "재시도",
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp()
-                    )
-                }
-                Box(
+                        .padding(top = 38f.bhp()),
+                    text = "식단 추천 중 오류가 발생했어!\n다시 해볼래?",
+                    style = DungGeunMo20,
+                    fontSize = 20f.isp(),
+                    textAlign = TextAlign.Center
+                )
+                Row(
                     modifier = Modifier
-                        .size(126f.wp(),56f.bhp())
-                        .clip(RoundedCornerShape(16f.bhp()))
-                        .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
-                        .clickable{
-                            navController.navigate(Route.Home.route)
-                        },
-                    contentAlignment = Alignment.Center
-                ){
-                    Text(
-                        text = "그만두기",
-                        style = DungGeunMo17,
-                        fontSize = 17f.isp()
-                    )
+                        .fillMaxWidth()
+                        .padding(top = 26f.bhp()),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    // 재시도
+                    Box(
+                        modifier = Modifier
+                            .size(126f.wp(), 56f.bhp())
+                            .clip(RoundedCornerShape(16f.bhp()))
+                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
+                            .clickable {
+                                mealViewModel.runAiPipeline()
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "재시도",
+                            style = DungGeunMo17,
+                            fontSize = 17f.isp()
+                        )
+                    }
+
+                    // 그만두기
+                    Box(
+                        modifier = Modifier
+                            .size(126f.wp(), 56f.bhp())
+                            .clip(RoundedCornerShape(16f.bhp()))
+                            .border(1.dp, Color(0xFF000000), RoundedCornerShape(30f.bhp()))
+                            .clickable {
+                                navController.navigate(Route.Home.route) {
+                                    popUpTo("plan_ai_loading") { inclusive = true }
+                                }
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "그만두기",
+                            style = DungGeunMo17,
+                            fontSize = 17f.isp()
+                        )
+                    }
                 }
             }
         }
-     */
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun PlanAILoadingScreenPreview() {
     val navController = rememberNavController()
-    PlanAILoadingScreen(
-        navController = navController
-    )
+    PlanAILoadingScreen(navController = navController)
 }

@@ -51,6 +51,7 @@ import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo15
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo20
+import java.time.LocalDate
 
 @Composable
 fun PlanIPTempScreen(
@@ -266,7 +267,10 @@ fun PlanIPTempScreen(
                     else{
                         mealViewModel.createPlan()
                     }
-                    navController.navigate("PlanIPGraph/plan_in_person_add?date=${mealViewModel.planDate.value}")
+                    val date = mealViewModel.planDate.value ?: LocalDate.now().toString()
+                    navController.navigate("PlanIPGraph/day/$date") {
+                        popUpTo("PlanIPGraph") { inclusive = false }
+                    }
                 },
             contentAlignment = Alignment.Center
         ) {

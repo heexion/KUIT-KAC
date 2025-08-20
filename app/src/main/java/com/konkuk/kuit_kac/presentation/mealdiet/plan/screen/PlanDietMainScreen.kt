@@ -130,7 +130,7 @@ fun PlanDietMainScreen(
             )
             DefaultButton(
                 onClick = {
-                    navController.navigate(Route.PlanCheck.route)
+                    navController.navigate("PlanCheckGraph")
                 },
                 value = "내 식단 계획 확인하기",
                 buttonHeight = 70f,

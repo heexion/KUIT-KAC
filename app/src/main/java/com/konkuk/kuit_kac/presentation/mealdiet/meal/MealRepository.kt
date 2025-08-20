@@ -1,10 +1,12 @@
 package com.konkuk.kuit_kac.presentation.mealdiet.meal
 
+import com.konkuk.kuit_kac.data.AiGeneralDto
 import com.konkuk.kuit_kac.data.request.AiRequestDto
 import com.konkuk.kuit_kac.data.request.MealRequestDto
 import com.konkuk.kuit_kac.data.request.PlanRequestDto
 import com.konkuk.kuit_kac.data.request.SimpleRequestDto
 import com.konkuk.kuit_kac.data.request.SnackRequestDto
+import com.konkuk.kuit_kac.data.response.AiFoodResponse
 import com.konkuk.kuit_kac.data.response.MealResponseDto
 import com.konkuk.kuit_kac.data.response.PlanResponseDto
 import com.konkuk.kuit_kac.data.service.MealService
@@ -23,8 +25,10 @@ interface MealRepository {
     suspend fun createPlan(request: PlanRequestDto): Response<Unit>
     suspend fun changePlan(dietId: Int, request: PlanRequestDto): Response<Unit>
     suspend fun getPlan(userId: Int): Response<List<PlanResponseDto>>
-    suspend fun postAi(request: AiRequestDto): Response<Unit>
+    suspend fun postAi(request: AiRequestDto): Response<AiGeneralDto>
+    suspend fun createAi(request: AiGeneralDto): Response<Unit>
     suspend fun getMonthPlan(userId: Int, yearMonth: String): Response<List<PlanResponseDto>>
+    suspend fun getNewAiFood(): Response<List<AiFoodResponse>>
 }
 
 class MealRepositoryImpl @Inject constructor(
@@ -69,11 +73,19 @@ class MealRepositoryImpl @Inject constructor(
         return api.getPlan(userId)
     }
 
-    override suspend fun postAi(request: AiRequestDto): Response<Unit> {
+    override suspend fun postAi(request: AiRequestDto): Response<AiGeneralDto> {
         return api.postAi(request)
+    }
+
+    override suspend fun createAi(request: AiGeneralDto): Response<Unit> {
+        return api.createAi(request)
     }
 
     override suspend fun getMonthPlan(userId: Int, yearMonth: String): Response<List<PlanResponseDto>> {
         return api.getMonthPlan(userId, yearMonth)
+    }
+
+    override suspend fun getNewAiFood(): Response<List<AiFoodResponse>> {
+        return api.getNewAiFood()
     }
 }

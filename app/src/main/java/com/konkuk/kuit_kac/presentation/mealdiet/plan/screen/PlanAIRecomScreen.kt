@@ -154,7 +154,7 @@ fun PlanAIRecomScreen(
                     modifier = Modifier.padding(18f.wp()),
                     taggedDATES = taggedDates,
                     onNavigateToDetail = {
-                        mealViewModel.postAi()
+                        mealViewModel.runAiPipeline()
                         navController.navigate("plan_ai_loading")
                     },
                     isTagButton = true,

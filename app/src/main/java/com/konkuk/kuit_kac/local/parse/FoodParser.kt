@@ -18,7 +18,6 @@ suspend fun loadFoods(context: Context): List<Food> {
             rowNum++
             if (row.isEmpty()) continue
 
-            // Strip BOM on first cell of first row if present
             if (rowNum == 1 && row[0].startsWith("\uFEFF")) {
                 row[0] = row[0].removePrefix("\uFEFF")
             }
@@ -38,7 +37,6 @@ suspend fun loadFoods(context: Context): List<Food> {
             val isProcessed = row[5].trim().toIntOrNull()
             if (isProcessed == null) { Log.w("CSV", "is_processed_food 파싱 실패 (line $rowNum): ${row.toList()}"); continue }
 
-            // Double fields (supports "3,5" and "3.5")
             val calorie = parseDouble(row[6])
             val carbohydrate = parseDouble(row[7])
             val protein = parseDouble(row[8])

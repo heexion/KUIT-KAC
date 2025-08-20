@@ -28,10 +28,8 @@ suspend fun loadFitness(context: Context): List<Fitness> {
             // Trim all fields
             val c = Array(row.size) { i -> row[i].trim() }
 
-            // Skip a header if present
             if (rowNum == 1 && (c[0].equals("id", true) || c[0].equals("name", true))) continue
 
-            // Case A: first col looks like an ID and we have at least 4 cols -> use first 4
             val idFromFirst = c[0].toIntOrNull()
             if (idFromFirst != null && c.size >= 4) {
                 val name = c[1]
@@ -47,11 +45,9 @@ suspend fun loadFitness(context: Context): List<Fitness> {
                 continue
             }
 
-            // Case B: old/other format: name, target, metValue, [extras...]
             if (c.size >= 3) {
                 val name = c[0]
                 val target = c[1]
-                // Find the first parsable double from col 2 onwards (works if you have 6 cols)
                 var met: Double? = null
                 var j = 2
                 while (j < c.size && met == null) {
@@ -62,8 +58,6 @@ suspend fun loadFitness(context: Context): List<Fitness> {
                     Log.w("CSV", "fitness parse fail (line $rowNum): ${c.toList()}"); continue
                 }
                 if (!seenNames.add(name)) continue
-
-                // Generate deterministic id from name (avoid collisions within this batch)
                 var genId = abs(name.hashCode())
                 while (!seenIds.add(genId)) genId = (genId + 1) and 0x7FFFFFFF
 

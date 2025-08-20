@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.kuit_kac.core.util.context.toDrawable
+import com.konkuk.kuit_kac.data.AiGeneralDto
 import com.konkuk.kuit_kac.data.request.AiDto
 import com.konkuk.kuit_kac.data.request.AiRequestDto
 import com.konkuk.kuit_kac.data.request.FoodRequestDto
@@ -52,6 +53,73 @@ class MealViewModel @Inject constructor(
             .atZone(java.time.ZoneId.of("Asia/Seoul"))
 
         return now.isAfter(next3AM)
+    }
+
+    sealed class AiPipelineState {
+        data object Idle : AiPipelineState()
+        data object Loading : AiPipelineState()
+        data class Success(val payload: AiGeneralDto) : AiPipelineState()
+        data class Error(val message: String) : AiPipelineState()
+    }
+
+    private val _aiPipelineState = mutableStateOf<AiPipelineState>(AiPipelineState.Idle)
+    val aiPipelineState: State<AiPipelineState> get() = _aiPipelineState
+
+    fun runAiPipeline() {
+        if (_aiPipelineState.value == AiPipelineState.Loading) return
+
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+        val activities: List<com.konkuk.kuit_kac.data.request.AiDto> =
+            _aiDateSlotTags.value.flatMap { (date, perSlot) ->
+                perSlot.map { (slot, tag) ->
+                    com.konkuk.kuit_kac.data.request.AiDto(
+                        dietDate = date.format(formatter),
+                        dietEntryType = when (tag) {
+                            PlanTagType.NONE         -> "없음"
+                            PlanTagType.EATING_OUT   -> "외식"
+                            PlanTagType.DRINKING     -> "술자리"
+                            PlanTagType.AI_RECOMMEND -> "AI추천"
+                        },
+                        dietType = slot.toApiLabel()
+                    )
+                }
+            }
+
+        val req = com.konkuk.kuit_kac.data.request.AiRequestDto(
+            dietActivities = activities
+        )
+
+        _aiPipelineState.value = AiPipelineState.Loading
+
+        viewModelScope.launch {
+            runCatching {
+                val resp = mealRepository.postAi(req)
+                if (!resp.isSuccessful) error("ai/diets failed: ${resp.code()} ${resp.message()}")
+                val body = resp.body() ?: error("ai/diets returned empty body")
+                val create = mealRepository.createAi(body)
+                if (!create.isSuccessful) error("ai/diets/create failed: ${create.code()} ${create.message()}")
+
+                runCatching {
+                    val foodsResp = mealRepository.getNewAiFood()
+                    if (foodsResp.isSuccessful) {
+                        val newFoods = foodsResp.body().orEmpty()
+                        foodRepository.addNewAiFoods(newFoods)
+                    } else {
+                        Log.w("AI", "getNewAiFood failed: ${foodsResp.code()} ${foodsResp.message()}")
+                    }
+                }.onFailure {
+                    Log.w("AI", "getNewAiFood exception: ${it.message}")
+                }
+
+                body
+            }.onSuccess { body ->
+                _postAiSuccessState.value = true
+                _aiPipelineState.value = AiPipelineState.Success(body)
+            }.onFailure { t ->
+                _postAiSuccessState.value = false
+                _aiPipelineState.value = AiPipelineState.Error(t.message ?: "Unknown error")
+            }
+        }
     }
     fun saveFastingStartTimeForType(mealType: String) {
         val key = "fasting_started_at_$mealType"
@@ -695,37 +763,6 @@ class MealViewModel @Inject constructor(
     private val _planDietType = mutableStateOf<String?>(null)
     val planDietType: State<String?> get() = _planDietType
 
-    fun postAi() {
-        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-        val activities: List<AiDto> = _aiDateSlotTags.value.flatMap { (date, perSlot) ->
-            perSlot.map { (slot, tag) ->
-                AiDto(
-                    dietDate = date.format(formatter),
-                    dietEntryType = when (tag) {
-                        PlanTagType.NONE         -> "없음"
-                        PlanTagType.EATING_OUT   -> "외식"
-                        PlanTagType.DRINKING     -> "술자리"
-                        PlanTagType.AI_RECOMMEND -> "AI추천"
-                    },
-                    dietType = slot.toApiLabel()
-                )
-            }
-        }
-
-        viewModelScope.launch {
-            runCatching {
-                mealRepository.postAi(
-                    AiRequestDto(userId = 1, dietActivities = activities)
-                )
-            }.onSuccess {
-                Log.d("API", "Success")
-                _postAiSuccessState.value = true
-            }.onFailure {
-                _postAiSuccessState.value = false
-                Log.e("postAi", it.message ?: "Unknown error")
-            }
-        }
-    }
 }
 
 data class FoodWithQuantity(

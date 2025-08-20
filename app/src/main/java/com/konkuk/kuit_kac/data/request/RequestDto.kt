@@ -148,8 +148,6 @@ data class WeightRequestDto(
 
 @Serializable
 data class AiRequestDto(
-    @SerialName("userId")
-    val userId: Int,
     @SerialName("dietActivities")
     val dietActivities: List<AiDto>
 )
