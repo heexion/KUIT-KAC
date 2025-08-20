@@ -60,17 +60,29 @@ fun HomeMainScreen(
     viewModel: HomeSummaryViewModel = hiltViewModel()
 ) {
     var randNum by remember { mutableIntStateOf(1) }
-    val isLate = true
+    val isLate = false
     var hamcoachNum by remember { mutableIntStateOf(1) }
+
+    val summary by viewModel.summary
+
+    // API 응답에서 값 추출
+    val goal = summary?.dailyKCalorieGoal ?: 0
+    val current = summary?.weight ?: 0
+    val left = summary?.remainingKCalorie ?: 0
+
     LaunchedEffect(Unit) {
         viewModel.getSummary(userId)
-        if (!isLate) randNum = Random.nextInt(3) + 1
-        else {
+
+        // 냠이 3가지 랜덤 애니메이션 결정
+        if (isLate) {
             randNum = 4
             hamcoachNum = 3
+        } else {
+            randNum = Random.nextInt(3) + 1
         }
+        if (left.toInt() == 0) randNum = 4
     }
-    val summary by viewModel.summary
+
 
     Log.d("HomeMainScreen", summary?.dailyKCalorieGoal.toString())
 
@@ -80,11 +92,6 @@ fun HomeMainScreen(
         Loading()
         return
     }*/
-
-    // API 응답에서 값 추출
-    val goal = summary?.dailyKCalorieGoal ?: 0
-    val current = summary?.weight ?: 0
-    val left = summary?.remainingKCalorie ?: 0
 
     HomeBackgroundComponent()
     Box(
@@ -110,27 +117,29 @@ fun HomeMainScreen(
                 sizePercent = 0.93f
             )
 
-            Box(
-                modifier = Modifier
-                    .size(248.0013f.wp(), 103.00002f.bhp())
-                    .offset(x = 144f.wp(), y = 40f.hp()),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
+            if (left.toInt() <= 0) {
+                Box(
                     modifier = Modifier
-                        .matchParentSize(),
-                    painter = painterResource(R.drawable.img_homegraphscreen_maintextballoon),
-                    contentDescription = "너 진짜 너무 많이 먹은 거 아냐 ㅠㅠ"
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(bottom = 29.89f.bhp()),
-                    text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
-                    style = DungGeunMo17,
-                    fontSize = 17f.isp(),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Center
-                )
+                        .size(248.0013f.wp(), 103.00002f.bhp())
+                        .offset(x = 144f.wp(), y = 40f.hp()),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .matchParentSize(),
+                        painter = painterResource(R.drawable.img_homegraphscreen_maintextballoon),
+                        contentDescription = "너 진짜 너무 많이 먹은 거 아냐 ㅠㅠ"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(bottom = 29.89f.bhp()),
+                        text = "너 진짜 ,,,, ㅠㅠ\n넘 많이 먹은 거 아냐?",
+                        style = DungGeunMo17,
+                        fontSize = 17f.isp(),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
 
             Image(
@@ -156,8 +165,12 @@ fun HomeMainScreen(
                         colors = listOf(Color(0xFFFFFFFF), Color(0xFFFFEDD0))
                     )
                 )
-                .border(1.dp, color = Color(0xFF000000), RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp()))
-                .clickable (
+                .border(
+                    1.dp,
+                    color = Color(0xFF000000),
+                    RoundedCornerShape(topStart = 75f.wp(), topEnd = 75f.wp())
+                )
+                .clickable(
                     onClick = {
                         navController.navigate("NyamNyamNyom")
                     }
