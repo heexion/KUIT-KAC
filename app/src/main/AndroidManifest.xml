@@ -27,10 +27,28 @@
             android:theme="@style/Theme.KUITKAC">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 딥링크를 수신할 Activity 등록 -->
+        <activity
+            android:name=".AuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 서버에서 리다이렉트할 딥링크 URI 스펙 -->
+                <data
+                    android:scheme="myapp"
+                    android:host="oauth"
+                    android:path="/kakao" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".notification.MyNotificationListenerService"
             android:exported="true"

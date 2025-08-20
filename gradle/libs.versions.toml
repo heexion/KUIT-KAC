@@ -26,6 +26,7 @@ roomCompiler = "2.7.2"
 okio = "3.9.0"
 material3 = "1.2.1"
 browser = "1.9.0"
+appcompat = "1.7.1"
 
 [libraries]
 # Compose
@@ -83,6 +84,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

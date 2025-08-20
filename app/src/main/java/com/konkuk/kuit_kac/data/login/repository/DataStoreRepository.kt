@@ -7,7 +7,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class DataStoreRepository @Inject constructor(
@@ -40,6 +42,14 @@ class DataStoreRepository @Inject constructor(
         val prefs = dataStore.data.first()
         return prefs[REFRESH_TOKEN_KEY]
     }
+
+    // UI에서 실시간으로 토큰 존재 여부를 관찰하기 위한 Flow
+    fun getAccessTokenFlow(): Flow<String?> {
+        return dataStore.data.map { preferences ->
+            preferences[ACCESS_TOKEN_KEY]
+        }
+    }
+
 
     suspend fun clearTokens() {
         dataStore.edit { prefs ->

@@ -1,3 +1,4 @@
+/*
 package com.konkuk.kuit_kac.data.login.screen
 
 import androidx.compose.runtime.Composable
@@ -40,4 +41,4 @@ fun VerifyTokenScreen(viewModel: VerifyTokenViewModel = hiltViewModel()) {
         Spacer(Modifier.height(16.dp))
         Text(result)
     }
-}
+}*/

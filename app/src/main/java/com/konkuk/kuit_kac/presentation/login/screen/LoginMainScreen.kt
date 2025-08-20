@@ -2,6 +2,7 @@ package com.konkuk.kuit_kac.presentation.login.screen
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,8 +16,13 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,6 +33,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.kuit_kac.BuildConfig
@@ -36,15 +44,20 @@ import com.konkuk.kuit_kac.core.util.context.bhp
 import com.konkuk.kuit_kac.core.util.context.hp
 import com.konkuk.kuit_kac.core.util.context.isp
 import com.konkuk.kuit_kac.core.util.context.wp
+import com.konkuk.kuit_kac.data.login.viewmodel.LoginViewModel
 import com.konkuk.kuit_kac.presentation.navigation.Route
 import com.konkuk.kuit_kac.ui.theme.DungGeunMo17
 
 @Composable
 fun LoginMainScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val accessToken by viewModel.accessToken.collectAsState()
+    val userInfo by viewModel.userInfo.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Box(
         modifier = Modifier
@@ -75,6 +88,23 @@ fun LoginMainScreen(
                 fontSize = 17f.isp(),
                 color = Color(0xFF713E3A),
             )
+            Text("Access Token: ${accessToken?.take(20)}...")
+            Log.d("응답: ", "$accessToken")
+
+            Button(onClick = { viewModel.fetchUserInfo() }, enabled = !isLoading) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("보호 API 호출 (/users/me)")
+                }
+            }
+            if (userInfo.isNotEmpty()) {
+                Text("API 응답:", style = MaterialTheme.typography.titleMedium)
+                Text(userInfo, modifier = Modifier.padding(8.dp))
+            }
         }
 
         Image(
@@ -121,14 +151,15 @@ fun LoginMainScreen(
                 )
                 .size(346.6669f.wp(), 52f.bhp())
                 .clickable {
-                    navController.navigate(Route.LoginEmail.route)
-//                    val kakaoLoginUrl = "${BuildConfig.BASE_URL}/api/auth/kakao"
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(kakaoLoginUrl))
-//                    context.startActivity(intent)
+//                    navController.navigate(Route.LoginEmail.route)
+                    val kakaoLoginUrl = "${BuildConfig.BASE_URL}oauth2/authorization/kakao"
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(kakaoLoginUrl))
+                    context.startActivity(intent)
                 },
             painter = painterResource(id = R.drawable.ic_kakao_login_wide),
             contentDescription = null,
         )
+
     }
 }
 

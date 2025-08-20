@@ -39,9 +39,12 @@ object ApiModule {
     @Singleton
     fun provideAuthAuthenticator(
         dataStoreRepository: DataStoreRepository,
-        tokenRefreshService: dagger.Lazy<RefreshTokenApiService>
+        refreshTokenService: dagger.Lazy<RefreshTokenApiService>
     ): AuthAuthenticator {
-        return AuthAuthenticator(dataStoreRepository, tokenRefreshService)
+        return AuthAuthenticator(
+            dataStoreRepository = dataStoreRepository,
+            refreshTokenApiService = refreshTokenService
+        )
     }
 
     @Provides
@@ -92,8 +95,8 @@ object ApiModule {
         retrofit.create(HomeWeightService::class.java)
 
 
-
 }
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {

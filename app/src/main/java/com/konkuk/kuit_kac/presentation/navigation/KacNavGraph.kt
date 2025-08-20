@@ -16,10 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.konkuk.kuit_kac.R
-import com.konkuk.kuit_kac.data.login.screen.DebugScreen
-import com.konkuk.kuit_kac.data.login.screen.TestLoginScreen
-import com.konkuk.kuit_kac.data.login.screen.VerifyTokenScreen
 import com.konkuk.kuit_kac.data.login.dataStore
+import com.konkuk.kuit_kac.data.login.screen.LoginScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAICompleteScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAIDetailScreen
 import com.konkuk.kuit_kac.presentation.diet.screen.PlanAILoadingScreen
@@ -133,12 +131,14 @@ fun KacNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = if (isFirstLaunch) OnboardingStart.route else Route.Home.route
+        startDestination = if (isFirstLaunch) Route.LoginMain.route else Route.LoginMain.route
     ) {
 
 //        composable("login") { TestLoginScreen(navController = navController, dataStore = dataStore) }
 //        composable("debug") { DebugScreen(navController, dataStore) }
 //        composable("verify") { VerifyTokenScreen() }
+        composable("loginTest") { LoginScreen() }
+
 
         // 온보딩 스타트
         composable(route = OnboardingStart.route) {

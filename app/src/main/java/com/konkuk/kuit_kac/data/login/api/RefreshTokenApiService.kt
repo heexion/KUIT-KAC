@@ -15,10 +15,4 @@ interface RefreshTokenApiService {
     ): RefreshTokenResponseDto
 }
 
-interface UserApiService {
-    @GET("users/me")
-    suspend fun getMe(): UserResponseDto
-}
-
-
 
