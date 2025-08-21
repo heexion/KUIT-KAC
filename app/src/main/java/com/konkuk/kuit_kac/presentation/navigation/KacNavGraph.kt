@@ -190,15 +190,15 @@ fun KacNavGraph(
                     onboardingViewModel = onboardingViewModel
                 )
             }
-            composable(route = Route.LoginEmail.route) {
-                    backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry("OnboardingGraph")
-                }
-                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
-                LoginEmailScreen(navController = navController,
-                    onboardingViewModel = onboardingViewModel)
-            }
+//            composable(route = Route.LoginEmail.route) {
+//                    backStackEntry ->
+//                val parentEntry = remember(backStackEntry) {
+//                    navController.getBackStackEntry("OnboardingGraph")
+//                }
+//                val onboardingViewModel = hiltViewModel<OnboardingViewModel>(parentEntry)
+//                LoginEmailScreen(navController = navController,
+//                    onboardingViewModel = onboardingViewModel)
+//            }
             composable(route = OnboardingStart.route) {
                     backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
