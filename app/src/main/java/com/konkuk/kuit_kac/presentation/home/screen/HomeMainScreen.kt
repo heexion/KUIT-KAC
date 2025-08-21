@@ -68,7 +68,7 @@ fun HomeMainScreen(
     // API 응답에서 값 추출
     val goal = summary?.dailyKCalorieGoal ?: 0
     val current = summary?.weight ?: 0
-    val left = summary?.remainingKCalorie ?: 0
+    var left = summary?.remainingKCalorie ?: 0
 
     LaunchedEffect(left) {
         viewModel.getSummary(userId)
@@ -80,6 +80,7 @@ fun HomeMainScreen(
         } else {
             randNum = Random.nextInt(3) + 1
         }
+        if(left.toInt() < 0){ left = 0.0}
         if (left.toInt() <= 0) randNum = 4
     }
 
