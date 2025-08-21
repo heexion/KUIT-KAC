@@ -17,16 +17,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.KUITKAC"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.KUITKAC">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.KUITKAC"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -38,16 +38,16 @@
             android:name=".AuthCallbackActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@style/Theme.App.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- 서버에서 리다이렉트할 딥링크 URI 스펙 -->
                 <data
-                    android:scheme="myapp"
                     android:host="oauth"
-                    android:path="/kakao" />
+                    android:path="/kakao"
+                    android:scheme="myapp" />
             </intent-filter>
         </activity>
 
@@ -60,6 +60,7 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
         <receiver
             android:name=".notification.ReminderReceiver"
             android:exported="false" />

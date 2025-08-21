@@ -44,7 +44,7 @@ class AuthCallbackActivity : AppCompatActivity() {
                     AuthCallbackEntryPoint::class.java
                 )
                 val repository = hiltEntryPoint.getDataStoreRepository()
-                repository.setIncomingUid(kid)
+                repository.setIncomingKid(kid)
 
                 val appIntent = Intent(this, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP

@@ -432,11 +432,18 @@ fun OnboardingInputScreen(
                     if (lossAmount >= limit) {
                         showDialog = true
                     } else {
-                        onboardingViewModel.setAge(age.toInt())
+                        onboardingViewModel.saveFirstPageAndProceed(
+                            gender = if (selectedGender == "남자") "MALE" else "FEMALE",
+                            age = age.toInt(),
+                            height = height.toInt(),
+                            targetWeight = weightTarget.toDouble(),
+                            currentWeight = weightCurrent.toDouble()
+                        )
+/*                        onboardingViewModel.setAge(age.toInt())
                         onboardingViewModel.setGender(if(selectedGender== "남자"){"MALE"}else{"FEMALE"})
                         onboardingViewModel.setHeight(height.toInt())
                         onboardingViewModel.setTargetWeight(weightTarget.toDouble())
-                        onboardingViewModel.setCurrentWeight(weightCurrent.toDouble())
+                        onboardingViewModel.setCurrentWeight(weightCurrent.toDouble())*/
                         proceedNext()
                     }
                 }
@@ -477,6 +484,7 @@ fun AgeInputBox(
                 value = age,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
+
                         onAgeChange(newValue)
                     }
                 },
@@ -515,6 +523,7 @@ fun HeightInputBox(
     height: String,
     onHeightChange: (String) -> Unit,
     scrollState: ScrollState // 부모 Column 의 scrollState 전달받음
+    ,
 ) {
     val coroutineScope = rememberCoroutineScope()
     var componentY by remember { mutableStateOf(0) }
@@ -547,6 +556,7 @@ fun HeightInputBox(
                 value = height,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
+
                         onHeightChange(newValue)
                     }
                 },

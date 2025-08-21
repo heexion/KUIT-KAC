@@ -3,6 +3,7 @@ package com.konkuk.kuit_kac.data.login.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,23 @@ class DataStoreRepository @Inject constructor(
     companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
+
+        val USER_ID_KEY = intPreferencesKey("user_id")
+
     }
+
+    suspend fun saveUserId(id: Int) {
+        dataStore.edit { preferences ->
+            preferences[USER_ID_KEY] = id
+        }
+    }
+
+    fun getUserIdFlow(): Flow<Int?> {
+        return dataStore.data.map { preferences ->
+            preferences[USER_ID_KEY]
+        }
+    }
+
 
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { preferences ->
@@ -54,13 +71,14 @@ class DataStoreRepository @Inject constructor(
         dataStore.edit { prefs ->
             prefs.remove(ACCESS_TOKEN_KEY)
             prefs.remove(REFRESH_TOKEN_KEY)
+            prefs.remove(USER_ID_KEY)
         }
     }
 
     private val _incomingKid = MutableStateFlow<String?>(null)
     val incomingKid: StateFlow<String?> = _incomingKid.asStateFlow()
 
-    fun setIncomingUid(uid: String?) {
+    fun setIncomingKid(uid: String?) {
         _incomingKid.value = uid
     }
 
