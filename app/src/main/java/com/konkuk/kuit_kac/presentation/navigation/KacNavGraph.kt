@@ -849,7 +849,7 @@ fun KacNavGraph(
 
                 // Fetch monthly plans/tags whenever the month changes
                 LaunchedEffect(yearMonthArg) {
-                    mealViewModel.getMonthPlan(userId = 1, yearMonth = yearMonthArg)
+                    mealViewModel.getMonthPlan(yearMonth = yearMonthArg)
                 }
 
                 PlanMonthScreen(

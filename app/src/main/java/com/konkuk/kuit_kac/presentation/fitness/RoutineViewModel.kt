@@ -1,4 +1,5 @@
 package com.konkuk.kuit_kac.presentation.fitness
+
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
@@ -7,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.kuit_kac.data.login.repository.DataStoreRepository
 import com.konkuk.kuit_kac.data.request.ExerciseRequestDto
 import com.konkuk.kuit_kac.data.request.FitnessRequestDto
 import com.konkuk.kuit_kac.data.request.RecordRequestDto
@@ -16,43 +18,66 @@ import com.konkuk.kuit_kac.data.request.RoutineSetsDto
 import com.konkuk.kuit_kac.data.response.RecordResponseDto
 import com.konkuk.kuit_kac.data.response.RoutineResponseDto
 import com.konkuk.kuit_kac.local.Fitness
-import com.konkuk.kuit_kac.presentation.fitness.RoutineRepository
 import com.konkuk.kuit_kac.presentation.fitness.local.FitnessRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.text.Normalizer
 import javax.inject.Inject
 
 @HiltViewModel
 class RoutineViewModel @Inject constructor(
     private val fitnessRepository: FitnessRepository,
     private val routineRepository: RoutineRepository,
+    private val dataStoreRepository: DataStoreRepository,
     savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
+
+    private val _userId = mutableStateOf<Int?>(null)
+    val userId: State<Int?> get() = _userId
+
+    init {
+        viewModelScope.launch {
+            dataStoreRepository.getUserIdFlow().collect { _userId.value = it }
+        }
+    }
+    private suspend fun requireUserId(): Int {
+        _userId.value?.let { return it }
+        return dataStoreRepository.getUserIdFlow().first()
+            ?: throw IllegalStateException("User id is null. Make sure to save it in DataStore.")
+    }
+
     private val _createRoutineSuccessState = mutableStateOf<Boolean?>(null)
     val createRoutineSuccessState: State<Boolean?> get() = _createRoutineSuccessState
+
     private val _selectedRoutines = mutableStateListOf<Fitness?>()
     val selectedRoutines: List<Fitness?> get() = _selectedRoutines
+
     private val _routineName = mutableStateOf<String?>(null)
     val routineName: State<String?> get() = _routineName
+
     private val _routineType = mutableStateOf<String?>(null)
     val routineType: State<String?> get() = _routineType
+
     private val _getRoutineRecordState = mutableStateOf<List<RecordResponseDto>?>(null)
     val getRoutineRecordState: State<List<RecordResponseDto>?> get() = _getRoutineRecordState
+
     private val _getRoutineRecordSuccessState = mutableStateOf<Boolean?>(null)
     val getRoutineRecordSuccessState: State<Boolean?> get() = _getRoutineRecordSuccessState
+
     private val _routineId = mutableStateOf<Int?>(null)
     val routineId: State<Int?> get() = _routineId
 
     private val _initialName = mutableStateOf<String?>(null)
     val initialName: State<String?> get() = _initialName
-    private val _exerciseRecords = androidx.compose.runtime.mutableStateMapOf<Int, ExerciseRecord>()
+
+    private val _exerciseRecords = mutableStateMapOf<Int, ExerciseRecord>()
     val exerciseRecords: Map<Int, ExerciseRecord> get() = _exerciseRecords
+
     private fun intensityIndexFromString(s: String) = when (s) {
         "느슨함" -> 0
         "보통"   -> 1
-        "강함" -> 2
-        else -> 1
+        "강함"   -> 2
+        else     -> 1
     }
     private fun intensityStringFromIndex(i: Int) = when (i) {
         0 -> "느슨함"
@@ -97,7 +122,6 @@ class RoutineViewModel @Inject constructor(
         _setsByExerciseName.keys.filter { it !in validNames }.toList().forEach { _setsByExerciseName.remove(it) }
     }
 
-
     private fun RoutineResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
         Fitness(
             id = exercise.id,
@@ -105,6 +129,7 @@ class RoutineViewModel @Inject constructor(
             targetMuscleGroup = exercise.targetMuscleGroup,
             metValue = exercise.metValue
         )
+
     private fun RecordResponseDto.RoutineExerciseProfile.toFitness(): Fitness =
         Fitness(
             id = exercise.id,
@@ -123,7 +148,8 @@ class RoutineViewModel @Inject constructor(
         _routineId.value?.let { id ->
             viewModelScope.launch {
                 runCatching {
-                    val resp = routineRepository.getRoutineTemplate(userId = 1)
+                    val uid = requireUserId()
+                    val resp = routineRepository.getRoutineTemplate(userId = uid)
                     resp.body()?.firstOrNull { it.id == id } ?: error("No template $id")
                 }.onSuccess { template ->
                     template.routineExerciseProfiles.forEach { profile ->
@@ -136,11 +162,11 @@ class RoutineViewModel @Inject constructor(
             }
         }
     }
-    private fun buildExerciseRequests(): List<ExerciseRequestDto> {
-        return _selectedRoutines.filterNotNull().map { f ->
+
+    private fun buildExerciseRequests(): List<ExerciseRequestDto> =
+        _selectedRoutines.filterNotNull().map { f ->
             val rec = getRecord(f.id)
             val sets = setsByExerciseName[f.name].orEmpty()
-            Log.d("BuildRequest", "Exercise: ${f.name}, Sets: $sets")
             ExerciseRequestDto(
                 exerciseId = f.id,
                 routineDetail = RoutineDetailDto(
@@ -150,53 +176,45 @@ class RoutineViewModel @Inject constructor(
                 routineSets = sets
             )
         }
-    }
-    private fun buildRecordRequest(): RecordRequestDto {
-        return RecordRequestDto(
+
+    private fun buildRecordRequest(userId: Int): RecordRequestDto =
+        RecordRequestDto(
             name = _routineName.value.orEmpty(),
             routineType = _routineType.value ?: "기록",
-            userId = 1,
+            userId = userId,
             routineExercises = buildExerciseRequests()
         )
-    }
 
-    fun createRoutine(
-    ) {
-        val routines = selectedRoutines.map {
-            FitnessRequestDto(
-                exerciseId = it?.id ?: -1
-            )
-        }
-        val request = RoutineRequestDto(
-            userId = 1,
-            name = routineName.value ?: "",
-            routineType = routineType.value ?: "",
-            routineExercises = routines
-        )
+    fun createRoutine() {
+        val routines = selectedRoutines.filterNotNull().map { FitnessRequestDto(exerciseId = it.id) }
         viewModelScope.launch {
             runCatching {
+                val uid = requireUserId()
+                val request = RoutineRequestDto(
+                    userId = uid,
+                    name = routineName.value ?: "",
+                    routineType = routineType.value ?: "",
+                    routineExercises = routines
+                )
                 routineRepository.createRoutine(request)
+            }.onSuccess {
+                _createRoutineSuccessState.value = true
+                Log.d("createRoutine", "success")
+            }.onFailure {
+                _createRoutineSuccessState.value = false
+                Log.e("createRoutine", it.message ?: "Unknown error")
             }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _createRoutineSuccessState.value = true
-                    Log.e("createRoutine", "success")
-                }
-                .onFailure {
-                    _createRoutineSuccessState.value = false
-                    Log.e("creatDiet", it.message ?: "Unknown error")
-                }
         }
     }
 
-    fun getRoutineRecord(userId: Int) {
+    fun getRoutineRecord() {
         viewModelScope.launch {
             runCatching {
-                routineRepository.getRoutineRecord(userId)
+                val uid = requireUserId()
+                routineRepository.getRoutineRecord(uid)
             }.onSuccess { response ->
                 if (response.isSuccessful) {
-                    val body = response.body()
-                    _getRoutineRecordState.value = body
+                    _getRoutineRecordState.value = response.body()
                     _getRoutineRecordSuccessState.value = true
                 } else {
                     _getRoutineRecordSuccessState.value = false
@@ -205,39 +223,6 @@ class RoutineViewModel @Inject constructor(
             }.onFailure {
                 _getRoutineRecordSuccessState.value = false
                 Log.e("getRoutineRecord", it.message ?: "Unknown error")
-            }
-        }
-    }
-    private val _changeRoutineRecordSuccessState = mutableStateOf<Boolean?>(null)
-    val changeRoutineRecordSuccessState: State<Boolean?> get() = _changeRoutineRecordSuccessState
-    fun changeRoutine(
-
-    ){
-        val routines = selectedRoutines.map {
-            FitnessRequestDto(
-                exerciseId = it?.id ?: -1
-            )
-        }
-        val request = RoutineRequestDto(
-            userId = 1,
-            name = routineName.value ?: "",
-            routineType = routineType.value ?: "",
-            routineExercises = routines
-        )
-        viewModelScope.launch {
-            viewModelScope.launch {
-                runCatching {
-                    routineRepository.changeRoutine(dietId = routineId.value?:-1,request)
-                }
-                    .onSuccess {
-                        Log.d("API", "Success")
-                        _changeRoutineRecordSuccessState.value= true
-                        Log.e("changeRoutineRecord", "success")
-                    }
-                    .onFailure {
-                        _changeRoutineRecordSuccessState.value = false
-                        Log.e("changeRoutineRecord", it.message ?: "Unknown error")
-                    }
             }
         }
     }
@@ -251,37 +236,40 @@ class RoutineViewModel @Inject constructor(
             _updateRoutineRecordSuccessState.value = false
             return
         }
-        val body = buildRecordRequest()
         viewModelScope.launch {
-            runCatching { routineRepository.changeRecordRoutine(id, body) }
-                .onSuccess { resp ->
-                    if (resp.isSuccessful) {
-                        _updateRoutineRecordSuccessState.value = true
-                        Log.d("changeRecordRoutine", "success")
-                    } else {
-                        _updateRoutineRecordSuccessState.value = false
-                        Log.e("changeRecordRoutine", "HTTP ${resp.code()}")
-                    }
-                }
-                .onFailure {
+            runCatching {
+                val uid = requireUserId()
+                val body = buildRecordRequest(uid)
+                routineRepository.changeRecordRoutine(id, body)
+            }.onSuccess { resp ->
+                if (resp.isSuccessful) {
+                    _updateRoutineRecordSuccessState.value = true
+                    Log.d("changeRecordRoutine", "success")
+                } else {
                     _updateRoutineRecordSuccessState.value = false
-                    Log.e("changeRecordRoutine", it.message ?: "Unknown error")
+                    Log.e("changeRecordRoutine", "HTTP ${resp.code()}")
                 }
+            }.onFailure {
+                _updateRoutineRecordSuccessState.value = false
+                Log.e("changeRecordRoutine", it.message ?: "Unknown error")
+            }
         }
     }
 
     private val _getRoutineTemplateState = mutableStateOf<List<RoutineResponseDto>?>(null)
     val getRoutineTemplateState: State<List<RoutineResponseDto>?> get() = _getRoutineTemplateState
+
     private val _getRoutineTemplateSuccessState = mutableStateOf<Boolean?>(null)
     val getRoutineTemplateSuccessState: State<Boolean?> get() = _getRoutineTemplateSuccessState
-    fun getRoutineTemplate(userId: Int) {
+
+    fun getRoutineTemplate() {
         viewModelScope.launch {
             runCatching {
-                routineRepository.getRoutineTemplate(userId)
+                val uid = requireUserId()
+                routineRepository.getRoutineTemplate(uid)
             }.onSuccess { response ->
                 if (response.isSuccessful) {
-                    val body = response.body()
-                    _getRoutineTemplateState.value = body
+                    _getRoutineTemplateState.value = response.body()
                     _getRoutineTemplateSuccessState.value = true
                 } else {
                     _getRoutineTemplateSuccessState.value = false
@@ -294,43 +282,29 @@ class RoutineViewModel @Inject constructor(
         }
     }
 
-    fun setName(name: String) {
-        _routineName.value = name
-    }
-
-    fun addRoutine(routine: Fitness) {
-        _selectedRoutines.add(routine)
-    }
-
-    fun setType(type: String) {
-        _routineType.value = type
-    }
+    fun setName(name: String) { _routineName.value = name }
+    fun addRoutine(routine: Fitness) { _selectedRoutines.add(routine) }
+    fun setType(type: String) { _routineType.value = type }
 
     fun removeRoutine(item: Fitness) {
         _selectedRoutines.remove(item)
         _exerciseRecords.remove(item.id)
         _setsByExerciseName.remove(item.name)
     }
+
     fun setSelectedRoutines(items: List<Fitness>) {
         _selectedRoutines.clear()
         _selectedRoutines.addAll(items)
 
-        items.forEach { f ->
-            if (!_exerciseRecords.containsKey(f.id)) {
-                _exerciseRecords[f.id] = ExerciseRecord()
-            }
-        }
+        items.forEach { f -> _exerciseRecords.putIfAbsent(f.id, ExerciseRecord()) }
+
         val validIds = items.map { it.id }.toSet()
-        _exerciseRecords.keys
-            .filter { it !in validIds }
-            .toList()
-            .forEach { _exerciseRecords.remove(it) }
+        _exerciseRecords.keys.filter { it !in validIds }.toList().forEach { _exerciseRecords.remove(it) }
+
         val validNames = items.map { it.name }.toSet()
-        _setsByExerciseName.keys
-            .filter { it !in validNames }
-            .toList()
-            .forEach { _setsByExerciseName.remove(it) }
+        _setsByExerciseName.keys.filter { it !in validNames }.toList().forEach { _setsByExerciseName.remove(it) }
     }
+
     fun getRecord(id: Int): ExerciseRecord = _exerciseRecords[id] ?: ExerciseRecord()
 
     fun updateMinutes(id: Int, minutesStr: String) {
@@ -345,30 +319,32 @@ class RoutineViewModel @Inject constructor(
     fun updateDetail(id: Int, detail: String) {
         _exerciseRecords[id] = getRecord(id).copy(detail = detail)
     }
-    fun totalKcal(): Int {
-        return selectedRoutines.filterNotNull().sumOf { f ->
+
+    fun totalKcal(): Int =
+        selectedRoutines.filterNotNull().sumOf { f ->
             val r = _exerciseRecords[f.id] ?: return@sumOf 0
             val factor = when (r.intensity) { 0 -> 3; 1 -> 5; 2 -> 8; else -> 0 }
             r.minutes * factor
         }
-    }
+
     fun setRoutineId(id: Int?) { _routineId.value = id }
+
     fun kcalFor(id: Int): Int {
         val r = getRecord(id)
-        val factor = when (r.intensity) {
-            0 -> 3   // low
-            1 -> 5   // medium
-            2 -> 8   // high
-            else -> 0
-        }
+        val factor = when (r.intensity) { 0 -> 3; 1 -> 5; 2 -> 8; else -> 0 }
         return r.minutes * factor
     }
+
     fun ensureExercise(f: Fitness) {
         if (selectedRoutines.none { it?.id == f.id }) {
             _selectedRoutines.add(f)
         }
         _exerciseRecords.putIfAbsent(f.id, ExerciseRecord())
     }
+
+    private val _setsByExerciseName = mutableStateMapOf<String, MutableList<RoutineSetsDto>>()
+    val setsByExerciseName: Map<String, List<RoutineSetsDto>> get() = _setsByExerciseName
+
     fun appendSetsByName(name: String, newSets: List<RoutineSetsDto>) {
         val merged = (_setsByExerciseName[name].orEmpty() + newSets)
             .mapIndexed { i, s -> s.copy(setOrder = i + 1) }
@@ -376,21 +352,19 @@ class RoutineViewModel @Inject constructor(
         _setsByExerciseName[name] = merged
     }
 
-    private val _setsByExerciseName = mutableStateMapOf<String, MutableList<RoutineSetsDto>>()
-    val setsByExerciseName: Map<String, List<RoutineSetsDto>> get() = _setsByExerciseName
-
     fun addOrReplaceSetsByName(name: String, sets: List<RoutineSetsDto>) {
         _setsByExerciseName[name] = sets.toMutableList()
     }
+
     fun addSetByName(name: String, set: RoutineSetsDto) {
         val list = _setsByExerciseName.getOrPut(name) { mutableListOf() }
         list.add(set)
     }
+
     fun removeSetByName(name: String, index: Int) {
-        _setsByExerciseName[name]?.let {
-            if (index in it.indices) it.removeAt(index)
-        }
+        _setsByExerciseName[name]?.let { if (index in it.indices) it.removeAt(index) }
     }
+
     fun createRoutineRecord() {
         val selected = _selectedRoutines.filterNotNull()
         if (selected.isEmpty()) {
@@ -398,16 +372,11 @@ class RoutineViewModel @Inject constructor(
             _createRoutineSuccessState.value = false
             return
         }
-        val body = buildRecordRequest()
-
-        val routineName = _routineName.value.orEmpty()
-        val routineType = _routineType.value ?: "기록"
-
         viewModelScope.launch {
             runCatching {
-                routineRepository.createRoutineRecord(
-                    body
-                )
+                val uid = requireUserId()
+                val body = buildRecordRequest(uid)
+                routineRepository.createRoutineRecord(body)
             }.onSuccess { resp ->
                 if (resp.isSuccessful) {
                     Log.d("createRoutineRecord", "success")
@@ -422,8 +391,10 @@ class RoutineViewModel @Inject constructor(
             }
         }
     }
+
     private fun idForName(name: String): Int? =
         _selectedRoutines.filterNotNull().firstOrNull { it.name == name }?.id
+
     fun rGetRecord(name: String): ExerciseRecord =
         idForName(name)?.let { getRecord(it) } ?: ExerciseRecord()
 
@@ -441,7 +412,6 @@ class RoutineViewModel @Inject constructor(
 
     fun rKcalFor(name: String): Int =
         idForName(name)?.let { kcalFor(it) } ?: 0
-
 }
 
 data class ExerciseRecord(

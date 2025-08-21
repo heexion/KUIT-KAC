@@ -60,7 +60,7 @@ fun DietMainScreen(
     dietViewModel: DietViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        dietViewModel.getDiet(userId = 1)
+        dietViewModel.getDiet()
     }
     val dietList = dietViewModel.getDietState.value
     val state = !dietList.isNullOrEmpty()

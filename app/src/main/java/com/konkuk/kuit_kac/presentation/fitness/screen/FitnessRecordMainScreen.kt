@@ -57,7 +57,7 @@ fun FitnessRecordMainScreen(
     routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        routineViewModel.getRoutineRecord(userId = 1)
+        routineViewModel.getRoutineRecord()
     }
     val routine = routineViewModel.getRoutineRecordState.value
     val latestRoutine = routine?.firstOrNull()

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.kuit_kac.core.util.context.toDrawable
 import com.konkuk.kuit_kac.data.AiGeneralDto
+import com.konkuk.kuit_kac.data.login.repository.DataStoreRepository
 import com.konkuk.kuit_kac.data.request.AiDto
 import com.konkuk.kuit_kac.data.request.AiRequestDto
 import com.konkuk.kuit_kac.data.request.FoodRequestDto
@@ -27,6 +28,7 @@ import com.konkuk.kuit_kac.presentation.mealdiet.plan.PlanTagType
 import com.konkuk.kuit_kac.presentation.mealdiet.plan.component.DietType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -37,9 +39,15 @@ import javax.inject.Inject
 class MealViewModel @Inject constructor(
     private val mealRepository: MealRepository,
     private val foodRepository: FoodRepository,
+    private val dataStoreRepository: DataStoreRepository,
     @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle
 ):ViewModel() {
+
+    private suspend fun requireUserId(): Int {
+        return dataStoreRepository.getUserIdFlow().first()
+            ?: throw IllegalStateException("User id is null. Make sure to save it in DataStore.")
+    }
     private val prefs = context.getSharedPreferences("meal_prefs", Context.MODE_PRIVATE)
     private val FASTING_START_KEY = "fasting_started_at"
     fun isPastNext3AM(startedAtMillis: Long): Boolean {
@@ -185,56 +193,107 @@ class MealViewModel @Inject constructor(
             onResolved()
         }
     }
-    fun createSimple(){
-        val request = SimpleRequestDto(
-            userId = 1,
-            dietType = selectType.value?:""
-        )
+    fun createSimple() {
         viewModelScope.launch {
             runCatching {
+                val uid = requireUserId()
+                val request = SimpleRequestDto(
+                    userId = uid,
+                    dietType = selectType.value ?: ""
+                )
                 mealRepository.createSimple(request)
+            }.onSuccess {
+                _createSimpleSuccessState.value = true
+                prefs.edit().putLong(FASTING_START_KEY, System.currentTimeMillis()).apply()
+            }.onFailure {
+                _createSimpleSuccessState.value = false
+                Log.e("createSimple", it.message ?: "Unknown error")
             }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _createSimpleSuccessState.value = true
-                    Log.e("createSimple", "success")
-                    val now = System.currentTimeMillis()
-                    prefs.edit().putLong(FASTING_START_KEY, now).apply()
-                }
-                .onFailure {
-                    _createSimpleSuccessState.value = false
-                    Log.e("createSimple", it.message?: "Unknown error")
-                }
         }
     }
-    private val _createPlanState = mutableStateOf<Boolean?>(null)
-    val createPlanState: State<Boolean?> get() = _createPlanState
-    fun createPlan(){
-        val foods = selectedFoods.map {
-            FoodRequestDto(
-                foodId = it.food.id,
-                quantity = it.quantity
-            )
-        }
-        val request = PlanRequestDto(
-            userId = 1,
-            dietType = selectType.value?:",",
-            foods = foods,
-            date = planDate.value?:"2025-01-01"
-        )
+    fun getPlan() {
         viewModelScope.launch {
             runCatching {
-                mealRepository.createPlan(request)
+                val uid = requireUserId()
+                mealRepository.getPlan(uid)
+            }.onSuccess { response ->
+                if (response.isSuccessful) {
+                    _getPlanState.value = response.body().orEmpty()
+                    _getPlanSuccessState.value = true
+                    _planCheck.value = 0
+                    getRecord()  // load existing records too
+                } else {
+                    _getPlanSuccessState.value = false
+                }
+            }.onFailure { _getPlanSuccessState.value = false }
+        }
+    }
+
+    fun getMonthPlan(yearMonth: String) {
+        viewModelScope.launch {
+            runCatching {
+                val uid = requireUserId()
+                mealRepository.getMonthPlan(uid, yearMonth)
+            }.onSuccess { response ->
+                if (response.isSuccessful) {
+                    val body = response.body().orEmpty()
+                    _getMonthPlanState.value = body
+                    _getMonthPlanSuccessState.value = true
+                    _monthTags.value = computeMonthTags(body)
+                } else {
+                    _getMonthPlanSuccessState.value = false
+                }
+            }.onFailure { _getMonthPlanSuccessState.value = false }
+        }
+    }
+
+    fun getRecord() {
+        viewModelScope.launch {
+            runCatching {
+                val uid = requireUserId()
+                mealRepository.getRecord(uid)
+            }.onSuccess { response ->
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    _getRecordState.value = body
+                    _mealCardData.value = body
+                        ?.filterNotNull()
+                        ?.map { parseToMealCardData(it) }
+                        ?: emptyList()
+                    _getRecordSuccessState.value = true
+                } else {
+                    _getRecordSuccessState.value = false
+                    Log.e("getRecord", "Unsuccessful response: ${response.code()}")
+                }
+            }.onFailure {
+                _getRecordSuccessState.value = false
+                Log.e("getRecord", it.message ?: "Unknown error")
             }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _createPlanState.value = true
-                    Log.e("createPlan", "success")
-                }
-                .onFailure {
-                    _createPlanState.value = false
-                    Log.e("createPlan", it.message?: "Unknown error")
-                }
+        }
+    }
+
+    private val _createPlanState = mutableStateOf<Boolean?>(null)
+    val createPlanState: State<Boolean?> get() = _createPlanState
+    fun createPlan() {
+        val foods = selectedFoods.map {
+            FoodRequestDto(foodId = it.food.id, quantity = it.quantity)
+        }
+        viewModelScope.launch {
+            runCatching {
+                val uid = requireUserId()
+                val request = PlanRequestDto(
+                    userId = uid,
+                    dietType = selectType.value ?: "",
+                    foods = foods,
+                    date = planDate.value ?: "2025-01-01"
+                )
+                mealRepository.createPlan(request)
+            }.onSuccess {
+                _createPlanState.value = true
+            }.onFailure {
+                _createPlanState.value = false
+                Log.e("createPlan", it.message ?: "Unknown error")
+            }
         }
     }
     private val _getPlanSuccessState = mutableStateOf<Boolean?>(null)
@@ -242,22 +301,6 @@ class MealViewModel @Inject constructor(
 
     private val _getPlanState = mutableStateOf<List<PlanResponseDto>?>(null)
     val getPlanState: State<List<PlanResponseDto>?> get() = _getPlanState
-    fun getPlan(userId: Int) {
-        viewModelScope.launch {
-            runCatching { mealRepository.getPlan(userId) }
-                .onSuccess { response ->
-                    if (response.isSuccessful) {
-                        _getPlanState.value = response.body().orEmpty()
-                        _getPlanSuccessState.value = true
-                        _planCheck.value = 0
-                        getRecord(userId)           // still load existing records here
-                    } else {
-                        _getPlanSuccessState.value = false
-                    }
-                }
-                .onFailure { _getPlanSuccessState.value = false }
-        }
-    }
     private val _monthTags =
         mutableStateOf<Map<LocalDate, Set<PlanTagType>>>(emptyMap())
     val monthTags: State<Map<LocalDate, Set<PlanTagType>>> get() = _monthTags
@@ -307,211 +350,161 @@ class MealViewModel @Inject constructor(
 
     private val _getMonthPlanState = mutableStateOf<List<PlanResponseDto>?>(null)
     val getMonthPlanState: State<List<PlanResponseDto>?> get() = _getMonthPlanState
-    fun getMonthPlan(userId: Int, yearMonth: String) {
-        viewModelScope.launch {
-            runCatching { mealRepository.getMonthPlan(userId, yearMonth) }
-                .onSuccess { response ->
-                    if (response.isSuccessful) {
-                        val body = response.body().orEmpty()
-                        _getMonthPlanState.value = body
-                        _getMonthPlanSuccessState.value = true
-                        _monthTags.value = computeMonthTags(body)
-                    } else {
-                        _getMonthPlanSuccessState.value = false
-                    }
-                }
-                .onFailure { _getMonthPlanSuccessState.value = false }
-        }
-    }
     fun postAllUnrecordedPlans() {
         val plans   = _getPlanState.value.orEmpty()
         val records = _getRecordState.value.orEmpty().map { it.dietType }
 
-        plans.forEach { planDto ->
-            if (!records.contains(planDto.dietType)) {
-                postMealFromPlan(planDto)
+        viewModelScope.launch {
+            runCatching {
+                val uid = requireUserId()
+                plans.filter { it.dietType !in records }
+                    .forEach { postMealFromPlan(uid, it) }
+            }.onFailure {
+                Log.e("AutoPost", "Failed to auto-post plans", it)
             }
         }
     }
-    private fun postMealFromPlan(dto: PlanResponseDto) {
-        val foods = dto.dietFoods.map { foodItem ->
-            FoodRequestDto(
-                foodId   = foodItem.food.id,
-                quantity = foodItem.quantity.toFloat()
-            )
-        }
 
+    private fun postMealFromPlan(uid: Int, dto: PlanResponseDto) {
+        val foods = dto.dietFoods.map {
+            FoodRequestDto(foodId = it.food.id, quantity = it.quantity.toFloat())
+        }
         val request = MealRequestDto(
-            userId   = 1,
+            userId   = uid,
             dietType = dto.dietType,
             foods    = foods,
-            name     = "${dto.dietType}식단",
+            name     = dto.dietType + "식단",
             dietTime = "12:00:00"
         )
-
         viewModelScope.launch {
-            runCatching {
-                mealRepository.createMeal(request)
-            }
-                .onSuccess {
-                    Log.d("AutoPost", "Posted plan for ${dto.dietType}")
-                }
-                .onFailure {
-                    Log.e("AutoPost", "Failed for ${dto.dietType}", it)
-                }
+            runCatching { mealRepository.createMeal(request) }
+                .onSuccess { Log.d("AutoPost", "Posted plan for ${dto.dietType}") }
+                .onFailure { Log.e("AutoPost", "Failed for ${dto.dietType}", it) }
         }
     }
+
     private val _changePlanSuccessState = mutableStateOf<Boolean?>(null)
     val changePlanSuccessState: State<Boolean?> get() = _changePlanSuccessState
-    fun changePlan(){
-        val foods = selectedFoods.map {
-            FoodRequestDto(
-                foodId = it.food.id,
-                quantity = it.quantity
-            )
-        }
-        val request = PlanRequestDto(
-            userId = 1,
-            dietType = selectType.value?:"",
-            foods = foods,
-            date = planDate.value?:"2025-01-01"
-        )
+    fun changePlan() {
+        val foods = selectedFoods.map { FoodRequestDto(it.food.id, it.quantity) }
         viewModelScope.launch {
             runCatching {
-                mealRepository.changePlan(dietId = dietId.value?:1, request)
+                val uid = requireUserId()
+                val request = PlanRequestDto(
+                    userId = uid,
+                    dietType = selectType.value ?: "",
+                    foods = foods,
+                    date = planDate.value ?: "2025-01-01"
+                )
+                mealRepository.changePlan(dietId = dietId.value ?: error("dietId missing"), request)
             }.onSuccess {
-                Log.d("API", "Success")
                 _changePlanSuccessState.value = true
-                Log.e("changePlan", "success")
+            }.onFailure {
+                _changePlanSuccessState.value = false
+                Log.e("changePlan", it.message ?: "Unknown error")
             }
-                .onFailure {
-                    _changePlanSuccessState.value = false
-                    Log.e("changePlan", it.message?: "Unknown error")
-                }
         }
     }
 
 
-    fun editMeal(
 
-    ){
-        val foods = selectedFoods.map{
-            FoodRequestDto(
-                foodId = it.food.id,
-                quantity = it.quantity
-            )
-        }
-        val dietRequest = MealRequestDto(
-            userId = 1,
-            dietType = selectType.value?:"",
-            foods = foods,
-            name = selectType.value?:"" + "식단",
-            dietTime = _selectedTime.value ?: formattedTime
-        )
+    fun editMeal() {
+        val foods = selectedFoods.map { FoodRequestDto(it.food.id, it.quantity) }
         viewModelScope.launch {
             runCatching {
-                mealRepository.changeRecord(dietId = dietId.value?:1,dietRequest)
+                val uid = requireUserId()
+                val dietRequest = MealRequestDto(
+                    userId = uid,
+                    dietType = selectType.value ?: "",
+                    foods = foods,
+                    name = (selectType.value ?: "") + "식단",      // <-- fixed Elvis precedence
+                    dietTime = _selectedTime.value ?: formattedTime
+                )
+                mealRepository.changeRecord(dietId = dietId.value ?: error("dietId missing"), dietRequest)
+            }.onSuccess {
+                _changeRecordSuccessState.value = true
+            }.onFailure {
+                _changeRecordSuccessState.value = false
+                Log.e("editDiet", it.message ?: "Unknown error")
             }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _changeRecordSuccessState.value = true
-                    Log.e("editDiet", "success")
-                }
-                .onFailure {
-                    _changeRecordSuccessState.value = false
-                    Log.e("editDiet", it.message?: "Unknown error")
-                }
         }
     }
 
-    fun createMeal(
-    ){
-        val foods = selectedFoods.map{
-            FoodRequestDto(
-                foodId = it.food.id,
-                quantity = it.quantity
-            )
-        }
-        val dietRequest = MealRequestDto(
-            userId = 1,
-            dietType = selectType.value?:"",
-            foods = foods,
-            name = selectType.value?:"" + "식단",
-            dietTime = _selectedTime.value ?: formattedTime
-        )
+    fun createMeal() {
+        val foods = selectedFoods.map { FoodRequestDto(it.food.id, it.quantity) }
         viewModelScope.launch {
             runCatching {
+                val uid = requireUserId()
+                val dietRequest = MealRequestDto(
+                    userId = uid,
+                    dietType = selectType.value ?: "",
+                    foods = foods,
+                    name = (selectType.value ?: "") + "식단",
+                    dietTime = _selectedTime.value ?: formattedTime
+                )
                 mealRepository.createMeal(dietRequest)
+            }.onSuccess {
+                _createMealState.value = true
+            }.onFailure {
+                _createMealState.value = false
+                Log.e("createDiet", it.message ?: "Unknown error")
             }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _createMealState.value = true
-                    Log.e("createDiet", "success")
-                }
-                .onFailure {
-                    _createMealState.value = false
-                    Log.e("creatDiet", it.message?: "Unknown error")
-                }
         }
     }
+
     private val _changeSnackState = mutableStateOf<Boolean?>(null)
     val changeSnackState: State<Boolean?> get() = _changeSnackState
-    fun changeSnack(){
+    fun changeSnack() {
         val foods = selectedFoods.map {
             SnackFoodRequestDto(
                 foodId = it.food.id,
                 quantity = it.quantity,
-                dietTime = selectedTime.value?:""
+                dietTime = selectedTime.value ?: ""
             )
         }
-        val request = SnackRequestDto(
-            userId = 1,
-            name = selectType.value + "식단",
-            foods = foods
-        )
         viewModelScope.launch {
             runCatching {
-                mealRepository.changeSnack(dietId = dietId.value?:1,request)
+                val uid = requireUserId()
+                val request = SnackRequestDto(
+                    userId = uid,
+                    name = (selectType.value ?: "") + "식단",
+                    foods = foods
+                )
+                mealRepository.changeSnack(dietId = dietId.value ?: error("dietId missing"), request)
+            }.onSuccess {
+                _changeSnackState.value = true
+            }.onFailure {
+                _changeSnackState.value = false
+                Log.e("changeSnack", it.message ?: "Unknown error")
             }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _changeSnackState.value = true
-                    Log.e("changeSnack", "success")
-                }
-                .onFailure {
-                    _changeSnackState.value = false
-                    Log.e("changeSnack", it.message?: "Unknown error")
-                }
         }
     }
+
     private val _createSnackState = mutableStateOf<Boolean?>(null)
     val createSnackState: State<Boolean?> get() = _createSnackState
-    fun createSnack(){
+    fun createSnack() {
         val foods = selectedFoods.map {
             SnackFoodRequestDto(
                 foodId = it.food.id,
                 quantity = it.quantity,
-                dietTime = selectedTime.value?:""
+                dietTime = selectedTime.value ?: ""
             )
         }
-        val request = SnackRequestDto(
-            userId = 1,
-            name = selectType.value + "식단",
-            foods = foods
-        )
         viewModelScope.launch {
             runCatching {
-            mealRepository.createSnack(request)
-        }
-                .onSuccess {
-                    Log.d("API", "Success")
-                    _createSnackState.value = true
-                    Log.e("createSnack", "success")
-                }
-                .onFailure {
-                    _createSnackState.value = false
-                    Log.e("creatSnack", it.message?: "Unknown error")
-                }
+                val uid = requireUserId()
+                val request = SnackRequestDto(
+                    userId = uid,
+                    name = (selectType.value ?: "") + "식단",      // <-- fixed
+                    foods = foods
+                )
+                mealRepository.createSnack(request)
+            }.onSuccess {
+                _createSnackState.value = true
+            }.onFailure {
+                _createSnackState.value = false
+                Log.e("createSnack", it.message ?: "Unknown error")
+            }
         }
     }
     private val _selectedFoods = mutableStateListOf<FoodWithQuantity>()
@@ -611,31 +604,6 @@ class MealViewModel @Inject constructor(
     private val _getRecordState = mutableStateOf<List<MealResponseDto>?>(null)
     val getRecordState: State<List<MealResponseDto>?> get() = _getRecordState
 
-    fun getRecord(userId: Int) {
-        viewModelScope.launch {
-            runCatching {
-                mealRepository.getRecord(userId)
-            }.onSuccess { response ->
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    _getRecordState.value = body
-                    _mealCardData.value = body
-                        ?.filterNotNull()       // null 포인터 익셉션 방지
-                        ?.map { parseToMealCardData(it) }
-                        ?: emptyList()
-
-//                    _mealCardData.value = body?.map { parseToMealCardData(it) } ?: emptyList()
-                    _getRecordSuccessState.value = true
-                } else {
-                    _getRecordSuccessState.value = false
-                    Log.e("getRecord", "Unsuccessful response: ${response.code()}")
-                }
-            }.onFailure {
-                _getRecordSuccessState.value = false
-                Log.e("getRecord", it.message ?: "Unknown error")
-            }
-        }
-    }
 
 
     private val _mealCardData = mutableStateOf<List<MealCardData>>(emptyList())

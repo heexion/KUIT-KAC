@@ -69,7 +69,7 @@ fun FitnessRoutineEditScreen(
     routineViewModel: RoutineViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        routineViewModel.getRoutineTemplate(userId = 1)
+        routineViewModel.getRoutineTemplate()
     }
     val coroutineScope = rememberCoroutineScope()
     val routines = routineViewModel.getRoutineTemplateState.value.orEmpty()

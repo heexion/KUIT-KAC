@@ -71,7 +71,7 @@ fun HomeMainScreen(
     var left = summary?.remainingKCalorie ?: 0
 
     LaunchedEffect(left) {
-        viewModel.getSummary(userId)
+        viewModel.getSummary()
 
         // 냠이 3가지 랜덤 애니메이션 결정
         if (isLate) {

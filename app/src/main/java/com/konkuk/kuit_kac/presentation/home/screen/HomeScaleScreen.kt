@@ -73,7 +73,7 @@ fun HomeScaleScreen(
 
     // 화면 진입 시 getWeight 호출
     LaunchedEffect(Unit) {
-        viewModel.getWeight(userId = 1)
+        viewModel.getWeight()
     }
 
     val weight = (weightInfo?.weight ?: 0f).toDouble()

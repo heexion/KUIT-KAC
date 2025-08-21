@@ -69,8 +69,8 @@ fun MealMainScreen(
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        mealViewModel.getPlan(userId = 1)
-        mealViewModel.getRecord(userId = 1)
+        mealViewModel.getPlan()
+        mealViewModel.getRecord()
     }
     val planList by mealViewModel.getPlanState
     val recordList by mealViewModel.getRecordState
