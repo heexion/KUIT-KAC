@@ -189,7 +189,7 @@ fun LoginMainScreen(
                 )
                 .size(346.6669f.wp(), 52f.bhp())
                 .noRippleClickable {
-                    navController.navigate(Route.LoginEmail.route)
+                    navController.navigate(Route.OnboardingStart.route)
                     val kakaoLoginUrl = "${BuildConfig.BASE_URL}oauth2/authorization/kakao"
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(kakaoLoginUrl))
                     context.startActivity(intent)
