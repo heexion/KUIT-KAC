@@ -26,7 +26,7 @@ class DietViewModel @Inject constructor(
     private val dietRepository: DietRepository,
     private val foodRepository: FoodRepository,
     savedStateHandle: SavedStateHandle
-):ViewModel() {
+) : ViewModel() {
     private val _createDietState = mutableStateOf<Boolean?>(null)
     val createDietState: State<Boolean?> get() = _createDietState
 
@@ -38,7 +38,7 @@ class DietViewModel @Inject constructor(
 
     fun createDiet(
 
-    ){
+    ) {
         val foods = selectedFoods.map {
             FoodRequestDto(
                 foodId = it.food.id,
@@ -47,7 +47,7 @@ class DietViewModel @Inject constructor(
         }
         val dietRequest = DietRequestDto(
             userId = 1,
-            name = dietName.value?:"",
+            name = dietName.value ?: "",
             foods = foods
         )
         viewModelScope.launch {
@@ -61,12 +61,15 @@ class DietViewModel @Inject constructor(
                 }
                 .onFailure {
                     _createDietState.value = false
-                    Log.e("creatDiet", it.message?: "Unknown error")
+                    Log.e("creatDiet", it.message ?: "Unknown error")
                 }
         }
     }
-    private val _selectedFoods = mutableStateListOf<FoodWithQuantity>()
-    val selectedFoods: List<FoodWithQuantity> get() = _selectedFoods
+//    private val _selectedFoods = mutableStateListOf<FoodWithQuantity>()
+//    val selectedFoods: List<FoodWithQuantity> get() = _selectedFoods
+
+    private val _selectedFoods = mutableStateOf<List<FoodWithQuantity>?>(null)
+    val selectedFoods: List<FoodWithQuantity> get() = _selectedFoods.value ?: emptyList()
 
     init {
         val dietId = savedStateHandle.get<Int>("dietId") ?: -1
@@ -88,6 +91,7 @@ class DietViewModel @Inject constructor(
             getTemp(dietId, parsed, name)
         }
     }
+
     fun getTemp(dietId: Int, fwqRaw: List<Pair<String, String>>, name: String) {
         viewModelScope.launch {
             val resolved = fwqRaw.mapNotNull { (foodName, quantityStr) ->
@@ -101,38 +105,48 @@ class DietViewModel @Inject constructor(
                 }
             }
             setName(name)
-            _selectedFoods.addAll(resolved)
+            _selectedFoods.value = (_selectedFoods.value ?: emptyList()) + resolved
             _dietId.value = dietId
         }
     }
 
     fun addFood(food: Food, quantity: Float) {
-        val existing = _selectedFoods.indexOfFirst { it.food.id == food.id }
-        if (existing >= 0) {
-            _selectedFoods[existing] = FoodWithQuantity(food, quantity)
+        val currentList = _selectedFoods.value.orEmpty().toMutableList()
+
+        val newFoodItem = FoodWithQuantity(food, quantity)
+        val existingIndex = currentList.indexOfFirst { it.food.id == food.id }
+
+        if (existingIndex >= 0) {
+            currentList[existingIndex] = newFoodItem
         } else {
-            _selectedFoods.add(FoodWithQuantity(food, quantity))
+            currentList.add(newFoodItem)
         }
+        _selectedFoods.value = currentList
     }
+
     fun removeFood(item: FoodWithQuantity) {
-        _selectedFoods.remove(item)
+        val newList = _selectedFoods.value.orEmpty() - item
+        _selectedFoods.value = newList
     }
 
 
     fun setName(
         name: String
-    ){
-        _dietName.value =name
+    ) {
+        _dietName.value = name
     }
+
     private val _tempSearch = mutableStateOf<String?>(null)
     val tempSearch: State<String?> get() = _tempSearch
-    fun getTempSearch(item: String){
+    fun getTempSearch(item: String) {
         _tempSearch.value = ""
         _tempSearch.value = item
     }
-    fun clearTempSearch(){
+
+    fun clearTempSearch() {
         _tempSearch.value = ""
     }
+
     val totalCalorie: Int
         get() = selectedFoods.sumOf { (it.food.calorie * it.quantity).toInt() }
 
@@ -150,29 +164,30 @@ class DietViewModel @Inject constructor(
     private val _getDietState = mutableStateOf<List<MealResponseDto>?>(null)
     val getDietState: State<List<MealResponseDto>?> get() = _getDietState
 
-    fun getDiet(userId: Int){
+    fun getDiet(userId: Int) {
         viewModelScope.launch {
             runCatching {
                 dietRepository.getTemplate(userId)
             }.onSuccess { response ->
-                    if(response.isSuccessful){
-                        val body = response.body()
-                        _getDietState.value = body
-                        _getDietSuccessState.value = true
-                    }
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    _getDietState.value = body
+                    _getDietSuccessState.value = true
                 }
+            }
                 .onFailure {
                     _getDietSuccessState.value = false
-                    Log.e("getDiet", it.message?: "Unknown Error")
+                    Log.e("getDiet", it.message ?: "Unknown Error")
                 }
         }
     }
+
     private val _changeDietSuccessState = mutableStateOf<Boolean?>(null)
     val changeDietSuccessState: State<Boolean?> get() = _changeDietSuccessState
     fun editDiet(
 
-    ){
-        val foods = selectedFoods.map{
+    ) {
+        val foods = selectedFoods.map {
             FoodRequestDto(
                 foodId = it.food.id,
                 quantity = it.quantity
@@ -181,11 +196,11 @@ class DietViewModel @Inject constructor(
         val dietRequest = DietRequestDto(
             userId = 1,
             foods = foods,
-            name = dietName.value?:"식단"
+            name = dietName.value ?: "식단"
         )
         viewModelScope.launch {
             runCatching {
-                dietRepository.changeDiet(dietId = dietId.value?:1,dietRequest)
+                dietRepository.changeDiet(dietId = dietId.value ?: 1, dietRequest)
             }
                 .onSuccess {
                     Log.d("API", "Success")
@@ -194,7 +209,7 @@ class DietViewModel @Inject constructor(
                 }
                 .onFailure {
                     _changeDietSuccessState.value = false
-                    Log.e("editDiet", it.message?: "Unknown error")
+                    Log.e("editDiet", it.message ?: "Unknown error")
                 }
         }
     }

@@ -70,7 +70,7 @@ fun HomeMainScreen(
     val current = summary?.weight ?: 0
     val left = summary?.remainingKCalorie ?: 0
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(left) {
         viewModel.getSummary(userId)
 
         // 냠이 3가지 랜덤 애니메이션 결정
@@ -80,11 +80,12 @@ fun HomeMainScreen(
         } else {
             randNum = Random.nextInt(3) + 1
         }
-        if (left.toInt() == 0) randNum = 4
+        if (left.toInt() <= 0) randNum = 4
     }
 
 
     Log.d("HomeMainScreen", summary?.dailyKCalorieGoal.toString())
+    Log.d("HomeMainScreen", summary?.remainingKCalorie.toString())
 
 
     // 로딩 상태 처리
