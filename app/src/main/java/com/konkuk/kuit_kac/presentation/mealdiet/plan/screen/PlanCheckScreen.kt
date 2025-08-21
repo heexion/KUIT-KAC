@@ -62,7 +62,7 @@ fun PlanCheckScreen(
     val displayedMonth = remember(yearMonthKey) { java.time.YearMonth.parse(yearMonthKey) }
 
     LaunchedEffect(yearMonthKey) {
-        mealViewModel.getMonthPlan(userId = 1, yearMonth = yearMonthKey)
+        mealViewModel.getMonthPlan( yearMonth = yearMonthKey)
     }
 
     Box(

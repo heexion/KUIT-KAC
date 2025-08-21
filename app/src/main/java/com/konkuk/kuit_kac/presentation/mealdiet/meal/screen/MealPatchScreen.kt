@@ -77,7 +77,7 @@ fun MealPatchScreen(
     val scrollState = rememberScrollState()
     val lazyState = rememberLazyListState()
     LaunchedEffect(Unit) {
-        dietViewModel.getDiet(userId = 1)
+        dietViewModel.getDiet()
     }
 
     val dietList = dietViewModel.getDietState.value

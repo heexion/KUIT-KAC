@@ -70,7 +70,7 @@ fun PlanAICompleteScreen(
     var buttonValue = if (selectedDate != null) "확인해볼래!" else "저장하기"
     var navigateValue = if (selectedDate != null) "plan_ai_detail" else "plan_result"
     LaunchedEffect(Unit) {
-        mealViewModel.getMonthPlan( yearMonth = "2025-08", userId = 1)
+        mealViewModel.getMonthPlan( yearMonth = "2025-08")
     }
     Box(
         modifier = Modifier

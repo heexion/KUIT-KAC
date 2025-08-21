@@ -15,52 +15,67 @@ suspend fun loadFoods(context: Context): List<Food> {
 
         var rowNum = 0
         while (true) {
-            val row = reader.readNext() ?: break
+            val raw = reader.readNext() ?: break
             rowNum++
-            if (row.isEmpty()) continue
-
-            if (rowNum == 1 && row[0].startsWith("\uFEFF")) {
-                row[0] = row[0].removePrefix("\uFEFF")
+            if (raw.isEmpty()) continue
+            fun cell(i: Int): String {
+                val s = raw.getOrNull(i) ?: return ""
+                return s.trim()
+                    .removePrefix("\uFEFF")
+                    .trim('"')
             }
 
-            if (rowNum == 1 && row[0].trim().equals("name", ignoreCase = true)) continue
+            if (rowNum == 1) {
+                val c0 = cell(0).lowercase()
+                val c2 = cell(2).lowercase()
+                val c2Num = cell(2).toIntOrNull()
 
-            if (row.size < 9) {
-                Log.w("CSV", "열 개수 부족 (line $rowNum): ${row.toList()}")
+                val looksLikeHeader =
+                    c0 == "name" || c2 == "unit_num" || c2Num == null
+
+                if (looksLikeHeader) {
+                    Log.i("CSV", "헤더 스킵 (line $rowNum): ${raw.toList()}")
+                    continue
+                }
+            }
+
+            // Need at least up to fat (index 8). sugar/score optional.
+            if (raw.size < 9) {
+                Log.w("CSV", "열 개수 부족 (line $rowNum): ${raw.toList()}")
                 continue
             }
 
-            val name = row[0].trim()
+            val name = cell(0)
             if (name.isEmpty()) {
-                Log.w("CSV", "name 없음 (line $rowNum): ${row.toList()}")
+                Log.w("CSV", "name 없음 (line $rowNum): ${raw.toList()}")
                 continue
             }
 
-            val unitType = row.getOrNull(1)?.trim().takeUnless { it.isNullOrEmpty() } ?: "개"
-            val unitNum = row.getOrNull(2)?.trim()?.toIntOrNull()
+            val unitType = cell(1).ifEmpty { "개" }
+            val unitNum = cell(2).toIntOrNull()
             if (unitNum == null) {
-                Log.w("CSV", "unit_num 파싱 실패 (line $rowNum): ${row.toList()}")
+                Log.w("CSV", "unit_num 파싱 실패 (line $rowNum): ${raw.toList()}")
                 continue
             }
 
-            val foodType = row.getOrNull(3)?.trim().orEmpty()
-            val isProcessed = row.getOrNull(4)?.let { parseBoolean(it) }
+            val foodType = cell(3)
+            val isProcessed = parseBoolean(cell(4))
             if (isProcessed == null) {
-                Log.w("CSV", "is_processed_food 파싱 실패 (line $rowNum): ${row.toList()}")
+                Log.w("CSV", "is_processed_food 파싱 실패 (line $rowNum): ${raw.toList()}")
                 continue
             }
 
-            val calorie = row.getOrNull(5)?.let { parseDouble(it) }
-            val carbohydrate = row.getOrNull(6)?.let { parseDouble(it) }
-            val protein = row.getOrNull(7)?.let { parseDouble(it) }
-            val fat = row.getOrNull(8)?.let { parseDouble(it) }
+            val calorie = parseDouble(cell(5))
+            val carbohydrate = parseDouble(cell(6))
+            val protein = parseDouble(cell(7))
+            val fat = parseDouble(cell(8))
             if (calorie == null || carbohydrate == null || protein == null || fat == null) {
-                Log.w("CSV", "실수 파싱 실패 (line $rowNum): ${row.toList()}")
+                Log.w("CSV", "실수 파싱 실패 (line $rowNum): ${raw.toList()}")
                 continue
             }
 
-            val sugar = row.getOrNull(9)?.let { parseDouble(it) } ?: 0.0
-            val score = row.getOrNull(10)?.trim()?.toIntOrNull() ?: 0
+            val sugar = parseDouble(cell(9)) ?: 0.0
+            val score = cell(10).toIntOrNull() ?: 0
 
             out += Food(
                 name = name,

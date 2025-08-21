@@ -61,7 +61,7 @@ fun PlanMonthScreen(
                     modifier = Modifier.clickable {
                         ym = ym.minusMonths(1)
                         // keep VM data fresh when month changes
-                        mealViewModel.getMonthPlan(userId = 1, yearMonth = ym.toString())
+                        mealViewModel.getMonthPlan(yearMonth = ym.toString())
                     }
                 )
                 Text(
@@ -69,7 +69,7 @@ fun PlanMonthScreen(
                     style = DungGeunMo17,
                     modifier = Modifier.clickable {
                         ym = ym.plusMonths(1)
-                        mealViewModel.getMonthPlan(userId = 1, yearMonth = ym.toString())
+                        mealViewModel.getMonthPlan(yearMonth = ym.toString())
                     }
                 )
             }

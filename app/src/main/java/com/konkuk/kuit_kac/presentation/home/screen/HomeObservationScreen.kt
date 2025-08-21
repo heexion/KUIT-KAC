@@ -61,7 +61,7 @@ fun HomeObservationScreen(
     val error = viewModel.error.value
 
     LaunchedEffect(Unit) {
-        viewModel.loadCoachReport(userId = 1)
+        viewModel.loadCoachReport()
     }
     if (coachReport == null) {
         Loading()
