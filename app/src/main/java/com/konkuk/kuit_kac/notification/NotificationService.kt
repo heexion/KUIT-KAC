@@ -94,9 +94,9 @@ class MyNotificationListenerService : NotificationListenerService() {
                         }
 
                         val builder = NotificationCompat.Builder(this, "alert_channel")
-                            .setSmallIcon(R.drawable.ic_jam)
+                            .setSmallIcon(R.drawable.img_nyamee_normal)
                             .setContentTitle("냠코치")
-                            .setContentText("야 배달 뭐야? 한 번만 봐줄게 기록해놔")
+                            .setContentText("배달시킨거야? 기록으로 남겨줘")
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setAutoCancel(true)
                             .setContentIntent(pendingIntent)
@@ -194,7 +194,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     context,
                     id = 3001,
                     title = "냠코치",
-                    text = "아침 식사 기록할 시간이에요."
+                    text = "잘잤어? 아침먹을 시간이네! 오늘 냠이의 첫끼는 뭐야?"
                 )
                 ReminderScheduler.scheduleTomorrowSameTime(context, 1001, action)
             }
@@ -204,7 +204,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     context,
                     id = 3002,
                     title = "냠코치",
-                    text = "점심 식사 기록 잊지 말기!"
+                    text = "벌써 점심시간이네! 오늘의 점심은 뭐야?"
                 )
                 ReminderScheduler.scheduleTomorrowSameTime(context, 1002, action)
             }
@@ -214,7 +214,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     context,
                     id = 3003,
                     title = "냠코치",
-                    text = "저녁 식사 기록해볼까요?"
+                    text = "오늘 하루도 곧 끝이 보이네! 냠이의 마지막 식사는 뭐야?"
                 )
                 ReminderScheduler.scheduleTomorrowSameTime(context, 1003, action)
             }
@@ -224,7 +224,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     context,
                     id = 3004,
                     title = "냠코치",
-                    text = "야식은 내일의 나에게 영향을 줘요. 조심!"
+                    text = "지금 딱 야식 땡길 시간이야.. 먹으면 안되는거 알지? 냠이랑 같이 참아보자!"
                 )
                 ReminderScheduler.scheduleTomorrowSameTime(context, 1004, action)
             }
