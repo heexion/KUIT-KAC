@@ -1,11 +1,14 @@
 package com.konkuk.kuit_kac
 
 //import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -97,6 +100,8 @@ class MainActivity : ComponentActivity() {
 //        if (!isNotificationServiceEnabled(this)) {
 //            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
 //        }
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
