@@ -31,7 +31,7 @@ class FoodRepository(private val dao: FoodDao) {
                 unit_type = f.unitType.ifBlank { "개" },
                 unit_num = 1,
                 food_type = f.foodType.ifBlank { "NORMAL_GRAIN_AND_TUBER" },
-                is_processed_food = if (f.isProcessedFood) 1 else 0,
+                is_processed_food = if (f.isProcessedFood) true else false,
                 calorie = f.calorie,
                 carbohydrate = f.carbohydrate,
                 protein = f.protein,
