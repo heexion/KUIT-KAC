@@ -26,17 +26,17 @@ class FoodRepository(private val dao: FoodDao) {
 
         val toInsert = apiFoods.mapIndexed { index, f ->
             Food(
-                id = startId + index,                    // sequential id
+                id = startId + index,
                 name = f.name,
-                unit_type = f.unitType.ifBlank { "개" }, // default if blank
-                unit_num = 1,                            // not provided → pick sensible default
-                food_type = f.foodType,
-                is_processed_food = if (f.isProcessedFood) 1 else 0,
+                unit_type = f.unitType.ifBlank { "개" },
+                unit_num = 1,
+                food_type = f.foodType.ifBlank { "NORMAL_GRAIN_AND_TUBER" },
+                is_processed_food = if (f.isProcessedFood) true else false,
                 calorie = f.calorie,
-                carbohydrate = 10.0,                     // defaults per your spec
-                protein = 10.0,
-                fat = 10.0,
-                sugar = 0.0
+                carbohydrate = f.carbohydrate,
+                protein = f.protein,
+                fat = f.fat,
+                sugar = f.sugar
             )
         }
         dao.insertAll(toInsert)

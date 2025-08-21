@@ -45,7 +45,7 @@ fun HomeNutritionScreen(modifier: Modifier = Modifier) {
     val error = viewModel.error.value
 
     LaunchedEffect(Unit) {
-        viewModel.loadNutrition(userId = 1)
+        viewModel.loadNutrition()
     }
 
     Box(

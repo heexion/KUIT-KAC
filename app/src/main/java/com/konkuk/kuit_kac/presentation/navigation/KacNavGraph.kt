@@ -544,6 +544,7 @@ fun KacNavGraph(
             composable(
                 route = "RoutineRecordEdit"
             ) { backStackEntry ->
+                Log.d("here", "here")
                 val parenEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("RoutineRecordGraph")
                 }
@@ -848,7 +849,7 @@ fun KacNavGraph(
 
                 // Fetch monthly plans/tags whenever the month changes
                 LaunchedEffect(yearMonthArg) {
-                    mealViewModel.getMonthPlan(userId = 1, yearMonth = yearMonthArg)
+                    mealViewModel.getMonthPlan(yearMonth = yearMonthArg)
                 }
 
                 PlanMonthScreen(
@@ -1074,6 +1075,7 @@ fun KacNavGraph(
             startDestination = Route.DietCreate.route
         ) {
             composable(Route.DietCreate.route) { backStackEntry ->
+                Log.d("here","here")
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }
@@ -1098,6 +1100,7 @@ fun KacNavGraph(
             composable(
                 route = "diet_search_detail/{foodName}"
             ) { backStackEntry ->
+                Log.d("here","here")
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }
@@ -1110,6 +1113,7 @@ fun KacNavGraph(
                 )
             }
             composable(Route.DietPatch.route) { backStackEntry ->
+                Log.d("here","here")
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry("DietGraph")
                 }

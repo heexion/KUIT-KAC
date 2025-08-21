@@ -106,7 +106,6 @@ fun LoginMainScreen(
 
 /*            Button(onClick = {
                 viewModel.fetchUserInfo()
-                clicked = true
             }, enabled = !isLoading) {
                 if (isLoading) {
                     CircularProgressIndicator(
@@ -116,9 +115,9 @@ fun LoginMainScreen(
                 } else {
                     Text("보호 API 호출 (/users/me)")
                 }
-            }
+            }*/
 
-            userInfo?.let { user ->
+/*            userInfo?.let { user ->
                 Text("API 응답:", style = MaterialTheme.typography.titleMedium)
                 Text("이름: ${user.userId ?: "정보 없음"}", modifier = Modifier.padding(8.dp))
                 Text("나이: ${user.age ?: "정보 없음"}", modifier = Modifier.padding(8.dp))

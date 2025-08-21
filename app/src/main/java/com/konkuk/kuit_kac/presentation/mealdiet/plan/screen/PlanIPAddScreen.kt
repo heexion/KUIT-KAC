@@ -67,7 +67,7 @@ fun PlanIPAddScreen(
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
     LaunchedEffect(Unit) {
-        mealViewModel.getPlan(userId = 1)
+        mealViewModel.getPlan()
     }
     val meal = mealViewModel.getPlanState.value
     val currentDate = mealViewModel.planDate.value ?: selectedDate.toString()

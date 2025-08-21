@@ -1,14 +1,23 @@
 package com.konkuk.kuit_kac
 
 //import com.konkuk.kuit_kac.presentation.login.viewmodel.LoginViewModel
+
 import android.Manifest
+
+import android.app.AlarmManager
+
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+
 import android.widget.Toast
+
+import android.provider.Settings
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -80,6 +89,8 @@ class MainActivity : ComponentActivity() {
                 requestPostNoti.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+
+
 
 
 

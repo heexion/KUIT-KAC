@@ -76,7 +76,7 @@ fun HomeScaleInputScreen(
     val weightInfo by viewModel.weightInfo
 
     LaunchedEffect(Unit) {
-        viewModel.getWeight(userId = 1)
+        viewModel.getWeight()
     }
     val postSuccess by viewModel.postSuccess
 
@@ -112,7 +112,7 @@ fun HomeScaleInputScreen(
         cweight = weightInfo?.weight?.toDouble()?:0.0,
         initialWeight = "",
         onConfirm = { weight ->
-            viewModel.postWeight(userId = 1, weight = weight.toFloatOrNull() ?: 0f)
+            viewModel.postWeight(weight = weight.toFloatOrNull() ?: 0f)
         },
         navController = navController,
         isKeyboardVisible = isKeyboardVisible

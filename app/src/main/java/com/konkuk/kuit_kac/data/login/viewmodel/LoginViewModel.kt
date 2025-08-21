@@ -7,7 +7,6 @@ import com.konkuk.kuit_kac.data.login.NavigationEvent
 import com.konkuk.kuit_kac.data.login.api.UserApiService
 import com.konkuk.kuit_kac.data.login.dto.UserResponseDto
 import com.konkuk.kuit_kac.data.login.repository.DataStoreRepository
-import com.konkuk.kuit_kac.presentation.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +45,7 @@ class LoginViewModel @Inject constructor(
     val navigationEvent = _navigationEvent.asSharedFlow()
 
 
-    private fun fetchUserInfo() {
+    fun fetchUserInfo() {
         viewModelScope.launch {
             _isLoading.value = true
             _userInfo.value = null
@@ -83,24 +82,25 @@ class LoginViewModel @Inject constructor(
                 .collect { kid ->
                     Log.d("LoginViewModel", "새로운 KID($kid)를 감지하여 토큰 발급을 시작합니다.")
                     mintToken(kid) // 토큰 발급 함수 호출
-                    dataStoreRepository.setIncomingUid(null)
+                    dataStoreRepository.setIncomingKid(null)
                 }
         }
     }
 
     fun mintToken(uid: String) {
-        dataStoreRepository.setIncomingUid(null)
+        dataStoreRepository.setIncomingKid(null)
 
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val response = apiService.mintToken(uid)
                 val accessToken = response.accessToken
-                val refreshToken = response.refreshToken
+//                val refreshToken = response.refreshToken
 
-                if (!accessToken.isNullOrBlank() && !refreshToken.isNullOrBlank()) {
+//                if (!accessToken.isNullOrBlank() && !refreshToken.isNullOrBlank()) {
+                if (!accessToken.isNullOrBlank()) {
                     dataStoreRepository.saveAccessToken(accessToken)
-                    dataStoreRepository.saveRefreshToken(refreshToken)
+//                    dataStoreRepository.saveRefreshToken(refreshToken)
                     Log.d("LoginViewModel", "민트- 토큰 저장 성공")
                     fetchUserInfo()
                 } else {
