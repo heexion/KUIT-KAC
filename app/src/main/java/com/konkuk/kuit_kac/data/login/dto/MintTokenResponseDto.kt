@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 data class MintTokenResponseDto(
     @SerialName("accessToken")
     val accessToken: String?,
-    @SerialName("refreshToken")
-    val refreshToken: String?
+//    @SerialName("refreshToken")
+//    val refreshToken: String?
 )

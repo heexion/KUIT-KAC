@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.kuit_kac.data.login.repository.DataStoreRepository
 import com.konkuk.kuit_kac.data.request.Agreement
 import com.konkuk.kuit_kac.data.request.OnboardingRequestDto
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val onboardingRepository: OnboardingRepository
+    private val onboardingRepository: OnboardingRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     private val _draft = mutableStateOf(OnboardingDraft())
@@ -33,6 +35,8 @@ class OnboardingViewModel @Inject constructor(
     fun setEatingOutType(v: String) { _draft.value = _draft.value.copy(eatingOutType = v) }
     fun setActivity(v: String) {_draft.value = _draft.value.copy(activity = v)}
     fun setHasDietExperience(b: Boolean) { _draft.value = _draft.value.copy(hasDietExperience = b) }
+
+
 
 
     private val _agreements = mutableStateListOf<Agreement>()   // no null seed
@@ -95,15 +99,24 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             _onboardingPostSuccessState.value = null
             runCatching { onboardingRepository.postOnboarding(request) }
-                .onSuccess {
+                .onSuccess { response ->
+                    val accessToken = response.access
+                    val refreshToken = response.refresh
+                    val userId = response.userId
+
+                    dataStoreRepository.saveAccessToken(accessToken)
+                    dataStoreRepository.saveRefreshToken(refreshToken)
+                    dataStoreRepository.saveUserId(userId)
+
                     _onboardingPostSuccessState.value = true
-                    Log.d("postOnboarding", "success")
+                    Log.d("postOnboarding", "온보딩 성공 및 토큰 저장 완료!")
                 }
                 .onFailure {
                     _onboardingPostSuccessState.value = false
                     Log.e("postOnboarding", it.message ?: "Unknown error")
                 }
         }
+
     }
 
     private fun missingFields(): List<String> {
@@ -119,6 +132,22 @@ class OnboardingViewModel @Inject constructor(
             if (d.eatingOutType == null) add("eatingOutType")
             if (d.hasDietExperience == null) add("hasDietExperience")
         }
+    }
+
+    fun saveFirstPageAndProceed(
+        gender: String,
+        age: Int,
+        height: Int,
+        targetWeight: Double,
+        currentWeight: Double
+    ) {
+        setGender(gender)
+        setAge(age)
+        setHeight(height)
+        setTargetWeight(targetWeight)
+        setCurrentWeight(currentWeight)
+
+        Log.d("OnboardingViewModel", "첫 페이지 정보 저장 완료: ${draft.value}")
     }
 }
 
